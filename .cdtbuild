@@ -11,6 +11,18 @@
 <toolReference command="g++" id="cdt.managedbuild.tool.gnu.cpp.compiler" outputFlag="-o" outputPrefix="" outputs="o">
 <optionReference defaultValue="gnu.cpp.compiler.optimization.level.none" id="gnu.cpp.compiler.option.optimization.level"/>
 <optionReference defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.option.debugging.level"/>
+<optionReference id="gnu.cpp.compiler.option.include.paths">
+<listOptionValue builtIn="false" value="&quot;E:\Adam\Eclipse\RTSound\RTAudio&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Microsoft DirectX 9.0 SDK (October 2004)\Include&quot;"/>
+</optionReference>
+<optionReference id="gnu.cpp.compiler.option.preprocessor.def">
+<listOptionValue builtIn="false" value="__WINDOWS_DS__"/>
+</optionReference>
+</toolReference>
+<toolReference command="g++" id="cdt.managedbuild.tool.gnu.cpp.linker" outputFlag="-o" outputPrefix="" outputs="exe">
+<optionReference id="gnu.cpp.link.option.userobjs">
+<listOptionValue builtIn="false" value="&quot;C:\Dev-Cpp\lib\libdsound.a&quot;"/>
+</optionReference>
 </toolReference>
 </configuration>
 <configuration id="cdt.managedbuild.config.gnu.cygwin.exe.release.178185596" name="Release" parent="cdt.managedbuild.config.gnu.cygwin.exe.release">

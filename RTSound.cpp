@@ -3,60 +3,46 @@
 #include "Blocks\Generator.h"
 #include "Blocks\Amplifier.h"
 #include "Blocks\CConnector.h"
-//#include "include\portaudio+v18_1\pa_common\portaudio.h"
-// portaudio stuff
 
-#define NUM_SECONDS   (3)
-#define SAMPLE_RATE   (44100)
-#define FRAMES_PER_BUFFER  (64)
-#define OUTPUT_DEVICE Pa_GetDefaultOutputDeviceID()
-#ifndef M_PI
-#define M_PI  (3.14159265)
+#if defined(__WINDOWS_DS__)
+#include "RTAudio.h"
 #endif
-#define TABLE_SIZE   (200)
-// EOF portaudio stuff
+
+#define FRAMES_PER_BUFFER  (256)
 
 using namespace std;
 
-//// struktura przekazywana do rtsoundCallback()
-//typedef struct
-//{
-//	Generator *gen;
-//	Amplifier *amp;
-//	CConnector *conn;
-//}
-//rtsoundData;
+// struktura przekazywana do rtsoundCallback()
+typedef struct
+{
+	Generator *gen;
+	Amplifier *amp;
+	CConnector *conn;
+}
+rtsoundData;
 
 //-----------------------------------------------------------------------------
-//static int rtsoundCallback(   void *inputBuffer, void *outputBuffer,
-//                             unsigned long framesPerBuffer,
-//                             PaTimestamp outTime, void *userData )
-//{
-//    rtsoundData *data = (rtsoundData*)userData;
-//    
-//    float *out = (float*)outputBuffer;
-//    float *connOut;
-//    unsigned long i;
-//    int finished = 0;
-//    
-//    (void) outTime; /* Prevent unused variable warnings. */
-//    (void) inputBuffer;
-//    
-//    //printf("PortAudio Test: framesPerBuffer = %d\n", framesPerBuffer);
-//
-//	// przetwarzanie 
-//    data->gen->Process();
-//	data->amp->Process();
-//	
-//	// zapis do bufora karty
-//    connOut = data->conn->Out();
-//    for( i = 0; i < framesPerBuffer; i++ )
-//    {
-//		*out++ = *connOut;		/* left */
-//        *out++ = *connOut++;	/* right */
-//    }
-//    return finished;
-//}
+int rtsoundCallback(char *outputBuffer, int bufferSize, void *userData)
+{
+	 rtsoundData *data = (rtsoundData*)userData;
+	
+	float *out = (float*)outputBuffer;
+    float *connOut;
+    int i;
+    
+   	// przetwarzanie 
+    data->gen->Process();
+	data->amp->Process();
+	
+	// zapis do bufora karty
+    connOut = data->conn->Out();
+    for( i = 0; i < bufferSize; i++ )
+    {
+		*out++ = *connOut;		/* lewy  */
+        *out++ = *connOut++;	/* prawy */
+    }
+    return 0;
+}
 
 //-----------------------------------------------------------------------------
 int main (int argc, char *argv[])
@@ -102,69 +88,67 @@ int main (int argc, char *argv[])
     		cout << "wy gen=" << *endBuff1++ << "     wy amp=" << *endBuff2++ << endl;
 		}  
 	}
-   
-	cin.get();
 
-//    PortAudioStream *stream;
-//    PaError err;
-//    rtsoundData data;
-//	int i;
-//
-//	// struktura przekazywana do rtsoundCallback()
-//    data.gen = gen;
-//    data.amp = amp;
-//    data.conn = conn2;	// skad bierzemy wyjscie
-//    
-//	// copy & paste z przykladu portadio
-//    printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d, devID = %d\n",
-//    	SAMPLE_RATE, FRAMES_PER_BUFFER, OUTPUT_DEVICE);
-//
-//    err = Pa_Initialize();
-//    if( err != paNoError ) goto error;
-//    
-//    err = Pa_OpenStream(
-//              &stream,
-//              paNoDevice,		/* default input device */
-//              0,				/* no input */
-//              paFloat32,		/* 32 bit floating point input */
-//              NULL,
-//              OUTPUT_DEVICE,
-//              2,				/* stereo output */
-//              paFloat32,		/* 32 bit floating point output */
-//              NULL,
-//              SAMPLE_RATE,
-//              FRAMES_PER_BUFFER,
-//              0,				/* number of buffers, if zero then use default minimum */
-//              paClipOff,		/* we won't output out of range samples so don't bother clipping them */
-//              rtsoundCallback,
-//              &data );
-//              
-//    if( err != paNoError ) goto error;
-//    err = Pa_StartStream( stream );
-//    if( err != paNoError ) goto error;
-//
-//    printf("Play for %d seconds.\n", NUM_SECONDS ); fflush(stdout);
-//    Pa_Sleep( NUM_SECONDS * 1000 );
-//
-//    err = Pa_StopStream( stream );
-//    if( err != paNoError ) goto error;
-//    err = Pa_CloseStream( stream );
-//    if( err != paNoError ) goto error;
-//    Pa_Terminate();
-//    printf("Test finished.\n");
-//
-//	delete conn1;
-//	delete conn2;   
-//
-//	return err;
-//	
-//error:
-//    Pa_Terminate();
-//    fprintf( stderr, "An error occured while using the portaudio stream\n" );
-//    fprintf( stderr, "Error number: %d\n", err );
-//    fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
-//    return err;
+// jesli RTAudio wlaczone
+#if defined(__WINDOWS_DS__)
+	int channels = 2;
+	int sampleRate = 44100;
+	int bufferSize = FRAMES_PER_BUFFER;
+	int nBuffers = 24;		// number of internal buffers used by device
+	int device = 0;			// 0 indicates the default or first available device
+	char input;
+	RtAudio *audio;		
+    rtsoundData data;
+    
+    // struktura przekazywana do rtsoundCallback()
+    data.gen = gen;
+    data.amp = amp;
+    data.conn = conn2;	// gdzie wyjscie calego systemu
+    
+	// Open a stream during RtAudio instantiation
+	try
+	{
+		audio = new RtAudio(device, channels, 0, 0, RTAUDIO_FLOAT32,
+                        sampleRate, &bufferSize, nBuffers);
+	}
+	catch (RtError &error)
+	{
+		error.printMessage();
+		exit(EXIT_FAILURE);
+	}
 
-return 0;
+	try
+	{
+		// Set the stream callback function
+		audio->setStreamCallback(&rtsoundCallback, (void *)&data);
+
+		// Start the stream
+		audio->startStream();
+	}
+	catch (RtError &error)
+	{
+		error.printMessage();
+		goto cleanup;
+	}
+
+	cout << "\nPlaying ... press <enter> to quit.\n";
+	cin.get(input);
+
+	try
+	{
+		// Stop and close the stream
+		audio->stopStream();
+		audio->closeStream();
+	}
+	catch (RtError &error)
+	{
+		error.printMessage();
+	}
+
+	cleanup:
+		delete audio;
+#endif
+
+	return 0;
 }
 

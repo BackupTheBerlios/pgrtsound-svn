@@ -7,8 +7,9 @@
 #include "CBlock.h" // inheriting class's header file
 
 /**
- * No description
- */
+* Powiedzmy, ze ma to byc wzmacniacz
+* Wzmacniacz wbrew nazwie moze czasami tlumic :P
+*/
 class Amplifier : public CBlock
 {
 	public:
@@ -16,7 +17,11 @@ class Amplifier : public CBlock
 		Amplifier();
 		// class destructor
 		~Amplifier();
-		// Process
+		
+		//! Funckcja przetwarzajaca
+		/*!
+			A more elaborate description of funckja na la la la.
+		*/
 		void Process(void);
 };
 

@@ -1,6 +1,10 @@
 #ifndef CCONNECTOR_H
 #define CCONNECTOR_H
 
+//! Kabelek do polaczen
+/*!
+Trala la la trala la la rrala la la mocium panie.
+*/
 class CConnector{
 public:
 
