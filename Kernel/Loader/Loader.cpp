@@ -100,11 +100,12 @@ void Loader::LoadFromFile(string filename)
         
                 
         if (block != NULL) {
+            block -> BUFFOR_SIZE  = FRAMES_PER_BUFFER;
+            block -> name         = blockName;
+            block -> id           = blockId;
+            block -> type         = blockType;
             block -> inConnection.reserve(block->inputCount);
             block -> outConnection.reserve(block->outputCount);
-            block -> name = blockName;
-            block -> id   = blockId;
-            block -> type = blockType;
             if (block->paramCount>0)
                 block->param  = new float[block->paramCount];
              
@@ -113,18 +114,14 @@ void Loader::LoadFromFile(string filename)
                  element = element->NextSiblingElement() ) {
     
                 strTemp = element->Value();
-                cout <<"-"<<strTemp<<"-"<<endl;
                 if (strTemp=="input") {
-                    cout <<atoi(element -> Attribute("number"))-1<<endl;
-                    block -> inConnection[atoi(element -> Attribute("number"))-1] = NULL;//project->FindConnector(atoi(element -> Attribute("idConnection")));                    
+                    block -> inConnection[atoi(element -> Attribute("number"))-1] = project->FindConnector(atoi(element -> Attribute("idConnection")));                    
                 }
-                if (strTemp=="output") {
-                    cout <<"*"<<endl;
-                    block ->   outConnection[atoi(element -> Attribute("number"))] = project->FindConnector(atoi(element -> Attribute("idConnection")));
+                if (strTemp=="output") {                    
+                    block ->   outConnection[atoi(element -> Attribute("number"))-1] = project->FindConnector(atoi(element -> Attribute("idConnection")));
                 }
-                if (strTemp=="parameter") {
-                    cout <<"*"<<endl;                   
-                    block ->   param[atoi(element -> Attribute("number"))] = atof(element -> Attribute("value"));
+                if (strTemp=="parameter") {                
+                    block ->   param[atoi(element -> Attribute("number"))-1] = atof(element -> Attribute("value"));
                 }
             
             }

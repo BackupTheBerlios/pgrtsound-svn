@@ -17,6 +17,7 @@ CConnector *Scheduler::FindConnector(int id){
             return (*i);
        
     }
+    cout << "Connector not found "<<endl;
     return NULL;
 }
  
