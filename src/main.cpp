@@ -90,6 +90,7 @@ int SDL_main(int argc, char *argv[]) {
 						break;
 				}
 				break;
+				
             case SDL_QUIT:
 				quit = 1;
 				break;

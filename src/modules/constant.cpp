@@ -1,6 +1,5 @@
 #include "constant.h"
 
-// class constructor
 Constant::Constant() {
 	type = "constant";
 	oldValue = 0;
@@ -8,7 +7,6 @@ Constant::Constant() {
 	pValue = addParam("value");
 }
 
-// class destructor
 Constant::~Constant() {
 }
 

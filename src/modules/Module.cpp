@@ -1,4 +1,4 @@
-#include "module.h" // class's header file
+#include "module.h"
 
 int Module::framesPerBlock = 64;
 int Module::sampleRate = 44100;

@@ -1,6 +1,5 @@
-#include "gain.h" // class's header file
+#include "gain.h"
 
-// class constructor
 Gain::Gain() {
 	type = "gain";
 	iIn = addInput("input");
@@ -9,7 +8,6 @@ Gain::Gain() {
 	setParam(pGain, 1);
 }
 
-// class destructor
 Gain::~Gain() {
 }
 

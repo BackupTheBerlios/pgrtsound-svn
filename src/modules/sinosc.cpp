@@ -1,6 +1,5 @@
-#include "sinosc.h" // class's header file
+#include "sinosc.h"
 
-// class constructor
 SinOsc::SinOsc() {
 	iFreq = addInput("frequency");
 	//iAmp = addInput("amplitude");
@@ -11,7 +10,6 @@ SinOsc::SinOsc() {
 	phaseIncrement = 0;
 }
 
-// class destructor
 SinOsc::~SinOsc() {
 }
 

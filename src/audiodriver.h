@@ -14,9 +14,7 @@
 class AudioDriver
 {
 	public:
-		// class constructor
 		AudioDriver();
-		// class destructor
 		~AudioDriver();
 		void init(int samplingFreq, int numBits, int framesPerBuffer, int numBuffers);
 		void start();
