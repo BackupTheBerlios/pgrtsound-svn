@@ -2,7 +2,7 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
-#include "cblock.h" // inheriting class's header file
+#include "CBlock.h" // inheriting class's header file
 
 /**
  * Generator funkcji  A*sin(2*pi*f*n+p)

@@ -5,7 +5,7 @@ class CConnector{
 public:
 
 	CConnector(int bufferSize);
-	~CConnector();
+	virtual ~CConnector();
 	
 	// dostep do poczatka i konca 'kabla' - na razie jedno i to samo :o
 	virtual float *In(void);

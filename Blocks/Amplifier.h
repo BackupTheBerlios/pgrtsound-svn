@@ -4,7 +4,7 @@
 #define AMPLIFIER_H
 
 
-#include "cblock.h" // inheriting class's header file
+#include "CBlock.h" // inheriting class's header file
 
 /**
  * No description
