@@ -22,18 +22,31 @@ static int paCallback( void *inputBuffer, void *outputBuffer,
 
 AudioDriver::AudioDriver()
 {
+	TRACE("AudioDriver", "Tworze...");
 	sampleRate = 44100;
 	numBits = 16;
 	framesPerBuffer = 64;
 	numBuffers = 0;
-
+	
 	error = Pa_Initialize();
+	if(error != paNoError)
+		TRACE("AudioDriver::AudioDriver()",  Pa_GetErrorText(error));
+	else
+		TRACE("AudioDriver", "Utworzony");
 }
 
-AudioDriver::~AudioDriver()
-{
-	Pa_CloseStream(stream);
-	Pa_Terminate();
+AudioDriver::~AudioDriver() {
+	error = Pa_CloseStream(stream);
+	if(error != paNoError)
+		TRACE("AudioDriver::~AudioDriver()",  Pa_GetErrorText(error));
+	else
+		TRACE("AudioDriver", "Strumien zakmniety");
+
+	error = Pa_Terminate();
+	if(error != paNoError)
+		TRACE("AudioDriver::~AudioDriver()",  Pa_GetErrorText(error));
+	else
+		TRACE("AudioDriver", "Zakmniety");
 }
 
 void AudioDriver::setCallback(void* cbData) {
@@ -45,6 +58,8 @@ void AudioDriver::init(int sFreq, int nBits, int fPerBuffer, int nBuffers) {
 	numBits = nBits;
 	framesPerBuffer = fPerBuffer;
 	numBuffers = nBuffers;
+
+	TRACE("AudioDriver::init()",  "Otwieram strumien");
 	 
 	error = Pa_OpenStream(
 			&stream,
@@ -63,10 +78,7 @@ void AudioDriver::init(int sFreq, int nBits, int fPerBuffer, int nBuffers) {
 			paCallback,
 			callbackData);
 
-	#ifndef NDEBUG
-	printf("PortAudio: SR = %d, BufSize = %d, devID = %d\n",
-		sampleRate, framesPerBuffer, OUTPUT_DEVICE);
-   	#endif
+	TRACE3("AudioDriver::init()", "Uruchomiono strumien ", sampleRate, "Hz ");
 }
 
 void AudioDriver::start() {
@@ -75,5 +87,13 @@ void AudioDriver::start() {
 
 void AudioDriver::stop() {
 	Pa_StopStream(stream);
+}
+
+void AudioDriver::close() {
+	error = Pa_CloseStream(stream);
+	if(error != paNoError)
+		TRACE("AudioDriver::~AudioDriver()",  Pa_GetErrorText(error));
+	else
+		TRACE("AudioDriver", "Strumien zakmniety");
 }
 

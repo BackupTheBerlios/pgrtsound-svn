@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "../debug.h"
+
 #ifndef M_PI
 #define M_PI  (3.14159265)
 #endif
@@ -37,15 +39,15 @@ class Input {
 		string	name;				/**< Nazwa wejscia */
 		float*	signal;				/**< Wskaznik na podlaczony do wejscia bufor */
 		
-		/**
-		 * Przeladowyany operator = sluzy do ustanowiania polaczen miedzy
-		 * wejsciem i wyjsciem dwoch modulow.
-		 */
-		Input&	operator=(Output& out) {
-			// poczatek bufora skad czerpac sygnal
-			this->signal = out.signal;
-			return *this;									
-		}
+//		/**
+//		 * Przeladowyany operator = sluzy do ustanowiania polaczen miedzy
+//		 * wejsciem i wyjsciem dwoch modulow.
+//		 */
+//		Input&	operator=(Output& out) {
+//			// poczatek bufora skad czerpac sygnal
+//			this->signal = out.signal;
+//			return *this;									
+//		}
 };
 
 //------------------------------------------------------------------------------
@@ -65,26 +67,32 @@ struct Param {
  */
 class Module {
 	public:
-		string type;
-		int	id;	/**< Identyfikator modulu. */
-		static int framesPerBlock;
-		static int sampleRate;
+		string			name;
+		string			type;
+		int				id;				/**< Identyfikator modulu. */
+		static int		framesPerBlock;
+		static int		sampleRate;
+		vector<Param*>	params;			/**< Wektor parametrow. */
+		vector<Input*>	inputs;			/**< Wektor wejsc. */
+		vector<Output*>	outputs;		/**< Wektor wyjsc. */
 		
 		Module();
 		~Module();
 		int addInput(string name);
 		int addOutput(string name);
 		int addParam(string name);
+		
+		/**
+		 *	Laczy wejscie bierzacego modulu z wyjsciem innego
+		 */
+		void ConnectInputTo(int numInput, float *sourceSignal);
 		void setParam(int paramNum, float value);
-		float param(int paramNum);
-		Input& input(int inputNum);
-		Output& output(int outputNum);
+		//float param(int paramNum);
+		//Input& input(int inputNum);
+		//Output& output(int outputNum);
 		virtual void process();
 		
 	private:
-		vector<Param> params;	/**< Wektor parametrow. */
-		vector<Input> inputs;	/**< Wektor wejsc. */
-		vector<Output> outputs;	/**< Wektor wyjsc. */
 };
 
 #endif // MODULE_H

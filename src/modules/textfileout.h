@@ -18,6 +18,7 @@ class TextFileOut : public Module
 	
 	private:
 		int iIn, pFreq;
+		unsigned long frames;
 };
 
 #endif // MUL_H

@@ -11,19 +11,19 @@ Constant::~Constant() {
 }
 
 void Constant::process() {
-	if (oldValue != param(pValue))
+	// jesli w tym bloku zmienila sie wartosc to wypelnij bufor wyjsciowy
+	if (oldValue != params[pValue]->value)
 	{
 		int n;
-		float value = param(pValue);
-		float *out = output(oValue).signal;
+		float value = params[pValue]->value;
+		float *out = outputs[oValue]->signal;
 			
 		#ifndef NDEBUG
 			cout << "Constant(" << id << "): zmiana wartosci z " << oldValue
 				<< " na " << value << endl;
 		#endif
 		
-		for (n = 0; n < Module::framesPerBlock; n++)
-		{
+		for (n = 0; n < Module::framesPerBlock; n++) {
 			*out++ = value;
 		}
 		oldValue = value;

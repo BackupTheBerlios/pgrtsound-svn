@@ -6,27 +6,27 @@ TextFileOut::TextFileOut() {
 	type = "TextFileOut";
 	iIn = addInput("input");
 	pFreq = addParam("freq");
-	setParam(pFreq, 1);
+	
+	frames = 0;
+	setParam(pFreq, 22050);
 }
 
 TextFileOut::~TextFileOut() {
-    
 }
 
 void TextFileOut::process() {
 	int n;
-	float* in = input(iIn).signal;
-	float pFreq1 = param(pFreq);
+	float* in = inputs[iIn]->signal;
+	float pFreq1 = params[pFreq]->value;
     
-    ofstream out("TextFielOut.txt", ios_base::app);
-    //assure(out, "TextFielOut.txt");
-    
-    
+    ofstream out("TextFileOut.txt", ios_base::app);
+    //assure(out, "TextFileOut.txt");
+
 	for (n = 0; n < Module::framesPerBlock; n++) {
-        if (n % int(pFreq1)==0)
+		frames++;
+        if (frames % (unsigned long)pFreq1 == 0)
     	   out << (*in++)  << endl;
 	}
 	
 	out.close();
-		
 }

@@ -13,9 +13,9 @@ Sum::~Sum() {
 
 void Sum::process() {
 	int n;
-	float* in1 = input(i1).signal;
-	float* in2 = input(i2).signal;
-	float* sum = output(oSum).signal;
+	float* in1 = inputs[i1]->signal;
+	float* in2 = inputs[i2]->signal;
+	float* sum = outputs[oSum]->signal;
 	
 	for(n = 0; n < Module::framesPerBlock; n++)
 	{

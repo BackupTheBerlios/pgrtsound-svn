@@ -16,13 +16,14 @@ SinOsc::~SinOsc() {
 
 void SinOsc::process() {
 	
-	float* freq = input(iFreq).signal;
+	float* freq = inputs[iFreq]->signal;
 	//float* amp = getInput(iAmp);
-	float* out = output(oOut).signal;
+	float* out = outputs[oOut]->signal;
+	float sr = (float)Module::sampleRate;
 	
 	for(int i = 0; i < Module::framesPerBlock; i++) {
         n++;
-		phaseIncrement = 2.0*M_PI*(*freq++/(float)Module::sampleRate);
+		phaseIncrement = 2.0*M_PI*(*freq++/sr);
 		*out++ = 0.5*sin(phase);
 		phase += phaseIncrement;
 	}

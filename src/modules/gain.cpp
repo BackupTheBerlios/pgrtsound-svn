@@ -13,9 +13,9 @@ Gain::~Gain() {
 
 void Gain::process() {
 	int n;
-	float* in = input(iIn).signal;
-	float* out = output(oOut).signal;
-	float gain = param(pGain);
+	float* in = inputs[iIn]->signal;
+	float* out = outputs[oOut]->signal;
+	float gain = params[pGain]->value;
 
 	for (n = 0; n < Module::framesPerBlock; n++) {
 			*out++ = (*in++) * gain;
