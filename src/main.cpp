@@ -36,7 +36,7 @@ int SDL_main(int argc, char *argv[]) {
 	}
    
     //--------------------------------------------------------------------------
-    // wazna kolejnosc
+    // wazne tu i teraz
     algo.setFramesPerBlock(FRAMES_PER_BLOCK);
     algo.setSampleRate(SAMPLE_RATE);
     
