@@ -30,9 +30,11 @@ public:
     IterConnectorVector iterOutConnection;
 	int   outputCount;
 	
-	//parametry sta³e
-	float *param;
-	int   paramCount;
+	
+    //parametry sta³e
+    float *param;
+    int   paramCount;
+
 
 
     //class constructor

@@ -7,6 +7,7 @@
 #include "../Blocks/Adder.h"
 #include "../Blocks/Amplifier.h"
 #include "../Blocks/Generator.h"
+#include "../Blocks/FixedParameter.h"
 
 
 //Scheduler

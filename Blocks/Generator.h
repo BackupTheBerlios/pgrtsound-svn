@@ -1,15 +1,16 @@
+/* Generator sinus
+ * Po³¹czenia
+ *  wejœcie=3  (A, f, p)
+ *  wyjœcie=1  (wy)
+ * Algorytm
+ *  wy = A*sin(2*pi*f*n+p)
+ */
+
+
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
 #include "CBlock.h" // inheriting class's header file
-
-//! Generator funkcji  A*sin(2*pi*f*n+p) 
-/*!
-Generuje funkcje sin uwzgledniajac parametry
-param[0] A
-param[1] f
-param[2] p
-*/
  
 class Generator : public CBlock
 {
