@@ -70,8 +70,6 @@ int main (int argc, char *argv[])
     //inicjowanie generatora
     Generator *gen       = new Generator();
     gen->BUFFOR_SIZE     = FRAMES_PER_BUFFER;
-    gen->AddrOfNextBlock = NULL;
-    gen->AddrOfPrevBlock = NULL;
     gen->param           = new float[*gen->paramCount];
     gen->param[0]        = 0.25;
     gen->param[1]        = 440./44100.;
@@ -81,8 +79,6 @@ int main (int argc, char *argv[])
     //inicjowanie wzmacniacza
     Amplifier *amp       = new Amplifier();
     amp->BUFFOR_SIZE     = FRAMES_PER_BUFFER;
-    amp->AddrOfNextBlock = NULL;
-    amp->AddrOfPrevBlock = NULL;
     amp->param           = new float[*amp->paramCount];
     amp->param[0]        = 2.;  
     amp->inConnection	= conn1;

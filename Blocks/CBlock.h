@@ -5,12 +5,8 @@
 
 class CBlock{
 public:
+  //Parametry / atrybuty
 
-    //class constructor
-	CBlock();
-	//class destructor
-	virtual ~CBlock();
-	
 	//parametry sytemowe
 	int BUFFOR_SIZE;
 	
@@ -21,15 +17,21 @@ public:
 	CConnector *outConnection;
 	int   *outputCount;
 	
-	//parametry wejœciowe
+	//parametry sta³e
 	float *param;
 	int   *paramCount;
+
+
+
+    //class constructor
+	CBlock();
+	//class destructor
+	virtual ~CBlock();
+	
 	
 	//funkcjia obliczaj¹ca/generuj¹ca
 	virtual void Process(void);
 	
-	CBlock* AddrOfNextBlock;
-	CBlock* AddrOfPrevBlock;
 };
 
 #endif //CBLOCK_H
