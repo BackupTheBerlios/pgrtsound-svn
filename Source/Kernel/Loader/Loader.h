@@ -2,15 +2,12 @@
 #define LOADER_H
 
 //XML
-#include "../../../library/TinyXML/tinyxml.h"
+#include "tinyxml.h"
 
-#ifdef TIXML_USE_STL
+
   #include <iostream>
    #include <sstream>
     using namespace std;
-#else
-   #include <stdio.h>
-#endif 
 
 #include <string>
 
@@ -37,9 +34,9 @@ public:
 	//demo -- czyli przykladowy system	
 	void Demo(void);
     //load form file
-    void LoadFromFile(string filename);
+    void LoadFromFile(const char * filename);
 	
-	//Konstruktor i destruktor
+	//Konstruktor i destruktor string
 	Loader();
 	virtual ~Loader();
 };

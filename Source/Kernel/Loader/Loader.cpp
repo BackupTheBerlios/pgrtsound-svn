@@ -6,9 +6,9 @@ Loader::~Loader()
 {}
 
 
-void Loader::LoadFromFile(string filename)
+void Loader::LoadFromFile(const char * filename)
 {
-   //wsk. do objektow tworzonych
+   //wsk. do objektow tworzonych  string
     CConnector *conn    = NULL;
     Module *module       = NULL;
     
