@@ -1,7 +1,6 @@
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 
-
 #include <string>
 
 #include "modulefactory.h"
@@ -14,7 +13,6 @@
 #include <boost/graph/topological_sort.hpp>
 #include <iterator>
 #include <utility>
-
 
 typedef std::pair<std::size_t,std::size_t> Pair;
 
