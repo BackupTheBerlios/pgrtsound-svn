@@ -10,9 +10,9 @@
 #ifndef FIXEDPARAMETER_H
 #define FIXEDPARAMETER_H
 
-#include "CBlock.h" 
+#include "Module.h" 
 
-class FixedParameter : public CBlock{
+class FixedParameter : public Module{
 public:
 
     void Process(void);

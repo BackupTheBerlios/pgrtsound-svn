@@ -33,33 +33,33 @@ void Scheduler:: AddConnector(CConnector *conn){
     cout << "[OK]"<<endl;
 }
 
-void Scheduler::AddBlock(CBlock *block){
+void Scheduler::AddModule(Module *module){
   if (isDebugMode) 
-    cout << "Add block ";
+    cout << "Add module ";
   
   int inputCount=0;
-  for (int i = 0; i < block->inputCount; i++) {
-    if (block->inConnection[i] != NULL) 
+  for (int i = 0; i < module->inputCount; i++) {
+    if (module->inConnection[i] != NULL) 
         inputCount++;    
   }
   
   //zapelnianie poloczen wejsciowych
   //wow!!! chyba troche dluga linia :)
-  for (block->iterInConnection=block->inConnection.begin();block->iterInConnection!=block->inConnection.end();block->iterInConnection++) {
-     (*(*(block->iterInConnection))->In())=1;  //a to juz chyba porazka ;)
+  for (module->iterInConnection=module->inConnection.begin();module->iterInConnection!=module->inConnection.end();module->iterInConnection++) {
+     (*(*(module->iterInConnection))->In())=1;  //a to juz chyba porazka ;)
   }
   
-  blockList.push_back(block);
+  moduleList.push_back(module);
 
   if (isDebugMode) 
-    cout << block->name << " inputCount="<<inputCount<<"  maxInputCount="<<block->inputCount<< endl;
+    cout << module->name << " inputCount="<<inputCount<<"  maxInputCount="<<module->inputCount<< endl;
 }
 
 /****************************  AddTask **********************************/
-void Scheduler::AddTask(int priority, CBlock *block){
-	taskList.push(Task(priority, block));
+void Scheduler::AddTask(int priority, Module *module){
+	taskList.push(Task(priority, module));
    if (isDebugMode) 
-        cout << "Add block " << block->name << "  priority = " << priority << endl;
+        cout << "Add module " << module->name << "  priority = " << priority << endl;
 }
 
 /****************************  CreateTaskList **********************************/
@@ -70,7 +70,7 @@ void Scheduler::CreateTaskList(){
     
     while (!stop) {
         stop = true;
-        for (IterList i = blockList.begin(); i != blockList.end(); i++ ) {
+        for (IterList i = moduleList.begin(); i != moduleList.end(); i++ ) {
             if (isDebugMode) 
                 cout << "Priority " << priority << endl;
             if ((*i)!=NULL) {
@@ -106,8 +106,8 @@ void Scheduler::Start(){
     timeStart = time(0);
     for (int i = 0; i != 16*16*16 ; i++) {
       for (vector  <Task> :: iterator it = v.begin(); it != v.end(); it++) {
-        (*it).block->Process();  
-        //cout <<(*it).block->name<<endl;
+        (*it).module->Process();  
+        //cout <<(*it).module->name<<endl;
       }
     //cout << "Counter = " << i << endl;
     }

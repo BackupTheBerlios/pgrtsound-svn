@@ -2,14 +2,14 @@
 #include <vector>
 #include "CConnector.h"
 
-#ifndef CBLOCK_H
-#define CBLOCK_H
+#ifndef Module_H
+#define Module_H
 
 using namespace std;
 
 
 
-class CBlock{
+class Module{
 public:
   //Parametry / atrybuty
 	//parametry sytemowe
@@ -38,9 +38,9 @@ public:
 
 
     //class constructor
-	CBlock();
+	Module();
 	//class destructor
-	virtual ~CBlock();
+	virtual ~Module();
 	
 	
 	//funkcjia obliczaj¹ca/generuj¹ca
@@ -48,4 +48,4 @@ public:
 	
 };
 
-#endif //CBLOCK_H
+#endif //Module_H

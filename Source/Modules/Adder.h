@@ -10,9 +10,9 @@
 #ifndef ADDER_H
 #define ADDER_H
 
-#include "CBlock.h"
+#include "Module.h"
 
-class Adder : public CBlock{
+class Adder : public Module{
 public:
 
 	Adder();

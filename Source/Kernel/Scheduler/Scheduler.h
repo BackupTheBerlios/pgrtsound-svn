@@ -10,13 +10,13 @@
 #include <iostream>
 #include <iterator>
 
-#include "../../Blocks/CBlock.h"
-#include "../../Blocks/CConnector.h"
+#include "../../Modules/Module.h"
+#include "../../Modules/CConnector.h"
 #include "Task.h"
 
 using namespace std;
 
-typedef list <CBlock *> List;
+typedef list <Module *> List;
 typedef List::iterator IterList;
 
 typedef list <CConnector *> ListConn;
@@ -39,21 +39,21 @@ private:
     //lista zadañ w kolejnoœci
 	PQV <Task> taskList;	 
 	//lista bloków w projekcie
-	List blockList;      
+	List moduleList;      
     //lista bloków w projekcie
     ListConn connectorList;
     
 
 	
   //metdoy
-	void AddTask(int priority, CBlock *block);
+	void AddTask(int priority, Module *module);
 		
 public:
   //parametry	
     bool isDebugMode;
   //metdoy
 	//dodawanie bloku do listy blokow
-	void AddBlock(CBlock *block);
+	void AddModule(Module *module);
     //dodawanie polaczenia do listy polaczen
     void AddConnector(CConnector *conn);
     //szukanie po³¹czenia od danym id

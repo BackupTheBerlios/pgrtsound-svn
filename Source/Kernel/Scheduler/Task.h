@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "../../Blocks/CBlock.h"
+#include "../../Modules/Module.h"
 
 using namespace std;
 
@@ -11,7 +11,7 @@ class Task{
 public:
   //parametry
 	int priority;  //Piorytet podsatwowy
-	CBlock *block;  //Adres do obiektu
+	Module *module;  //Adres do obiektu
 	
   //metody
 	//metoda sluzaca po porownywania priorytetow zadan (Task)
@@ -21,14 +21,14 @@ public:
 	}
 	// metoda do np w cout << task;
 	friend ostream& operator << (ostream& os, const Task& task) {
-		return os << task.priority  << ": " << task.block->name;
+		return os << task.priority  << ": " << task.module->name;
 	}
 		
 	
 	
 	//konstruktor i destruktor
-	Task(int priority1, CBlock *block1)
-	: priority(priority1),block(block1){};
+	Task(int priority1, Module *module1)
+	: priority(priority1),module(module1){};
 	virtual ~Task();
 	
 };

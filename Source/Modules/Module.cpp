@@ -1,10 +1,10 @@
-#include "CBlock.h"
+#include "Module.h"
 
 
-CBlock::CBlock()
+Module::Module()
 {}
-CBlock::~CBlock()
+Module::~Module()
 {}
 
-void CBlock::Process(void)
+void Module::Process(void)
 {}

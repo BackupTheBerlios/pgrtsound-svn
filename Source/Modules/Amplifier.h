@@ -10,13 +10,13 @@
 #define AMPLIFIER_H
 
 
-#include "CBlock.h" // inheriting class's header file
+#include "Module.h" // inheriting class's header file
 
 /**
 * Powiedzmy, ze ma to byc wzmacniacz
 * Wzmacniacz wbrew nazwie moze czasami tlumic :P
 */
-class Amplifier : public CBlock
+class Amplifier : public Module
 {
 	public:
 		// class constructor

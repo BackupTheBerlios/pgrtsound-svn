@@ -10,22 +10,22 @@ void Loader::LoadFromFile(string filename)
 {
    //wsk. do objektow tworzonych
     CConnector *conn    = NULL;
-    CBlock *block       = NULL;
+    Module *module       = NULL;
     
     
    //XML
     TiXmlNode* node                     = 0;
     TiXmlElement* projectElement        = 0;
     TiXmlElement* connectionElements    = 0;
-    TiXmlElement* blockElements         = 0;
+    TiXmlElement* moduleElements         = 0;
     TiXmlElement* element               = 0;
-    TiXmlElement* blockXML              = 0;
+    TiXmlElement* moduleXML              = 0;
     
     
-    string blockType;
-    string blockName;
+    string moduleType;
+    string moduleName;
     string strTemp;
-    int blockId;
+    int moduleId;
     
     
     TiXmlDocument doc(filename);
@@ -69,67 +69,67 @@ void Loader::LoadFromFile(string filename)
     //*******************************    
     //Stworzenie obiektów blokow
     //*******************************
-    node = projectElement->FirstChildElement("blocks");
+    node = projectElement->FirstChildElement("modules");
     assert( node );
-    blockElements = node->ToElement();
-    assert( blockElements  );
+    moduleElements = node->ToElement();
+    assert( moduleElements  );
     string idStr;
-    for( blockXML = blockElements->FirstChildElement();
-         blockXML;
-         blockXML = blockXML->NextSiblingElement() )
+    for( moduleXML = moduleElements->FirstChildElement();
+         moduleXML;
+         moduleXML = moduleXML->NextSiblingElement() )
     {
-        cout << blockXML->Attribute("type");
+        cout << moduleXML->Attribute("type");
         
-        blockType = blockXML->Attribute("type");
-        blockName = blockXML->Attribute("name");
-        blockId   = atoi(blockXML->Attribute("id"));
+        moduleType = moduleXML->Attribute("type");
+        moduleName = moduleXML->Attribute("name");
+        moduleId   = atoi(moduleXML->Attribute("id"));
 
-        block = NULL;
-        if (blockType=="Generator") {
-            block = new Generator();    
+        module = NULL;
+        if (moduleType=="Generator") {
+            module = new Generator();    
         }
-        if (blockType=="Amplifier") {
-            block = new Amplifier();    
+        if (moduleType=="Amplifier") {
+            module = new Amplifier();    
         }
-        if (blockType=="Adder") {
-            block = new Adder();    
+        if (moduleType=="Adder") {
+            module = new Adder();    
         }
-        if (blockType=="FixedParameter") {
-            block = new FixedParameter();    
+        if (moduleType=="FixedParameter") {
+            module = new FixedParameter();    
         }
         
                 
-        if (block != NULL) {
-            block -> BUFFOR_SIZE  = FRAMES_PER_BUFFER;
-            block -> name         = blockName;
-            block -> id           = blockId;
-            block -> type         = blockType;
-            block -> inConnection.reserve(block->inputCount);
-            block -> outConnection.reserve(block->outputCount);
-            if (block->paramCount>0)
-                block->param  = new float[block->paramCount];
+        if (module != NULL) {
+            module -> BUFFOR_SIZE  = FRAMES_PER_BUFFER;
+            module -> name         = moduleName;
+            module -> id           = moduleId;
+            module -> type         = moduleType;
+            module -> inConnection.reserve(module->inputCount);
+            module -> outConnection.reserve(module->outputCount);
+            if (module->paramCount>0)
+                module->param  = new float[module->paramCount];
              
-            for( element = blockXML->FirstChildElement();
+            for( element = moduleXML->FirstChildElement();
                  element;
                  element = element->NextSiblingElement() ) {
     
                 strTemp = element->Value();
                 if (strTemp=="input") {
-                    block -> inConnection[atoi(element -> Attribute("number"))-1] = project->FindConnector(atoi(element -> Attribute("idConnection")));                    
+                    module -> inConnection[atoi(element -> Attribute("number"))-1] = project->FindConnector(atoi(element -> Attribute("idConnection")));                    
                 }
                 if (strTemp=="output") {                    
-                    block ->   outConnection[atoi(element -> Attribute("number"))-1] = project->FindConnector(atoi(element -> Attribute("idConnection")));
+                    module ->   outConnection[atoi(element -> Attribute("number"))-1] = project->FindConnector(atoi(element -> Attribute("idConnection")));
                 }
                 if (strTemp=="parameter") {                
-                    block ->   param[atoi(element -> Attribute("number"))-1] = atof(element -> Attribute("value"));
+                    module ->   param[atoi(element -> Attribute("number"))-1] = atof(element -> Attribute("value"));
                 }
             
             }
         }
          
         
-        if (block != NULL){
-           project->AddBlock(block);
+        if (module != NULL){
+           project->AddModule(module);
             cout << "      [Created]" <<endl;
         }
         
@@ -185,7 +185,7 @@ int FRAMES_PER_BUFFER=256;
     //out
     gen->outConnection.push_back(conn01);    
     
-    project->AddBlock(gen);
+    project->AddModule(gen);
     
 //  
     gen          = new Generator();
@@ -198,7 +198,7 @@ int FRAMES_PER_BUFFER=256;
     //out
     gen->outConnection.push_back(conn03);
     
-    project->AddBlock(gen);
+    project->AddModule(gen);
 
 //   
     gen          = new Generator();
@@ -211,7 +211,7 @@ int FRAMES_PER_BUFFER=256;
     //out
     gen->outConnection.push_back(conn05);
     
-    project->AddBlock(gen);
+    project->AddModule(gen);
   
   
     //inicjowanie wzmacniaczy  
@@ -226,7 +226,7 @@ int FRAMES_PER_BUFFER=256;
     //out
     amp->outConnection.push_back(conn02);
     
-    project->AddBlock(amp);
+    project->AddModule(amp);
     
 //
     amp          = new Amplifier();
@@ -239,7 +239,7 @@ int FRAMES_PER_BUFFER=256;
     //out
     amp->outConnection.push_back(conn06);
     
-    project->AddBlock(amp);        
+    project->AddModule(amp);        
 
 
     //inicjowanie sumatorow
@@ -253,7 +253,7 @@ int FRAMES_PER_BUFFER=256;
     //out
     add->outConnection.push_back(conn04); 
     
-    project->AddBlock(add);
+    project->AddModule(add);
     
 //    
     add                     = new Adder();
@@ -265,7 +265,7 @@ int FRAMES_PER_BUFFER=256;
     //out
     add->outConnection.push_back(conn07); 
     
-    project->AddBlock(add);
+    project->AddModule(add);
     
     //FixedParameter
 //
@@ -278,7 +278,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn08);
     
-    project->AddBlock(fix); 
+    project->AddModule(fix); 
     
 //
     fix                     = new FixedParameter();
@@ -290,7 +290,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn09); 
     
-    project->AddBlock(fix);
+    project->AddModule(fix);
     
 //
     fix                     = new FixedParameter();
@@ -302,7 +302,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn10);
     
-    project->AddBlock(fix);  
+    project->AddModule(fix);  
     
 //
     fix                     = new FixedParameter();
@@ -314,7 +314,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn12);
     
-    project->AddBlock(fix); 
+    project->AddModule(fix); 
     
 //
     fix                     = new FixedParameter();
@@ -326,7 +326,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn13); 
     
-    project->AddBlock(fix);
+    project->AddModule(fix);
     
 //
     fix                     = new FixedParameter();
@@ -338,7 +338,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn14);
     
-    project->AddBlock(fix);      
+    project->AddModule(fix);      
     
 //
     fix                     = new FixedParameter();
@@ -350,7 +350,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn15);
     
-    project->AddBlock(fix); 
+    project->AddModule(fix); 
     
 //
     fix                     = new FixedParameter();
@@ -362,7 +362,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn16); 
     
-    project->AddBlock(fix);
+    project->AddModule(fix);
     
 //
     fix                     = new FixedParameter();
@@ -374,7 +374,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn17);
     
-    project->AddBlock(fix);      
+    project->AddModule(fix);      
     
 //
     fix                     = new FixedParameter();
@@ -386,7 +386,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn11);
     
-    project->AddBlock(fix);      
+    project->AddModule(fix);      
     
 //
     fix                     = new FixedParameter();
@@ -398,7 +398,7 @@ int FRAMES_PER_BUFFER=256;
     //in
     fix->outConnection.push_back(conn18);
     
-    project->AddBlock(fix);         
+    project->AddModule(fix);         
      
 
 }

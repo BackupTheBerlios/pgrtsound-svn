@@ -15,12 +15,12 @@
 #include <string>
 
 //Bloki
-#include "../../Blocks/CBlock.h"
-#include "../../Blocks/CConnector.h"
-#include "../../Blocks/Adder.h"
-#include "../../Blocks/Amplifier.h"
-#include "../../Blocks/Generator.h"
-#include "../../Blocks/FixedParameter.h"
+#include "../../Modules/Module.h"
+#include "../../Modules/CConnector.h"
+#include "../../Modules/Adder.h"
+#include "../../Modules/Amplifier.h"
+#include "../../Modules/Generator.h"
+#include "../../Modules/FixedParameter.h"
 
 
 //Scheduler

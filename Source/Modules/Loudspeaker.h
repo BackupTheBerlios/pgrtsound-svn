@@ -1,14 +1,15 @@
 #ifndef LOUDSPEAKER_H
 #define LOUDSPEAKER_H
 
-#include "CBlock.h"
+#include "Module.h"
 
+/*
 #if defined(__WINDOWS_DS__)
-#include "..\RTAudio\RTAudio.h"
+#include "..\..Library\RTAudio\RTAudio.h"
 #endif
+*/
 
-
-class Loudspeaker :  CBlock{
+class Loudspeaker :  Module{
 public:
 
 	Loudspeaker();

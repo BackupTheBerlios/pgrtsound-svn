@@ -3,24 +3,22 @@
 
 <ManagedProjectBuildInfo>
 <project id="RTSoundSrc.cdt.managedbuild.target.gnu.cygwin.exe.913070168" name="Executable (Gnu on Windows)" projectType="cdt.managedbuild.target.gnu.cygwin.exe">
-<configuration artifactExtension="exe" artifactName="RTSound" cleanCommand="rm -rf" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.cygwin.exe.debug.1306788763" name="Debug" parent="cdt.managedbuild.config.gnu.cygwin.exe.debug">
+<configuration artifactExtension="exe" artifactName="RTSound" cleanCommand="rm -rf" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.VCErrorParser" id="cdt.managedbuild.config.gnu.cygwin.exe.debug.1306788763" name="Debug" parent="cdt.managedbuild.config.gnu.cygwin.exe.debug">
 <toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug.1962121122" name="%ToolChainName.Dbg" superClass="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug">
 <tool command="gcc" id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug.634849443" name="GCC C Compiler" outputFlag="-o" outputPrefix="" outputs="o" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug"/>
 <tool command="g++" id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug.890651469" name="GCC C++ Compiler" outputFlag="-o" outputPrefix="" outputs="o" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug">
 <option id="gnu.cpp.compiler.option.preprocessor.def.1169501611" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-<listOptionValue builtIn="false" value="__WINDOWS_DS__"/>
 <listOptionValue builtIn="false" value="TIXML_USE_STL"/>
 </option>
 <option id="gnu.cpp.compiler.option.include.paths.495716994" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-<listOptionValue builtIn="false" value="&quot;C:\Eclipse\RTSound\RTAudio&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\!sources\tinyxml&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\Dxsdk\Include&quot;"/>
+<listOptionValue builtIn="false" value="&quot;F:\eclipse\RTSound\library\TinyXML&quot;"/>
 </option>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug.1220482763" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug"/>
 <tool command="g++" id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug.464537380" name="GCC C++ Linker" outputFlag="-o" outputPrefix="" outputs="exe" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug">
-<option id="gnu.cpp.link.option.userobjs.984037934" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
-<listOptionValue builtIn="false" value="&quot;C:\Dev-Cpp\lib\libdsound.a&quot;"/>
+<option id="gnu.cpp.link.option.userobjs.984037934" superClass="gnu.cpp.link.option.userobjs"/>
+<option id="gnu.cpp.link.option.paths.281697231" superClass="gnu.cpp.link.option.paths" valueType="stringList">
+<listOptionValue builtIn="false" value="&quot;F:\eclipse\RTSound\library\TinyXML&quot;"/>
 </option>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug.1365300874" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug"/>

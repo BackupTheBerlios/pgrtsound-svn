@@ -10,9 +10,9 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
-#include "CBlock.h" // inheriting class's header file
+#include "Module.h" // inheriting class's header file
  
-class Generator : public CBlock
+class Generator : public Module
 {
 	public:
 		// class constructor

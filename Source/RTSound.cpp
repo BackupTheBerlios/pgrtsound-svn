@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
-//Block
-#include "Blocks\Generator.h"
-#include "Blocks\Amplifier.h"
-#include "Blocks\CConnector.h"
+//Module
+#include "Modules\Generator.h"
+#include "Modules\Amplifier.h"
+#include "Modules\CConnector.h"
 
 #include "Kernel\Loader\Loader.h"
 #include "Kernel\Scheduler\Scheduler.h"
@@ -38,7 +38,7 @@ int main (int argc, char *argv[])
     project->Start();
     return 0;
 
-	cout << "Blocks initialised" << endl;
+	cout << "Modules initialised" << endl;
 
 /*	// kilka razy (4) wywolujemy Process()
 	for(int n = 0; n < 4; n++)
