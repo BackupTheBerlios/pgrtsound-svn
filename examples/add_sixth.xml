@@ -1,0 +1,25 @@
+<?xml version=".0" encoding="UTF-8" ?>
+<algorithm> 
+
+	<modules>
+		<module type="SinOsc" name="SinOsc" id="1"/>	
+		<module type="SinOsc" name="SinOsc" id="2"/>	
+	    <module type="Constant" name="Constant" id="3"/>	
+	 	<module type="Constant" name="Constant" id="4"/>	
+		<module type="Sumator" name="Sumator" id="5"/>	
+	</modules>	
+
+	<connections>
+		<connection idModule1="1" output="0" idModule2="5" input="0"/>	
+		<connection idModule1="2" output="0" idModule2="5" input="1"/>
+		<connection idModule1="3" output="0" idModule2="1" input="0"/>
+		<connection idModule1="4" output="0" idModule2="2" input="0"/>
+		<connection idModule1="5" output="0" idModule2="0" input="0"/>	
+	</connections>
+
+	<parameters>
+		<parameter idModule="4" number="0" value="261"/>	
+		<parameter idModule="3" number="0" value="440"/>
+	</parameters>
+
+</algorithm> 
