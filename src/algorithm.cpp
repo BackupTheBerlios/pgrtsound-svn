@@ -23,7 +23,6 @@ float* Algorithm::process() {
 	}
 	i--;
 	return modulesQueue[i]->input(0).signal;
-
 }
 
 int Algorithm::addModule(string type) {
@@ -84,7 +83,6 @@ void Algorithm::setQueueManually(int* order, int num) {
 	for(int i = 0; i < num; i++) {
 		modulesQueue.push_back( modules[ order[i] ] );
 	}
-
 }
 
 void Algorithm::setFramesPerBlock(unsigned long fpb) {
