@@ -10,6 +10,28 @@ Scheduler::Scheduler(){
 Scheduler::~Scheduler(){	
 }
 
+
+CConnector *Scheduler::FindConnector(int id){
+    for (IterListConn i = connectorList.begin(); i != connectorList.end(); i++ ) {    
+        if ((*i)->id == id)
+            return (*i);
+       
+    }
+    return NULL;
+}
+ 
+ 
+   
+void Scheduler:: AddConnector(CConnector *conn){
+  if (isDebugMode) 
+    cout << "Add connector ";
+    
+   connectorList.push_back(conn);
+  
+  if (isDebugMode) 
+    cout << "[OK]"<<endl;
+}
+
 void Scheduler::AddBlock(CBlock *block){
   if (isDebugMode) 
     cout << "Add block ";

@@ -61,47 +61,47 @@
 		</block>
 		<block type="FixedParameter" name="Fix1" id="8">
 			<output number="1" idConnection="8"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix2" id="9">
 			<output number="1" idConnection="9"/>		
-  		<parameter id="0" value="0.2" />
+  		<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix3" id="10">
 			<output number="1" idConnection="10"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix4" id="11">
 			<output number="1" idConnection="12"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix5" id="12">
 			<output number="1" idConnection="13"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>	
 		<block type="FixedParameter" name="Fix6" id="13">
 			<output number="1" idConnection="14"/>		
-  		<parameter id="0" value="0.2" />
+  		<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix7" id="14">
 			<output number="1" idConnection="15"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix8" id="15">
 			<output number="1" idConnection="16"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix9" id="16">
 			<output number="1" idConnection="17"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix10" id="17">
 			<output number="1" idConnection="11"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 		<block type="FixedParameter" name="Fix11" id="18">
 			<output number="1" idConnection="18"/>		
-			<parameter id="0" value="0.2" />
+			<parameter number="1" value="0.2" />
 		</block>
 	</blocks>	
 </project>

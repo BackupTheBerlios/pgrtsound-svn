@@ -12,6 +12,7 @@
    #include <stdio.h>
 #endif 
 
+#include <string>
 
 //Bloki
 #include "../../Blocks/CBlock.h"
@@ -30,12 +31,13 @@ class Loader{
 public:
 //Atrybuty
 	Scheduler *project;
+    int FRAMES_PER_BUFFER;
 	
 //Metody
 	//demo -- czyli przykladowy system	
 	void Demo(void);
     //load form file
-    void LoadFromFile (string filename);
+    void LoadFromFile(string filename);
 	
 	//Konstruktor i destruktor
 	Loader();

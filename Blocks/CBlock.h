@@ -14,7 +14,7 @@ public:
   //Parametry / atrybuty
 	//parametry sytemowe
 	int BUFFOR_SIZE;
-	int idBlock;    //id blokum, unikalny
+	int id;    //id blokum, unikalny
 	string name; 	//Unikalna w skali prokjektu (nazwa moze sie skladac z typ+id ale nie koniecznie
 	string type;    //Czy Generator czy Aplife czy inne ustrojstwo :)
 	

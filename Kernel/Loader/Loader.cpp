@@ -1,13 +1,34 @@
 #include "Loader.h"
-Loader::Loader()
-{}
+Loader::Loader(){
+    FRAMES_PER_BUFFER = 256;
+}
 Loader::~Loader()
 {}
 
 
-void LoadFromFile (string filename)
+void Loader::LoadFromFile(string filename)
 {
-    TiXmlDocument doc( filename);
+   //wsk. do objektow tworzonych
+    CConnector *conn    = NULL;
+    CBlock *block       = NULL;
+    
+    
+   //XML
+    TiXmlNode* node                     = 0;
+    TiXmlElement* projectElement        = 0;
+    TiXmlElement* connectionElements    = 0;
+    TiXmlElement* blockElements         = 0;
+    TiXmlElement* element               = 0;
+    TiXmlElement* blockXML              = 0;
+    
+    
+    string blockType;
+    string blockName;
+    string strTemp;
+    int blockId;
+    
+    
+    TiXmlDocument doc(filename);
     bool loadOkay = doc.LoadFile();
 
     if ( !loadOkay )
@@ -15,10 +36,108 @@ void LoadFromFile (string filename)
         cout << "Could not load test file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
         exit( 1 );
     } 
-    TiXmlNode* node = 0;
-    TiXmlElement* todoElement = 0;
-    TiXmlElement* itemElement = 0;
- 
+    
+    node = doc.FirstChild( "project" );
+    assert( node );
+    projectElement = node->ToElement();
+    assert( projectElement );
+    
+    //*******************************
+    //Stworzenie obiektów connections
+    //*******************************
+    node = projectElement->FirstChildElement("connections");
+    assert( node );
+    connectionElements = node->ToElement();
+    assert( connectionElements );
+   
+    for( element = connectionElements->FirstChildElement();
+         element;
+         element = element->NextSiblingElement() )
+    {
+        cout << element ->Attribute("name");
+        
+        conn = new CConnector(FRAMES_PER_BUFFER);
+        conn->name = element ->Attribute("name");
+        conn->id  = atoi(element ->Attribute("id"));
+        
+        project->AddConnector(conn);
+        cout << "      [Created]" <<endl;
+        
+    }
+    
+    
+    //*******************************    
+    //Stworzenie obiektów blokow
+    //*******************************
+    node = projectElement->FirstChildElement("blocks");
+    assert( node );
+    blockElements = node->ToElement();
+    assert( blockElements  );
+    string idStr;
+    for( blockXML = blockElements->FirstChildElement();
+         blockXML;
+         blockXML = blockXML->NextSiblingElement() )
+    {
+        cout << blockXML->Attribute("type");
+        
+        blockType = blockXML->Attribute("type");
+        blockName = blockXML->Attribute("name");
+        blockId   = atoi(blockXML->Attribute("id"));
+
+        block = NULL;
+        if (blockType=="Generator") {
+            block = new Generator();    
+        }
+        if (blockType=="Amplifier") {
+            block = new Amplifier();    
+        }
+        if (blockType=="Adder") {
+            block = new Adder();    
+        }
+        if (blockType=="FixedParameter") {
+            block = new FixedParameter();    
+        }
+        
+                
+        if (block != NULL) {
+            block -> inConnection.reserve(block->inputCount);
+            block -> outConnection.reserve(block->outputCount);
+            block -> name = blockName;
+            block -> id   = blockId;
+            block -> type = blockType;
+            if (block->paramCount>0)
+                block->param  = new float[block->paramCount];
+             
+            for( element = blockXML->FirstChildElement();
+                 element;
+                 element = element->NextSiblingElement() ) {
+    
+                strTemp = element->Value();
+                cout <<"-"<<strTemp<<"-"<<endl;
+                if (strTemp=="input") {
+                    cout <<atoi(element -> Attribute("number"))-1<<endl;
+                    block -> inConnection[atoi(element -> Attribute("number"))-1] = NULL;//project->FindConnector(atoi(element -> Attribute("idConnection")));                    
+                }
+                if (strTemp=="output") {
+                    cout <<"*"<<endl;
+                    block ->   outConnection[atoi(element -> Attribute("number"))] = project->FindConnector(atoi(element -> Attribute("idConnection")));
+                }
+                if (strTemp=="parameter") {
+                    cout <<"*"<<endl;                   
+                    block ->   param[atoi(element -> Attribute("number"))] = atof(element -> Attribute("value"));
+                }
+            
+            }
+        }
+         
+        
+        if (block != NULL){
+           project->AddBlock(block);
+            cout << "      [Created]" <<endl;
+        }
+        
+    }
+    
 }
 
 

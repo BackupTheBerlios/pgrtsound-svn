@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 //Block
 #include "Blocks\Generator.h"
 #include "Blocks\Amplifier.h"
@@ -27,7 +28,8 @@ int main (int argc, char *argv[])
 
     Loader *load = new Loader();    
     load->project = project;
-    load->Demo();
+    
+    load->LoadFromFile("c:\\demo01.xml");
     cout << "Project loaded." << endl;
 
     project->CreateTaskList();

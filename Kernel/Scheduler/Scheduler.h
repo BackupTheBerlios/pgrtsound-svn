@@ -11,6 +11,7 @@
 #include <iterator>
 
 #include "../../Blocks/CBlock.h"
+#include "../../Blocks/CConnector.h"
 #include "Task.h"
 
 using namespace std;
@@ -18,6 +19,8 @@ using namespace std;
 typedef list <CBlock *> List;
 typedef List::iterator IterList;
 
+typedef list <CConnector *> ListConn;
+typedef ListConn::iterator IterListConn;
 
 template<class T> class PQV : public priority_queue<T> {
 public:
@@ -35,9 +38,10 @@ private:
   //parametry
     //lista zadañ w kolejnoœci
 	PQV <Task> taskList;	 
-	//lista bloków w sytemie
+	//lista bloków w projekcie
 	List blockList;      
- 
+    //lista bloków w projekcie
+    ListConn connectorList;
     
 
 	
@@ -50,6 +54,10 @@ public:
   //metdoy
 	//dodawanie bloku do listy blokow
 	void AddBlock(CBlock *block);
+    //dodawanie polaczenia do listy polaczen
+    void AddConnector(CConnector *conn);
+    //szukanie po³¹czenia od danym id
+    CConnector *FindConnector(int id);
 	//tworzenie listy zadañ
 	void CreateTaskList(); 
     //Rozpoczêcie przetwarzania
