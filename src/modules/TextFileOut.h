@@ -7,7 +7,7 @@
 
 using namespace std;
 /**
- * Modul mnozenia. Mnozy skalarnie dwa sygnaly wejsciowe.
+ * Modul zapisu do pliku. Dane dopisywane s¹ do pliku FileTexOut.txt
  */
 class TextFileOut : public Module
 {

@@ -11,10 +11,11 @@ Algorithm::~Algorithm() {
     for (int i=0; i<=modules.size(); i++)
     {
         delete adjacencyMatrix[i];
+      	delete modules[i];
     } 
     delete adjacencyMatrix;
     
-	delete modules[0];
+
 	
 	cout << "Bye.";
 }
