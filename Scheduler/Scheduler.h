@@ -11,13 +11,9 @@
 
 using namespace std;
 
-struct BlockInfo {
-    CBlock *block;
-    int inputCount;   
-};
+typedef list <CBlock *> List;
+typedef List::iterator IterList;
 
-typedef list <BlockInfo *> List;
-typedef List::iterator Iter;
 
 class Scheduler{
 private:

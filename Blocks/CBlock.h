@@ -19,12 +19,15 @@ public:
 	string type;    //Czy Generator czy Aplife czy inne ustrojstwo :)
 	
 	typedef std::vector <CConnector *> CConnectorVector;
-	
+	typedef CConnectorVector::iterator IterConnectorVector;
+  
 	//druty
 	CConnectorVector inConnection;
+    IterConnectorVector iterInConnection;
 	int   inputCount;
 	
 	CConnectorVector outConnection;
+    IterConnectorVector iterOutConnection;
 	int   outputCount;
 	
 	//parametry sta³e

@@ -12,8 +12,8 @@
 <optionReference defaultValue="gnu.cpp.compiler.optimization.level.none" id="gnu.cpp.compiler.option.optimization.level"/>
 <optionReference defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.option.debugging.level"/>
 <optionReference id="gnu.cpp.compiler.option.include.paths">
-<listOptionValue builtIn="false" value="&quot;E:\Adam\Eclipse\RTSound\RTAudio&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Microsoft DirectX 9.0 SDK (October 2004)\Include&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Eclipse\RTSound\RTAudio&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Dxsdk\Include&quot;"/>
 </optionReference>
 <optionReference id="gnu.cpp.compiler.option.preprocessor.def">
 <listOptionValue builtIn="false" value="__WINDOWS_DS__"/>
