@@ -60,9 +60,9 @@ int SDL_main(int argc, char *argv[]) {
 	algo.connectModules(sum, 0, osc, 0);
 	algo.connectModules(osc, 0, 0, 0);	// 0 = AudioPortOut
 	
-	algo.module(freq_mod)->setParam(0, 5);
+	algo.module(freq_mod)->setParam(0, 5);		// czest. modulacji
 	algo.module(gain_mod)->setParam(0, 150);	// glebokosc modulacji
-	algo.module(freq_osc)->setParam(0, 440);
+	algo.module(freq_osc)->setParam(0, 440);	// czest. nosnej
 	
 	// reczne ustalenie kolejnosci	
 	int order[] = {freq_mod, mod, gain_mod, freq_osc, sum, osc, 0};

@@ -93,7 +93,6 @@ void Algorithm::setFramesPerBlock(unsigned long fpb) {
 	#ifndef NDEBUG
 		cout << "Module::framesPerBlock = " << Module::framesPerBlock << endl;
 	#endif
-	
 
 /* TODO (#1#): reinicjalizacja buforow wyjsciowych wszystkich 
                modulow */	
