@@ -1,8 +1,6 @@
 #ifndef MODULEFACTORY_H
 #define MODULEFACTORY_H
 
-#include <map>
-
 #include "modules/module.h"
 #include "modules/sinosc.h"
 #include "modules/constant.h"
