@@ -13,10 +13,12 @@
 <optionReference defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.option.debugging.level"/>
 <optionReference id="gnu.cpp.compiler.option.include.paths">
 <listOptionValue builtIn="false" value="&quot;C:\Eclipse\RTSound\RTAudio&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\!sources\tinyxml&quot;"/>
 <listOptionValue builtIn="false" value="&quot;C:\Dxsdk\Include&quot;"/>
 </optionReference>
 <optionReference id="gnu.cpp.compiler.option.preprocessor.def">
 <listOptionValue builtIn="false" value="__WINDOWS_DS__"/>
+<listOptionValue builtIn="false" value="TIXML_USE_STL"/>
 </optionReference>
 </toolReference>
 <toolReference command="g++" id="cdt.managedbuild.tool.gnu.cpp.linker" outputFlag="-o" outputPrefix="" outputs="exe">

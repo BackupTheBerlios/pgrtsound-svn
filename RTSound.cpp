@@ -33,6 +33,7 @@ int main (int argc, char *argv[])
     project->CreateTaskList();
     cout << "Created task list." << endl;
    
+    project->Start();
     return 0;
 
 	cout << "Blocks initialised" << endl;
