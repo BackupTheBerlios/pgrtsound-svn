@@ -2,7 +2,7 @@
 #define LOADER_H
 
 //XML
-#include "../../TinyXML/tinyxml.h"
+#include "../../../library/TinyXML/tinyxml.h"
 
 #ifdef TIXML_USE_STL
   #include <iostream>
