@@ -1,8 +1,8 @@
 #include <iostream>
 //Block
-#include "Generator.h"
-#include "Amplifier.h"
-#include "CConnector.h"
+#include "Blocks\Generator.h"
+#include "Blocks\Amplifier.h"
+#include "Blocks\CConnector.h"
 //#include "include\portaudio+v18_1\pa_common\portaudio.h"
 // portaudio stuff
 
