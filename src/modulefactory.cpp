@@ -25,7 +25,9 @@ Module* ModuleFactory::createModule(string type) {
 	if (type == "Gain") {
 		return new Gain;
 	}
-
+    
+    
+    //exit (1);
 	// throw bo nie ma modulu?
 
 }
