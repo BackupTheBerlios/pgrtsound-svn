@@ -23,27 +23,29 @@ typedef std::pair<std::size_t,std::size_t> Pair;
  */
 class Algorithm {
 	public:
-		//unsigned long currentFrame;
 		vector<Module*>   modules;
 		vector<Module*>   modulesQueue;
-
-		Algorithm();
-		~Algorithm();
         int     **adjacencyMatrix;	//  macierz s¹siedztwa [j][k] gdy 1 to po³¹czeni j -> k, gdy -1 odwrotnie
-		float   *process();
-		int     addModule(string type);
-		void    printInfo();
+
+
+  		Algorithm();
+		~Algorithm();
+		float*	Process();
+		int     AddModule(string type);
+		void    PrintInfo();
 		//Module* module(int moduleId);
 		void    CreateAdjacencyMatrix(void);
-		void    connectModules(int moduleId1, int outputId, int moduleId2, int inputId);
+		void    ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId);
 		void    CreateQueue(void);
-		void    setQueueManually(int* order, int num);
-		void    setFramesPerBlock(unsigned long fpb);
-		void    setSampleRate(int sRate); 		
+		void    SetQueueManually(int* order, int num);
+		void    SetFramesPerBlock(unsigned long fpb);
+		void    SetSampleRate(int sRate);
         void    LoadModulesFromFile(const char * filename);
         void    LoadConnectionsFromFile(const char * filename);
         void    LoadParametersFromFile(const char * filename);
+        
 	private:
+   		//unsigned long currentFrame;
 		//unsigned long currentBlock;
 		int               sampleRate;
 		unsigned long     framesPerBlock;

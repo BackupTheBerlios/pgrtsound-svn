@@ -9,7 +9,7 @@ ModuleFactory::~ModuleFactory() {
 /**
  * Towrzy modul wybranego typu i zwraca do niego wskaznik
  */
-Module* ModuleFactory::createModule(string type) {
+Module* ModuleFactory::CreateModule(string type) {
 	if (type == "Constant") {
 		return new Constant;
 	}

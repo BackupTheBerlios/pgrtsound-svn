@@ -16,19 +16,19 @@ class AudioDriver
 	public:
 		AudioDriver();
 		~AudioDriver();
-		void init(int samplingFreq, int numBits, int framesPerBuffer, int numBuffers);
-		void start();
-		void stop();
-		void close();
-		void setCallback(void* cbData);
+		void Init(int samplingFreq, int numBits, int framesPerBuffer, int numBuffers);
+		void Start();
+		void Stop();
+		void Close();
+		void SetCallback(void* cbData);
 		
 	private:
-		void* callbackData;
-		int sampleRate;
-		int numBits;
-		int framesPerBuffer;
-		int numBuffers;
-		PaError error;
+		void*	callbackData;
+		int		sampleRate;
+		int		numBits;
+		int		framesPerBuffer;
+		int		numBuffers;
+		PaError	error;
 		PortAudioStream* stream;
 };
 

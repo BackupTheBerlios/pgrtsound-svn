@@ -24,17 +24,17 @@ Algorithm::~Algorithm() {
  * Wywolanie tej funkcji spowoduje przeliczenie bloku ramek o dlugosci
  * framesPerBlock.
  */
-float* Algorithm::process() {
+float* Algorithm::Process() {
 	int i;
 	for(i = 0; i < modulesQueue.size(); i++) {
-		modulesQueue[i]->process();
+		modulesQueue[i]->Process();
 	}
 	i--;
 	return modulesQueue[i]->inputs[0]->signal;
 }
 
-int Algorithm::addModule(string type) {
-	Module* m = moduleFactory.createModule(type);
+int Algorithm::AddModule(string type) {
+	Module* m = moduleFactory.CreateModule(type);
 	
 	m->id = modules.size();
 	modules.push_back(m);
@@ -44,7 +44,7 @@ int Algorithm::addModule(string type) {
 	return m->id;
 }
 
-void Algorithm::printInfo() {
+void Algorithm::PrintInfo() {
 	cout << endl << "Informacje o algorytmie: " << endl;
 	for(int i = 0; i < modules.size(); i++) {
 		cout << "modul id: " << modules[i]->id << "     typ modulu: " <<
@@ -77,7 +77,7 @@ void Algorithm::printInfo() {
 /**
  * Laczenie dwoch blokow
  */
-void Algorithm::connectModules(int moduleId1, int outputId, int moduleId2, int inputId) {
+void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId) {
 	#ifndef NDEBUG
 		cout << "Lacze " << 
 			modules[moduleId1]->type << "(" << modules[moduleId1]->outputs[outputId]->name << ") -> " <<
@@ -96,7 +96,7 @@ void Algorithm::connectModules(int moduleId1, int outputId, int moduleId2, int i
  * Dla celow testowych mozna za pomoca tej funckji ustawci recznie kolejnosc
  * przetwarzania modulow.
  */
-void Algorithm::setQueueManually(int* order, int num) {
+void Algorithm::SetQueueManually(int* order, int num) {
 	TRACE("Algorithm", "Reczne uxtawianie kolejki... ");
 	
 	modulesQueue.clear();
@@ -108,7 +108,7 @@ void Algorithm::setQueueManually(int* order, int num) {
 	TRACE("Algorithm", "Kolejka ustawiona");
 }
 
-void Algorithm::setFramesPerBlock(unsigned long fpb) {
+void Algorithm::SetFramesPerBlock(unsigned long fpb) {
 	framesPerBlock = fpb;
 
 	Module::framesPerBlock = fpb; // wartos widoczna we wszystkich modulach
@@ -118,7 +118,7 @@ void Algorithm::setFramesPerBlock(unsigned long fpb) {
                modulow */	
 }
 
-void Algorithm::setSampleRate(int sRate) {
+void Algorithm::SetSampleRate(int sRate) {
 	sampleRate = sRate;
 	Module::sampleRate = sRate; // wartos widoczna we wszystkich modulach
 
@@ -176,7 +176,7 @@ void Algorithm::LoadModulesFromFile(const char * filename) {
        moduleType = moduleXML->Attribute("type");
        //moduleName = moduleXML->Attribute("name");      
        moduleId   = atoi(moduleXML->Attribute("id"));  
-       module     = addModule(moduleType);
+       module     = AddModule(moduleType);
        if (module != moduleId) exit(1);
 	}
 }
@@ -224,7 +224,7 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
          moduleXML;
          moduleXML = moduleXML->NextSiblingElement() )
     {
-        modules[ atoi(moduleXML -> Attribute("idModule")) ]->setParam(atoi(moduleXML -> Attribute("number")), atof(moduleXML -> Attribute("value")));
+        modules[ atoi(moduleXML -> Attribute("idModule")) ]->SetParam(atoi(moduleXML -> Attribute("number")), atof(moduleXML -> Attribute("value")));
     }
     
  	TRACE("Algorithm", "Parametry wczytane");
@@ -274,7 +274,7 @@ void Algorithm::LoadConnectionsFromFile(const char * filename) {
          moduleXML;
          moduleXML = moduleXML->NextSiblingElement() )
     {
-         connectModules(atoi(moduleXML -> Attribute("idModule1")), atoi(moduleXML -> Attribute("output")), atoi(moduleXML -> Attribute("idModule2")), atoi(moduleXML -> Attribute("input")));    
+         ConnectModules(atoi(moduleXML -> Attribute("idModule1")), atoi(moduleXML -> Attribute("output")), atoi(moduleXML -> Attribute("idModule2")), atoi(moduleXML -> Attribute("input")));
     }
     
     TRACE("Algorithm", "Moduly polaczone");

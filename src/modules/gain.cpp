@@ -2,16 +2,16 @@
 
 Gain::Gain() {
 	type = "gain";
-	iIn = addInput("input");
-	oOut = addOutput("output");
-	pGain = addParam("gain");
-	setParam(pGain, 1);
+	iIn = AddInput("input");
+	oOut = AddOutput("output");
+	pGain = AddParam("gain");
+	SetParam(pGain, 1);
 }
 
 Gain::~Gain() {
 }
 
-void Gain::process() {
+void Gain::Process() {
 	int n;
 	float* in = inputs[iIn]->signal;
 	float* out = outputs[oOut]->signal;

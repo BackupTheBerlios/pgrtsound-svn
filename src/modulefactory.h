@@ -18,7 +18,7 @@ class ModuleFactory {
 	public:
 		ModuleFactory();
 		~ModuleFactory();
-		Module* createModule(string type);
+		Module* CreateModule(string type);
 };
 
 #endif // MODULEFACTORY_H

@@ -78,19 +78,19 @@ class Module {
 		
 		Module();
 		~Module();
-		int addInput(string name);
-		int addOutput(string name);
-		int addParam(string name);
+		int AddInput(string name);
+		int AddOutput(string name);
+		int AddParam(string name);
 		
 		/**
 		 *	Laczy wejscie bierzacego modulu z wyjsciem innego
 		 */
 		void ConnectInputTo(int numInput, float *sourceSignal);
-		void setParam(int paramNum, float value);
+		void SetParam(int paramNum, float value);
 		//float param(int paramNum);
 		//Input& input(int inputNum);
 		//Output& output(int outputNum);
-		virtual void process();
+		virtual void Process();
 		
 	private:
 };

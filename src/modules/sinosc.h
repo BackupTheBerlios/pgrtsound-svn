@@ -13,7 +13,7 @@ class SinOsc : public Module
 	public:
 		SinOsc();
 		~SinOsc();
-		void process();
+		void Process();
 
 	private:
 		int iFreq, iAmp, oOut; // indeksy wejsc i wyjsc

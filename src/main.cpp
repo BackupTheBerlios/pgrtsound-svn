@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
 
     //--------------------------------------------------------------------------	
     // wazne tu i teraz
-    algo.setFramesPerBlock(FRAMES_PER_BLOCK);
-    algo.setSampleRate(SAMPLE_RATE);
+    algo.SetFramesPerBlock(FRAMES_PER_BLOCK);
+    algo.SetSampleRate(SAMPLE_RATE);
     
 //	// DEMO
 //	//      
@@ -77,18 +77,18 @@ int main(int argc, char *argv[]) {
     
 	//algo.printInfo();
 
-	audio.setCallback((void*)&algo);
-	audio.init(SAMPLE_RATE, 16, FRAMES_PER_BLOCK, 0);
+	audio.SetCallback((void*)&algo);
+	audio.Init(SAMPLE_RATE, 16, FRAMES_PER_BLOCK, 0);
 	  	
 	while(SDL_WaitEvent( &event ) and !quit) {
 		switch( event.type ) {
             case SDL_KEYDOWN:
 				switch(event.key.keysym.sym) {
 					case SDLK_F5:
-						audio.start();
+						audio.Start();
 						break;
 					case SDLK_F8:
-						audio.stop();
+						audio.Stop();
 						break;
 					default:
 						break;
@@ -104,6 +104,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	audio.close();
+	audio.Close();
 	SDL_Quit();
 }

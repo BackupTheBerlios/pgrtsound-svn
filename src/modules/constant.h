@@ -10,7 +10,7 @@ class Constant : public Module {
 	public:
 		Constant();
 		~Constant();
-		void process();
+		void Process();
 		
 	private:
 		int oValue;	// indeks wyjscia

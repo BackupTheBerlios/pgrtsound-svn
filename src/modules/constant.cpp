@@ -3,14 +3,14 @@
 Constant::Constant() {
 	type = "constant";
 	oldValue = 0;
-	oValue = addOutput("value");
-	pValue = addParam("value");
+	oValue = AddOutput("value");
+	pValue = AddParam("value");
 }
 
 Constant::~Constant() {
 }
 
-void Constant::process() {
+void Constant::Process() {
 	// jesli w tym bloku zmienila sie wartosc to wypelnij bufor wyjsciowy
 	if (oldValue != params[pValue]->value)
 	{

@@ -1,9 +1,9 @@
 #include "sinosc.h"
 
 SinOsc::SinOsc() {
-	iFreq = addInput("frequency");
+	iFreq = AddInput("frequency");
 	//iAmp = addInput("amplitude");
-	oOut = addOutput("output signal");
+	oOut = AddOutput("output signal");
 	
 	type = "sinosc";
 	phase = 0;
@@ -14,7 +14,7 @@ SinOsc::SinOsc() {
 SinOsc::~SinOsc() {
 }
 
-void SinOsc::process() {
+void SinOsc::Process() {
 	
 	float* freq = inputs[iFreq]->signal;
 	//float* amp = getInput(iAmp);

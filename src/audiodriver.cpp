@@ -9,7 +9,7 @@ static int paCallback( void *inputBuffer, void *outputBuffer,
 
 	Algorithm* alg = (Algorithm*)userData;
 		
-	float* gen = alg->process();
+	float* gen = alg->Process();
 	float* out = (float*)outputBuffer;
 
 	for(i = 0; i < framesPerBuffer; i++) {
@@ -49,11 +49,11 @@ AudioDriver::~AudioDriver() {
 		TRACE("AudioDriver", "Zakmniety");
 }
 
-void AudioDriver::setCallback(void* cbData) {
+void AudioDriver::SetCallback(void* cbData) {
 	callbackData = cbData;
 }
 
-void AudioDriver::init(int sFreq, int nBits, int fPerBuffer, int nBuffers) {
+void AudioDriver::Init(int sFreq, int nBits, int fPerBuffer, int nBuffers) {
 	sampleRate = sFreq;
 	numBits = nBits;
 	framesPerBuffer = fPerBuffer;
@@ -81,15 +81,15 @@ void AudioDriver::init(int sFreq, int nBits, int fPerBuffer, int nBuffers) {
 	TRACE3("AudioDriver::init()", "Uruchomiono strumien ", sampleRate, "Hz ");
 }
 
-void AudioDriver::start() {
+void AudioDriver::Start() {
 	Pa_StartStream(stream);
 }
 
-void AudioDriver::stop() {
+void AudioDriver::Stop() {
 	Pa_StopStream(stream);
 }
 
-void AudioDriver::close() {
+void AudioDriver::Close() {
 	error = Pa_CloseStream(stream);
 	if(error != paNoError)
 		TRACE("AudioDriver::~AudioDriver()",  Pa_GetErrorText(error));

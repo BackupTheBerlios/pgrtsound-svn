@@ -11,7 +11,7 @@ class Gain : public Module
 	public:
 		Gain();
 		~Gain();
-		void process();
+		void Process();
 	
 	private:
 		int iIn, oOut, pGain;

@@ -11,7 +11,7 @@ class Sum : public Module
 	public:
 		Sum();
 		~Sum();
-		void process();
+		void Process();
 	
 	private:
 		int i1, i2, oSum;

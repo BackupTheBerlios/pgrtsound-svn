@@ -32,7 +32,7 @@ Module::~Module() {
 /**
  * Dodanie parametru o nazwie name
  */
-int Module::addParam(string name) {
+int Module::AddParam(string name) {
 	Param* param = new Param;
 	
 	param->name = name;
@@ -49,7 +49,7 @@ int Module::addParam(string name) {
  * Funkcja po dodaniu wejscia zwraca numer idnetyfikujacy to wejscie w module.
  * Nazwa moze byc dowolna, byc moze bedzie miala wieksze zastosowanie w GUI.
  */
-int Module::addInput(string name) {
+int Module::AddInput(string name) {
 	Input* input = new Input;
 	
 	input->name = name;
@@ -64,7 +64,7 @@ int Module::addInput(string name) {
 /**
  * Dodanie wyjscia o nazwie name
  */
-int Module::addOutput(string name) {
+int Module::AddOutput(string name) {
 	Output* output = new Output;
 	
 	output->name = name;
@@ -84,7 +84,7 @@ void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 /**
  * Funckja przetwarzania. Musi zostac zredefiniowana w kazdym module.
  */
-void Module::process() {
+void Module::Process() {
 	// nic sie nie dzieje
 }
 
@@ -112,6 +112,6 @@ void Module::process() {
 /**
  * Zmiana wartosci parametru numer paramNum na wartosc value.
  */
-void Module::setParam(int paramNum, float value) {
+void Module::SetParam(int paramNum, float value) {
 	params[paramNum]->value = value;
 }

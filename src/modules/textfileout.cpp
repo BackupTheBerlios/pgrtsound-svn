@@ -4,17 +4,17 @@ using namespace std;
 
 TextFileOut::TextFileOut() {
 	type = "TextFileOut";
-	iIn = addInput("input");
-	pFreq = addParam("freq");
+	iIn = AddInput("input");
+	pFreq = AddParam("freq");
 	
 	frames = 0;
-	setParam(pFreq, 22050);
+	SetParam(pFreq, 22050);
 }
 
 TextFileOut::~TextFileOut() {
 }
 
-void TextFileOut::process() {
+void TextFileOut::Process() {
 	int n;
 	float* in = inputs[iIn]->signal;
 	float pFreq1 = params[pFreq]->value;

@@ -14,7 +14,7 @@ class TextFileOut : public Module
 	public:
 		TextFileOut();
 		~TextFileOut();
-		void process();
+		void Process();
 	
 	private:
 		int iIn, pFreq;

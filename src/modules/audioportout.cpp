@@ -2,7 +2,7 @@
 
 AudioPortOut::AudioPortOut() {
 	type = "AudioPortOut";
-	addInput("audio in");
+	AddInput("audio in");
 }
 
 AudioPortOut::~AudioPortOut() {
