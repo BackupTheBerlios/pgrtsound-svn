@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?fileVersion 2.0.0?>
+<?fileVersion 2.1.0?>
 
 <ManagedProjectBuildInfo>
-<target artifactName="RTSound" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="RTSound.cdt.managedbuild.target.gnu.cygwin.exe.121167167" isAbstract="false" isTest="false" name="Executable (Gnu on Windows)" parent="cdt.managedbuild.target.gnu.cygwin.exe">
-<configuration id="cdt.managedbuild.config.gnu.cygwin.exe.debug.125399405" name="Debug" parent="cdt.managedbuild.config.gnu.cygwin.exe.debug">
-<toolReference command="gcc" id="cdt.managedbuild.tool.gnu.c.compiler" outputFlag="-o" outputPrefix="" outputs="o">
-<optionReference defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level"/>
-<optionReference defaultValue="gnu.c.debugging.level.max" id="gnu.c.compiler.option.debugging.level"/>
-</toolReference>
-<toolReference command="g++" id="cdt.managedbuild.tool.gnu.cpp.compiler" outputFlag="-o" outputPrefix="" outputs="o">
-<optionReference defaultValue="gnu.cpp.compiler.optimization.level.none" id="gnu.cpp.compiler.option.optimization.level"/>
-<optionReference defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.option.debugging.level"/>
-<optionReference id="gnu.cpp.compiler.option.include.paths">
+<project id="RTSoundSrc.cdt.managedbuild.target.gnu.cygwin.exe.913070168" name="Executable (Gnu on Windows)" projectType="cdt.managedbuild.target.gnu.cygwin.exe">
+<configuration artifactExtension="exe" artifactName="RTSound" cleanCommand="rm -rf" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.cygwin.exe.debug.1306788763" name="Debug" parent="cdt.managedbuild.config.gnu.cygwin.exe.debug">
+<toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug.1962121122" name="%ToolChainName.Dbg" superClass="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug">
+<tool command="gcc" id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug.634849443" name="GCC C Compiler" outputFlag="-o" outputPrefix="" outputs="o" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug"/>
+<tool command="g++" id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug.890651469" name="GCC C++ Compiler" outputFlag="-o" outputPrefix="" outputs="o" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug">
+<option id="gnu.cpp.compiler.option.preprocessor.def.1169501611" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+<listOptionValue builtIn="false" value="__WINDOWS_DS__"/>
+<listOptionValue builtIn="false" value="TIXML_USE_STL"/>
+</option>
+<option id="gnu.cpp.compiler.option.include.paths.495716994" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;C:\Eclipse\RTSound\RTAudio&quot;"/>
 <listOptionValue builtIn="false" value="&quot;C:\!sources\tinyxml&quot;"/>
 <listOptionValue builtIn="false" value="&quot;C:\Dxsdk\Include&quot;"/>
-</optionReference>
-<optionReference id="gnu.cpp.compiler.option.preprocessor.def">
-<listOptionValue builtIn="false" value="__WINDOWS_DS__"/>
-<listOptionValue builtIn="false" value="TIXML_USE_STL"/>
-</optionReference>
-</toolReference>
-<toolReference command="g++" id="cdt.managedbuild.tool.gnu.cpp.linker" outputFlag="-o" outputPrefix="" outputs="exe">
-<optionReference id="gnu.cpp.link.option.userobjs">
+</option>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug.1220482763" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug"/>
+<tool command="g++" id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug.464537380" name="GCC C++ Linker" outputFlag="-o" outputPrefix="" outputs="exe" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug">
+<option id="gnu.cpp.link.option.userobjs.984037934" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
 <listOptionValue builtIn="false" value="&quot;C:\Dev-Cpp\lib\libdsound.a&quot;"/>
-</optionReference>
-</toolReference>
+</option>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug.1365300874" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug"/>
+</toolChain>
 </configuration>
-<configuration id="cdt.managedbuild.config.gnu.cygwin.exe.release.178185596" name="Release" parent="cdt.managedbuild.config.gnu.cygwin.exe.release">
-<toolReference command="gcc" id="cdt.managedbuild.tool.gnu.c.compiler" outputFlag="-o" outputPrefix="" outputs="o">
-<optionReference defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level"/>
-<optionReference defaultValue="gnu.c.debugging.level.none" id="gnu.c.compiler.option.debugging.level"/>
-</toolReference>
-<toolReference command="g++" id="cdt.managedbuild.tool.gnu.cpp.compiler" outputFlag="-o" outputPrefix="" outputs="o">
-<optionReference defaultValue="gnu.cpp.compiler.optimization.level.most" id="gnu.cpp.compiler.option.optimization.level"/>
-<optionReference defaultValue="gnu.cpp.compiler.debugging.level.none" id="gnu.cpp.compiler.option.debugging.level"/>
-</toolReference>
+<configuration artifactExtension="exe" artifactName="RTSound" cleanCommand="rm -rf" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.cygwin.exe.release.66410020" name="Release" parent="cdt.managedbuild.config.gnu.cygwin.exe.release">
+<toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.exe.release.1020537057" name="%ToolChainName.Rel" superClass="cdt.managedbuild.toolchain.gnu.cygwin.exe.release">
+<tool command="gcc" id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.release.662270366" name="GCC C Compiler" outputFlag="-o" outputPrefix="" outputs="o" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.release"/>
+<tool command="g++" id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.release.469273641" name="GCC C++ Compiler" outputFlag="-o" outputPrefix="" outputs="o" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.release"/>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.release.508014832" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.release"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.release.731802793" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.release"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.release.552329447" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.release"/>
+</toolChain>
 </configuration>
-</target>
+</project>
 </ManagedProjectBuildInfo>
