@@ -69,11 +69,15 @@ int main(int argc, char *argv[]) {
 //	algo.setQueueManually(order, 7);
 
 	char fileName[] = "examples/fm.xml";
-	algo.LoadModulesFromFile(fileName);
-	algo.CreateAdjacencyMatrix();
-	algo.LoadConnectionsFromFile(fileName);
-	algo.LoadParametersFromFile(fileName);
- 	algo.CreateQueue();
+	try {
+        algo.LoadModulesFromFile(fileName);
+        algo.CreateAdjacencyMatrix();
+    	algo.LoadConnectionsFromFile(fileName);
+	    algo.LoadParametersFromFile(fileName);
+     	algo.CreateQueue();
+    } catch (RTSError& error) {
+        cout << "Error: "<<error.what()<<endl;         
+    }
     
 	//algo.printInfo();
 

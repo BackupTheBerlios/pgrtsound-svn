@@ -78,6 +78,9 @@ void Algorithm::PrintInfo() {
  * Laczenie dwoch blokow
  */
 void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId) {
+    if (moduleId1>=modules.size()) throw RTSError("Bledne polaczenie. Modul nie istnieje.");
+    if (moduleId2>=modules.size()) throw RTSError("Bledne polaczenie. Modul nie istnieje.");
+    
 	#ifndef NDEBUG
 		cout << "Lacze " << 
 			modules[moduleId1]->type << "(" << modules[moduleId1]->outputs[outputId]->name << ") -> " <<
@@ -131,21 +134,12 @@ void Algorithm::SetSampleRate(int sRate) {
  * Funckja wczytuj¹ca do pamiêci modu³y 
  * @param Nazwa plik zaierajacego Algorytm
 */
-void Algorithm::LoadModulesFromFile(const char * filename) {       
-    int module;
-      
-    //Zmienne do parsowania XML
-    int moduleId;
-    int modulesCount  = 0;
-    
-    string moduleType;
-    string moduleName;
-    string strTemp;
+void Algorithm::LoadModulesFromFile(const char * filename) { 
+    TRACE("Algorithm", "Wczytywanie modulow...");      
+
     TiXmlNode* node                     = 0;
     TiXmlElement* projectElement        = 0;
-    TiXmlElement* connectionElements    = 0;
     TiXmlElement* moduleElements        = 0;
-    TiXmlElement* element               = 0;
     TiXmlElement* moduleXML             = 0;
     
     TiXmlDocument doc(filename);
@@ -153,8 +147,10 @@ void Algorithm::LoadModulesFromFile(const char * filename) {
 
     if ( !loadOkay )
     {
-        cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
-        exit( 1 );
+        //cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
+        //exit( 1 );
+        throw RTSError("Nie mo¿na wczytaæ pliku " + (string)filename + " Error: " + doc.ErrorDesc());
+        
     } 
 
     node = doc.FirstChild( "algorithm" );
@@ -168,17 +164,17 @@ void Algorithm::LoadModulesFromFile(const char * filename) {
     assert( moduleElements  );
 
     // stworzenie wszystkich modu³ów
+    //pierw g³oœnika
+    moduleMap.insert(make_pair("0",0));
+    //a potem reszte :)
     for( moduleXML = moduleElements->FirstChildElement();
          moduleXML;
          moduleXML = moduleXML->NextSiblingElement() )
-    {
-      
-       moduleType = moduleXML->Attribute("type");
-       //moduleName = moduleXML->Attribute("name");      
-       moduleId   = atoi(moduleXML->Attribute("id"));  
-       module     = AddModule(moduleType);
-       if (module != moduleId) exit(1);
+    {    
+       moduleMap.insert(make_pair(moduleXML->Attribute("name"),AddModule(moduleXML->Attribute("type"))));
 	}
+	
+	TRACE("Algorithm", "Moduly wczytane");
 }
 
 /**
@@ -187,18 +183,10 @@ void Algorithm::LoadModulesFromFile(const char * filename) {
 */
 void Algorithm::LoadParametersFromFile(const char * filename) { 
     TRACE("Algorithm", "Wczytywanie parametrow...");                         
-    //Zmienne do parsowania XML
-    int moduleId;
-    int modulesCount  = 0;
-        
-    string moduleType;
-    string moduleName;
-    string strTemp;
-    TiXmlNode* node                     = 0;
+   
+    TiXmlNode*    node                  = 0;
     TiXmlElement* projectElement        = 0;
-    TiXmlElement* connectionElements    = 0;
     TiXmlElement* moduleElements        = 0;
-    TiXmlElement* element               = 0;
     TiXmlElement* moduleXML             = 0;        
     
     TiXmlDocument doc(filename);
@@ -206,8 +194,9 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
 
     if ( !loadOkay )
     {
-        cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
-        exit( 1 );
+        //cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
+        //exit( 1 );
+        throw RTSError("Nie mo¿na wczytaæ pliku " + (string)filename + " Error: " + doc.ErrorDesc());
     } 
 
     node = doc.FirstChild( "algorithm" );
@@ -224,7 +213,7 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
          moduleXML;
          moduleXML = moduleXML->NextSiblingElement() )
     {
-        modules[ atoi(moduleXML -> Attribute("idModule")) ]->SetParam(atoi(moduleXML -> Attribute("number")), atof(moduleXML -> Attribute("value")));
+        modules[ (*moduleMap.find(moduleXML->Attribute("name"))).second ]->SetParam(atoi(moduleXML -> Attribute("number")), atof(moduleXML -> Attribute("value")));
     }
     
  	TRACE("Algorithm", "Parametry wczytane");
@@ -237,17 +226,12 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
 void Algorithm::LoadConnectionsFromFile(const char * filename) {       
     //Zmienne do parsowania XML
     TRACE("Algorithm", "Wczytywanie polaczen...");
-    int moduleId;
-    int modulesCount  = 0;
-    
-	string moduleType;
-    string moduleName;
+     
     string strTemp;
-    TiXmlNode* node                     = 0;
+    
+    TiXmlNode*    node                  = 0;
     TiXmlElement* projectElement        = 0;
     TiXmlElement* connectionElements    = 0;
-    TiXmlElement* moduleElements        = 0;
-    TiXmlElement* element               = 0;
     TiXmlElement* moduleXML             = 0;
     
     TiXmlDocument doc(filename);
@@ -255,8 +239,9 @@ void Algorithm::LoadConnectionsFromFile(const char * filename) {
 
     if ( !loadOkay )
     {
-        cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
-        exit( 1 );
+        //cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
+        //exit( 1 );
+        throw RTSError("Nie mo¿na wczytaæ pliku " + (string)filename + " Error: " + doc.ErrorDesc());
     } 
 
     node = doc.FirstChild( "algorithm" );
@@ -266,15 +251,18 @@ void Algorithm::LoadConnectionsFromFile(const char * filename) {
 
 	node = projectElement->FirstChildElement("connections");
     assert( node );
-    moduleElements = node->ToElement();
-    assert( moduleElements  );
+    connectionElements = node->ToElement();
+    assert( connectionElements  );
 
     //powi¹zanie modu³ów
-    for( moduleXML = moduleElements->FirstChildElement();
+    for( moduleXML = connectionElements->FirstChildElement();
          moduleXML;
          moduleXML = moduleXML->NextSiblingElement() )
     {
-         ConnectModules(atoi(moduleXML -> Attribute("idModule1")), atoi(moduleXML -> Attribute("output")), atoi(moduleXML -> Attribute("idModule2")), atoi(moduleXML -> Attribute("input")));
+         cout << (*moduleMap.find(moduleXML->Attribute("name1"))).second <<endl;
+         cout << (*moduleMap.find(moduleXML->Attribute("name2"))).second <<endl;
+         
+         ConnectModules((*moduleMap.find(moduleXML->Attribute("name1"))).second, atoi(moduleXML -> Attribute("output")), (*moduleMap.find(moduleXML->Attribute("name2"))).second, atoi(moduleXML -> Attribute("input")));
     }
     
     TRACE("Algorithm", "Moduly polaczone");

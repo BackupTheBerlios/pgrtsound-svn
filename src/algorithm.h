@@ -6,15 +6,22 @@
 #include "modulefactory.h"
 #include "tinyxml.h"
 #include <boost/config.hpp>
-#include <iostream>
-#include <list>
-#include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
+#include <algorithm>
+#include <iostream>
 #include <iterator>
+#include <list>
+#include <map>
 #include <utility>
 
 typedef std::pair<std::size_t,std::size_t> Pair;
+
+
+class RTSError : public runtime_error {
+    public:
+        RTSError (const string& msg ="") : runtime_error(msg) {}
+    };
 
 /**
  * Klasa bedaca najwyzsza struktura w systemie.
@@ -50,6 +57,7 @@ class Algorithm {
 		int               sampleRate;
 		unsigned long     framesPerBlock;
 		ModuleFactory     moduleFactory;
+		map <string, int> moduleMap;     // mapa asocjacyjna nazwy z id
 };
 
 #endif // ALGORITHM_H

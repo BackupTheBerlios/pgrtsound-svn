@@ -59,6 +59,16 @@ struct Param {
 };
 
 //------------------------------------------------------------------------------
+/** Struktura parametrów specjalnych typu string*/
+struct StringParam {
+	int		id;
+	string	name;
+	string	value;
+};
+
+
+
+//------------------------------------------------------------------------------
 /**
  * Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
  * Takze autorzy zewnetrznych modulow musza dostosowac sie do tego interfejsu.
@@ -67,26 +77,29 @@ struct Param {
  */
 class Module {
 	public:
-		string			name;
-		string			type;
-		int				id;				/**< Identyfikator modulu. */
-		static int		framesPerBlock;
-		static int		sampleRate;
-		vector<Param*>	params;			/**< Wektor parametrow. */
-		vector<Input*>	inputs;			/**< Wektor wejsc. */
-		vector<Output*>	outputs;		/**< Wektor wyjsc. */
+		string			      name;
+		string			      type;
+		int				      id;				/**< Identyfikator modulu. */
+		static int		      framesPerBlock;
+		static int		      sampleRate;
+		vector<Param*>	      params;			/**< Wektor parametrow. */
+		vector<StringParam*>  stringParams;		/**< Wektor parametrow typu string. */
+		vector<Input*>	      inputs;			/**< Wektor wejsc. */
+		vector<Output*>	      outputs;		    /**< Wektor wyjsc. */
 		
 		Module();
 		~Module();
 		int AddInput(string name);
 		int AddOutput(string name);
 		int AddParam(string name);
+		int AddStringParam(string name);
 		
 		/**
 		 *	Laczy wejscie bierzacego modulu z wyjsciem innego
 		 */
 		void ConnectInputTo(int numInput, float *sourceSignal);
 		void SetParam(int paramNum, float value);
+		void SetStringParam(int paramNum, string value);
 		//float param(int paramNum);
 		//Input& input(int inputNum);
 		//Output& output(int outputNum);
