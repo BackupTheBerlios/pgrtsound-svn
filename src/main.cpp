@@ -82,6 +82,12 @@ int SDL_main(int argc, char *argv[]) {
 					case SDLK_F8:
 						audio.stop();
 						break;
+					case SDLK_q:
+						algo.module(freq_mod)->setParam(0, 5);
+						break;
+					case SDLK_w:
+						algo.module(freq_mod)->setParam(0, 100);
+						break;
 				}
 				break;
             case SDL_QUIT:

@@ -6,7 +6,7 @@
 #include "module.h"
 
 /**
- * Prosty, tablicowy oscylator sinusoidalny
+ * Prosty oscylator sinusoidalny
  */
 class SinOsc : public Module
 {
