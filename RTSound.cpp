@@ -4,8 +4,11 @@
 #include "Blocks\Amplifier.h"
 #include "Blocks\CConnector.h"
 
+#include "Loader\Loader.h"
+
+
 #if defined(__WINDOWS_DS__)
-#include "RTAudio.h"
+#include "RTAudio\RTAudio.h"
 #endif
 
 #define FRAMES_PER_BUFFER  (256)
@@ -47,8 +50,15 @@ int rtsoundCallback(char *outputBuffer, int bufferSize, void *userData)
 //-----------------------------------------------------------------------------
 int main (int argc, char *argv[])
 {
+
     cout << "Start system" << endl;
-      
+//1
+    int ch;
+    Loader *load = new Loader();
+    load->Demo();
+    cin >> ch;    
+    return 0;
+//2      
     //utworzenie przewodow
     CConnector *conn1 = new CConnector(FRAMES_PER_BUFFER);
     CConnector *conn2 = new CConnector(FRAMES_PER_BUFFER);
@@ -56,19 +66,19 @@ int main (int argc, char *argv[])
     //inicjowanie generatora
     Generator *gen       = new Generator();
     gen->BUFFOR_SIZE     = FRAMES_PER_BUFFER;
-    gen->param           = new float[*gen->paramCount];
+    gen->param           = new float[gen->paramCount];
     gen->param[0]        = 0.25;
     gen->param[1]        = 440./44100.;
     gen->param[2]        = 0;
-    gen->outConnection	= conn1;
+    gen->outConnection[0]	= conn1;
       
     //inicjowanie wzmacniacza
     Amplifier *amp       = new Amplifier();
     amp->BUFFOR_SIZE     = FRAMES_PER_BUFFER;
-    amp->param           = new float[*amp->paramCount];
+    amp->param           = new float[amp->paramCount];
     amp->param[0]        = 2.;  
-    amp->inConnection	= conn1;
-    amp->outConnection	= conn2;
+    amp->inConnection[0]	= conn1;
+    amp->outConnection[0]	= conn2;
 
 	cout << "Blocks initialised" << endl;
 

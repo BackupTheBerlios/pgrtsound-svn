@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include "CConnector.h"
 
 #ifndef CBLOCK_H
@@ -6,29 +7,29 @@
 
 using namespace std;
 
+
+
 class CBlock{
 public:
   //Parametry / atrybuty
-
 	//parametry sytemowe
 	int BUFFOR_SIZE;
 	int idBlock;    //id blokum, unikalny
 	string name; 	//Unikalna w skali prokjektu (nazwa moze sie skladac z typ+id ale nie koniecznie
 	string type;    //Czy Generator czy Aplife czy inne ustrojstwo :)
 	
-	
+	typedef std::vector <CConnector *> CConnectorVector;
 	
 	//druty
-	CConnector *inConnection;
-	int   *inputCount;
+	CConnectorVector inConnection;
+	int   inputCount;
 	
-	CConnector *outConnection;
-	int   *outputCount;
+	CConnectorVector outConnection;
+	int   outputCount;
 	
 	//parametry sta³e
 	float *param;
-	int   *paramCount;
-
+	int   paramCount;
 
 
     //class constructor

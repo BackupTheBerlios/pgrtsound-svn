@@ -5294,6 +5294,7 @@ void RtApiDs :: initialize(void)
   nDevices_ = 0;
 
   // Count DirectSound devices.
+
   result = DirectSoundEnumerate((LPDSENUMCALLBACK)deviceCountCallback, &outs);
   if ( FAILED(result) ) {
     sprintf(message_, "RtApiDs: Unable to enumerate through sound playback devices: %s.",
@@ -5340,7 +5341,6 @@ void RtApiDs :: initialize(void)
   // opened, they report < 1 supported channels, or they report no
   // supported data (capture only).
   RtApiDevice device;
-  int index = 0;
   for (i=0; i<count; i++) {
     if ( info[i].isValid ) {
       device.name.erase();

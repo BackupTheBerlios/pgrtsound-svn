@@ -4,8 +4,9 @@
 // class constructor
 Amplifier::Amplifier()
 {
-    inputCount  = new int(1);
-    paramCount  = new int(1);
+    inputCount  = 1;
+    outputCount = 1;
+    paramCount  = 1;
 }
 
 // class destructor
@@ -17,8 +18,8 @@ Amplifier::~Amplifier()
 // override Process()
 void Amplifier::Process(void)
 {
-	float *inBuff = inConnection->Out();
-	float *outBuff = outConnection->In();
+	float *inBuff = inConnection[0]->Out();
+	float *outBuff = outConnection[0]->In();
 	
     for (int i=0;i<BUFFOR_SIZE;i++)
     {        

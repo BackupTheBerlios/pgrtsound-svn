@@ -10,8 +10,9 @@ using namespace std;
 Generator::Generator()
 {
     n = 1;	
-    inputCount   = new int(1);
-    paramCount   = new int(3); 
+    inputCount   = 0;
+    outputCount  = 1;
+    paramCount   = 3; 
 }
 
 // class destructor
@@ -23,7 +24,7 @@ Generator::~Generator()
 // override Process()
 void Generator::Process(void)
 {
-	float *outBuff = outConnection->In();
+	float *outBuff = outConnection[0]->In();
 	
     for (int i = 0; i < BUFFOR_SIZE; i++)
     {        
