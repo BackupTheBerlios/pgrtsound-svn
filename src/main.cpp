@@ -4,7 +4,7 @@
 #include <vector>
 #include <math.h>
 
-#include "SDL.h"
+#include "SDL/SDL.h"
 #include "audiodriver.h"
 #include "algorithm.h"
 
@@ -13,29 +13,32 @@
 
 using namespace std;
 
-//------------------------------------------------------------------------------
+//----SDL_---------------------------------------------------------------------------
 int SDL_main(int argc, char *argv[]) {
 	SDL_Event event;
     int quit = 0;
 	AudioDriver audio;
     Algorithm algo;
-        
-	//--------------------------------------------------------------------------
+    
+    
+    //--------------------------------------------------------------------------
 	// SDL
-	/* Initialise SDL */
+	// Initialise SDL 
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0){
 	    fprintf( stderr, "Could not initialise SDL: %s\n", SDL_GetError() );
 	    exit( -1 );
 	}
 	
-	/* Set a video mode */
+	// Set a video mode 
 	if( !SDL_SetVideoMode( 320, 200, 32, SDL_HWSURFACE|SDL_DOUBLEBUF ) ){
 	    fprintf( stderr, "Could not set video mode: %s\n", SDL_GetError() );
 	    SDL_Quit();
 	    exit( -1 );
 	}
    
-    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------	
+    
+	
     // wazne tu i teraz
     algo.setFramesPerBlock(FRAMES_PER_BLOCK);
     algo.setSampleRate(SAMPLE_RATE);
@@ -46,32 +49,48 @@ int SDL_main(int argc, char *argv[]) {
 	//                                                              ^
     //                                                              |
     //                                           (SinOsc)freq_osc ---
-	int osc = algo.addModule("SinOsc");
-    int mod = algo.addModule("SinOsc");
-    int freq_osc = algo.addModule("Constant");
-    int freq_mod = algo.addModule("Constant");
-    int gain_mod = algo.addModule("Gain");
-    int sum = algo.addModule("Sumator");
-        
-	algo.connectModules(freq_mod, 0, mod, 0);
-	algo.connectModules(mod, 0, gain_mod, 0);
-	algo.connectModules(gain_mod, 0, sum, 0);
-	algo.connectModules(freq_osc, 0, sum, 1);
-	algo.connectModules(sum, 0, osc, 0);
-	algo.connectModules(osc, 0, 0, 0);	// 0 = AudioPortOut
+/*	int osc = algo.addModule("SinOsc");           //1
+    int mod = algo.addModule("SinOsc");           //2
+    int freq_osc = algo.addModule("Constant");    //3
+    int freq_mod = algo.addModule("Constant");    //4
+    int gain_mod = algo.addModule("Gain");        //5
+    int sum = algo.addModule("Sumator");          //6
+
+ 	algo.connectModules(1, 0, 0, 0);	// 0 = AudioPortOut
+	algo.connectModules(2, 0, 5, 0);
+	algo.connectModules(3, 0, 6, 1);
+    algo.connectModules(4, 0, 2, 0);
+    algo.connectModules(5, 0, 6, 0);
+	algo.connectModules(6, 0, 1, 0);  
 	
 	algo.module(freq_mod)->setParam(0, 5);		// czest. modulacji
 	algo.module(gain_mod)->setParam(0, 150);	// glebokosc modulacji
 	algo.module(freq_osc)->setParam(0, 440);	// czest. nosnej
+*/	   
+
+
+    cout <<"Wczytywanie modulow..." << endl;    
+    algo.LoadModulesFromFile("d:\\DemoModules.xml");  
+      
+    cout <<"Tworzenie macierzy sasiedztwa..." << endl; 
+    algo.CreateAdjacencyMatrix();
+    
+    cout <<"Wczytywanie powiazan..." << endl;    
+    algo.LoadConnectionsFromFile("d:\\DemoConnections.xml");    
+    
+    cout <<"Wczytywanie parametrów..." << endl;    
+    algo.LoadParametersFromFile("d:\\DemoParameters.xml");
+   
+	// ustalenie kolejnosci	 
+    algo.CreateQueue();
+
 	
-	// reczne ustalenie kolejnosci	
-	int order[] = {freq_mod, mod, gain_mod, freq_osc, sum, osc, 0};
-	algo.setQueueManually(order, 7);
     algo.printInfo();
-	
+
 	audio.setCallback((void*)&algo);
 	audio.init(SAMPLE_RATE, 16, FRAMES_PER_BLOCK, 0);
 	
+  	
 	while(SDL_WaitEvent( &event ) and !quit) {
 		switch( event.type ) {
             case SDL_KEYDOWN:
@@ -83,10 +102,10 @@ int SDL_main(int argc, char *argv[]) {
 						audio.stop();
 						break;
 					case SDLK_q:
-						algo.module(freq_mod)->setParam(0, 5);
+						algo.module(4)->setParam(0, 5);
 						break;
 					case SDLK_w:
-						algo.module(freq_mod)->setParam(0, 100);
+						algo.module(4)->setParam(0, 100);
 						break;
 				}
 				break;
@@ -101,4 +120,5 @@ int SDL_main(int argc, char *argv[]) {
 	}
     
 	SDL_Quit();
+
 }
