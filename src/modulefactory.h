@@ -9,6 +9,7 @@
 #include "modules/sum.h"
 #include "modules/gain.h"
 #include "modules/audioportout.h"
+#include "modules/TextFileOut.h"
 
 /**
  * Docelowo klasa ma sie zjamowac ladowaniem wtyczek i ich tworzeniem.

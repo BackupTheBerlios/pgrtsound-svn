@@ -25,6 +25,9 @@ Module* ModuleFactory::createModule(string type) {
 	if (type == "Gain") {
 		return new Gain;
 	}
+	if (type == "TextFileOut") {
+		return new TextFileOut;
+	}
     
     
     //exit (1);

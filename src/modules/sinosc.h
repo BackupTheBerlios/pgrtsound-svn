@@ -18,6 +18,7 @@ class SinOsc : public Module
 	private:
 		int iFreq, iAmp, oOut; // indeksy wejsc i wyjsc
 		float phase, phaseIncrement;
+		int n;
 };
 
 #endif // SINOSC_H
