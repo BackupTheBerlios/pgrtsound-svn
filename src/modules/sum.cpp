@@ -1,6 +1,5 @@
 #include "sum.h"
 
-// class constructor
 Sum::Sum() {
 	type = "sumator";
 	i1 = addInput("input 1");
@@ -8,7 +7,6 @@ Sum::Sum() {
 	oSum = addOutput("sum");
 }
 
-// class destructor
 Sum::~Sum() {
 	// insert your code here
 }
