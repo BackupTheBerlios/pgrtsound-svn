@@ -68,10 +68,11 @@ int main(int argc, char *argv[]) {
 //	int order[] = {freq_osc, freq_mod, mod, gain_mod, sum, osc, 0};
 //	algo.setQueueManually(order, 7);
 
-	algo.LoadModulesFromFile("DemoModules.xml");  
+	char fileName[] = "examples/fm.xml";
+	algo.LoadModulesFromFile(fileName);
 	algo.CreateAdjacencyMatrix();
-	algo.LoadConnectionsFromFile("DemoConnections.xml");
-	algo.LoadParametersFromFile("DemoParameters.xml");
+	algo.LoadConnectionsFromFile(fileName);
+	algo.LoadParametersFromFile(fileName);
  	algo.CreateQueue();
     
 	//algo.printInfo();
