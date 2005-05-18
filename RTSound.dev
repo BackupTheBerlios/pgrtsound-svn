@@ -337,16 +337,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit34]
-FileName=src\modules\module_parameters.cpp
-CompileCpp=1
-Folder=modules
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit35]
 FileName=src\modules\module_parameters.h
 CompileCpp=1
