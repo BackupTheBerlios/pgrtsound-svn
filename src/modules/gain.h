@@ -14,7 +14,9 @@ class Gain : public Module
 		void Process();
 	
 	private:
-		int iIn, oOut, pGain;
+		Input iIn;
+		Output oOut;
+		ParameterFloat pGain;
 };
 
 #endif // MUL_H

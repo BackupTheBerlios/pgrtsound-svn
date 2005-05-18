@@ -14,22 +14,25 @@ Module* ModuleFactory::CreateModule(string type) {
 		return new Constant;
 	}
 	
-	if (type == "SinOsc") {
-		return new SinOsc;
+//	if (type == "SinOsc") {
+//		return new SinOsc;
+//	}
+//
+	if (type == "SinOsc2") {
+		return new SinOsc2;
 	}
-	
+
 	if (type == "Sumator") {
 		return new Sum;
 	}
-	
+
 	if (type == "Gain") {
 		return new Gain;
 	}
-	
+
 	if (type == "TextFileOut") {
 		return new TextFileOut;
 	}
 
-    //exit (1);
-	// throw bo nie ma modulu?
+    throw RTSError("ModuleFactory::CreateModule(): Nie ma modulu '" + type + "'");
 }

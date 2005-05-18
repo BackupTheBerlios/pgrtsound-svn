@@ -4,11 +4,20 @@ using namespace std;
 
 TextFileOut::TextFileOut() {
 	type = "TextFileOut";
-	iIn = AddInput("input");
-	pFreq = AddParam("freq");
 	
+	iIn.SetName("input");
+	AddInput(&iIn);
+	
+	pFileName.SetName("filename");
+	pFileName.SetGUIType(gtEditBox);
+	AddParameter(&pFileName);
+	
+	pFreq.SetName("freq");
+	pFreq.SetGUIType(gtSlider);
+	pFreq.SetValue(22050);
+	AddParameter(&pFreq);
+
 	frames = 0;
-	SetParam(pFreq, 22050);
 }
 
 TextFileOut::~TextFileOut() {
@@ -16,10 +25,10 @@ TextFileOut::~TextFileOut() {
 
 void TextFileOut::Process() {
 	int n;
-	float* in = inputs[iIn]->signal;
-	float pFreq1 = params[pFreq]->value;
+	float* in = iIn.GetSignal();
+	float pFreq1 = pFreq.GetValue();
     
-    ofstream out("TextFileOut.txt", ios_base::app);
+    ofstream out(pFileName.GetText().c_str(), ios_base::app);
     //assure(out, "TextFileOut.txt");
 
 	for (n = 0; n < Module::framesPerBlock; n++) {

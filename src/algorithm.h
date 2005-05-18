@@ -17,12 +17,6 @@
 
 typedef std::pair<std::size_t,std::size_t> Pair;
 
-
-class RTSError : public runtime_error {
-    public:
-        RTSError (const string& msg ="") : runtime_error(msg) {}
-    };
-
 /**
  * Klasa bedaca najwyzsza struktura w systemie.
  * Przechowuje zastosowane moduly oraz zna sposob ich polaczenia.
@@ -33,7 +27,6 @@ class Algorithm {
 		vector<Module*>   modules;
 		vector<Module*>   modulesQueue;
         int     **adjacencyMatrix;	//  macierz s¹siedztwa [j][k] gdy 1 to po³¹czeni j -> k, gdy -1 odwrotnie
-
 
   		Algorithm();
 		~Algorithm();
@@ -57,7 +50,7 @@ class Algorithm {
 		int               sampleRate;
 		unsigned long     framesPerBlock;
 		ModuleFactory     moduleFactory;
-		map <string, int> moduleMap;     // mapa asocjacyjna nazwy z id
+		map <string, int> moduleName2IDMap;     // mapa asocjacyjna nazwy z id
 };
 
 #endif // ALGORITHM_H

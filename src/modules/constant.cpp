@@ -1,10 +1,16 @@
 #include "constant.h"
 
 Constant::Constant() {
-	type = "constant";
+    type = "constant";
+
+	oValue.SetName("wy");
+	AddOutput(&oValue);
+	
+	pValue.SetName("value");
+	pValue.SetGUIType(gtEditBox);
+	AddParameter(&pValue);
+	
 	oldValue = 0;
-	oValue = AddOutput("value");
-	pValue = AddParam("value");
 }
 
 Constant::~Constant() {
@@ -12,11 +18,11 @@ Constant::~Constant() {
 
 void Constant::Process() {
 	// jesli w tym bloku zmienila sie wartosc to wypelnij bufor wyjsciowy
-	if (oldValue != params[pValue]->value)
+	if (oldValue != pValue.GetValue())
 	{
 		int n;
-		float value = params[pValue]->value;
-		float *out = outputs[oValue]->signal;
+		float value = pValue.GetValue();
+		float *out = oValue.GetSignal();
 			
 		#ifndef NDEBUG
 			cout << "Constant(" << id << "): zmiana wartosci z " << oldValue

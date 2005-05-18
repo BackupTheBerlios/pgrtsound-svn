@@ -8,7 +8,7 @@
 #include "audiodriver.h"
 #include "algorithm.h"
 
-#define FRAMES_PER_BLOCK (64)
+#define FRAMES_PER_BLOCK (128)
 #define SAMPLE_RATE (44100)
 
 using namespace std;
@@ -40,46 +40,21 @@ int main(int argc, char *argv[]) {
     algo.SetFramesPerBlock(FRAMES_PER_BLOCK);
     algo.SetSampleRate(SAMPLE_RATE);
     
-//	// DEMO
-//	//      
-//	// Const.(freq_mod) --> SinOsc(mod) --> (Gain)gain_mod --> Sum(sum) --> SinOsc(osc) --> AudioPortOut
-//	//                                                              ^
-//	//                                                              |
-//	//                                           (SinOsc)freq_osc ---
-//	int osc = algo.addModule("SinOsc");           //1
-//	int mod = algo.addModule("SinOsc");           //2
-//	int freq_osc = algo.addModule("Constant");    //3
-//	int freq_mod = algo.addModule("Constant");    //4
-//	int gain_mod = algo.addModule("Gain");        //5
-//	int sum = algo.addModule("Sumator");          //6
-//
-//	algo.CreateAdjacencyMatrix();
-//	algo.connectModules(freq_mod, 0, mod, 0);
-//	algo.connectModules(mod, 0, gain_mod, 0);
-//	algo.connectModules(gain_mod, 0, sum, 0);
-//	algo.connectModules(freq_osc, 0, sum, 1);
-//	algo.connectModules(sum, 0, osc, 0);
-//	algo.connectModules(osc, 0, 0, 0);
-//	
-//	algo.module(freq_mod)->setParam(0, 5);		// czest. modulacji
-//	algo.module(gain_mod)->setParam(0, 150);	// glebokosc modulacji
-//	algo.module(freq_osc)->setParam(0, 440);	// czest. nosnej
-//	
-//	int order[] = {freq_osc, freq_mod, mod, gain_mod, sum, osc, 0};
-//	algo.setQueueManually(order, 7);
-
-	char fileName[] = "examples/fm.xml";
+	char fileName[] = "examples/fm2.xml";
 	try {
-        algo.LoadModulesFromFile(fileName);
-        algo.CreateAdjacencyMatrix();
-    	algo.LoadConnectionsFromFile(fileName);
+		algo.LoadModulesFromFile(fileName);
+		algo.CreateAdjacencyMatrix();
+		algo.LoadConnectionsFromFile(fileName);
 	    algo.LoadParametersFromFile(fileName);
-     	algo.CreateQueue();
+		algo.CreateQueue();
     } catch (RTSError& error) {
-        cout << "Error: "<<error.what()<<endl;         
+        cout << "Error: " << error.what() << endl;
     }
     
 	//algo.printInfo();
+
+	float freq = 220;
+	float freq_mod = 5;
 
 	audio.SetCallback((void*)&algo);
 	audio.Init(SAMPLE_RATE, 16, FRAMES_PER_BLOCK, 0);
@@ -89,11 +64,36 @@ int main(int argc, char *argv[]) {
             case SDL_KEYDOWN:
 				switch(event.key.keysym.sym) {
 					case SDLK_F5:
+						//cout << "F5" << endl;
 						audio.Start();
 						break;
 					case SDLK_F8:
+                        //cout << "F8" << endl;
 						audio.Stop();
 						break;
+
+//					// demo
+//					case SDLK_UP:
+//						freq = freq + 10;
+//						((ParameterFloat*)algo.modules[5]->GetParameter(0))->SetValue(freq);
+//						break;
+//
+//					case SDLK_DOWN:
+//						freq = freq - 10;
+//						//algo.modules[5]->SetParam(0, freq);
+//						break;
+//
+//   					case SDLK_RIGHT:
+//						freq_mod = freq_mod + 1;
+//						//algo.modules[3]->SetParam(0, freq_mod);
+//						break;
+//
+//					case SDLK_LEFT:
+//						freq_mod = freq_mod - 1;
+//						//algo.modules[3]->SetParam(0, freq_mod);
+//						break;
+//					// eof demo
+
 					default:
 						break;
 				}

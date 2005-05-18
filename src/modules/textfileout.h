@@ -17,8 +17,10 @@ class TextFileOut : public Module
 		void Process();
 	
 	private:
-		int iIn, pFreq;
-		unsigned long frames;
+        unsigned long frames;
+		ParameterString pFileName;
+		ParameterFloat pFreq;
+		Input iIn;
 };
 
 #endif // MUL_H

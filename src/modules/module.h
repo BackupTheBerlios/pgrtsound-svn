@@ -5,12 +5,19 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <math.h>
 
+#include "module_parameters.h"
 #include "../debug.h"
 
 #ifndef M_PI
 #define M_PI  (3.14159265)
 #endif
+
+#ifndef M_2PI
+#define M_2PI  (6.2831853)
+#endif
+
 
 using namespace std;
 
@@ -23,9 +30,19 @@ using namespace std;
  */
 class Output {
 	public:
+		Output();
+		~Output();
+		int GetID() const;
+		string GetName() const;
+		float* GetSignal() const;
+		void SetID(int newID);
+		void SetName(string newName);
+		void SetSignal(float* sig);
+		
+	protected:
 		int		id;		/**< Numer idetyfikujacy wejscie */
 		string	name;	/**< Nazwa wejscia */
-		float*	signal;	/**< Wskaznik na bufor wyjsciowy */
+		float*	signal;	/**< Wskaznik na bufor wyjscia */
 };
 
 //------------------------------------------------------------------------------
@@ -35,38 +52,20 @@ class Output {
  */
 class Input {
 	public:
-		int		id;					/**< Numer idetyfikujacy wejscie */
-		string	name;				/**< Nazwa wejscia */
-		float*	signal;				/**< Wskaznik na podlaczony do wejscia bufor */
-		
-//		/**
-//		 * Przeladowyany operator = sluzy do ustanowiania polaczen miedzy
-//		 * wejsciem i wyjsciem dwoch modulow.
-//		 */
-//		Input&	operator=(Output& out) {
-//			// poczatek bufora skad czerpac sygnal
-//			this->signal = out.signal;
-//			return *this;									
-//		}
+		Input();
+		~Input();
+		int GetID() const;
+		string GetName() const;
+		float* GetSignal() const;
+		void SetID(int newID);
+		void SetName(string newName);
+		void SetSignal(float* sig);
+
+	protected:
+		int		id;		/**< Numer idetyfikujacy wejscie */
+		string	name;	/**< Nazwa wejscia */
+		float*	signal;	/**< Wskaznik na podlaczony do wejscia bufor */
 };
-
-//------------------------------------------------------------------------------
-/** Struktura parametru modulu */
-struct Param {
-	int		id;
-	string	name;
-	float	value;
-};
-
-//------------------------------------------------------------------------------
-/** Struktura parametrów specjalnych typu string*/
-struct StringParam {
-	int		id;
-	string	name;
-	string	value;
-};
-
-
 
 //------------------------------------------------------------------------------
 /**
@@ -77,35 +76,49 @@ struct StringParam {
  */
 class Module {
 	public:
-		string			      name;
-		string			      type;
-		int				      id;				/**< Identyfikator modulu. */
-		static int		      framesPerBlock;
-		static int		      sampleRate;
-		vector<Param*>	      params;			/**< Wektor parametrow. */
-		vector<StringParam*>  stringParams;		/**< Wektor parametrow typu string. */
-		vector<Input*>	      inputs;			/**< Wektor wejsc. */
-		vector<Output*>	      outputs;		    /**< Wektor wyjsc. */
-		
+  		static int	framesPerBlock;
+		static int	sampleRate;
+
 		Module();
 		~Module();
-		int AddInput(string name);
-		int AddOutput(string name);
-		int AddParam(string name);
-		int AddStringParam(string name);
-		
-		/**
-		 *	Laczy wejscie bierzacego modulu z wyjsciem innego
-		 */
-		void ConnectInputTo(int numInput, float *sourceSignal);
-		void SetParam(int paramNum, float value);
-		void SetStringParam(int paramNum, string value);
-		//float param(int paramNum);
-		//Input& input(int inputNum);
-		//Output& output(int outputNum);
+		int AddInput(Input* input);
+		int AddOutput(Output* output);
+		int AddParameter(Parameter* param);
+        void ConnectInputTo(int numInput, float *sourceSignal);
 		virtual void Process();
+
+		void SetID(int newID);
+		void SetName(string newName);
+		int GetID() const;
+		string GetType() const;
+		string GetName() const;
+		Input* GetInput(int inputID);
+		Output* GetOutput(int outputID);
+		Parameter* GetParameter(int pID);
 		
-	private:
+  	protected:
+        vector<Input*>		inputs;			/**< Wektor wejsc. */
+        vector<Output*>		outputs;	    /**< Wektor wyjsc. */
+        vector<Parameter*>	parameters;		/**< Wektor parametrow. */
+        string		name;           /**< Dowolna nazwa modulu, mozliwa zmiana przez uzytkownika */
+		string		type;           /**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+		int			id;				/**< Liczbowy identyfikator modulu. */
 };
+
+inline float* Input::GetSignal() const {
+	return signal;
+}
+
+inline Input* Module::GetInput(int inputID) {
+	return inputs[inputID];
+}
+
+inline Output* Module::GetOutput(int outputID) {
+	return outputs[outputID];
+}
+
+inline Parameter* Module::GetParameter(int pID) {
+	return parameters[pID];
+}
 
 #endif // MODULE_H

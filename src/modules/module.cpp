@@ -1,84 +1,135 @@
 #include "module.h"
 
-int Module::framesPerBlock = 64;
+int Module::framesPerBlock = 256;
 int Module::sampleRate = 44100;
 
+//------------------------------------------------------------------------------
+Input::Input() {
+}
+
+Input::~Input() {
+}
+
+void Input::SetID(int newID) {
+	id = newID;
+}
+
+void Input::SetName(string newName) {
+	name = newName;
+}
+
+void  Input::SetSignal(float* sig) {
+	signal = sig;
+}
+
+int Input::GetID() const {
+	return id;
+}
+
+string Input::GetName() const {
+	return name;
+}
+
+//------------------------------------------------------------------------------
+Output::Output() {
+}
+
+Output::~Output() {
+}
+
+void  Output::SetSignal(float* sig) {
+	signal = sig;
+}
+
+
+void Output::SetID(int newID) {
+	id = newID;
+}
+
+void Output::SetName(string newName) {
+	name = newName;
+}
+
+
+int Output::GetID() const {
+	return id;
+}
+
+string Output::GetName() const {
+	return name;
+}
+
+float* Output::GetSignal() const {
+	return signal;
+}
+
+//------------------------------------------------------------------------------
 Module::Module() {
-	type = "no_type_given";
+	type = "no type";
 }
 
 Module::~Module() {
-	TRACE2("Module", "Sprzatam modul ", id);
+	int i;
+	float* temp;
 
-	int i;	
+	TRACE2("Module::~Module", "Sprzatam modul ", id);
 
-	for(i = 0; i < inputs.size(); i++) {
-		delete inputs[i];
-	}
-	
 	// czy to naprawde usuwa bufory?
 	for(i = 0; i < outputs.size(); i++) {
-		delete outputs[i]->signal;
-		delete outputs[i];
+		temp = outputs[i]->GetSignal();
+		delete []temp;
 	}
 	
-	for(i = 0; i < params.size(); i++) {
-		delete params[i];
+	for(i = 0; i < parameters.size(); i++) {
+		delete parameters[i];
 	}
 
-	TRACE3("Module", "Modul ", id, " sprzatniety");
+	TRACE3("Module::~Module", "Modul ", id, " sprzatniety");
 }
 
 /**
- * Dodanie parametru o nazwie name
+ * Dodanie parametru
  */
-int Module::AddParam(string name) {
-	Param* param = new Param;
-	
-	param->name = name;
-	param->id = params.size();
-	param->value = 0;
-
-	params.push_back(param);
-	
-	return param->id;
+int Module::AddParameter(Parameter *param) {
+	parameters.push_back(param);
+	return param->GetID();
 }
 
 /**
- * Dodanie wejscia o nazwie name.
+ * Dodanie wejscia
  * Funkcja po dodaniu wejscia zwraca numer idnetyfikujacy to wejscie w module.
- * Nazwa moze byc dowolna, byc moze bedzie miala wieksze zastosowanie w GUI.
  */
-int Module::AddInput(string name) {
-	Input* input = new Input;
-	
-	input->name = name;
-	input->id = inputs.size();
-	input->signal = NULL;
-
+int Module::AddInput(Input* input) {
+	input->SetID( inputs.size() );
+	input->SetSignal(NULL);
 	inputs.push_back(input);
-	
-	return input->id;
+	return input->GetID();
 }
 
 /**
- * Dodanie wyjscia o nazwie name
+ * Dodanie wyjscia
  */
-int Module::AddOutput(string name) {
-	Output* output = new Output;
-	
-	output->name = name;
-	output->id = outputs.size();
-	// stowrzenie bufora o dlugosci framesPerBlock
-	output->signal = new float[Module::framesPerBlock];
- 
-	outputs.push_back(output);
-	
-	return output->id;
+int Module::AddOutput(Output* output) {
+	float* outBuff;
+
+	// stworzenie bufora wyjsciowego o dlugosci framesPerBlock
+	outBuff = new float[Module::framesPerBlock];
+	if(outBuff == NULL) {
+        throw RTSError("Module::AddOutput(): Nie mozna zaalokowac pamieci na bufor wyjsciowy");
+	}
+	else {
+        output->SetID(outputs.size());
+		output->SetSignal(outBuff);
+ 		outputs.push_back(output);
+		return output->GetID();
+	}
 }
 
+/**
+ *	Laczy wejscie bierzacego modulu z wyjsciem innego
+ */
 void Module::ConnectInputTo(int numInput, float *sourceSignal) {
-	inputs[numInput]->signal = sourceSignal;
+	inputs[numInput]->SetSignal(sourceSignal);
 }
 
 /**
@@ -88,30 +139,22 @@ void Module::Process() {
 	// nic sie nie dzieje
 }
 
-///**
-// * Zwraca obiekt wejscia numer inputNum.
-// */
-//Input& Module::input(int inputNum) {
-//	return inputs[inputNum];
-//}
+void Module:: SetID(int newID) {
+	id = newID;
+}
 
-///**
-// * Zwraca obiekt wejscia numer outputNum.
-// */
-//Output& Module::output(int outputNum) {
-//	return outputs[outputNum];
-//}
+void Module::SetName(string newName) {
+	name = newName;
+}
 
-///**
-// * Zwraca wartosc parametru numer paramNum
-// */
-//float Module::param(int paramNum) {
-//	return params[paramNum].value;
-//}
+int Module::GetID() const {
+	return id;
+}
 
-/**
- * Zmiana wartosci parametru numer paramNum na wartosc value.
- */
-void Module::SetParam(int paramNum, float value) {
-	params[paramNum]->value = value;
+string Module::GetName() const {
+	return name;
+}
+
+string Module::GetType() const {
+	return type;
 }

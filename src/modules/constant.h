@@ -13,10 +13,10 @@ class Constant : public Module {
 		void Process();
 		
 	private:
-		int oValue;	// indeks wyjscia
-		int pValue; // indeks parametru
-		float oldValue;
-		
+        float oldValue;
+        
+		Output oValue;
+		ParameterFloat pValue;
 };
 
 #endif // CONSTANT_H

@@ -15,5 +15,14 @@
 	#define TRACE5(kto, co1, co2, co3, co4, co5)
 #endif
 
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+class RTSError : public runtime_error {
+    public:
+        RTSError (const string& msg = "") : runtime_error(msg) {}
+};
 
 #endif // DEBUG_H

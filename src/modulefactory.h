@@ -2,7 +2,8 @@
 #define MODULEFACTORY_H
 
 #include "modules/module.h"
-#include "modules/sinosc.h"
+//#include "modules/sinosc.h"
+#include "modules/sinosc2.h"
 #include "modules/constant.h"
 #include "modules/sum.h"
 #include "modules/gain.h"

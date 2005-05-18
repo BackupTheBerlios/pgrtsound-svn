@@ -1,8 +1,6 @@
 #ifndef SINOSC_H
 #define SINOSC_H
 
-#include <math.h>
-
 #include "module.h"
 
 /**

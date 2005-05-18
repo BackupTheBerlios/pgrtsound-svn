@@ -2,7 +2,9 @@
 
 AudioPortOut::AudioPortOut() {
 	type = "AudioPortOut";
-	AddInput("audio in");
+
+	inLeft.SetName("wejscie L");
+	AddInput(&inLeft);
 }
 
 AudioPortOut::~AudioPortOut() {

@@ -2,9 +2,15 @@
 
 Sum::Sum() {
 	type = "sumator";
-	i1 = AddInput("input 1");
-	i2 = AddInput("input 2");
-	oSum = AddOutput("sum");
+
+	i1.SetName("input 1");
+	AddInput(&i1);
+	
+	i2.SetName("input 2");
+	AddInput(&i2);
+	
+	oSum.SetName("sum");
+	AddOutput(&oSum);
 }
 
 Sum::~Sum() {
@@ -13,12 +19,11 @@ Sum::~Sum() {
 
 void Sum::Process() {
 	int n;
-	float* in1 = inputs[i1]->signal;
-	float* in2 = inputs[i2]->signal;
-	float* sum = outputs[oSum]->signal;
+	float* in1 = i1.GetSignal();
+	float* in2 = i2.GetSignal();
+	float* sum = oSum.GetSignal();
 	
-	for(n = 0; n < Module::framesPerBlock; n++)
-	{
+	for(n = 0; n < Module::framesPerBlock; n++)	{
 		*sum++ = (*in1++) + (*in2++);
 	}	
 }

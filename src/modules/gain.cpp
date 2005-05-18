@@ -2,10 +2,17 @@
 
 Gain::Gain() {
 	type = "gain";
-	iIn = AddInput("input");
-	oOut = AddOutput("output");
-	pGain = AddParam("gain");
-	SetParam(pGain, 1);
+
+	iIn.SetName("input");
+	AddInput(&iIn);
+
+	oOut.SetName("output");
+	AddOutput(&oOut);
+
+	pGain.SetName("gain");
+	pGain.Bound(0, 1, 0.01);    // ograczniczenie wartosci
+	pGain.SetGUIType(gtSlider);
+	AddParameter(&pGain);
 }
 
 Gain::~Gain() {
@@ -13,9 +20,9 @@ Gain::~Gain() {
 
 void Gain::Process() {
 	int n;
-	float* in = inputs[iIn]->signal;
-	float* out = outputs[oOut]->signal;
-	float gain = params[pGain]->value;
+	float* in = iIn.GetSignal();
+	float* out = oOut.GetSignal();
+	float gain = pGain.GetValue();
 
 	for (n = 0; n < Module::framesPerBlock; n++) {
 			*out++ = (*in++) * gain;

@@ -6,15 +6,15 @@
 /**
  * No description
  */
-class Sum : public Module
-{
+class Sum : public Module {
 	public:
 		Sum();
 		~Sum();
 		void Process();
 	
 	private:
-		int i1, i2, oSum;
+		Input i1, i2;
+		Output oSum;
 };
 
 #endif // SUM_H

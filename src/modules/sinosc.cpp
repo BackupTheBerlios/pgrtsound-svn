@@ -15,7 +15,6 @@ SinOsc::~SinOsc() {
 }
 
 void SinOsc::Process() {
-	
 	float* freq = inputs[iFreq]->signal;
 	//float* amp = getInput(iAmp);
 	float* out = outputs[oOut]->signal;

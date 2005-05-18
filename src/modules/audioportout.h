@@ -10,6 +10,10 @@ class AudioPortOut : public Module {
 	public:
 		AudioPortOut();
 		~AudioPortOut();
+		
+	private:
+		Input inLeft;
+		//input inRight;
 };
 
 #endif // AUDIOPORTOUT_H
