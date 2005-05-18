@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<algorithm> 
+
+	<modules>
+		<module type="SinOsc2" name="mod"/>
+
+		<module type="SinOsc2" name="carrier"/>
+
+		<module type="Constant" name="mod_freq">
+			<parameter number="0" type="float">5</parameter>
+		</module>
+
+		<module type="Constant" name="mod_ampl">
+			<parameter number="0" type="float">1</parameter>
+		</module>	
+
+		<module type="Constant" name="carr_freq">
+			<parameter number="0" type="float">220</parameter>
+		</module>
+
+		<module type="Constant" name="carr_ampl">
+			<parameter number="0" type="float">0.5</parameter>
+		</module>
+
+		<module type="Gain" name="mod_index">
+			<parameter number="0" type="float">50</parameter>
+		</module>
+
+		<module type="Sumator" name="sum"/>
+
+		<module type="TextFileOut" name="rekorder">
+			<parameter number="0" type="string">siasia.txt</parameter>
+		</module>
+
+	</modules>	
+
+	<connections>
+		<connection name1="mod_ampl" output="0" name2="mod" input="1"/>	
+		<connection name1="mod_freq" output="0" name2="mod" input="0"/>	
+		<connection name1="mod" output="0" name2="mod_index" input="0"/>
+		<connection name1="carr_freq" output="0" name2="sum" input="0"/>
+		<connection name1="mod_index" output="0" name2="sum" input="1"/>
+		<connection name1="sum" output="0" name2="carrier" input="0"/>
+		<connection name1="carr_ampl" output="0" name2="carrier" input="1"/>	
+		<connection name1="carrier" output="0" name2="0" input="0"/>
+	</connections>
+
+</algorithm> 
