@@ -69,10 +69,10 @@ void Algorithm::PrintInfo() {
 	}		
 	cout << endl << endl;
 }
-//
-//Module* Algorithm::module(int moduleId) {
-//	return modules[moduleId];
-//}
+
+void Algorithm::LoadAlgorithmSettingsFile(const char * filename) {
+}
+
 
 /**
  * Laczenie dwoch blokow
@@ -177,6 +177,10 @@ void Algorithm::LoadModulesFromFile(const char * filename) {
 	TRACE("Algorithm", "Moduly wczytane");
 }
 
+/**
+ * Funckja wczytuj¹ca parametry modu³ów
+ * @param Nazwa plik zaierajacego Algorytm
+*/
 void Algorithm::LoadParametersFromFile(const char * filename) {
 	TRACE("Algorithm", "Wczytywanie parametrow...");
 
@@ -190,10 +194,10 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
 	string paramValue, paramType;
   	int paramId, moduleId;
 	TiXmlHandle docHandle( &doc );
-	TiXmlElement* moduleElem;
-	TiXmlElement* paramElem;
-	TiXmlNode* moduleNode;
-	TiXmlNode* parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules" ).Child("module", 1).Node();
+	TiXmlElement* moduleElem, * paramElem;
+	TiXmlNode* moduleNode, * parent, * paramTxt;
+
+	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules" ).Child("module", 1).Node();
 
 	// wszystkie moduly
 	for( moduleNode = parent; moduleNode; moduleNode = moduleNode->NextSibling("module") ) {
@@ -203,14 +207,13 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
 		// wszystkie parametry kazdego modulu
 		for( paramElem = moduleNode->FirstChildElement("parameter"); paramElem; paramElem = moduleNode->NextSiblingElement("parameter") ) {
 			if(paramElem != NULL) {
-                TiXmlNode* txt = paramElem->FirstChild();
-                
+                paramTxt = paramElem->FirstChild();
                 paramType = paramElem->Attribute("type");
 				paramId = atoi(paramElem->Attribute("number"));
-				if(txt != NULL) {
-					paramValue = txt->Value();
-				}
 				
+				if(paramTxt != NULL) {
+					paramValue = paramTxt->Value();
+				}
     			#ifndef NDEBUG
 				cout << "     " << moduleElem->Attribute("name") << "." <<
 					modules[moduleId]->GetParameter(paramId)->GetName() << " = ";
@@ -234,56 +237,10 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
 					    cout << param->GetText() << endl;
 				    #endif
 				}
-				
 			}
-		}
-	}
-//(ParameterFloat*)modules[ (*moduleName2IDMap.find(moduleXML->Attribute("name"))).second ]
-
+		} // eof parametry
+	} // eof moduly
 }
-
-///**
-// * Funckja wczytuj¹ca do pamiêci parametry modu³ów
-// * @param Nazwa plik zaierajacego Algorytm
-//*/
-//void Algorithm::LoadParametersFromFile(const char * filename) {
-//    TRACE("Algorithm", "Wczytywanie parametrow...");
-//
-//    TiXmlNode*    node                  = 0;
-//    TiXmlElement* projectElement        = 0;
-//    TiXmlElement* moduleElements        = 0;
-//    TiXmlElement* moduleXML             = 0;
-//
-//    TiXmlDocument doc(filename);
-//    bool loadOkay = doc.LoadFile();
-//
-//    if ( !loadOkay )
-//    {
-//        //cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
-//        //exit( 1 );
-//        throw RTSError("Nie mo¿na wczytaæ pliku " + (string)filename + " Error: " + doc.ErrorDesc());
-//    }
-//
-//    node = doc.FirstChild( "algorithm" );
-//    assert( node );
-//    projectElement = node->ToElement();
-//    assert( projectElement );
-//
-//    node = projectElement->FirstChildElement("parameters");
-//    assert( node );
-//    moduleElements = node->ToElement();
-//    assert( moduleElements  );
-//
-//    for( moduleXML = moduleElements->FirstChildElement();
-//         moduleXML;
-//         moduleXML = moduleXML->NextSiblingElement() )
-//    {
-//        //modules[ (*moduleName2IDMap.find(moduleXML->Attribute("name"))).second ]->SetParam(atoi(moduleXML -> Attribute("number")), atof(moduleXML -> Attribute("value")));
-//		( (ParameterFloat*)modules[ (*moduleName2IDMap.find(moduleXML->Attribute("name"))).second ]->GetParameter(atoi(moduleXML -> Attribute("number")))  )->SetValue( atof(moduleXML -> Attribute("value")) );
-//    }
-//
-// 	TRACE("Algorithm", "Parametry wczytane");
-//}
 
 /**
  * Funckja wczytuj¹ca do pamiêci powi¹zania miêdzy modu³ami 

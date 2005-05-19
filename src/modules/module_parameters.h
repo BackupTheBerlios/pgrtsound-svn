@@ -45,7 +45,7 @@ class ParameterFloat : public Parameter {
 		~ParameterFloat() {};
 		void Bound(float min, float max, float step);
 		//virtual void SetValue(float newValue);
-		void SetValue(float newValue);
+		virtual void SetValue(float newValue);
 		virtual float GetValue() const;
 
 	protected:
@@ -78,7 +78,7 @@ class ParameterString : public Parameter {
 	public:
    		ParameterString(string name_, int GUItype_);
    		~ParameterString();
-		void SetText(string newText);
+		virtual void SetText(string newText);
 		virtual string GetText();
 		
 	protected:
