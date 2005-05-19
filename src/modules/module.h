@@ -98,7 +98,7 @@ class Module {
 		virtual void Process();
 
 		void SetID(int newID);
-		//void SetName(string newName);
+		void SetName(string newName);
 		int GetID() const;
 		string GetType() const;
 		string GetName() const;

@@ -1,7 +1,6 @@
 #include "audioportout.h"
 
-AudioPortOut::AudioPortOut() :
-	Module("audioportput", "Audio Port Out"),
+AudioPortOut::AudioPortOut() : Module("audioportout", "AudioPortOut"),
 	inLeft("wejscie L")
 {
 	AddInput(&inLeft);

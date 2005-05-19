@@ -3,33 +3,48 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
+#include "debug.h"
 #include "portaudio.h"
 
-#define OUTPUT_DEVICE Pa_GetDefaultOutputDeviceID()
+using namespace std;
+
+class AudioDriverError : public runtime_error {
+    public:
+        AudioDriverError (const string& msg = "") : runtime_error(msg) {}
+};
 
 /**
- * No description
+ * PortAudio wrapper
  */
 class AudioDriver
 {
 	public:
 		AudioDriver();
 		~AudioDriver();
-		void Init(int samplingFreq, int numBits, int framesPerBuffer, int numBuffers);
+		void Open(double samplingFreq, unsigned long framesPerBuffer, unsigned long numBuffers);
 		void Start();
 		void Stop();
 		void Close();
-		void SetCallback(void* cbData);
+		void SetCallback(PortAudioCallback* cbFunc, void* cbData);
+		void EnableInput();
+		void DisableInput();
 		
+		void PrintDevices();
+
 	private:
-		void*	callbackData;
-		int		sampleRate;
-		int		numBits;
-		int		framesPerBuffer;
-		int		numBuffers;
-		PaError	error;
-		PortAudioStream* stream;
+		double				sampleRate;
+		unsigned long		framesPerBuffer, numBuffers;
+		PaDeviceID 			outputDevice, inputDevice;
+		int                 numOutputChannels, numInputChannels;
+		PaSampleFormat      sampleFormat;
+		void*				callbackData;
+		PortAudioCallback*	callbackFunction;
+		PortAudioStream*	stream;
+		PaError				error;
+
+		void Open();
 };
 
 #endif // AUDIODRIVER_H

@@ -15,7 +15,7 @@
 #include <map>
 #include <utility>
 
-typedef std::pair<std::size_t,std::size_t> Pair;
+typedef std::pair<std::size_t, std::size_t> Pair;
 
 /**
  * Klasa bedaca najwyzsza struktura w systemie.
@@ -26,7 +26,7 @@ class Algorithm {
 	public:
   		Algorithm();
 		~Algorithm();
-		float*	Process();
+		void	Process();
 		int     AddModule(string type);
 		void    PrintInfo();
 		void    CreateAdjacencyMatrix(void);

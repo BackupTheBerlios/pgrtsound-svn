@@ -8,12 +8,46 @@
 #include "audiodriver.h"
 #include "algorithm.h"
 
-#define FRAMES_PER_BLOCK (128)
+#define FRAMES_PER_BLOCK (256)
 #define SAMPLE_RATE (44100)
 
 using namespace std;
 
-//----SDL_---------------------------------------------------------------------------
+static int paCallback( void *inputBuffer, void *outputBuffer,
+	unsigned long framesPerBuffer, PaTimestamp outTime, void *userData )
+{
+	unsigned long i;
+
+	Algorithm* alg = (Algorithm*)userData;
+
+	float* put = alg->GetModule(0)->GetOutput(0)->GetSignal();	// AudioPortIn
+	float* gen = alg->GetModule(1)->GetInput(0)->GetSignal();   // AudioPortOut
+	float* in = (float*)inputBuffer;
+	float* out = (float*)outputBuffer;
+	
+	// algorytm oblicza blok probek
+	alg->Process();
+
+	if(in == NULL) {
+		for(i = 0; i < framesPerBuffer; i++) {
+			/* TODO (#1#): Zaimplementowac kanal lewy i prawy */
+			*out++ = *gen;
+			*out++ = *gen++;
+		}
+	}
+	else {
+        for(i = 0; i < framesPerBuffer; i++) {
+			/* TODO (#1#): Zaimplementowac kanal lewy i prawy */
+			*put++ = ( (*in++) + (*in++) )*0.5; // na razie miksowanie do mono
+			*out++ = *gen;
+			*out++ = *gen++;
+		}
+	}
+	
+	return 0;
+}
+
+//------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
 	SDL_Event event;
     int quit = 0;
@@ -40,7 +74,7 @@ int main(int argc, char *argv[]) {
     algo.SetFramesPerBlock(FRAMES_PER_BLOCK);
     algo.SetSampleRate(SAMPLE_RATE);
     
-	char fileName[] = "examples/fm2.xml";
+	char fileName[] = "examples/duplex.xml";
 	try {
 		algo.LoadModulesFromFile(fileName);
 		algo.CreateAdjacencyMatrix();
@@ -56,8 +90,15 @@ int main(int argc, char *argv[]) {
 	float freq = 220;
 	float freq_mod = 5;
 
-	audio.SetCallback((void*)&algo);
-	audio.Init(SAMPLE_RATE, 16, FRAMES_PER_BLOCK, 0);
+	try {
+		audio.PrintDevices();
+		audio.SetCallback(paCallback, (void*)&algo);
+		audio.EnableInput();
+		audio.Open(SAMPLE_RATE, FRAMES_PER_BLOCK, 0); // gramy!!!
+	}	catch (AudioDriverError& error) {
+        cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
+        exit(1);
+    }
 	  	
 	while(SDL_WaitEvent( &event ) and !quit) {
 		switch( event.type ) {
@@ -108,6 +149,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	audio.Close();
+	//audio.Close();
 	SDL_Quit();
 }

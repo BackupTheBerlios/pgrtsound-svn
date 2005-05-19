@@ -8,6 +8,7 @@
 #include "modules/sum.h"
 #include "modules/gain.h"
 #include "modules/audioportout.h"
+#include "modules/audioportin.h"
 #include "modules/textfileout.h"
 
 /**

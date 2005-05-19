@@ -19,7 +19,7 @@ void Input::SetID(int newID) {
 //	name = newName;
 //}
 
-void  Input::SetSignal(float* sig) {
+void Input::SetSignal(float* sig) {
 	signal = sig;
 }
 
@@ -77,12 +77,8 @@ Module::~Module() {
 
 	// czy to naprawde usuwa bufory?
 	for(i = 0; i < outputs.size(); i++) {
-		temp = outputs[i]->GetSignal();
+        temp = outputs[i]->GetSignal();
 		delete []temp;
-	}
-	
-	for(i = 0; i < parameters.size(); i++) {
-		delete parameters[i];
 	}
 
 	TRACE3("Module::~Module", "Modul ", id, " sprzatniety");
@@ -144,9 +140,9 @@ void Module:: SetID(int newID) {
 	id = newID;
 }
 
-//void Module::SetName(string newName) {
-//	name = newName;
-//}
+void Module::SetName(string newName) {
+	name = newName;
+}
 
 int Module::GetID() const {
 	return id;
