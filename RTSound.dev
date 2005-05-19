@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSound.dev
 Name=rtsound
-UnitCount=31
+UnitCount=33
 Type=1
 Ver=1
 ObjFiles=
@@ -318,7 +318,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit32]
-FileName=src\modules\textfileout.cpp
+FileName=src\modules\audioportin.h
 CompileCpp=1
 Folder=modules
 Compile=1
@@ -328,7 +328,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit33]
-FileName=src\modules\textfileout.h
+FileName=src\modules\audioportin.cpp
 CompileCpp=1
 Folder=modules
 Compile=1
