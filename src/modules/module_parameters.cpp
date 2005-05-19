@@ -1,6 +1,9 @@
 #include "module_parameters.h"
 
 Parameter::Parameter(string type_, string name_, int GUItype_) {
+	type = type_;
+	name = name_;
+	GUItype = GUItype_;
 	description = "";
 	label = "";
 }

@@ -41,7 +41,7 @@ class Parameter {
 //------------------------------------------------------------------------------
 class ParameterFloat : public Parameter {
 	public:
-		ParameterFloat(string name, int GUItype_);
+		ParameterFloat(string name_, int GUItype_);
 		~ParameterFloat() {};
 		void Bound(float min, float max, float step);
 		//virtual void SetValue(float newValue);
