@@ -42,7 +42,7 @@
 		<connection name1="mod_index" output="0" name2="sum" input="1"/>
 		<connection name1="sum" output="0" name2="carrier" input="0"/>
 		<connection name1="carr_ampl" output="0" name2="carrier" input="1"/>	
-		<connection name1="carrier" output="0" name2="0" input="0"/>
+		<connection name1="carrier" output="0" name2="AudioPortOut" input="0"/>
 		<connection name1="mod_freq" output="0" name2="rekorder" input="0"/>
 	</connections>
 
