@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSound.dev
 Name=rtsound
-UnitCount=33
+UnitCount=34
 Type=1
 Ver=1
 ObjFiles=
@@ -381,6 +381,16 @@ BuildCmd=
 FileName=src\modules\module_parameters.h
 CompileCpp=1
 Folder=modules
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit34]
+FileName=src\algorithm_loaders.cpp
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000
