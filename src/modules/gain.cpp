@@ -1,17 +1,12 @@
 #include "gain.h"
 
-Gain::Gain() {
-	type = "gain";
-
-	iIn.SetName("input");
+Gain::Gain() : Module("gain", "New gain"),
+	iIn("input"), oOut("output"), pGain("gain", gtSlider)
+ {
 	AddInput(&iIn);
-
-	oOut.SetName("output");
 	AddOutput(&oOut);
 
-	pGain.SetName("gain");
 	pGain.Bound(0, 1, 0.01);    // ograczniczenie wartosci
-	pGain.SetGUIType(gtSlider);
 	AddParameter(&pGain);
 }
 

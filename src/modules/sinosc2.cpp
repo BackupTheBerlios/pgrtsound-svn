@@ -1,17 +1,12 @@
 #include "sinosc2.h"
-SinOsc2::SinOsc2() {
+SinOsc2::SinOsc2() : Module("osc2", "New oscillator v2"),
+    iFreq("frequency"), iAmp("amplitude"), oOut("output")
+{
 	float	*sample, tableSizeInverted;
 	tableSize = 16384;
 
-	type = "osc2";
-
-	iFreq.SetName("frequency");
 	AddInput(&iFreq);
-	
-	iAmp.SetName("amplitude");
 	AddInput(&iAmp);
-	
-	oOut.SetName("output");
  	AddOutput(&oOut);
 
 	sinTable = new float[tableSize + 1];

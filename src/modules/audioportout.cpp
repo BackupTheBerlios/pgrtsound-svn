@@ -1,9 +1,12 @@
 #include "audioportout.h"
 
-AudioPortOut::AudioPortOut() {
-	type = "AudioPortOut";
+AudioPortOut::AudioPortOut() :
+	Module("audioportput", "Audio Port Out"),
+	inLeft("wejscie L")
+{
+	//type = "AudioPortOut";
 
-	inLeft.SetName("wejscie L");
+	//inLeft.SetName("wejscie L");
 	AddInput(&inLeft);
 }
 

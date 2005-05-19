@@ -2,18 +2,12 @@
 
 using namespace std;
 
-TextFileOut::TextFileOut() {
-	type = "TextFileOut";
-	
-	iIn.SetName("input");
+TextFileOut::TextFileOut() : Module("textfileout", "New text file"),
+	iIn("input"), pFileName("filename", gtEditBox), pFreq("freq", gtSlider)
+  {
 	AddInput(&iIn);
-	
-	pFileName.SetName("filename");
-	pFileName.SetGUIType(gtEditBox);
 	AddParameter(&pFileName);
-	
-	pFreq.SetName("freq");
-	pFreq.SetGUIType(gtSlider);
+
 	pFreq.SetValue(22050);
 	AddParameter(&pFreq);
 

@@ -1,15 +1,10 @@
 #include "sum.h"
 
-Sum::Sum() {
-	type = "sumator";
-
-	i1.SetName("input 1");
+Sum::Sum() : Module("sumator", "New sumator"),
+	i1("input 1"), i2("input 2"), oSum("sum")
+{
 	AddInput(&i1);
-	
-	i2.SetName("input 2");
 	AddInput(&i2);
-	
-	oSum.SetName("sum");
 	AddOutput(&oSum);
 }
 

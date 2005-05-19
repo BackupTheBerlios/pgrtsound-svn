@@ -1,10 +1,8 @@
 #include "module_parameters.h"
 
-Parameter::Parameter() {
-	type = "no type";
+Parameter::Parameter(string type_, string name_, int GUItype_) {
 	description = "";
 	label = "";
-	GUItype = "no gui type";
 }
 
 Parameter::~Parameter() {
@@ -34,9 +32,6 @@ void Parameter::SetID(int newID) {
 	id = newID;
 }
 
-void Parameter::SetName(string newName) {
-	name = newName;
-}
 void Parameter::SetLabel(string newLabel) {
 	label = newLabel;
 }
@@ -44,16 +39,13 @@ void Parameter::SetLabel(string newLabel) {
 void Parameter::SetDescription(string newDesc) {
 	description = newDesc;
 }
-void Parameter::SetGUIType(int newGuiType) {
-	GUItype = newGuiType;
-}
 
 //------------------------------------------------------------------------------
-ParameterFloat::ParameterFloat() {
+ParameterFloat::ParameterFloat(string name_, int GUItype_) :
+	Parameter("float", name_, GUItype_)
+{
     value = 0;
     bounded = false;
-    
-    type = "float";
 }
 
 void ParameterFloat::Bound(float min, float max, float stp) {
@@ -64,12 +56,12 @@ void ParameterFloat::Bound(float min, float max, float stp) {
 }
 
 //------------------------------------------------------------------------------
-ParameterString::ParameterString() {
-	type = "string";
+ParameterString::ParameterString(string name_, int GUItype_) :
+	Parameter("string", name_, GUItype_)
+{
 	description = "no description";
 	label = "no label";
-	GUItype = "no gui type";
-	text= "";
+	text = "";
 }
 
 ParameterString::~ParameterString() {

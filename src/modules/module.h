@@ -30,13 +30,13 @@ using namespace std;
  */
 class Output {
 	public:
-		Output();
+		Output(string name_);
 		~Output();
 		int GetID() const;
 		string GetName() const;
 		float* GetSignal() const;
 		void SetID(int newID);
-		void SetName(string newName);
+		//void SetName(string newName);
 		void SetSignal(float* sig);
 		
 	protected:
@@ -52,13 +52,13 @@ class Output {
  */
 class Input {
 	public:
-		Input();
+		Input(string name_);
 		~Input();
 		int GetID() const;
 		string GetName() const;
 		float* GetSignal() const;
 		void SetID(int newID);
-		void SetName(string newName);
+		//void SetName(string newName);
 		void SetSignal(float* sig);
 
 	protected:
@@ -75,11 +75,21 @@ class Input {
  * wejsc, wyjsc oraz parmaetrow modulu.
  */
 class Module {
+  	protected:
+        vector<Input*>		inputs;			/**< Wektor wejsc. */
+        vector<Output*>		outputs;	    /**< Wektor wyjsc. */
+        vector<Parameter*>	parameters;		/**< Wektor parametrow. */
+        string		name;	/**< Dowolna nazwa modulu, mozliwa zmiana przez uzytkownika */
+		int			id;		/**< Liczbowy identyfikator modulu. */
+
+	private:
+		string type; /**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+
 	public:
   		static int	framesPerBlock;
 		static int	sampleRate;
 
-		Module();
+		Module(string type_, string name_);
 		~Module();
 		int AddInput(Input* input);
 		int AddOutput(Output* output);
@@ -88,21 +98,13 @@ class Module {
 		virtual void Process();
 
 		void SetID(int newID);
-		void SetName(string newName);
+		//void SetName(string newName);
 		int GetID() const;
 		string GetType() const;
 		string GetName() const;
 		Input* GetInput(int inputID);
 		Output* GetOutput(int outputID);
 		Parameter* GetParameter(int pID);
-		
-  	protected:
-        vector<Input*>		inputs;			/**< Wektor wejsc. */
-        vector<Output*>		outputs;	    /**< Wektor wyjsc. */
-        vector<Parameter*>	parameters;		/**< Wektor parametrow. */
-        string		name;           /**< Dowolna nazwa modulu, mozliwa zmiana przez uzytkownika */
-		string		type;           /**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
-		int			id;				/**< Liczbowy identyfikator modulu. */
 };
 
 inline float* Input::GetSignal() const {

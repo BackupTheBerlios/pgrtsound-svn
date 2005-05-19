@@ -1,15 +1,10 @@
 #include "constant.h"
 
-Constant::Constant() {
-    type = "constant";
-
-	oValue.SetName("wy");
+Constant::Constant() : Module("constant", "New constant"),
+	oValue("wy"), pValue("value", gtEditBox)
+{
 	AddOutput(&oValue);
-	
-	pValue.SetName("value");
-	pValue.SetGUIType(gtEditBox);
 	AddParameter(&pValue);
-	
 	oldValue = 0;
 }
 

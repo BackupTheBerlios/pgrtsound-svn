@@ -4,7 +4,8 @@ int Module::framesPerBlock = 256;
 int Module::sampleRate = 44100;
 
 //------------------------------------------------------------------------------
-Input::Input() {
+Input::Input(string name_) {
+   	name = name_;
 }
 
 Input::~Input() {
@@ -14,9 +15,9 @@ void Input::SetID(int newID) {
 	id = newID;
 }
 
-void Input::SetName(string newName) {
-	name = newName;
-}
+//void Input::SetName(string newName) {
+//	name = newName;
+//}
 
 void  Input::SetSignal(float* sig) {
 	signal = sig;
@@ -31,7 +32,8 @@ string Input::GetName() const {
 }
 
 //------------------------------------------------------------------------------
-Output::Output() {
+Output::Output(string name_) {
+	name = name_;
 }
 
 Output::~Output() {
@@ -41,15 +43,13 @@ void  Output::SetSignal(float* sig) {
 	signal = sig;
 }
 
-
 void Output::SetID(int newID) {
 	id = newID;
 }
 
-void Output::SetName(string newName) {
-	name = newName;
-}
-
+//void Output::SetName(string newName) {
+//	name = newName;
+//}
 
 int Output::GetID() const {
 	return id;
@@ -64,8 +64,9 @@ float* Output::GetSignal() const {
 }
 
 //------------------------------------------------------------------------------
-Module::Module() {
-	type = "no type";
+Module::Module(string type_, string name_) {
+	type = type_;
+	name = name_;
 }
 
 Module::~Module() {
@@ -143,9 +144,9 @@ void Module:: SetID(int newID) {
 	id = newID;
 }
 
-void Module::SetName(string newName) {
-	name = newName;
-}
+//void Module::SetName(string newName) {
+//	name = newName;
+//}
 
 int Module::GetID() const {
 	return id;

@@ -8,14 +8,25 @@ using namespace std;
 
 // Paramter GUI types
 enum {
+	gtInvisible,
    	gtSlider,
 	gtEditBox
 };
 
 //------------------------------------------------------------------------------
 class Parameter {
+   	protected:
+   		int		id;
+		string	description;	/**< Legedna dla parametru np. "Hz" dla czestotliwosci */
+        string	label;			/**< Opis parametru - najczesciej wartosc jaka parametr przyjmuje */
+
+	private:
+   		string	type;
+   		string	name;
+   		string	GUItype;
+
 	public:
-		Parameter();
+		Parameter(string type_, string name_, int GUItype_);
 		~Parameter();
 		int GetID() const;
 		string GetName() const;
@@ -23,24 +34,14 @@ class Parameter {
 		string GetDescription() const;
 		string GetGUIType() const;
 		void SetID(int newID);
-		void SetName(string newName);
 		void SetLabel(string newLabel);
 		void SetDescription(string newDesc);
-		void SetGUIType(int guiType);
-
-	protected:
-   		int		id;
-		string	name;
-        string	description;	/**< Legedna dla parametru np. "Hz" dla czestotliwosci */
-        string	label;			/**< Opis parametru - najczesciej wartosc jaka parametr przyjmuje */
-   		string	type;
-   		string	GUItype;
 };
 
 //------------------------------------------------------------------------------
 class ParameterFloat : public Parameter {
 	public:
-		ParameterFloat();
+		ParameterFloat(string name, int GUItype_);
 		~ParameterFloat() {};
 		void Bound(float min, float max, float step);
 		//virtual void SetValue(float newValue);
@@ -75,7 +76,7 @@ inline float ParameterFloat::GetValue() const {
 //------------------------------------------------------------------------------
 class ParameterString : public Parameter {
 	public:
-   		ParameterString();
+   		ParameterString(string name_, int GUItype_);
    		~ParameterString();
 		void SetText(string newText);
 		virtual string GetText();
