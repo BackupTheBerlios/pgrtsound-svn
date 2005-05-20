@@ -59,22 +59,21 @@ int main(int argc, char *argv[]) {
     algo.SetFramesPerBlock(FRAMES_PER_BLOCK);
     algo.SetSampleRate(SAMPLE_RATE);
     
-	//char fileName[] = "examples/duplex.xml";
-	
 	xmlConfig.OpenFile("examples/fm2.xml");
 	
 	try {
-		xmlConfig.LoadModules(&algo);
-		algo.CreateAdjacencyMatrix();
-		xmlConfig.LoadConnections(&algo);
-		xmlConfig.LoadParameters(&algo);
+		//xmlConfig.LoadModules(&algo);
+		//xmlConfig.LoadConnections(&algo);
+		//xmlConfig.LoadParameters(&algo);
+		
+		xmlConfig.LoadAlgorithm(&algo);
 		algo.CreateQueue();
     } catch (RTSError& error) {
         cout << "Error: " << error.what() << endl;
         exit(1);
     }
     
-	//algo.printInfo();
+	algo.PrintInfo();
 
 	try {
 		audio.PrintDevices();

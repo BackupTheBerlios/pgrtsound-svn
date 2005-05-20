@@ -18,6 +18,9 @@ void XMLConfigFile::OpenFile(const char * filename) {
 }
 
 void XMLConfigFile::LoadAlgorithm(Algorithm* algo) {
+	LoadModules(algo);
+	LoadParameters(algo);
+	LoadConnections(algo);
 }
 
 /**

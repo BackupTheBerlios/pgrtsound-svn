@@ -5,26 +5,25 @@ Algorithm::Algorithm() {
 	AudioPortIn* api = new AudioPortIn;
 	api->SetID(0);
 	modules.push_back(api);
+	add_vertex(graph);  // dodajemy do grafu
 
 	AudioPortOut* apo = new AudioPortOut;
 	apo->SetID(1);
 	modules.push_back(apo);
+	add_vertex(graph);
 	
 	TRACE("Algorithm::Algorithm()", "Dodano AudioPortIn i AudioPortOut");
 }
 
 Algorithm::~Algorithm() {
 	TRACE3("Algorithm", "Sprzatanie algorytmu (", modules.size(), " modulow)..."); 
-
 	//delete modules[0];
 	//delete modules[1];
 
     for (int i = 0; i < modules.size(); i++) {
-        delete adjacencyMatrix[i];
         delete modules[i];
     } 
-    delete adjacencyMatrix;
-	
+
 	TRACE("Algorithm", "Bye!");
 }
 
@@ -33,6 +32,8 @@ int Algorithm::AddModule(string type) {
 	
 	m->SetID( modules.size() );
 	modules.push_back(m);
+	// dodajemy do grafu
+	add_vertex(graph);
 
 	TRACE5("Algorithm", "Modul typu ", type, " o id = ", m->GetID(), " dodany do algorytmu");
 	
@@ -42,21 +43,29 @@ int Algorithm::AddModule(string type) {
 void Algorithm::PrintInfo() {
 	cout << endl << "Informacje o algorytmie: " << endl;
 	for(int i = 0; i < modules.size(); i++) {
-		cout << "modul id: " << modules[i]->GetID() << "     typ modulu: " <<
-			modules[i]->GetType() << endl;
+		cout << "modul id: " << modules[i]->GetID() <<
+		    "     " << modules[i]->GetName() <<
+			"(" << modules[i]->GetType() << ")" << endl;
 	}
+	using namespace boost;
+
+	typedef property_map<Graph, vertex_index_t>::type IndexMap;
+    IndexMap index = get(vertex_index, graph);
 
     cout << endl;
-
-	cout << "Macierz przetwarzaina" << endl;
-	for(int i = 0; i < modules.size(); i++) {
-        for(int j = 0; j < modules.size(); j++) {
-		  cout << adjacencyMatrix[i][j] << "  ";
-        }
-        cout << endl;
-	}
-
+	cout << "vertices(g) = ";
+    typedef graph_traits<Graph>::vertex_iterator vertex_iter;
+    std::pair<vertex_iter, vertex_iter> vp;
+	for (vp = vertices(graph); vp.first != vp.second; ++vp.first)
+      cout << index[*vp.first] <<  " ";
     cout << endl;
+
+    cout << "edges(g) = ";
+    graph_traits<Graph>::edge_iterator ei, ei_end;
+    for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei)
+        std::cout << "(" << index[source(*ei, graph)]
+                  << "," << index[target(*ei, graph)] << ") ";
+    std::cout << std::endl;
 
 	cout << "kolejnosc przetwarzania: ";
 	for(int i = 0; i < modulesQueue.size(); i++) {
@@ -84,9 +93,10 @@ void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int i
 //			moduleId2 << "(" << modules[moduleId2]->GetInput(inputId)->GetID() << ")" << endl;
 	#endif
 
-	modules[moduleId2]->ConnectInputTo( inputId, modules[moduleId1]->GetOutput(outputId)->GetSignal() );
-    adjacencyMatrix[moduleId1][moduleId2] = 1;
-    adjacencyMatrix[moduleId2][moduleId1] = -1;
+		modules[moduleId2]->ConnectInputTo(inputId,
+			modules[moduleId1]->GetOutput(outputId)->GetSignal() );
+		// aktualizacja grafu
+		add_edge(moduleId1, moduleId2, graph);
 }
 
 /**
@@ -124,89 +134,27 @@ void Algorithm::SetSampleRate(int sRate) {
 /* TODO (#1#): trzeba dac znac modulom ze sie zmienilo  */
 }
 
-/**
- * Funckja tworz¹ca macierz s¹siedztwa
-*/
-void Algorithm::CreateAdjacencyMatrix(void) {
-    TRACE("Algorithm", "Tworzenie macierzy sasiedztwa...");
-
-    adjacencyMatrix = new int*[modules.size()];
-    for (int i = 0; i < modules.size(); i++)
-    {
-        adjacencyMatrix[i]  = new int[modules.size()];
-    } 
-    
-    for(int i = 0; i < modules.size(); i++) {
-        for(int j = 0; j < modules.size(); j++) {
-		  adjacencyMatrix[i][j] = 0;
-        }
-	}
-	
-	TRACE("Algorithm", "Macierzy sasiedztwa utworzona");
-}
-
 void Algorithm::CreateQueue(void) {
 	TRACE("Algorithm", "Tworzenie kolejki modulow...");
-    
-    int edgeCount = 0;
-    int edgeIndex = 0;
-    for(int i = 0; i < modules.size(); i++) {
-        for(int j = i; j < modules.size(); j++) {
-		  if (adjacencyMatrix[i][j] != 0) edgeCount++;         
-        }
-	} 
 	
-	TRACE2("Algorithm", "Liczba krawedzi: ", edgeCount);
-   	
-    using namespace boost;
+	using namespace boost;
 
-    typedef adjacency_list<vecS, vecS, directedS, property<vertex_color_t, default_color_type> > Graph;
-    typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
-    
-    Pair edges[edgeCount];
-    
-    //edgeCount = 0;
-    for(int i = 0; i < modules.size(); i++) {
-        for(int j = i; j < modules.size(); j++) {
-		  if (adjacencyMatrix[i][j] ==1)
-		  {          
-              //cout << "Pair(" << i << "," << j << ")" << endl;
-		      edges[edgeIndex] = Pair (i,j);
-		      edgeIndex++;
-          }
-          if (adjacencyMatrix[i][j] ==-1)
-		  {
-              //cout << "Pair(" << j << "," << i << ")" << endl;
-		      edges[edgeIndex] = Pair (j,i);
-		      edgeIndex++;
-          }          
-        }        
-	} 
-	
-	TRACE("Algorithm", "Robie graf...");
-	
-    //Graph G(5);
-    Graph G(edgeCount);
-    for (std::size_t j = 0; j < edgeCount; ++j) {
-		//cout << "add_edge: " << edges[j].first << " " << edges[j].second << endl;
-        add_edge(edges[j].first, edges[j].second, G);
-	}
-    
-    boost::property_map<Graph, vertex_index_t>::type id = get(vertex_index, G);
+	typedef graph_traits<Graph>::vertex_descriptor Vertex;
+	typedef std::vector< Vertex > container;
+	typedef property_map<Graph, vertex_index_t>::type IndexMap;
 
-    typedef std::vector< Vertex > container;
+    IndexMap index = get(vertex_index, graph);
     container c;
-    topological_sort(G, std::back_inserter(c));
 
-    modulesQueue.clear();
-    
-    std::cout << "A topological ordering: ";
+	modulesQueue.clear();
+	
+    topological_sort(graph, std::back_inserter(c));
+
+    cout << "A topological ordering: ";
     for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii)
     {
-        std::cout << id[*ii] << " "; 
-		modulesQueue.push_back( modules[id[*ii]]  );
+        cout << index[*ii] << " ";
+		modulesQueue.push_back( modules[index[*ii]]  );
     }
-    std::cout << std::endl;  
-    
-    TRACE("Algorithm", "Kolejka utworzona");
+    cout << endl;
 }

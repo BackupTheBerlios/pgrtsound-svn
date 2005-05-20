@@ -9,6 +9,7 @@
 
 #include <boost/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
 #include <boost/graph/topological_sort.hpp>
 
 #include "modulefactory.h"
@@ -16,6 +17,8 @@
 //#include <utility>
 
 typedef std::pair<std::size_t, std::size_t> Pair;
+// Boost Graph
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS> Graph;
 
 /**
  * Klasa bedaca najwyzsza struktura w systemie.
@@ -29,7 +32,6 @@ class Algorithm {
 		void	Process();
 		int     AddModule(string type);
 		void    PrintInfo();
-		void    CreateAdjacencyMatrix(void);
 		void    ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId);
 		void    CreateQueue(void);
 		void    SetQueueManually(int* order, int num);
@@ -38,13 +40,12 @@ class Algorithm {
 		Module* GetModule(int moduleId);
         
 	private:
+		Graph				graph;
 		int					sampleRate;
 		unsigned long		framesPerBlock;
 		ModuleFactory		moduleFactory;
-		
 		vector<Module*>		modules;
 		vector<Module*>		modulesQueue;
-        int**				adjacencyMatrix;	//  macierz s¹siedztwa [j][k] gdy 1 to po³¹czeni j -> k, gdy -1 odwrotnie
 };
 
 /**
