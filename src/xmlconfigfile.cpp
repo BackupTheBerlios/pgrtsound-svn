@@ -62,7 +62,7 @@ void XMLConfigFile::LoadModules(Algorithm* algo) {
  * @param Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadParameters(Algorithm* algo) {
-	TRACE("Algorithm", "Wczytywanie parametrow...");
+	TRACE("XMLConfigFile::LoadParameters()", "Wczytywanie parametrow...");
 
 	string paramValue, paramType;
   	int paramId, moduleId;
@@ -72,7 +72,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
     TiXmlHandle docHandle( &document );
 	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules" ).Child("module", 0).Node();
 
-	cout << "PARENT: " << parent << endl;
+	//cout << "PARENT: " << parent << endl;
 
 	// wszystkie moduly
 	for( moduleNode = parent; moduleNode; moduleNode = moduleNode->NextSibling("module") ) {
@@ -119,6 +119,9 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 			}
 		}
 	}
+	
+	TRACE("XMLConfigFile::LoadParameters()", "Parametry wczytane");
+	
 }
 
 /**
@@ -126,7 +129,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
  * @param Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadConnections(Algorithm* algo) {
-    TRACE("Algorithm", "Wczytywanie polaczen...");
+    TRACE("XMLConfigFile::LoadConnections()", "Wczytywanie polaczen...");
 
     string strTemp;
     //Zmienne do parsowania XML
@@ -160,5 +163,5 @@ void XMLConfigFile::LoadConnections(Algorithm* algo) {
 			atoi(moduleXML -> Attribute("input")));
 	    }
 
-    TRACE("Algorithm", "Moduly polaczone");
+    TRACE("XMLConfigFile::LoadConnections()", "Moduly polaczone");
 }
