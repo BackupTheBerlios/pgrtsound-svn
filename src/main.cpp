@@ -3,6 +3,7 @@
 
 #include "audiodriver.h"
 #include "algorithm.h"
+#include "xmlconfigfile.h"
 
 #define FRAMES_PER_BLOCK (256)
 #define SAMPLE_RATE (44100)
@@ -53,16 +54,20 @@ static int paCallback( void *inputBuffer, void *outputBuffer,
 int main(int argc, char *argv[]) {
 	AudioDriver audio;
     Algorithm algo;
+	XMLConfigFile xmlConfig;
 
     algo.SetFramesPerBlock(FRAMES_PER_BLOCK);
     algo.SetSampleRate(SAMPLE_RATE);
     
-	char fileName[] = "examples/duplex.xml";
+	//char fileName[] = "examples/duplex.xml";
+	
+	xmlConfig.OpenFile("examples/fm2.xml");
+	
 	try {
-		algo.LoadModulesFromFile(fileName);
+		xmlConfig.LoadModules(&algo);
 		algo.CreateAdjacencyMatrix();
-		algo.LoadConnectionsFromFile(fileName);
-	    algo.LoadParametersFromFile(fileName);
+		xmlConfig.LoadConnections(&algo);
+		xmlConfig.LoadParameters(&algo);
 		algo.CreateQueue();
     } catch (RTSError& error) {
         cout << "Error: " << error.what() << endl;

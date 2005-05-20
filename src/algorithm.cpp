@@ -160,7 +160,7 @@ void Algorithm::CreateQueue(void) {
    	
     using namespace boost;
 
-    typedef adjacency_list<vecS, vecS, directedS,property<vertex_color_t, default_color_type> > Graph;
+    typedef adjacency_list<vecS, vecS, directedS, property<vertex_color_t, default_color_type> > Graph;
     typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
     
     Pair edges[edgeCount];
