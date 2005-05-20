@@ -8,12 +8,12 @@
 #include <boost/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
-#include <algorithm>
+//#include <algorithm>
 #include <iostream>
 #include <iterator>
 #include <list>
 #include <map>
-#include <utility>
+//#include <utility>
 
 typedef std::pair<std::size_t, std::size_t> Pair;
 
@@ -58,5 +58,18 @@ class Algorithm {
 inline Module* Algorithm::GetModule(int moduleId) {
 	return modules[moduleId];
 }
+
+/**
+ * Uruchomienie przetwarzania przez algorytm.
+ * Wywolanie tej funkcji spowoduje przeliczenie bloku ramek o dlugosci
+ * framesPerBlock.
+ */
+inline void Algorithm::Process() {
+	int i;
+	for(i = 0; i < modulesQueue.size(); i++) {
+		modulesQueue[i]->Process();
+	}
+}
+
 
 #endif // ALGORITHM_H

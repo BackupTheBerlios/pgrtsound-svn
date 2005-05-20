@@ -28,18 +28,6 @@ Algorithm::~Algorithm() {
 	TRACE("Algorithm", "Bye!");
 }
 
-/**
- * Uruchomienie przetwarzania przez algorytm.
- * Wywolanie tej funkcji spowoduje przeliczenie bloku ramek o dlugosci
- * framesPerBlock.
- */
-void Algorithm::Process() {
-	int i;
-	for(i = 0; i < modulesQueue.size(); i++) {
-		modulesQueue[i]->Process();
-	}
-}
-
 int Algorithm::AddModule(string type) {
 	Module* m = moduleFactory.CreateModule(type);
 	
@@ -88,12 +76,12 @@ void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int i
 		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul o takim id nie istnieje.");
 
 	#ifndef NDEBUG
-		cout << "Lacze " <<
+		cout << "    Lacze " <<
 			modules[moduleId1]->GetName() << "(" << modules[moduleId1]->GetOutput(outputId)->GetName() << ") -> " <<
 			modules[moduleId2]->GetName() << "(" << modules[moduleId2]->GetInput(inputId)->GetName() << ")" << endl;
-		cout << "Lacze " <<
-			moduleId1 << "(" << modules[moduleId1]->GetOutput(outputId)->GetID() << ") -> " <<
-			moduleId2 << "(" << modules[moduleId2]->GetInput(inputId)->GetID() << ")" << endl;
+//		cout << "Lacze " <<
+//			moduleId1 << "(" << modules[moduleId1]->GetOutput(outputId)->GetID() << ") -> " <<
+//			moduleId2 << "(" << modules[moduleId2]->GetInput(inputId)->GetID() << ")" << endl;
 	#endif
 
 	modules[moduleId2]->ConnectInputTo( inputId, modules[moduleId1]->GetOutput(outputId)->GetSignal() );

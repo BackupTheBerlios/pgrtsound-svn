@@ -65,6 +65,8 @@ void Algorithm::LoadParametersFromFile(const char * filename) {
 
 	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules" ).Child("module", 0).Node();
 
+	cout << "PARENT: " << parent << endl;
+
 	// wszystkie moduly
 	for( moduleNode = parent; moduleNode; moduleNode = moduleNode->NextSibling("module") ) {
 		moduleElem = moduleNode->ToElement();
@@ -127,12 +129,8 @@ void Algorithm::LoadConnectionsFromFile(const char * filename) {
     TiXmlElement* moduleXML             = 0;
 
     TiXmlDocument doc(filename);
-    bool loadOkay = doc.LoadFile();
 
-    if ( !loadOkay )
-    {
-        //cout << "Could not load file '" << filename << "'. Error='%s'. Exiting.\n" << doc.ErrorDesc()<<endl;
-        //exit( 1 );
+    if ( !doc.LoadFile() ) {
         throw RTSError("Nie mo¿na wczytaæ pliku " + (string)filename + " Error: " + doc.ErrorDesc());
     }
 

@@ -1,10 +1,6 @@
 #include <cstdlib>
 #include <iostream>
-#include <string>
-#include <vector>
-#include <math.h>
 
-#include "SDL/SDL.h"
 #include "audiodriver.h"
 #include "algorithm.h"
 
@@ -13,6 +9,12 @@
 
 using namespace std;
 
+// logowanie do pliku
+ofstream logfile("RTSoundlog.txt");
+streambuf* out = cout.rdbuf(logfile.rdbuf());
+
+//------------------------------------------------------------------------------
+// callback dla portuadio
 static int paCallback( void *inputBuffer, void *outputBuffer,
 	unsigned long framesPerBuffer, PaTimestamp outTime, void *userData )
 {
@@ -49,28 +51,9 @@ static int paCallback( void *inputBuffer, void *outputBuffer,
 
 //------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
-	SDL_Event event;
-    int quit = 0;
 	AudioDriver audio;
     Algorithm algo;
-    
-    //--------------------------------------------------------------------------
-	// SDL
-	// Initialise SDL 
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0) {
-	    fprintf( stderr, "Could not initialise SDL: %s\n", SDL_GetError() );
-	    exit( -1 );
-	}
-	
-	// Set a video mode 
-	if( !SDL_SetVideoMode( 320, 200, 32, SDL_HWSURFACE|SDL_DOUBLEBUF ) ) {
-	    fprintf( stderr, "Could not set video mode: %s\n", SDL_GetError() );
-	    SDL_Quit();
-	    exit( -1 );
-	}
 
-    //--------------------------------------------------------------------------	
-    // wazne tu i teraz
     algo.SetFramesPerBlock(FRAMES_PER_BLOCK);
     algo.SetSampleRate(SAMPLE_RATE);
     
@@ -83,72 +66,36 @@ int main(int argc, char *argv[]) {
 		algo.CreateQueue();
     } catch (RTSError& error) {
         cout << "Error: " << error.what() << endl;
+        exit(1);
     }
     
 	//algo.printInfo();
-
-	float freq = 220;
-	float freq_mod = 5;
 
 	try {
 		audio.PrintDevices();
 		audio.SetCallback(paCallback, (void*)&algo);
 		audio.EnableInput();
-		audio.Open(SAMPLE_RATE, FRAMES_PER_BLOCK, 0); // gramy!!!
+		audio.Open(SAMPLE_RATE, FRAMES_PER_BLOCK, 0); // gotowi do grania
 	}	catch (AudioDriverError& error) {
         cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
         exit(1);
     }
-	  	
-	while(SDL_WaitEvent( &event ) and !quit) {
-		switch( event.type ) {
-            case SDL_KEYDOWN:
-				switch(event.key.keysym.sym) {
-					case SDLK_F5:
-						//cout << "F5" << endl;
-						audio.Start();
-						break;
-					case SDLK_F8:
-                        //cout << "F8" << endl;
-						audio.Stop();
-						break;
-
-//					// demo
-//					case SDLK_UP:
-//						freq = freq + 10;
-//						((ParameterFloat*)algo.modules[5]->GetParameter(0))->SetValue(freq);
-//						break;
-//
-//					case SDLK_DOWN:
-//						freq = freq - 10;
-//						//algo.modules[5]->SetParam(0, freq);
-//						break;
-//
-//   					case SDLK_RIGHT:
-//						freq_mod = freq_mod + 1;
-//						//algo.modules[3]->SetParam(0, freq_mod);
-//						break;
-//
-//					case SDLK_LEFT:
-//						freq_mod = freq_mod - 1;
-//						//algo.modules[3]->SetParam(0, freq_mod);
-//						break;
-//					// eof demo
-
-					default:
-						break;
-				}
-				break;
-				
-            case SDL_QUIT:
-				quit = 1;
-				break;
-
-			default:
-				break;
+    
+    char c;
+    bool running = false;
+    
+    while(c != 'q') {
+		c = cin.get();
+		
+		if(!running) {
+			audio.Start();
+			running = true;
+		}
+		else {
+			audio.Stop();
+			running = false;
 		}
 	}
 
-	//audio.Close();
-	SDL_Quit();
+	return EXIT_SUCCESS;
 }
