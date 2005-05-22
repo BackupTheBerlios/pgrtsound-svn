@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSound.dev
 Name=rtsound
-UnitCount=35
+UnitCount=39
 Type=1
 Ver=1
 ObjFiles=
@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=0000000000000000000000
+CompilerSettings=0000000000000001000000
 
 [Unit6]
 FileName=src\algorithm.h
@@ -388,9 +388,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit36]
-FileName=src\xmlconfigfile.cpp
+FileName=src\modules\slider.h
 CompileCpp=1
-Folder=
+Folder=modules
 Compile=1
 Link=1
 Priority=1000
@@ -401,6 +401,36 @@ BuildCmd=
 FileName=src\xmlconfigfile.h
 CompileCpp=1
 Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit37]
+FileName=src\modules\slider.cpp
+CompileCpp=1
+Folder=modules
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit39]
+FileName=src\modules\multiplication.cpp
+CompileCpp=1
+Folder=modules
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit38]
+FileName=src\modules\multiplication.h
+CompileCpp=1
+Folder=modules
 Compile=1
 Link=1
 Priority=1000
