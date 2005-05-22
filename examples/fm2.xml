@@ -2,48 +2,56 @@
 <algorithm> 
 
 	<modules>
-		<module type="SinOsc2" name="mod"/>
 
-		<module type="SinOsc2" name="carrier"/>
-
-		<module type="Constant" name="mod_freq">
+		<module type="slider" name="Czestotliwosc modulatora">
 			<parameter number="0" type="float">5</parameter>
+			<parameter number="1" type="float">50</parameter>
+			<parameter number="2" type="float">5</parameter>
 		</module>
 
-		<module type="Constant" name="mod_ampl">
+		<module type="constant" name="Amplituda modulatora">
 			<parameter number="0" type="float">1</parameter>
 		</module>	
 
-		<module type="Constant" name="carr_freq">
+		<module type="sinosc2" name="Modulator"/>
+		
+		<module type="slider" name="Glebokosc modulacji">
+			<parameter number="0" type="float">0</parameter>
+			<parameter number="1" type="float">100</parameter>
+			<parameter number="2" type="float">50</parameter>
+		</module>
+		
+		<module type="multiplication" name="Mnozenie"/>
+
+		<module type="constant" name="Czestotliwosc nosnej">
 			<parameter number="0" type="float">220</parameter>
 		</module>
 
-		<module type="Constant" name="carr_ampl">
+		<module type="sumator" name="Suma"/>
+
+		<module type="constant" name="Amplituda nosnej">
 			<parameter number="0" type="float">0.5</parameter>
 		</module>
 
-		<module type="Gain" name="mod_index">
-			<parameter number="0" type="float">50</parameter>
-		</module>
+		<module type="sinosc2" name="Nosna"/>
 
-		<module type="Sumator" name="sum"/>
-
-		<module type="TextFileOut" name="rekorder">
-			<parameter number="0" type="string">siasia.txt</parameter>
+		<module type="textfileout" name="rekorder">
+			<parameter number="0" type="string">rekorder.txt</parameter>
 		</module>
 
 	</modules>	
 
 	<connections>
-		<connection name1="mod_ampl" output="0" name2="mod" input="1"/>	
-		<connection name1="mod_freq" output="0" name2="mod" input="0"/>	
-		<connection name1="mod" output="0" name2="mod_index" input="0"/>
-		<connection name1="carr_freq" output="0" name2="sum" input="0"/>
-		<connection name1="mod_index" output="0" name2="sum" input="1"/>
-		<connection name1="sum" output="0" name2="carrier" input="0"/>
-		<connection name1="carr_ampl" output="0" name2="carrier" input="1"/>	
-		<connection name1="carrier" output="0" name2="AudioPortOut" input="0"/>
-		<connection name1="mod_freq" output="0" name2="rekorder" input="0"/>
+		<connection name1="Czestotliwosc modulatora" output="0" name2="Modulator" input="0"/>
+		<connection name1="Amplituda modulatora" output="0" name2="Modulator" input="1"/>
+		<connection name1="Modulator" output="0" name2="Mnozenie" input="0"/>
+		<connection name1="Glebokosc modulacji" output="0" name2="Mnozenie" input="1"/>
+		<connection name1="Czestotliwosc nosnej" output="0" name2="Suma" input="0"/>
+		<connection name1="Mnozenie" output="0" name2="Suma" input="1"/>
+		<connection name1="Suma" output="0" name2="Nosna" input="0"/>
+		<connection name1="Amplituda nosnej" output="0" name2="Nosna" input="1"/>
+		<connection name1="Nosna" output="0" name2="AudioPortOut" input="0"/>
+		<connection name1="Glebokosc modulacji" output="0" name2="rekorder" input="0"/>
 	</connections>
 
 </algorithm> 

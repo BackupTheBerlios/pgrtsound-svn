@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<algorithm> 
+
+	<modules>
+		<module type="sinosc2" name="sin"/>
+
+		<module type="slider" name="Czestotliwosc">
+			<parameter number="0" type="float">220</parameter>
+			<parameter number="1" type="float">440</parameter>
+			<parameter number="2" type="float">220</parameter>
+		</module>		
+		<module type="slider" name="Amplituda">	
+			<parameter number="0" type="float">0</parameter>
+			<parameter number="1" type="float">0.5</parameter>
+			<parameter number="2" type="float">0.5</parameter>
+		</module>
+	</modules>	
+
+	<connections>
+		<connection name1="Czestotliwosc" output="0" name2="sin" input="0"/>	
+		<connection name1="Amplituda" output="0" name2="sin" input="1"/>	
+		<connection name1="sin" output="0" name2="AudioPortOut" input="0"/>
+	</connections>
+
+</algorithm> 
