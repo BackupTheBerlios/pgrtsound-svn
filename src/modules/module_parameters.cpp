@@ -27,7 +27,7 @@ string Parameter::GetDescription() const {
 	return description;
 }
 
-string Parameter::GetGUIType() const {
+int Parameter::GetGUIType() const {
 	return GUItype;
 }
 
@@ -58,6 +58,18 @@ void ParameterFloat::Bound(float min, float max, float stp) {
 	bounded = true;
 }
 
+float ParameterFloat::GetMin() const {
+	return minValue;
+}
+
+float ParameterFloat::GetMax() const {
+	return maxValue;
+}
+
+float ParameterFloat::GetStep() const {
+	return step;
+}
+
 //------------------------------------------------------------------------------
 ParameterString::ParameterString(string name_, int GUItype_) :
 	Parameter("string", name_, GUItype_)
@@ -77,3 +89,5 @@ string ParameterString::GetText() {
 void ParameterString::SetText(string newText) {
 	text = newText;
 }
+
+

@@ -3,7 +3,7 @@
 using namespace std;
 
 TextFileOut::TextFileOut() : Module("textfileout", "New text file"),
-	iIn("input"), pFileName("filename", gtEditBox), pFreq("freq", gtSlider)
+	iIn("input"), pFileName("filename", gtEditBox), pFreq("freq", gtEditBox)
   {
 	AddInput(&iIn);
 	AddParameter(&pFileName);

@@ -10,7 +10,7 @@ ModuleFactory::~ModuleFactory() {
  * Towrzy modul wybranego typu i zwraca do niego wskaznik
  */
 Module* ModuleFactory::CreateModule(string type) {
-	if (type == "Constant") {
+	if (type == "constant") {
 		return new Constant;
 	}
 	
@@ -18,19 +18,27 @@ Module* ModuleFactory::CreateModule(string type) {
 //		return new SinOsc;
 //	}
 //
-	if (type == "SinOsc2") {
+	if (type == "sinosc2") {
 		return new SinOsc2;
 	}
 
-	if (type == "Sumator") {
+	if (type == "sumator") {
 		return new Sum;
 	}
 
-	if (type == "Gain") {
+	if (type == "gain") {
 		return new Gain;
 	}
+	
+	if (type == "slider") {
+		return new Slider;
+	}
+	
+	if (type == "multiplication") {
+		return new Multiplication;
+	}
 
-	if (type == "TextFileOut") {
+	if (type == "textfileout") {
 		return new TextFileOut;
 	}
 

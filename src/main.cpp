@@ -60,19 +60,20 @@ int main(int argc, char *argv[]) {
     algo.SetSampleRate(SAMPLE_RATE);
     
 	xmlConfig.OpenFile("examples/fm2.xml");
-	
+
 	try {
 		//xmlConfig.LoadModules(&algo);
 		//xmlConfig.LoadConnections(&algo);
 		//xmlConfig.LoadParameters(&algo);
-		
+
 		xmlConfig.LoadAlgorithm(&algo);
+		algo.Init();
 		algo.CreateQueue();
     } catch (RTSError& error) {
         cout << "Error: " << error.what() << endl;
         exit(1);
     }
-    
+
 	algo.PrintInfo();
 
 	try {
@@ -84,13 +85,13 @@ int main(int argc, char *argv[]) {
         cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
         exit(1);
     }
-    
+
     char c;
     bool running = false;
-    
+
     while(c != 'q') {
 		c = cin.get();
-		
+
 		if(!running) {
 			audio.Start();
 			running = true;
@@ -100,6 +101,7 @@ int main(int argc, char *argv[]) {
 			running = false;
 		}
 	}
+
 
 	return EXIT_SUCCESS;
 }

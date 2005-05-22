@@ -1,7 +1,7 @@
 #include "constant.h"
 
 Constant::Constant() : Module("constant", "New constant"),
-	oValue("wy"), pValue("value", gtEditBox)
+	oValue("wy"), pValue("value", gtProperty)
 {
 	AddOutput(&oValue);
 	AddParameter(&pValue);

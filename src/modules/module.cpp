@@ -126,7 +126,12 @@ int Module::AddOutput(Output* output) {
  *	Laczy wejscie bierzacego modulu z wyjsciem innego
  */
 void Module::ConnectInputTo(int numInput, float *sourceSignal) {
-	inputs[numInput]->SetSignal(sourceSignal);
+	if(numInput > inputs.size()) {
+		TRACE3("Module::ConnectInputTo()", "Wejscie o id = ", numInput, " nie istnieje");
+	}
+	else {
+		inputs[numInput]->SetSignal(sourceSignal);
+	}
 }
 
 /**
@@ -136,7 +141,14 @@ void Module::Process() {
 	// nic sie nie dzieje
 }
 
-void Module:: SetID(int newID) {
+/**
+ * Funckja inicjalizujaca. Redefiniujac te funckje mozna zdefiniowac czynnosci
+ * wykonywane tuz po dodaniu modulu do algorytmu.
+ */
+void Module::Init() {
+}
+
+void Module::SetID(int newID) {
 	id = newID;
 }
 
@@ -154,4 +166,8 @@ string Module::GetName() const {
 
 string Module::GetType() const {
 	return type;
+}
+
+int Module::GetParameterCount() const {
+	return parameters.size();
 }

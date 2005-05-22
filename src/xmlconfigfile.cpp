@@ -6,26 +6,36 @@ XMLConfigFile::XMLConfigFile() {
 }
 
 XMLConfigFile::~XMLConfigFile() {
+	TRACE("XMLConfigFile::~XMLConfigFile()", "Destrukcja...");
+	TRACE("XMLConfigFile::~XMLConfigFile()", "Destrukcja pomyslna");
 }
 
 void XMLConfigFile::OpenFile(const char * filename) {
 	fileName = filename;
 
     if ( !document.LoadFile(fileName.c_str()) ) {
-        throw RTSError("Nie mozna wczytac pliku " + (string)filename +
+        throw RTSError("Nie mozna wczytac pliku " + (string)fileName +
 			"! Error: " + document.ErrorDesc());
     }
+    
+    TRACE3("XMLConfigFile::OpenFile()", "Otwarto plik '", fileName ,"'");
 }
 
+/**
+ * Wczytuje algorytm opisany w pliku
+ * @param algo Wskaznik do konfigurowanego algorytmu
+*/
 void XMLConfigFile::LoadAlgorithm(Algorithm* algo) {
+	TRACE("XMLConfigFile::LoadModules()", "Wczytywanie calego algorytmu...");
 	LoadModules(algo);
 	LoadParameters(algo);
 	LoadConnections(algo);
+	TRACE("XMLConfigFile::LoadModules()", "Algorytm wczytany");
 }
 
 /**
  * Wczytuje modu³y zadeklarowane w pliku
-  * @param Wskaznik do konfigurowanego algorytmu
+  * @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadModules(Algorithm* algo) {
 
@@ -59,7 +69,7 @@ void XMLConfigFile::LoadModules(Algorithm* algo) {
 
 /**
  * Funckja wczytuj¹ca parametry modu³ów
- * @param Wskaznik do konfigurowanego algorytmu
+ * @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadParameters(Algorithm* algo) {
 	TRACE("XMLConfigFile::LoadParameters()", "Wczytywanie parametrow...");
@@ -82,7 +92,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 		// wszystkie parametry kazdego modulu
 		for( paramElem = moduleNode->FirstChildElement("parameter");
 			paramElem;
-			paramElem = moduleNode->NextSiblingElement("parameter") )
+			paramElem = paramElem->NextSiblingElement("parameter") )
 		{
 			if(paramElem != NULL) {
                 paramTxt = paramElem->FirstChild();
@@ -101,7 +111,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 					float value;
 					ParameterFloat* param =
 						(ParameterFloat*)algo->GetModule(moduleId)->GetParameter(paramId);
-					value = atof(paramValue.c_str());
+					value = atof( paramValue.c_str() );
 					param->SetValue(value);
 					#ifndef NDEBUG
 						cout << param->GetValue() << endl;
@@ -121,47 +131,51 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 	}
 	
 	TRACE("XMLConfigFile::LoadParameters()", "Parametry wczytane");
-	
 }
 
 /**
- * Funckja wczytuj¹ca do pamiêci powi¹zania miêdzy modu³ami
- * @param Wskaznik do konfigurowanego algorytmu
+ * Funckja wczytuj¹ca polaczenia miêdzy modu³ami
+ * @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadConnections(Algorithm* algo) {
     TRACE("XMLConfigFile::LoadConnections()", "Wczytywanie polaczen...");
 
-    string strTemp;
-    //Zmienne do parsowania XML
-    TiXmlNode*    node                  = 0;
-    TiXmlElement* projectElement        = 0;
-    TiXmlElement* connectionElements    = 0;
-    TiXmlElement* moduleXML             = 0;
+	string module1Name, module2Name;
+  	int module1Id = -1, module2Id = -1, inputId = -1, outputId = -1;
+	TiXmlElement* connElem;
+	TiXmlNode* connNode, * parent;
 
-    node = document.FirstChild( "algorithm" );
-    assert( node );
-    projectElement = node->ToElement();
-    assert( projectElement );
+	TiXmlHandle docHandle( &document );
+	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "connections" ).Child("connection", 0).Node();
+	
+	cout << parent << endl;
+	
+	for( connNode = parent; connNode; connNode = connNode->NextSibling("connection") ) {
+		connElem = connNode->ToElement();
 
-	node = projectElement->FirstChildElement("connections");
-    assert( node );
-    connectionElements = node->ToElement();
-    assert( connectionElements  );
+		module1Name = connElem->Attribute("name1");
+		module1Id = ( *moduleName2IdMap.find(module1Name) ).second;
+		
+		module2Name = connElem->Attribute("name2");
+		module2Id = ( *moduleName2IdMap.find(module2Name) ).second;
+		
+		inputId = atoi( connElem->Attribute("input") );
+		outputId = atoi( connElem->Attribute("output") );
 
-    //powi¹zanie modu³ów
-    for( moduleXML = connectionElements->FirstChildElement();
-         moduleXML;
-         moduleXML = moduleXML->NextSiblingElement() )
-    {
-         //cout << (*moduleName2IDMap.find(moduleXML->Attribute("name1"))).second <<endl;
-         //cout << (*moduleName2IDMap.find(moduleXML->Attribute("name2"))).second <<endl;
-
-		algo->ConnectModules(
-		 	(*moduleName2IdMap.find(moduleXML->Attribute("name1"))).second,
-		 	atoi(moduleXML -> Attribute("output")),
-			(*moduleName2IdMap.find(moduleXML->Attribute("name2"))).second,
-			atoi(moduleXML -> Attribute("input")));
-	    }
+		algo->ConnectModules(module1Id, outputId, module2Id, inputId);
+		
+		#ifndef NDEBUG
+		cout << "XMLConfigFile::LoadConnections(): " <<
+		    module1Name << "(" << module1Id << ")." <<
+			algo->GetModule(module1Id)->GetOutput(outputId)->GetName() <<
+			"(" <<	outputId << ")" <<
+			" -> " <<
+   		    module2Name << "(" << module2Id << ")." <<
+			algo->GetModule(module2Id)->GetInput(inputId)->GetName() <<
+   		    "(" << inputId << ")" << endl;
+		#endif
+		
+	}
 
     TRACE("XMLConfigFile::LoadConnections()", "Moduly polaczone");
 }

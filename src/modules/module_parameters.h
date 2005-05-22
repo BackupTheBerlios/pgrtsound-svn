@@ -2,13 +2,15 @@
 #define MODULE_PARAMETERS_H
 
 #include <string>
-#include <math.h>
+#include <cstdlib>
+//#include <math.h>
 
 using namespace std;
 
 // Paramter GUI types
 enum {
 	gtInvisible,
+	gtProperty,
    	gtSlider,
 	gtEditBox
 };
@@ -23,7 +25,7 @@ class Parameter {
 	private:
    		string	type;
    		string	name;
-   		string	GUItype;
+   		int		GUItype;
 
 	public:
 		Parameter(string type_, string name_, int GUItype_);
@@ -32,7 +34,7 @@ class Parameter {
 		string GetName() const;
 		string GetLabel() const;
 		string GetDescription() const;
-		string GetGUIType() const;
+		int GetGUIType() const;
 		void SetID(int newID);
 		void SetLabel(string newLabel);
 		void SetDescription(string newDesc);
@@ -47,6 +49,9 @@ class ParameterFloat : public Parameter {
 		//virtual void SetValue(float newValue);
 		virtual void SetValue(float newValue);
 		virtual float GetValue() const;
+		virtual float GetMin() const;
+		virtual float GetMax() const;
+		virtual float GetStep() const;
 
 	protected:
    		float   value;
@@ -55,7 +60,6 @@ class ParameterFloat : public Parameter {
 		float   step;       /**< Minimlany przyrost wartosci parzmetru (tylko gdy bounded == true) */
 		bool    bounded;    /**< Prawda jesli parametr przyjmuje wartosci z przedzialu */
 };
-
 
 inline void ParameterFloat::SetValue(float newValue) {
 //	if(bounded) {

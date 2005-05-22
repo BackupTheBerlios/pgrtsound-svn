@@ -31,13 +31,16 @@ class Algorithm {
 		~Algorithm();
 		void	Process();
 		int     AddModule(string type);
-		void    PrintInfo();
 		void    ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId);
 		void    CreateQueue(void);
 		void    SetQueueManually(int* order, int num);
 		void    SetFramesPerBlock(unsigned long fpb);
 		void    SetSampleRate(int sRate);
-		Module* GetModule(int moduleId);
+		Module* GetModule(int moduleId) const;
+		void    PrintInfo(void) const;
+		int     GetModulesCount() const;
+		void    Clear();
+		void    Init();
         
 	private:
 		Graph				graph;
@@ -46,19 +49,22 @@ class Algorithm {
 		ModuleFactory		moduleFactory;
 		vector<Module*>		modules;
 		vector<Module*>		modulesQueue;
+		AudioPortIn			audioPortIn;
+		AudioPortOut		audioPortOut;
 };
 
 /**
  * Zwraca wskaznik do modulu o zadanym identyfikatorze.
- * @param Identyfikator modulu
+ * @param moduleId Identyfikator modulu
  */
-inline Module* Algorithm::GetModule(int moduleId) {
+inline Module* Algorithm::GetModule(int moduleId) const {
 	return modules[moduleId];
 }
 
 /**
- * Uruchomienie przetwarzania przez algorytm.
- * Wywolanie tej funkcji spowoduje przeliczenie bloku ramek o dlugosci
+ * Funckja przetwarzania algorytmu.
+ * Funkcja powoduje wywolanie funkcji przetwarzania wszystkich
+ * wykorzystanych w budowie algorytmu modulow.
  * framesPerBlock.
  */
 inline void Algorithm::Process() {

@@ -30,10 +30,11 @@ class AudioDriver
 		void SetCallback(PortAudioCallback* cbFunc, void* cbData);
 		void EnableInput();
 		void DisableInput();
-		
 		void PrintDevices();
 
 	private:
+		void Open();
+
 		double				sampleRate;
 		unsigned long		framesPerBuffer, numBuffers;
 		PaDeviceID 			outputDevice, inputDevice;
@@ -43,8 +44,6 @@ class AudioDriver
 		PortAudioCallback*	callbackFunction;
 		PortAudioStream*	stream;
 		PaError				error;
-
-		void Open();
 };
 
 #endif // AUDIODRIVER_H

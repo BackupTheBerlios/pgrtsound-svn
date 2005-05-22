@@ -5,6 +5,7 @@ AudioDriver::AudioDriver()
 	TRACE("AudioDriver::AudioDriver()", "Inicjalizacja...");
 	
 	// raczej bezpieczne wartosci domyslne
+	stream = NULL;
 	sampleRate = 44100.0;
 	sampleFormat = paFloat32;	// i basta - nie dajemy mozliwosci zmiany
 	framesPerBuffer = 256;
@@ -24,6 +25,8 @@ AudioDriver::AudioDriver()
 }
 
 AudioDriver::~AudioDriver() {
+	TRACE("AudioDriver::AudioDriver()", "Koncze...");
+
 	if(Pa_StreamActive(stream)) {
 		Stop();
 	}
@@ -51,24 +54,28 @@ void AudioDriver::Open(double samplingFreq, unsigned long fpb, unsigned long num
 }
 
 void AudioDriver::Start() {
-	if(!Pa_StreamActive(stream)) {
-		error = Pa_StartStream(stream);
+    if(stream != NULL) {
+		if(!Pa_StreamActive(stream)) {
+			error = Pa_StartStream(stream);
 
-		if(error != paNoError)
-			throw AudioDriverError( "AudioDriver::Start(): " + string(Pa_GetErrorText(error)) );
-		else
-			TRACE("AudioDriver::Start()", "Strumien odtwarzany");
+			if(error != paNoError)
+				throw AudioDriverError( "AudioDriver::Start(): " + string(Pa_GetErrorText(error)) );
+			else
+				TRACE("AudioDriver::Start()", "Strumien odtwarzany");
+		}
 	}
 }
 
 void AudioDriver::Stop() {
-	if(Pa_StreamActive(stream)) {
-		error = Pa_StopStream(stream);
+	if(stream != NULL) {
+		if(Pa_StreamActive(stream)) {
+			error = Pa_StopStream(stream);
 
-		if(error != paNoError)
-			throw AudioDriverError( "AudioDriver::Stop(): " + string(Pa_GetErrorText(error)) );
-		else
-			TRACE("AudioDriver::Stop()", "Strumien zatrzymany");
+			if(error != paNoError)
+				throw AudioDriverError( "AudioDriver::Stop(): " + string(Pa_GetErrorText(error)) );
+			else
+				TRACE("AudioDriver::Stop()", "Strumien zatrzymany");
+		}
 	}
 }
 

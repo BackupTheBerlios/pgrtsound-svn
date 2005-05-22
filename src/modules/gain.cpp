@@ -22,5 +22,4 @@ void Gain::Process() {
 	for (n = 0; n < Module::framesPerBlock; n++) {
 			*out++ = (*in++) * gain;
 	}
-		
 }

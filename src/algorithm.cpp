@@ -1,18 +1,26 @@
 #include "algorithm.h"
 
 Algorithm::Algorithm() {
-	// wyjscie i wyjscie audio jest zawsze
-	AudioPortIn* api = new AudioPortIn;
-	api->SetID(0);
-	modules.push_back(api);
-	add_vertex(graph);  // dodajemy do grafu
+	//// wyjscie i wyjscie audio jest zawsze
+//	AudioPortIn* api = new AudioPortIn;
+//	api->SetID(0);
+//	modules.push_back(api);
+//	add_vertex(graph);  // dodajemy do grafu (wierzcholek 0)
+//
+//	AudioPortOut* apo = new AudioPortOut;
+//	apo->SetID(1);
+//	modules.push_back(apo);
+//	add_vertex(graph);	// wierzcholek 1
 
-	AudioPortOut* apo = new AudioPortOut;
-	apo->SetID(1);
-	modules.push_back(apo);
-	add_vertex(graph);
-	
-	TRACE("Algorithm::Algorithm()", "Dodano AudioPortIn i AudioPortOut");
+	audioPortIn.SetID(0);
+	modules.push_back(&audioPortIn);
+	add_vertex(graph);   // dodajemy do grafu (wierzcholek 0)
+
+	audioPortOut.SetID(1);
+	modules.push_back(&audioPortOut);
+	add_vertex(graph);  // wierzcholek 1
+
+	TRACE("Algorithm::Algorithm()", "Dodano moduly AudioPortIn i AudioPortOut");
 }
 
 Algorithm::~Algorithm() {
@@ -20,7 +28,7 @@ Algorithm::~Algorithm() {
 	//delete modules[0];
 	//delete modules[1];
 
-    for (int i = 0; i < modules.size(); i++) {
+    for (int i = 2; i < modules.size(); i++) {
         delete modules[i];
     } 
 
@@ -35,12 +43,12 @@ int Algorithm::AddModule(string type) {
 	// dodajemy do grafu
 	add_vertex(graph);
 
-	TRACE5("Algorithm", "Modul typu ", type, " o id = ", m->GetID(), " dodany do algorytmu");
+	TRACE5("Algorithm", "Dodano modul typu ", m->GetType(), "(", m->GetID(), ")");
 	
 	return m->GetID();
 }
 
-void Algorithm::PrintInfo() {
+void Algorithm::PrintInfo(void) const {
 	cout << endl << "Informacje o algorytmie: " << endl;
 	for(int i = 0; i < modules.size(); i++) {
 		cout << "modul id: " << modules[i]->GetID() <<
@@ -80,23 +88,27 @@ void Algorithm::PrintInfo() {
  */
 void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId) {
     if (moduleId1 >= modules.size())
-		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul o takim id nie istnieje.");
+		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul (od) o takim id nie istnieje.");
     if (moduleId2 >= modules.size())
-		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul o takim id nie istnieje.");
+		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul (do) o takim id nie istnieje.");
+		
+//	#ifndef NDEBUG
+//		cout << "    Lacze " <<
+//			modules[moduleId1]->GetName() << "(" << modules[moduleId1]->GetOutput(outputId)->GetName() << ") -> " <<
+//			modules[moduleId2]->GetName() << "(" << modules[moduleId2]->GetInput(inputId)->GetName() << ")" << endl;
+//	#endif
 
-	#ifndef NDEBUG
-		cout << "    Lacze " <<
-			modules[moduleId1]->GetName() << "(" << modules[moduleId1]->GetOutput(outputId)->GetName() << ") -> " <<
-			modules[moduleId2]->GetName() << "(" << modules[moduleId2]->GetInput(inputId)->GetName() << ")" << endl;
-//		cout << "Lacze " <<
-//			moduleId1 << "(" << modules[moduleId1]->GetOutput(outputId)->GetID() << ") -> " <<
-//			moduleId2 << "(" << modules[moduleId2]->GetInput(inputId)->GetID() << ")" << endl;
-	#endif
-
+	//cout << "ConnectInputTo..." << endl;
 		modules[moduleId2]->ConnectInputTo(inputId,
 			modules[moduleId1]->GetOutput(outputId)->GetSignal() );
-		// aktualizacja grafu
-		add_edge(moduleId1, moduleId2, graph);
+  	//cout << "ConnectInputTo TAK" << endl;
+
+	// aktualizacja grafu
+	add_edge(moduleId1, moduleId2, graph);
+
+//	#ifndef NDEBUG
+//		cout << "    Polaczone " << endl;
+//	#endif
 }
 
 /**
@@ -143,18 +155,52 @@ void Algorithm::CreateQueue(void) {
 	typedef std::vector< Vertex > container;
 	typedef property_map<Graph, vertex_index_t>::type IndexMap;
 
-    IndexMap index = get(vertex_index, graph);
-    container c;
+	container c;
+	IndexMap index = get(vertex_index, graph);
 
 	modulesQueue.clear();
 	
     topological_sort(graph, std::back_inserter(c));
 
     cout << "A topological ordering: ";
-    for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii)
-    {
+    for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii) {
         cout << index[*ii] << " ";
 		modulesQueue.push_back( modules[index[*ii]]  );
     }
     cout << endl;
+}
+
+int Algorithm::GetModulesCount() const {
+	return modules.size();
+}
+
+void  Algorithm::Clear() {
+	TRACE("Algorithm::Clear()", "Czyszcze algorytm...");
+
+	for(int i = 0; i < modules.size(); i++) {
+		remove_vertex(i, graph);
+	}
+	
+	for (int i = 2; i < modules.size(); i++) {
+        delete modules[i];
+    }
+	
+	modulesQueue.clear();
+	modules.clear();
+	
+	modules.push_back(&audioPortIn);
+	add_vertex(graph);	// dodajemy do grafu (wierzcholek 0)
+
+	modules.push_back(&audioPortOut);
+	add_vertex(graph);	// wierzcholek 1
+	
+	TRACE("Algorithm::Clear()", "Algorytm wyczyszczony");
+}
+
+void Algorithm::Init() {
+    TRACE("Algorithm::Init()", "Inicjalizacja modulow...");
+	for(int i = 0; i < modules.size(); i++) {
+		modules[i]->Init();
+	}
+    TRACE("Algorithm::Init()", "Inicjalizacja modulow zakonczona");
 }

@@ -9,7 +9,6 @@ Sum::Sum() : Module("sumator", "New sumator"),
 }
 
 Sum::~Sum() {
-	// insert your code here
 }
 
 void Sum::Process() {

@@ -8,7 +8,7 @@
 #include "audiodriver.h"
 
 /**
- * Obiekt pliku konfiguracyjnego XML
+ * Obiekt pliku konfiguracyjnego XML.
  * Umozliwa wczytywanie konfiguracji algorytmu zapisanej w pliku XML ustalonego
  * formatu.
  */
@@ -26,13 +26,9 @@ class XMLConfigFile
 		void LoadConnections(Algorithm* algo);
 		
 	private:
-
 		string fileName;
 		TiXmlDocument document;
 		map <string, int>	moduleName2IdMap;	// mapa asocjacyjna nazwy z id
-		//Algorithm* algorithm;
-		//AudioDriver* audioDriver;
-
 };
 
 #endif // XMLCONFIGFILE_H

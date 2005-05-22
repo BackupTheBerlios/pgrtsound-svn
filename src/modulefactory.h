@@ -10,6 +10,8 @@
 #include "modules/audioportout.h"
 #include "modules/audioportin.h"
 #include "modules/textfileout.h"
+#include "modules/slider.h"
+#include "modules/multiplication.h"
 
 /**
  * Docelowo klasa ma sie zjamowac ladowaniem wtyczek i ich tworzeniem.
