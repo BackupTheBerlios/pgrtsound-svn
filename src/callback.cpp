@@ -27,7 +27,7 @@ int paCallback( void *inputBuffer, void *outputBuffer,
 //	else {
         for(i = 0; i < framesPerBuffer; i++) {
 			/* TODO (#1#): Zaimplementowac kanal lewy i prawy */
-			//*put++ = ( (*in++) + (*in++) )*0.5f; // na razie miksowanie do mono
+			*put++ = ( (*in++) + (*in++) )*0.5f; // na razie miksowanie do mono
 			*out++ = *gen;
 			*out++ = *gen++;
 		}
