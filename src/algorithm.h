@@ -6,6 +6,7 @@
 #include <iostream>
 //#include <iterator>
 //#include <list>
+//#include <utility>
 
 #include <boost/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -14,9 +15,9 @@
 
 #include "modulefactory.h"
 
-//#include <utility>
 
 typedef std::pair<std::size_t, std::size_t> Pair;
+
 // Boost Graph
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS> Graph;
 
@@ -27,14 +28,14 @@ typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS> Graph;
  */
 class Algorithm {
 	public:
-  		Algorithm();
+  		Algorithm(unsigned long framesPerBlock);
 		~Algorithm();
 		void	Process();
 		int     AddModule(string type);
 		void    ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId);
 		void    CreateQueue(void);
 		void    SetQueueManually(int* order, int num);
-		void    SetFramesPerBlock(unsigned long fpb);
+		//void    SetFramesPerBlock(unsigned long fpb);
 		void    SetSampleRate(int sRate);
 		Module* GetModule(int moduleId) const;
 		void    PrintInfo(void) const;
@@ -49,8 +50,6 @@ class Algorithm {
 		ModuleFactory		moduleFactory;
 		vector<Module*>		modules;
 		vector<Module*>		modulesQueue;
-		AudioPortIn			audioPortIn;
-		AudioPortOut		audioPortOut;
 };
 
 /**

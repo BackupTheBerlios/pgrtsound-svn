@@ -18,17 +18,16 @@ streambuf* out = cout.rdbuf(logfile.rdbuf());
 //------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
 	AudioDriver audio;
-    Algorithm algo;
+    Algorithm algo(FRAMES_PER_BLOCK);
 	XMLConfigFile xmlConfig;
 	char c = ' ';
     bool running = false;
 
-    algo.SetFramesPerBlock(FRAMES_PER_BLOCK);
     algo.SetSampleRate(SAMPLE_RATE);
     
-	xmlConfig.OpenFile("examples\\sin.xml");
-
-	try {
+ 	try {
+        xmlConfig.OpenFile("examples\\fm2.xml");
+        algo.Clear(); // test
 		xmlConfig.LoadAlgorithm(&algo);
 		algo.Init();
 		algo.CreateQueue();
@@ -48,7 +47,6 @@ int main(int argc, char *argv[]) {
         cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
         exit(1);
     }
-
 
     while(c != 'q') {
 		c = cin.get();

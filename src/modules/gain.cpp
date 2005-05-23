@@ -1,11 +1,10 @@
 #include "gain.h"
 
 Gain::Gain() : Module("gain", "New gain"),
-	iIn("input"), oOut("output"), pGain("gain", gtSlider)
+	iIn("inputexxxx"), oOut("output"), pGain("gain", gtSlider)
  {
 	AddInput(&iIn);
 	AddOutput(&oOut);
-
 	pGain.Bound(0, 1, 0.01);    // ograczniczenie wartosci
 	AddParameter(&pGain);
 }

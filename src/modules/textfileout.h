@@ -6,6 +6,7 @@
 #include <iostream>
 
 using namespace std;
+
 /**
  * Modul zapisu do pliku. Dane dopisywane s¹ do pliku FileTexOut.txt
  */

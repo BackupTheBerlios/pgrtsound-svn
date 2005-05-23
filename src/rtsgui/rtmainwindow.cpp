@@ -1,7 +1,7 @@
 #include "rtmainwindow.h"
 #include "callback.h"
 
-RTMainWindow::RTMainWindow() : mainBox(false, 0) {
+RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(256) {
 	set_title("Real Time GUI");
 	set_size_request(300, 550);
 
@@ -169,7 +169,7 @@ void RTMainWindow::OnOpenFile() {
 
 			try {
 			    xmlConfig.OpenFile(filename.c_str());
-    			algo.SetFramesPerBlock(256);
+    			//algo.SetFramesPerBlock(256);
 				algo.SetSampleRate(44100);
 				algo.Clear();
 				xmlConfig.LoadAlgorithm(&algo);

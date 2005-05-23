@@ -21,6 +21,8 @@
 
 using namespace std;
 
+void SetNullBuffer(unsigned long size);
+
 //------------------------------------------------------------------------------
 /**
  * Wyjscie modulu
@@ -56,7 +58,7 @@ class Input {
 		~Input();
 		int GetID() const;
 		string GetName() const;
-		float* GetSignal() const;
+		float* GetSignal();
 		void SetID(int newID);
 		//void SetName(string newName);
 		void SetSignal(float* sig);
@@ -82,6 +84,7 @@ class Module {
         string	name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
 		int		id;		/**< Liczbowy identyfikator modulu. */
 		string	type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+		
 
 	public:
   		static int	framesPerBlock;
@@ -106,10 +109,6 @@ class Module {
 		int GetParameterCount() const;
 
 };
-
-inline float* Input::GetSignal() const {
-	return signal;
-}
 
 inline Input* Module::GetInput(int inputID) {
 	return inputs[inputID];

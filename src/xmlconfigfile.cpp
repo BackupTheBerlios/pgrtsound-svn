@@ -102,7 +102,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 					paramValue = paramTxt->Value();
 				}
     			#ifndef NDEBUG
-				cout << "     " << moduleElem->Attribute("name") << "." <<
+				cout << "    " << moduleElem->Attribute("name") << "." <<
 					algo->GetModule(moduleId)->GetParameter(paramId)->GetName() << " = ";
 				#endif
 
@@ -146,9 +146,7 @@ void XMLConfigFile::LoadConnections(Algorithm* algo) {
 
 	TiXmlHandle docHandle( &document );
 	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "connections" ).Child("connection", 0).Node();
-	
-	cout << parent << endl;
-	
+
 	for( connNode = parent; connNode; connNode = connNode->NextSibling("connection") ) {
 		connElem = connNode->ToElement();
 
@@ -164,7 +162,7 @@ void XMLConfigFile::LoadConnections(Algorithm* algo) {
 		algo->ConnectModules(module1Id, outputId, module2Id, inputId);
 		
 		#ifndef NDEBUG
-		cout << "XMLConfigFile::LoadConnections(): " <<
+		cout << "    " <<
 		    module1Name << "(" << module1Id << ")." <<
 			algo->GetModule(module1Id)->GetOutput(outputId)->GetName() <<
 			"(" <<	outputId << ")" <<

@@ -3,21 +3,43 @@
 int Module::framesPerBlock = 256;
 int Module::sampleRate = 44100;
 
+// uzyteczny, globabalny bufor zerowy
+static float* nullBuffer;
+static bool allocateNullBuffer = true;
+
+void SetNullBuffer(unsigned long size) {
+	if(allocateNullBuffer) {
+		TRACE2("module.cpp", "Alokuje bufor zerowy rozmiaru ", size);
+		float* buff;
+		nullBuffer = new float[size];
+		buff = nullBuffer;
+
+	 	for(unsigned long i = 0; i < size; i++) {
+			*buff++ = 0.0f;
+		}
+		allocateNullBuffer = false;
+
+		TRACE2("module.cpp", "Bufor zerowy zaalokowany ", nullBuffer);
+	}
+}
+
 //------------------------------------------------------------------------------
 Input::Input(string name_) {
    	name = name_;
+   	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
+   	signal = nullBuffer;
 }
 
 Input::~Input() {
 }
 
+float* Input::GetSignal() {
+	return signal;
+}
+
 void Input::SetID(int newID) {
 	id = newID;
 }
-
-//void Input::SetName(string newName) {
-//	name = newName;
-//}
 
 void Input::SetSignal(float* sig) {
 	signal = sig;
@@ -47,10 +69,6 @@ void Output::SetID(int newID) {
 	id = newID;
 }
 
-//void Output::SetName(string newName) {
-//	name = newName;
-//}
-
 int Output::GetID() const {
 	return id;
 }
@@ -74,7 +92,6 @@ Module::~Module() {
 	float* temp;
 
 	TRACE2("Module::~Module", "Sprzatam modul ", id);
-
 	// czy to naprawde usuwa bufory?
 	for(unsigned i = 0; i < outputs.size(); i++) {
         temp = outputs[i]->GetSignal();
@@ -98,7 +115,6 @@ int Module::AddParameter(Parameter *param) {
  */
 int Module::AddInput(Input* input) {
 	input->SetID( inputs.size() );
-	input->SetSignal(NULL);
 	inputs.push_back(input);
 	return input->GetID();
 }
@@ -120,6 +136,7 @@ int Module::AddOutput(Output* output) {
  		outputs.push_back(output);
 		return output->GetID();
 	}
+
 }
 
 /**
@@ -130,7 +147,7 @@ void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 		TRACE3("Module::ConnectInputTo()", "Wejscie o id = ", numInput, " nie istnieje");
 	}
 	else {
-		inputs[numInput]->SetSignal(sourceSignal);
+		GetInput(numInput)->SetSignal(sourceSignal);
 	}
 }
 

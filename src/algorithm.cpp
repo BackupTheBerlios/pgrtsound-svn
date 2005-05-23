@@ -1,23 +1,33 @@
 #include "algorithm.h"
 
-Algorithm::Algorithm() {
-	//// wyjscie i wyjscie audio jest zawsze
+extern void SetNullBuffer(unsigned long);
 
-	audioPortIn.SetID(0);
-	modules.push_back(&audioPortIn);
+Algorithm::Algorithm(unsigned long fpb) {
+	Module* module;
+	
+	framesPerBlock = fpb;
+	Module::framesPerBlock = fpb;
+	SetNullBuffer(fpb);
+
+	// wyjscie i wyjscie audio jest zawsze
+	module = new AudioPortIn;
+	module->SetID(0);
+	modules.push_back(module);
 	add_vertex(graph);   // dodajemy do grafu (wierzcholek 0)
 
-	audioPortOut.SetID(1);
-	modules.push_back(&audioPortOut);
-	add_vertex(graph);  // wierzcholek 1
+	module = new AudioPortOut;
+	module->SetID(1);
+	modules.push_back(module);
+	add_vertex(graph);// wierzcholek 1
 
 	TRACE("Algorithm::Algorithm()", "Dodano moduly AudioPortIn i AudioPortOut");
 }
 
 Algorithm::~Algorithm() {
 	TRACE3("Algorithm", "Sprzatanie algorytmu (", modules.size(), " modulow)..."); 
-	//delete modules[0];
-	//delete modules[1];
+
+	delete modules[0];
+	delete modules[1];
 
     for (int i = 2; i < modules.size(); i++) {
         delete modules[i];
@@ -45,33 +55,31 @@ void Algorithm::PrintInfo(void) const {
 	graph_traits<Graph>::edge_iterator ei, ei_end;
 	typedef property_map<Graph, vertex_index_t>::type IndexMap;
 	
-	cout << endl << "Informacje o algorytmie: " << endl;
+	cout << "Algorithm::PrintInfo(): Informacje o algorytmie... " << endl;
 
 	for(int i = 0; i < modules.size(); i++) {
-		cout << "modul id: " << modules[i]->GetID() <<
-		    "     " << modules[i]->GetName() <<
+		cout << "    Modul id: " << modules[i]->GetID() <<
+		    "  " << modules[i]->GetName() <<
 			"(" << modules[i]->GetType() << ")" << endl;
 	}
 	
-	cout << endl;
-	cout << "vertices(g) = ";
+    cout << "    vertices = ";
     std::pair<vertex_iter, vertex_iter> vp;
 	IndexMap index = get(vertex_index, graph);
 	for (vp = vertices(graph); vp.first != vp.second; ++vp.first)
       cout << index[*vp.first] <<  " ";
     cout << endl;
 
-    cout << "edges(g) = ";
+    cout << "    edges = ";
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei)
         std::cout << "(" << index[source(*ei, graph)]
                   << "," << index[target(*ei, graph)] << ") ";
     std::cout << std::endl;
 
-
-	cout << "kolejnosc przetwarzania: ";
+	cout << "    kolejnosc przetwarzania: ";
 	for(int i = 0; i < modulesQueue.size(); i++) {
 		cout << modulesQueue[i]->GetID() << " ";
-	}		
+	}
 	cout << endl;
 }
 
@@ -95,10 +103,6 @@ void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int i
 			modules[moduleId1]->GetOutput(outputId)->GetSignal() );
   	
 	add_edge(moduleId1, moduleId2, graph);
-
-	#ifndef NDEBUG
-		cout << "    Polaczone " << endl;
-	#endif
 }
 
 /**
@@ -117,15 +121,17 @@ void Algorithm::SetQueueManually(int* order, int num) {
 	TRACE("Algorithm", "Kolejka ustawiona");
 }
 
-void Algorithm::SetFramesPerBlock(unsigned long fpb) {
-	framesPerBlock = fpb;
-
-	Module::framesPerBlock = fpb; // wartos widoczna we wszystkich modulach
-	TRACE2("Algorithm", "Module::framesPerBlock = ", Module::framesPerBlock);
-
-/* TODO (#1#): reinicjalizacja buforow wyjsciowych wszystkich
-               modulow */
-}
+//void Algorithm::SetFramesPerBlock(unsigned long fpb) {
+//	framesPerBlock = fpb;
+//
+//	Module::framesPerBlock = fpb; // wartos widoczna we wszystkich modulach
+//	TRACE2("Algorithm", "Module::framesPerBlock = ", Module::framesPerBlock);
+//
+//	SetNullBuffer(Module::framesPerBlock);
+//
+///* TODO (#1#): reinicjalizacja buforow wyjsciowych wszystkich
+//               modulow */
+//}
 
 void Algorithm::SetSampleRate(int sRate) {
 	sampleRate = sRate;
@@ -180,11 +186,18 @@ void  Algorithm::Clear() {
 	modules.clear();
 	graph.clear();
 	
-	modules.push_back(&audioPortIn);
-	add_vertex(graph);	// dodajemy do grafu (wierzcholek 0)
+	Module* module;
 
-	modules.push_back(&audioPortOut);
-	add_vertex(graph);	// wierzcholek 1
+	// wyjscie i wyjscie audio jest zawsze
+	module = new AudioPortIn;
+	module->SetID(0);
+	modules.push_back(module);
+	add_vertex(graph);   // dodajemy do grafu (wierzcholek 0)
+
+	module = new AudioPortOut;
+	module->SetID(1);
+	modules.push_back(module);
+	add_vertex(graph);// wierzcholek 1
 	
 	TRACE("Algorithm::Clear()", "Algorytm wyczyszczony");
 }
