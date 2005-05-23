@@ -1,4 +1,5 @@
 #include "modulefactory.h"
+#include "ltdl.h" 
 
 ModuleFactory::ModuleFactory() {
 }
