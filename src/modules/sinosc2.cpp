@@ -11,12 +11,12 @@ SinOsc2::SinOsc2() : Module("osc2", "New oscillator v2"),
 
 	sinTable = new float[tableSize + 1];
 	sample = sinTable;
-    tableSizeInverted = 1.0/(float)tableSize;
+    tableSizeInverted = 1.0f/(float)tableSize;
 	scale = (float)tableSize / (float)Module::sampleRate;
 	tableRingMask = tableSize - 1;
 
 	// generowanie tablicy
-	for(long n = 0; n < tableSize; n++) {
+	for(long n = 0; n < tableSize + 1; n++) {
 		*sample = sin(M_2PI*(float)n*tableSizeInverted);
 		sample++;
 	}
@@ -35,7 +35,7 @@ void SinOsc2::Process() {
 	float* out = oOut.GetSignal();
 
 	for(int i = 0; i < Module::framesPerBlock; i++) {
-		phaseFloor = floorf(phase);
+		phaseFloor = floor(phase);
 		phaseFraction = phase - phaseFloor;
 
 		// zawijanie pozycji

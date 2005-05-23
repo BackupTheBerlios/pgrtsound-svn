@@ -8,7 +8,7 @@ TextFileOut::TextFileOut() : Module("textfileout", "New text file"),
 	AddInput(&iIn);
 	AddParameter(&pFileName);
 
-	pFreq.SetValue(Module::sampleRate / 4); // np. co 44100/4 = 11025 probek (1/4 sekundy)
+	pFreq.SetValue(Module::sampleRate / 4.0f); // np. co 44100/4 = 11025 probek (1/4 sekundy)
 	AddParameter(&pFreq);
 
 	frames = 0;

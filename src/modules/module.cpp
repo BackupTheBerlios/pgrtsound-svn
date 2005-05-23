@@ -76,7 +76,7 @@ Module::~Module() {
 	TRACE2("Module::~Module", "Sprzatam modul ", id);
 
 	// czy to naprawde usuwa bufory?
-	for(i = 0; i < outputs.size(); i++) {
+	for(unsigned i = 0; i < outputs.size(); i++) {
         temp = outputs[i]->GetSignal();
 		delete []temp;
 	}
@@ -115,7 +115,7 @@ int Module::AddOutput(Output* output) {
         throw RTSError("Module::AddOutput(): Nie mozna zaalokowac pamieci na bufor wyjsciowy");
 	}
 	else {
-        output->SetID(outputs.size());
+        output->SetID( outputs.size() );
 		output->SetSignal(outBuff);
  		outputs.push_back(output);
 		return output->GetID();

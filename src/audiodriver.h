@@ -31,6 +31,7 @@ class AudioDriver
 		void EnableInput();
 		void DisableInput();
 		void PrintDevices();
+		float GetCPUUsage() const;
 
 	private:
 		void Open();

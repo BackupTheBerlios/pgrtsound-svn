@@ -14,11 +14,10 @@ void XMLConfigFile::OpenFile(const char * filename) {
 	fileName = filename;
 
     if ( !document.LoadFile(fileName.c_str()) ) {
-        throw RTSError("Nie mozna wczytac pliku " + (string)fileName +
+		throw RTSError("Nie mozna wczytac pliku " + (string)fileName +
 			"! Error: " + document.ErrorDesc());
     }
     
-    TRACE3("XMLConfigFile::OpenFile()", "Otwarto plik '", fileName ,"'");
 }
 
 /**

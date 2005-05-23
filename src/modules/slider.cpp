@@ -15,7 +15,7 @@ Slider::~Slider() {
 }
 
 void Slider::Init() {
-   	pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1);
+   	pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1f);
 }
 
 void Slider::Process() {

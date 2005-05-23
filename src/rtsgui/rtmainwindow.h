@@ -26,19 +26,23 @@ class RTMainWindow : public Gtk::Window {
    		void OnStop();
 		void OnOpenFile();
    		void OnMenuFileQuit();
-
+		bool OnTimeOut();
 
 	private:
 		std::vector<GuiModule*>	guiModules;
-        Gtk::ScrolledWindow			scrollWindow;
-        Gtk::VBox					mainBox, modulesBox;
+        Gtk::ScrolledWindow		scrollWindow;
+        Gtk::VBox				mainBox, modulesBox;
+        Gtk::Label              cpuUsageLabel;
 
-		Algorithm					algo;
-		XMLConfigFile				xmlConfig;
-		AudioDriver                 audio;
+		Algorithm				algo;
+		XMLConfigFile			xmlConfig;
+		AudioDriver				audio;
 		
 		Glib::RefPtr<Gtk::UIManager>      m_refUIManager;
 		Glib::RefPtr<Gtk::ActionGroup>    m_refActionGroup;
+		
+		sigc::slot<bool>	my_slot;
+		sigc::connection	conn;
 };
 
 #endif // RTMAINWINDOW_H

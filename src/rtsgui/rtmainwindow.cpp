@@ -1,45 +1,9 @@
 #include "rtmainwindow.h"
-
-static int paCallback( void *inputBuffer, void *outputBuffer,
-	unsigned long framesPerBuffer, PaTimestamp outTime, void *userData )
-{
-	unsigned long i;
-
-	Algorithm* alg = (Algorithm*)userData;
-
-	float* put = alg->GetModule(0)->GetOutput(0)->GetSignal();	// AudioPortIn
-	float* gen = alg->GetModule(1)->GetInput(0)->GetSignal();   // AudioPortOut
-	float* in = (float*)inputBuffer;
-	float* out = (float*)outputBuffer;
-
-	// algorytm oblicza blok probek
-	alg->Process();
-
-	if(in == NULL) {
-		//cout << "hit 1" << endl;
-		for(i = 0; i < framesPerBuffer; i++) {
-			/* TODO (#1#): Zaimplementowac kanal lewy i prawy */
-			*out++ = *gen;
-			*out++ = *gen++;
-		}
-	}
-	else {
-   		//cout << "hit 2" << endl;
-        for(i = 0; i < framesPerBuffer; i++) {
-			///* TODO (#1#): Zaimplementowac kanal lewy i prawy */
-			*put++ = ( (*in++) + (*in++) )*0.5; // na razie miksowanie do mono
-			*out++ = *gen;
-			*out++ = *gen++;
-		}
-	}
-
-	return 0;
-}
-
+#include "callback.h"
 
 RTMainWindow::RTMainWindow() : mainBox(false, 0) {
 	set_title("Real Time GUI");
-	set_size_request(300, 300);
+	set_size_request(300, 550);
 
 	TRACE("RTMainWindow::RTMainWindow()", "Tworze okno...");
 
@@ -105,14 +69,24 @@ RTMainWindow::RTMainWindow() : mainBox(false, 0) {
 	if(pToolbar)
 		mainBox.pack_start(*pToolbar, Gtk::PACK_SHRINK);
 
-    mainBox.pack_end(scrollWindow);
+	mainBox.set_homogeneous(false);
+    mainBox.pack_start(scrollWindow);
+    mainBox.pack_end(cpuUsageLabel, Gtk::PACK_SHRINK);
+
+	cpuUsageLabel.set_justify(Gtk::JUSTIFY_LEFT);
+    cpuUsageLabel.set_label("CPU usage");
 
    	scrollWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
 	modulesBox.set_border_width(5);
 	modulesBox.set_homogeneous(false);
 	modulesBox.set_spacing(5);
+
 	scrollWindow.add(modulesBox);
+
+	// timer
+	my_slot = sigc::mem_fun(*this, &RTMainWindow::OnTimeOut);
+	conn = Glib::signal_timeout().connect(my_slot, 1000);
 
 	TRACE("RTMainWindow::RTMainWindow()", "Okno aplikacji utworzone");
 }
@@ -141,7 +115,7 @@ void RTMainWindow::AddModule(Module* module) {
 	for(int m = 0; m < paramCount; m++) {
 		param = module->GetParameter(m);
 
-		if((param->GetGUIType() != gtInvisible) and (param->GetGUIType() != gtProperty) ) {
+		if((param->GetGUIType() != gtInvisible) && (param->GetGUIType() != gtProperty) ) {
            	TRACE2("RTMainWindow::AddModule()", "Dodaje modul ", module->GetName());
 			// beda jakies widoczne parametry tego modulu wiec go dodajmy
 			guiModule = new GuiModule;
@@ -155,7 +129,7 @@ void RTMainWindow::AddModule(Module* module) {
 				}
 			}
 			
-			modulesBox.add(*guiModule);
+			modulesBox.pack_start(*guiModule, Gtk::PACK_SHRINK);
 			TRACE("RTMainWindow::AddModule()", "Modul dodany");
 			break;
 		}
@@ -251,4 +225,12 @@ void RTMainWindow::ClearModules() {
 	guiModules.clear();
 	TRACE("RTMainWindow::ClearModules()", "Moduly wyczyszczone");
 	show_all_children();
+}
+
+bool RTMainWindow::OnTimeOut() {
+	char txt[20];
+    g_snprintf(txt, 20, "CPU Usage: %#.2f %%", audio.GetCPUUsage()*100);
+	cpuUsageLabel.set_label(txt);
+	
+	return true;
 }

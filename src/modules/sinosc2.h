@@ -19,7 +19,8 @@ class SinOsc2 : public Module {
 		Output	oOut;
 
 		long	tablePosition, tableRingMask, tableSize;
-		float	phase, phaseFloor, phaseFraction;
+		float	phase, phaseFraction;
+		float 	phaseFloor;
 		float*	sinTable;	// adres tablicy probek
 		float	*tempSample;
 		float	scale;

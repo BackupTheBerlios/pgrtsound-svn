@@ -155,3 +155,10 @@ void AudioDriver::DisableInput() {
 	inputDevice = paNoDevice;
 	numInputChannels = 0;
 }
+
+float AudioDriver::GetCPUUsage() const {
+	if(stream != NULL)
+		return Pa_GetCPULoad(stream);
+	else
+	    return 0.0;
+}

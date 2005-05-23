@@ -2,15 +2,6 @@
 
 Algorithm::Algorithm() {
 	//// wyjscie i wyjscie audio jest zawsze
-//	AudioPortIn* api = new AudioPortIn;
-//	api->SetID(0);
-//	modules.push_back(api);
-//	add_vertex(graph);  // dodajemy do grafu (wierzcholek 0)
-//
-//	AudioPortOut* apo = new AudioPortOut;
-//	apo->SetID(1);
-//	modules.push_back(apo);
-//	add_vertex(graph);	// wierzcholek 1
 
 	audioPortIn.SetID(0);
 	modules.push_back(&audioPortIn);
@@ -49,37 +40,39 @@ int Algorithm::AddModule(string type) {
 }
 
 void Algorithm::PrintInfo(void) const {
+	using namespace boost;
+	typedef graph_traits<Graph>::vertex_iterator vertex_iter;
+	graph_traits<Graph>::edge_iterator ei, ei_end;
+	typedef property_map<Graph, vertex_index_t>::type IndexMap;
+	
 	cout << endl << "Informacje o algorytmie: " << endl;
+
 	for(int i = 0; i < modules.size(); i++) {
 		cout << "modul id: " << modules[i]->GetID() <<
 		    "     " << modules[i]->GetName() <<
 			"(" << modules[i]->GetType() << ")" << endl;
 	}
-	using namespace boost;
-
-	typedef property_map<Graph, vertex_index_t>::type IndexMap;
-    IndexMap index = get(vertex_index, graph);
-
-    cout << endl;
+	
+	cout << endl;
 	cout << "vertices(g) = ";
-    typedef graph_traits<Graph>::vertex_iterator vertex_iter;
     std::pair<vertex_iter, vertex_iter> vp;
+	IndexMap index = get(vertex_index, graph);
 	for (vp = vertices(graph); vp.first != vp.second; ++vp.first)
       cout << index[*vp.first] <<  " ";
     cout << endl;
 
     cout << "edges(g) = ";
-    graph_traits<Graph>::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei)
         std::cout << "(" << index[source(*ei, graph)]
                   << "," << index[target(*ei, graph)] << ") ";
     std::cout << std::endl;
 
+
 	cout << "kolejnosc przetwarzania: ";
 	for(int i = 0; i < modulesQueue.size(); i++) {
 		cout << modulesQueue[i]->GetID() << " ";
 	}		
-	cout << endl << endl;
+	cout << endl;
 }
 
 
@@ -92,23 +85,20 @@ void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int i
     if (moduleId2 >= modules.size())
 		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul (do) o takim id nie istnieje.");
 		
-//	#ifndef NDEBUG
-//		cout << "    Lacze " <<
-//			modules[moduleId1]->GetName() << "(" << modules[moduleId1]->GetOutput(outputId)->GetName() << ") -> " <<
-//			modules[moduleId2]->GetName() << "(" << modules[moduleId2]->GetInput(inputId)->GetName() << ")" << endl;
-//	#endif
+	//#ifndef NDEBUG
+	//	cout << "    Lacze " <<
+	//		modules[moduleId1]->GetName() << "(" << modules[moduleId1]->GetOutput(outputId)->GetName() << ") -> " <<
+	//		modules[moduleId2]->GetName() << "(" << modules[moduleId2]->GetInput(inputId)->GetName() << ")" << endl;
+	//#endif
 
-	//cout << "ConnectInputTo..." << endl;
-		modules[moduleId2]->ConnectInputTo(inputId,
+	modules[moduleId2]->ConnectInputTo(inputId,
 			modules[moduleId1]->GetOutput(outputId)->GetSignal() );
-  	//cout << "ConnectInputTo TAK" << endl;
-
-	// aktualizacja grafu
+  	
 	add_edge(moduleId1, moduleId2, graph);
 
-//	#ifndef NDEBUG
-//		cout << "    Polaczone " << endl;
-//	#endif
+	#ifndef NDEBUG
+		cout << "    Polaczone " << endl;
+	#endif
 }
 
 /**
@@ -177,16 +167,18 @@ int Algorithm::GetModulesCount() const {
 void  Algorithm::Clear() {
 	TRACE("Algorithm::Clear()", "Czyszcze algorytm...");
 
-	for(int i = 0; i < modules.size(); i++) {
-		remove_vertex(i, graph);
+	for(unsigned int i = 0; i < modules.size(); i++) {
+		cout << "Usuwam vertex " << i << endl;
 	}
 	
-	for (int i = 2; i < modules.size(); i++) {
-        delete modules[i];
+	for (unsigned int i = 2; i < modules.size(); i++) {
+		cout << "Usuwam modul " << i << endl;
+        delete GetModule(i);
     }
 	
 	modulesQueue.clear();
 	modules.clear();
+	graph.clear();
 	
 	modules.push_back(&audioPortIn);
 	add_vertex(graph);	// dodajemy do grafu (wierzcholek 0)
@@ -199,7 +191,7 @@ void  Algorithm::Clear() {
 
 void Algorithm::Init() {
     TRACE("Algorithm::Init()", "Inicjalizacja modulow...");
-	for(int i = 0; i < modules.size(); i++) {
+	for(unsigned int i = 0; i < modules.size(); i++) {
 		modules[i]->Init();
 	}
     TRACE("Algorithm::Init()", "Inicjalizacja modulow zakonczona");
