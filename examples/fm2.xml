@@ -35,9 +35,9 @@
 
 		<module type="sinosc2" name="Nosna"/>
 
-		<module type="textfileout" name="rekorder">
+<!-- 		<module type="textfileout" name="rekorder">
 			<parameter number="0" type="string">rekorder.txt</parameter>
-		</module>
+		</module> -->
 
 	</modules>	
 
@@ -51,7 +51,7 @@
 		<connection name1="Suma" output="0" name2="Nosna" input="0"/>
 		<connection name1="Amplituda nosnej" output="0" name2="Nosna" input="1"/>
 		<connection name1="Nosna" output="0" name2="AudioPortOut" input="0"/>
-		<connection name1="Glebokosc modulacji" output="0" name2="rekorder" input="0"/>
+<!-- 		<connection name1="Glebokosc modulacji" output="0" name2="rekorder" input="0"/> -->
 	</connections>
 
 </algorithm> 
