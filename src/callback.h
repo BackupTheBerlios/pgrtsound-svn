@@ -4,6 +4,8 @@
 #include "algorithm.h"
 #include "portaudio.h"
 
-extern int paCallback( void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, PaTimestamp outTime, void *userData );
+extern int paCallback( const void *inputBuffer, void *outputBuffer,
+	unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo,
+	PaStreamCallbackFlags statusFlags, void *userData );
 
 #endif // CALLBACK_H

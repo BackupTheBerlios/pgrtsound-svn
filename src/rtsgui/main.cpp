@@ -4,7 +4,7 @@
 #include "rtmainwindow.h"
 
 // logowanie do pliku
-ofstream logfile("RTSGui.txt");
+ofstream logfile("RTSGuilog.txt");
 streambuf* out = cout.rdbuf(logfile.rdbuf());
 
 using namespace std;

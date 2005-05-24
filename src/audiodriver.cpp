@@ -3,31 +3,39 @@
 AudioDriver::AudioDriver()
 {
 	TRACE("AudioDriver::AudioDriver()", "Inicjalizacja...");
-	
-	// raczej bezpieczne wartosci domyslne
-	stream = NULL;
-	sampleRate = 44100.0;
-	sampleFormat = paFloat32;	// i basta - nie dajemy mozliwosci zmiany
-	framesPerBuffer = 256;
-	numBuffers = 0;				// automatyczny dobor ilosci buforow
-	outputDevice = 0;			// domyslny w systemie
-	numOutputChannels = 2;		// stereo
-	inputDevice = -1;	// domyslnie nagrywanie wylaczone
-	numInputChannels = 0;
-	callbackFunction = NULL;
-	callbackData = NULL;
-	
+
 	error = Pa_Initialize();
 	if(error != paNoError)
 		throw AudioDriverError( "AudioDriver::AudioDriver(): " + string(Pa_GetErrorText(error)) );
 	else
 		TRACE("AudioDriver::AudioDriver()", "Zainicjowany");
+	
+	// raczej bezpieczne wartosci domyslne
+	outputParameters.device = Pa_GetDefaultOutputDevice();	/* default output device */
+	outputParameters.channelCount = 2;						/* stereo output */
+	outputParameters.sampleFormat = paFloat32;				/* 32 bit floating point output */
+	outputParameters.suggestedLatency =
+		Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
+	outputParameters.hostApiSpecificStreamInfo = NULL;
+
+	inputParameters.device = paNoDevice;
+	inputParameters.channelCount = 0;
+	inputParameters.sampleFormat = paFloat32;
+	inputParameters.suggestedLatency = 0;
+	inputParameters.hostApiSpecificStreamInfo = NULL;
+
+	stream = NULL;
+	sampleRate = 44100.0;
+	framesPerBuffer = 256;
+
+	callbackFunction = NULL;
+	callbackData = NULL;
 }
 
 AudioDriver::~AudioDriver() {
 	TRACE("AudioDriver::AudioDriver()", "Koncze...");
 
-	if(Pa_StreamActive(stream)) {
+	if(Pa_IsStreamActive(stream)) {
 		Stop();
 	}
 
@@ -55,7 +63,7 @@ void AudioDriver::Open(double samplingFreq, unsigned long fpb, unsigned long num
 
 void AudioDriver::Start() {
     if(stream != NULL) {
-		if(!Pa_StreamActive(stream)) {
+		if(Pa_IsStreamStopped(stream)) {
 			error = Pa_StartStream(stream);
 
 			if(error != paNoError)
@@ -68,7 +76,7 @@ void AudioDriver::Start() {
 
 void AudioDriver::Stop() {
 	if(stream != NULL) {
-		if(Pa_StreamActive(stream)) {
+		if(Pa_IsStreamActive(stream)) {
 			error = Pa_StopStream(stream);
 
 			if(error != paNoError)
@@ -88,31 +96,31 @@ void AudioDriver::Close() {
 }
 
 void AudioDriver::PrintDevices() {
-	int numDevices = Pa_CountDevices();
-	const PaDeviceInfo* pdi;
-	string inDevs, outDevs;
-	int numInDevs = 0, numOutDevs = 0;
-	char buff[20];
-	
-	cout << "AudioDriver: Dostepne urzadzenia..." << endl;
-	for(int i = 0; i < numDevices; i++ ) {
-		pdi = Pa_GetDeviceInfo(i);
-
-		if(pdi->maxOutputChannels >= 2) {
-            itoa(numOutDevs, buff, 10);
-            outDevs += string("        (") + buff + ") " + string(pdi->name) + "\n";
-            numOutDevs++;
-		}
-		
-		if(pdi->maxInputChannels >= 2) {
-            itoa(numInDevs, buff, 10);
-            inDevs += string("        (") + buff + ") " + string(pdi->name) + "\n";
-            numInDevs++;
-		}
-	}
-
-	cout << "   Urzadzenia wejsciowe:" << endl << inDevs;
-	cout << "   Urzadzenia wyjsciowe:" << endl << outDevs;
+//	int numDevices = Pa_CountDevices();
+//	const PaDeviceInfo* pdi;
+//	string inDevs, outDevs;
+//	int numInDevs = 0, numOutDevs = 0;
+//	char buff[20];
+//
+//	cout << "AudioDriver: Dostepne urzadzenia..." << endl;
+//	for(int i = 0; i < numDevices; i++ ) {
+//		pdi = Pa_GetDeviceInfo(i);
+//
+//		if(pdi->maxOutputChannels >= 2) {
+//            itoa(numOutDevs, buff, 10);
+//            outDevs += string("        (") + buff + ") " + string(pdi->name) + "\n";
+//            numOutDevs++;
+//		}
+//
+//		if(pdi->maxInputChannels >= 2) {
+//            itoa(numInDevs, buff, 10);
+//            inDevs += string("        (") + buff + ") " + string(pdi->name) + "\n";
+//            numInDevs++;
+//		}
+//	}
+//
+//	cout << "   Urzadzenia wejsciowe:" << endl << inDevs;
+//	cout << "   Urzadzenia wyjsciowe:" << endl << outDevs;
 }
 
 void AudioDriver::Open() {
@@ -121,19 +129,11 @@ void AudioDriver::Open() {
 	error = Pa_OpenStream(
 			&stream,
 
-			inputDevice,		/* input device */
-			numInputChannels,	/* input channels */
-			sampleFormat,		/* 32 bit floating point input */
-			0,                  /* input driver info */
-
-			outputDevice,		/* output device */
-			numOutputChannels,	/* stereo output */
-			sampleFormat,		/* 32 bit floating point output */
-			0,
+			&inputParameters,
+			&outputParameters,
 
 			sampleRate,         /* sample rate */
 			framesPerBuffer,
-			numBuffers,			/* number of buffers, if zero then use default minimum */
 			paClipOff,			/* we won't output out of range samples so don't bother clipping them */
 			callbackFunction,
 			callbackData);
@@ -145,20 +145,25 @@ void AudioDriver::Open() {
 }
 
 void AudioDriver::EnableInput() {
-	/* TODO (#1#): ZMIENIC!!! */
-	inputDevice = outputDevice;
-	numInputChannels = 2;
+	inputParameters.device = Pa_GetDefaultInputDevice();
+	inputParameters.channelCount = 2;
+	inputParameters.sampleFormat = paFloat32;
+	inputParameters.suggestedLatency =
+		Pa_GetDeviceInfo( outputParameters.device )->defaultLowInputLatency;
+	inputParameters.hostApiSpecificStreamInfo = NULL;
 }
 
 void AudioDriver::DisableInput() {
-	/* TODO (#1#): ZMIENIC!!! */
-	inputDevice = paNoDevice;
-	numInputChannels = 0;
+	inputParameters.device = paNoDevice;
+	inputParameters.channelCount = 0;
+	inputParameters.sampleFormat = paFloat32;
+	inputParameters.suggestedLatency = 0;
+	inputParameters.hostApiSpecificStreamInfo = NULL;
 }
 
 float AudioDriver::GetCPUUsage() const {
 	if(stream != NULL)
-		return Pa_GetCPULoad(stream);
+		return Pa_GetStreamCpuLoad(stream);
 	else
 	    return 0.0;
 }

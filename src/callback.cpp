@@ -2,8 +2,9 @@
 
 //------------------------------------------------------------------------------
 // callback dla portuadio
-int paCallback( void *inputBuffer, void *outputBuffer,
-	unsigned long framesPerBuffer, PaTimestamp outTime, void *userData )
+int paCallback( const void *inputBuffer, void *outputBuffer,
+	unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo,
+	PaStreamCallbackFlags statusFlags, void *userData )
 {
 	unsigned long i;
 

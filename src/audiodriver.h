@@ -15,6 +15,10 @@ class AudioDriverError : public runtime_error {
         AudioDriverError (const string& msg = "") : runtime_error(msg) {}
 };
 
+typedef int (PortAudioCallback)( const void *inputBuffer, void *outputBuffer,
+	unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo,
+	PaStreamCallbackFlags statusFlags, void *userData );
+
 /**
  * PortAudio wrapper
  */
@@ -38,12 +42,13 @@ class AudioDriver
 
 		double				sampleRate;
 		unsigned long		framesPerBuffer, numBuffers;
-		PaDeviceID 			outputDevice, inputDevice;
+		PaDeviceIndex		outputDevice, inputDevice;
 		int                 numOutputChannels, numInputChannels;
 		PaSampleFormat      sampleFormat;
 		void*				callbackData;
 		PortAudioCallback*	callbackFunction;
-		PortAudioStream*	stream;
+		PaStream*	stream;
+		PaStreamParameters	inputParameters, outputParameters;
 		PaError				error;
 };
 
