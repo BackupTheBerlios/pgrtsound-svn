@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     algo.SetSampleRate(SAMPLE_RATE);
     
  	try {
-        xmlConfig.OpenFile("examples\\fm2.xml");
+        xmlConfig.OpenFile("../../examples/fm2.xml");
         algo.Clear(); // test
 		xmlConfig.LoadAlgorithm(&algo);
 		algo.Init();

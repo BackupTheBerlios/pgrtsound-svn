@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtkmm.h>
 
-#include "xmlconfigfile.h"
+#include "../xmlconfigfile.h"
 #include "guimodule.h"
 
 /*

@@ -1,5 +1,5 @@
 #include "rtmainwindow.h"
-#include "callback.h"
+#include "../callback.h"
 
 RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(256) {
 	set_title("Real Time GUI");

@@ -3,7 +3,7 @@
 
 #include <gtkmm.h>
 
-#include "algorithm.h"
+#include "../algorithm.h"
 
 /*
  * No description

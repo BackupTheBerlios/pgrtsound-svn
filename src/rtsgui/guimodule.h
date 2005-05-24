@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "algorithm.h"
+#include "../algorithm.h"
 #include "guiparameterslider.h"
 
 using namespace std;
