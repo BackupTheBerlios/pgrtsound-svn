@@ -22,8 +22,8 @@
 					<Add directory="..\..\lib\tinyxml"/>
 				</Compiler>
 				<Linker>
-					<Add option="-lwinmm"/>
 					<Add option="-lportaudio"/>
+					<Add option="-lwinmm"/>
 					<Add directory="..\..\lib\portaudio\lib"/>
 				</Linker>
 			</Target>

@@ -3,7 +3,7 @@
 <Code::Blocks_project_file>
 	<FileVersion major="1" minor="1"/>
 	<Project>
-		<Option title="RTSound"/>
+		<Option title="RTSgui"/>
 		<Option makefile="Makefile"/>
 		<Option makefile_is_custom="0"/>
 		<Option compiler="0"/>
