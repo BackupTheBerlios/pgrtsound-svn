@@ -108,16 +108,19 @@ MainForm::MainForm(Desk *d) {
     area->set_size_request(600,600);
     
     show_all_children();  
+    TRACE("MainForm::MainForm()", "Okno utworzone");
 }
 
 //------------------------------------------------------------------------------
 
 MainForm::~MainForm() {
+    TRACE("MainForm::~MainForm()", "bye");
 }
 
 //------------------------------------------------------------------------------
 
 void MainForm::OnNew( ){
+    TRACE("MainForm::OnNew()", "start");
     //delete desk;
     for (int i = 0;i<desk->deskModules.size();i++)
     {
@@ -128,18 +131,21 @@ void MainForm::OnNew( ){
     desk = new Desk(algo);
     area -> desk = desk;
     area -> on_expose_event(NULL);
+    TRACE("MainForm::OnNew()", "end");
 }
 
 
 //------------------------------------------------------------------------------
 void MainForm::OnMenuFileQuit()
 {
-  hide(); //Zamkniecie okna
+    TRACE("MainForm::OnMenuFileQuit()", "bye");
+    hide(); //Zamkniecie okna
 }
 
 
 //------------------------------------------------------------------------------
 void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
+    TRACE("MainForm::ShowModuleParameters()", "start");
     //dla poprzednio aktywnego
     if (desk->GetDeskModuleActive() != NULL)
     {
@@ -213,10 +219,12 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
     }     
     
     show_all_children();  
+    TRACE("MainForm::ShowModuleParameters()", "end");
 }
 
 //------------------------------------------------------------------------------
 void MainForm::AddNewModuleToDesk() {
+    TRACE("MainForm::AddNewModuleToDesk()", "start");
     for (int i = 0;i<desk->deskModules.size();i++)
         if (desk->deskModules[i]->widget == NULL)
         {
@@ -243,30 +251,37 @@ void MainForm::AddNewModuleToDesk() {
             area->on_expose_event(NULL);
             show_all_children();        
         }
+    TRACE("MainForm::AddNewModuleToDesk()", "end");
 }
 
 //------------------------------------------------------------------------------
 void MainForm::OnNewModule() {
+    TRACE("MainForm::OnNewModule()", "start");
     NewModuleForm form(desk);
     Gtk::Main::run(form);
     AddNewModuleToDesk();
+    TRACE("MainForm::OnNewModule()", "end");
 }
 
 //------------------------------------------------------------------------------
 void MainForm::OnNewConnection() {
+    TRACE("MainForm::OnNewConnection()", "start");
     NewConnectionForm form(desk);
     Gtk::Main::run(form);
     area->on_expose_event(NULL);
     show_all_children();
+    TRACE("MainForm::OnNewConnection()", "end");
 }
 
 //------------------------------------------------------------------------------
 void MainForm::OnModuleDragDataGet(const Glib::RefPtr<Gdk::DragContext>&, Gtk::SelectionData& selection_data, guint, guint) {
-  selection_data.set(selection_data.get_target(), 8 , (const guchar*)"", 0 );
+    TRACE("MainForm::OnModuleDragDataGet()", "drag");
+    selection_data.set(selection_data.get_target(), 8 , (const guchar*)"", 0 );
 }
 
 //------------------------------------------------------------------------------
 void MainForm::OnModuleDropDragDataReceived(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, const Gtk::SelectionData& selection_data, guint info, guint time) {
+    TRACE("MainForm::OnModuleDropDragDataReceived()", "drop");
     dnd.move ( *(Gtk::Widget::drag_get_source_widget(context)), x,y);
     for (int i = 0;i<desk->deskModules.size();i++)
         if (desk->deskModules[i]->widget == (Gtk::Widget::drag_get_source_widget(context))) {            
@@ -280,6 +295,7 @@ void MainForm::OnModuleDropDragDataReceived(const Glib::RefPtr<Gdk::DragContext>
 
 //------------------------------------------------------------------------------
 void MainForm::OnSaveFile() {
+    TRACE("MainForm::OnSaveFile()", "start save");
     Gtk::FileChooserDialog dialog("Podaj nazwê pliku do zapisania", Gtk::FILE_CHOOSER_ACTION_SAVE );
     dialog.set_transient_for(*this);
 
@@ -295,17 +311,17 @@ void MainForm::OnSaveFile() {
         case(Gtk::RESPONSE_OK):
         {
             desk->SaveToFile(dialog.get_filename());
-            std::cout << "Zapis w pliku: " << dialog.get_filename() << std::endl;
+            TRACE2("MainForm::OnSaveFile()", "Zapis w pliku: ", dialog.get_filename());
             break;
         }
         case(Gtk::RESPONSE_CANCEL):
         {
-            std::cout << "Cancel clicked." << std::endl;
+            TRACE("MainForm::OnSaveFile()", "Anulowano zapis ");
             break;
         }
         default:
         {
-            std::cout << "Unexpected button clicked." << std::endl;
+            TRACE("MainForm::OnSaveFile()", "Nieznana akcja ");
             break;
         }
     }
@@ -314,6 +330,7 @@ void MainForm::OnSaveFile() {
 //------------------------------------------------------------------------------
 void MainForm::OnLoadFile()
 {
+    TRACE("MainForm::OnLoadFile()", "start load");
     Gtk::FileChooserDialog dialog("Podaj nazwê pliku do zapisania", Gtk::FILE_CHOOSER_ACTION_OPEN );
     dialog.set_transient_for(*this);
 
@@ -331,19 +348,20 @@ void MainForm::OnLoadFile()
         {
             OnNew();
             desk->LoadFromFile(dialog.get_filename());
-            std::cout << "Odczyt z pliku: " << dialog.get_filename() << std::endl;
+            TRACE2("MainForm::OnLoadFile()", "Nieznana akcja ", dialog.get_filename());            
             break;
         }
         case(Gtk::RESPONSE_CANCEL):
         {
-            std::cout << "Cancel clicked." << std::endl;
+            TRACE("MainForm::OnLoadFile()", "Anulacja odczytu ");
             break;
         }
         default:
         {
-            std::cout << "Unexpected button clicked." << std::endl;
+            TRACE("MainForm::OnLoadFile()", "Nieznana akcja ");
             break;
         }
     }
+    TRACE("MainForm::OnLoadFile()", "AddNewModuleToDesk");
     AddNewModuleToDesk();
 }

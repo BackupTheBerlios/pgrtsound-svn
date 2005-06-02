@@ -76,13 +76,15 @@ int Desk::FindInput(int idModule,string inName)
 
 void Desk::SetPosition(string nameModule,int x, int y)
 {
+    TRACE("Desk::SetPosition()","start");
     for (int i = 0;i<deskModules.size();i++)
-        if (deskModules[i]->rtsModule->GetName() == nameModule)
-        {
-            deskModules[i]->x=x;
-            deskModules[i]->y=y;
-        }
-
+        if (deskModules[i]->rtsModule != NULL)
+            if (deskModules[i]->rtsModule->GetName() == nameModule)
+            {
+                deskModules[i]->x=x;
+                deskModules[i]->y=y;
+            }
+    TRACE("Desk::SetPosition()","end");
 }
 
 
@@ -187,8 +189,8 @@ void Desk::SaveToFile(string filename)
 //Odczyt z pliku ---------------------------------------------------------------
 void Desk::LoadFromFile(string filename)
 {
-    XMLConfigFile xmlConfig;
-    
+    TRACE("Desk::LoadFromFile()", "load algorithm");
+    XMLConfigFile xmlConfig;    
  	try {
         xmlConfig.OpenFile(filename.c_str());
         algorithm->Clear(); // test
@@ -198,42 +200,37 @@ void Desk::LoadFromFile(string filename)
         exit(1);
     }
     
+    TRACE("Desk::LoadFromFile()", "put module&widget on desk");
+    
     for (int m=0; m < algorithm->GetModulesCount(); m++)
     {      
         AddModule(algorithm->GetModule(m)->GetID());
     }
-     
-    TiXmlNode* node                     = 0;
-    TiXmlElement* projectElement        = 0;
-    TiXmlElement* moduleElements        = 0;
-    TiXmlElement* moduleXML             = 0;
-    TiXmlElement* connectionElements    = 0;
-
-    TiXmlDocument doc(filename.c_str());
-    bool loadOkay = doc.LoadFile();
-
-    if ( !loadOkay )
-    {
-      //  cout << "Error: " << endl;
-     //   exit(1);
+    
+    TRACE("Desk::LoadFromFile()", "load widget position");
+    
+    TiXmlDocument document;
+    if ( !document.LoadFile(filename.c_str()) ) {
+		throw RTSError("Nie mozna wczytac pliku " + (string)filename +
+			"! Error: " + document.ErrorDesc());
     }
+    
+    TiXmlElement* moduleXMLElem;
+	TiXmlNode* moduleXMLNode, * parent;
+	string moduleName;
+	int moduleId;
 
-    node = doc.FirstChild( "algorithm" );
-    assert( node );
-    projectElement = node->ToElement();
-    assert( projectElement );
 
-//moduly pozycje
-    node = projectElement->FirstChildElement("modules_widget");
-    assert( node );
-    moduleElements = node->ToElement();
-    assert( moduleElements  );
+    TiXmlHandle docHandle( &document );
+	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules_widget" ).Child("module_widget", 0).Node();
 
-    for( moduleXML = moduleElements->FirstChildElement();
-         moduleXML;
-         moduleXML = moduleXML->NextSiblingElement() )
-    {
-        SetPosition(moduleXML->Attribute("name"),atoi(moduleXML->Attribute("x")),atoi(moduleXML->Attribute("y")));
+	// przez wszystkie inne moduly
+	if(parent != NULL) {
+		for( moduleXMLNode = parent; moduleXMLNode; moduleXMLNode = moduleXMLNode->NextSibling("module_widget") ) {
+			moduleXMLElem = moduleXMLNode->ToElement();
+            SetPosition(moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
+  		}
 	}
+	TRACE("Desk::LoadFromFile()", "end");
 
 }
