@@ -18,7 +18,7 @@ Desk::~Desk()
 //Obs³uga modu³ów --------------------------------------------------------------
 void Desk::AddModule(string type, string name)
 {
-    DeskModule *deskModule = new DeskModule(-1,-1);
+    DeskModule *deskModule = new DeskModule(0,0);
     int id = algorithm->AddModule(type);
     algorithm->GetModule(id)->SetName(name);          
     deskModule->rtsModule  = algorithm->GetModule(id);
@@ -27,7 +27,7 @@ void Desk::AddModule(string type, string name)
 
 void Desk::AddModule(int id)
 {
-    DeskModule *deskModule = new DeskModule(-1,-1);          
+    DeskModule *deskModule = new DeskModule(0,0);          
     deskModule->rtsModule  = algorithm->GetModule(id);
     deskModules.push_back(deskModule);
 }
@@ -215,7 +215,7 @@ void Desk::LoadFromFile(string filename)
     if ( !loadOkay )
     {
       //  cout << "Error: " << endl;
-        exit(1);
+     //   exit(1);
     }
 
     node = doc.FirstChild( "algorithm" );

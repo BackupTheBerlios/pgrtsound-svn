@@ -6,6 +6,10 @@
 #define FRAMES_PER_BLOCK (64)
 #define SAMPLE_RATE (44100)
 
+// logowanie do pliku
+ofstream logfile("RTSDesklog.txt");
+streambuf* out = cout.rdbuf(logfile.rdbuf());
+
 int main (int argc, char *argv[])
 {
     Algorithm *algo= new Algorithm(FRAMES_PER_BLOCK);

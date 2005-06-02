@@ -22,14 +22,13 @@ protected:
   virtual void OnSaveFile();
   virtual void OnLoadFile();
   virtual void OnNew();
-  virtual void OnModuleClick(const Glib::RefPtr<Gdk::DragContext>& context);
   
   virtual void AddNewModuleToDesk();
   virtual void ShowModuleParameters(DeskModule*  deskModule);
 
   //DnD
-  virtual void OnButtonDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
-  virtual void OnLabelDropDragDataReceived(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, const Gtk::SelectionData& selection_data, guint info, guint time);
+  virtual void OnModuleDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
+  virtual void OnModuleDropDragDataReceived(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, const Gtk::SelectionData& selection_data, guint info, guint time);
   std::list<Gtk::TargetEntry> listTargets;
 
 
