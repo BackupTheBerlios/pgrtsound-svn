@@ -8,6 +8,10 @@ Desk::Desk(Algorithm *algo)
 {
     algorithm           = algo;
     deskModuleActive    = NULL;
+    for (int m=0; m < algorithm->GetModulesCount(); m++)
+    {      
+        AddModule(algorithm->GetModule(m)->GetID());
+    }
 }
 
 Desk::~Desk()
@@ -117,25 +121,25 @@ void Desk::SaveToFile(string filename)
         xml+= "  <modules>\n";
         for (int i = 0;i<deskModules.size();i++)
         {
-            xml+= "    <module type=\""+ deskModules[i]->rtsModule->GetType()+"\" name=\""+deskModules[i]->rtsModule->GetName()+"\">\n";            
-            if (deskModules[i]->rtsModule->GetParameterCount()>0)
-                for (int p = 0;p<deskModules[i]->rtsModule->GetParameterCount();p++)
-                {
-                    if ((deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtSlider) or 
-                        (deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtProperty))
-                    {
-                        ParameterFloat* param =	(ParameterFloat*)deskModules[i]->rtsModule->GetParameter(p);
-					    xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"float\">"+IntToString(param->GetValue())+"</parameter>";
-                    }
+            if ((deskModules[i]->rtsModule->GetType()!="audioportin")&(deskModules[i]->rtsModule->GetType()!="audioportout"))
+            {
+                xml+= "    <module type=\""+ deskModules[i]->rtsModule->GetType()+"\" name=\""+deskModules[i]->rtsModule->GetName()+"\">\n";            
+                if (deskModules[i]->rtsModule->GetParameterCount()>0)
+                    for (int p = 0;p<deskModules[i]->rtsModule->GetParameterCount();p++) {
+                        if ((deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtSlider) or 
+                            (deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtProperty))
+                        {
+                            ParameterFloat* param =	(ParameterFloat*)deskModules[i]->rtsModule->GetParameter(p);
+                            xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"float\">"+IntToString(param->GetValue())+"</parameter>";
+                        }
                 
-                    if (deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtEditBox)
-                    {
-                        ParameterString* param = (ParameterString*)deskModules[i]->rtsModule->GetParameter(p);					
-					    xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"string\">"+param->GetText()+"</parameter>";
-                     }               
-                }
-            
-            xml+= "    </module>";
+                        if (deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtEditBox) {
+                            ParameterString* param = (ParameterString*)deskModules[i]->rtsModule->GetParameter(p);					
+					       xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"string\">"+param->GetText()+"</parameter>";
+                        }               
+                    }            
+                xml+= "    </module>";
+            }
         }
         xml+= "  </modules>\n";
     }
@@ -165,7 +169,7 @@ void Desk::SaveToFile(string filename)
     {
         xml+= "  <modules_widget>\n";
         for (int i = 0;i<deskModules.size();i++)
-            xml+= "    <modules_widget name=\"" + deskModules[i]->rtsModule->GetName() +
+            xml+= "    <module_widget name=\"" + deskModules[i]->rtsModule->GetName() +
                                       "\" x=\"" + IntToString(deskModules[i]->x) +
                                       "\" y=\"" + IntToString(deskModules[i]->y) + "\" />\n";
         xml+= "  </modules_widget>\n";
@@ -229,6 +233,7 @@ void Desk::LoadFromFile(string filename)
 		for( moduleXMLNode = parent; moduleXMLNode; moduleXMLNode = moduleXMLNode->NextSibling("module_widget") ) {
 			moduleXMLElem = moduleXMLNode->ToElement();
             SetPosition(moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
+            TRACE3("Pozycaj",moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
   		}
 	}
 	TRACE("Desk::LoadFromFile()", "end");

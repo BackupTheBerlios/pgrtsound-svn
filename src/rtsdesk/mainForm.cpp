@@ -107,7 +107,12 @@ MainForm::MainForm(Desk *d) {
     dnd.signal_drag_data_received().connect( sigc::mem_fun(*this, &MainForm::OnModuleDropDragDataReceived) );
     area->set_size_request(600,600);
     
-    show_all_children();  
+    show_all_children();
+    
+    //dodanie jesli sa jakies automatyczne moduly, tak jak portaudioin i  out
+    AddNewModuleToDesk();
+    
+      
     TRACE("MainForm::MainForm()", "Okno utworzone");
 }
 
@@ -228,6 +233,7 @@ void MainForm::AddNewModuleToDesk() {
     for (int i = 0;i<desk->deskModules.size();i++)
         if (desk->deskModules[i]->widget == NULL)
         {
+            TRACE("MainForm::AddNewModuleToDesk()", "widget");
             //Rysunek
             GtkModule* module = new GtkModule(desk->deskModules[i]->rtsModule->GetInputCount(),desk->deskModules[i]->rtsModule->GetOutputCount());
             module->drag_source_set(listTargets);
@@ -237,7 +243,7 @@ void MainForm::AddNewModuleToDesk() {
             dnd.put(*module,desk->deskModules[i]->x,desk->deskModules[i]->y);
             desk->deskModules[i]->widget = module;
             //module->signal_drag_begin().connect( sigc::mem_fun(*this, &MainForm::onModuleClick) );
-            
+            TRACE("MainForm::AddNewModuleToDesk()", "entry");
             //Nazwa
             Gtk::Entry* text = new Gtk::Entry();
             text->set_editable(false);
@@ -248,9 +254,10 @@ void MainForm::AddNewModuleToDesk() {
             desk->deskModules[i]->text = text;
             dnd.put(*text,desk->deskModules[i]->x,desk->deskModules[i]->y+module->size+3);
             
-            area->on_expose_event(NULL);
-            show_all_children();        
-        }
+           
+                 
+        } 
+    show_all_children();   
     TRACE("MainForm::AddNewModuleToDesk()", "end");
 }
 
@@ -348,7 +355,7 @@ void MainForm::OnLoadFile()
         {
             OnNew();
             desk->LoadFromFile(dialog.get_filename());
-            TRACE2("MainForm::OnLoadFile()", "Nieznana akcja ", dialog.get_filename());            
+            TRACE2("MainForm::OnLoadFile()", "Wczytanie pliku ", dialog.get_filename());            
             break;
         }
         case(Gtk::RESPONSE_CANCEL):
