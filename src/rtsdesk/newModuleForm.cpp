@@ -27,11 +27,12 @@ NewModuleForm::NewModuleForm(Desk *d)
 //póki co rêcznie ale to raczej z jakiego mo¿e pliku configuruj¹cego czy cóœ =]
     comboType.clear();
     comboType.append_text("< ? >");
-    comboType.append_text("audioportin");
-    comboType.append_text("audioportout"); 
+//    comboType.append_text("audioportin");
+//    comboType.append_text("audioportout");     
     comboType.append_text("constant");
     comboType.append_text("gain");   
     comboType.append_text("sinosc2");
+    comboType.append_text("slider");
     comboType.append_text("sumator");
     comboType.append_text("textfileout");
     
@@ -117,5 +118,8 @@ void NewModuleForm::onAdd()
 
 void NewModuleForm::onComboTypeChanged()
 {
-    edName.set_text(comboType.get_active_text()+" "+IntToString(desk->deskModules.size() + 1) );
+    if (comboType.get_active_text()!= "< ? >")
+        edName.set_text(comboType.get_active_text()+" "+IntToString(desk->deskModules.size() + 1) );
+    else 
+        edName.set_text("");
 }

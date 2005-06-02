@@ -96,7 +96,9 @@ MainForm::MainForm(Desk *d) {
     paramPanel.put(edName,100,10);
     paramPanel.put(lbType,10,40);  
     paramPanel.put(edType,100,40);  
-    paramPanel.put(lbParams,10,70);
+    paramPanel.put(lbID,10,70);  
+    paramPanel.put(edID,100,70);
+    paramPanel.put(lbParams,10,100);
   
     //DnD
     area = new GtkDesk(desk);
@@ -127,15 +129,15 @@ MainForm::~MainForm() {
 void MainForm::OnNew( ){
     TRACE("MainForm::OnNew()", "start");
     //delete desk;
-    for (int i = 0;i<desk->deskModules.size();i++)
-    {
-         delete desk->deskModules[i]->widget;
-         delete desk->deskModules[i]->text;
-    } 
-    Algorithm *algo= new Algorithm(FRAMES_PER_BLOCK);
-    desk = new Desk(algo);
-    area -> desk = desk;
-    area -> on_expose_event(NULL);
+
+//    Algorithm *algo= new Algorithm(FRAMES_PER_BLOCK);
+//    desk = new Desk(algo);  
+//    area -> desk = desk;
+    desk->Clear();
+    
+//    area->on_expose_event(NULL);
+    
+    AddNewModuleToDesk();
     TRACE("MainForm::OnNew()", "end");
 }
 
@@ -195,7 +197,7 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
             if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
             {
                 Gtk::Label* label = new Gtk::Label(rtsModuleActive->GetParameter(i)->GetName());
-                paramPanel.put(*label,10,100 + i *20);
+                paramPanel.put(*label,10,130 + i *20);
                 widgetList[2*i] = label;    
                 
                 //Float parameter
@@ -204,7 +206,7 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
                 {
                     Gtk::Entry* entry = new Gtk::Entry();                   
                     entry->set_text(IntToString(((ParameterFloat*)rtsModuleActive->GetParameter(i))->GetValue()));   
-                    paramPanel.put(*entry,100,100 + i *20);
+                    paramPanel.put(*entry,100,130 + i *20);
                     widgetList[2*i + 1] = entry;    
                 }
                 
@@ -214,13 +216,14 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
                     Gtk::Entry* entry = new Gtk::Entry();  
                     ParameterString* param = (ParameterString*)rtsModuleActive->GetParameter(i);					              
                     entry->set_text(param->GetText());   
-                    paramPanel.put(*entry,100,100 + i *20);
+                    paramPanel.put(*entry,100,130 + i *20);
                     widgetList[2*i + 1] = entry;    
                 }
             }
         }
         edType.set_text(rtsModuleActive->GetType());
         edName.set_text(rtsModuleActive->GetName());
+        edID.set_text(IntToString(rtsModuleActive->GetID()));
     }     
     
     show_all_children();  
@@ -353,7 +356,6 @@ void MainForm::OnLoadFile()
     {
         case(Gtk::RESPONSE_OK):
         {
-            OnNew();
             desk->LoadFromFile(dialog.get_filename());
             TRACE2("MainForm::OnLoadFile()", "Wczytanie pliku ", dialog.get_filename());            
             break;

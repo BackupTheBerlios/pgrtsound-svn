@@ -34,6 +34,7 @@ class Desk
         ~Desk();
         
         //Obs³uga modu³ów
+        void    Clear();
         void    AddModule(string type, string name);
         void    AddModule(int id);
         int     FindModule(string name);

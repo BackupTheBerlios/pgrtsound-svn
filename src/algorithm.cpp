@@ -37,16 +37,20 @@ Algorithm::~Algorithm() {
 }
 
 int Algorithm::AddModule(string type) {
-	Module* m = moduleFactory.CreateModule(type);
+	Module* mod = moduleFactory.CreateModule(type);
 	
-	m->SetID( modules.size() );
-	modules.push_back(m);
+	for (int m = 0;m < modules.size(); m++)
+	   if (modules[m]->GetID() == modules.size())
+	       TRACE("Algorithm::AddModule", "B³êdne ID");
+	
+	mod->SetID( modules.size() );
+	modules.push_back(mod);
 	// dodajemy do grafu
 	add_vertex(graph);
 
-	TRACE5("Algorithm", "Dodano modul typu ", m->GetType(), "(", m->GetID(), ")");
+	TRACE5("Algorithm", "Dodano modul typu ", mod->GetType(), "(", mod->GetID(), ")");
 	
-	return m->GetID();
+	return mod->GetID();
 }
 
 void Algorithm::PrintInfo(void) const {

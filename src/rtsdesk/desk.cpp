@@ -193,11 +193,12 @@ void Desk::SaveToFile(string filename)
 //Odczyt z pliku ---------------------------------------------------------------
 void Desk::LoadFromFile(string filename)
 {
+    Clear();
+    
     TRACE("Desk::LoadFromFile()", "load algorithm");
     XMLConfigFile xmlConfig;    
  	try {
         xmlConfig.OpenFile(filename.c_str());
-        algorithm->Clear(); // test
 		xmlConfig.LoadAlgorithm(algorithm);
     } catch (RTSError& error) {
         cout << "Error: " << error.what() << endl;
@@ -205,6 +206,20 @@ void Desk::LoadFromFile(string filename)
     }
     
     TRACE("Desk::LoadFromFile()", "put module&widget on desk");
+    
+////////////////////////////////////////////////    
+    for (int i = 0;i<deskModules.size();i++)
+    {
+         delete deskModules[i]->widget;
+         delete deskModules[i]->text;         
+    }   
+    
+    deskModules.clear(); 
+    
+    deskModuleActive = NULL;
+////////////////////////////////////////////////    
+    
+    
     
     for (int m=0; m < algorithm->GetModulesCount(); m++)
     {      
@@ -238,4 +253,25 @@ void Desk::LoadFromFile(string filename)
 	}
 	TRACE("Desk::LoadFromFile()", "end");
 
+}
+
+
+void Desk::Clear() {
+    for (int i = 0;i<deskModules.size();i++)
+    {
+         delete deskModules[i]->widget;
+         delete deskModules[i]->text;         
+    }   
+    
+    deskModules.clear(); 
+    
+    deskModuleActive = NULL;
+    
+    algorithm->Clear();
+    
+    for (int m=0; m < algorithm->GetModulesCount(); m++)
+    {      
+        AddModule(algorithm->GetModule(m)->GetID());
+    }
+    
 }

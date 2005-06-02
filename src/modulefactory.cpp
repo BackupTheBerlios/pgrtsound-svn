@@ -44,13 +44,13 @@ Module* ModuleFactory::CreateModule(string type) {
 		return new TextFileOut;
 	}
 
-	if (type == "audioportin") {
-		return new AudioPortIn;
-	}
+//	if (type == "audioportin") {
+//		return new AudioPortIn;
+//	}
 	
-	if (type == "audioportout") {
-		return new AudioPortOut;
-	}
+//	if (type == "audioportout") {
+//		return new AudioPortOut;
+//	}
 
     throw RTSError("ModuleFactory::CreateModule(): Nie ma modulu '" + type + "'");
 }
