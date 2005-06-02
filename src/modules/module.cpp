@@ -53,6 +53,23 @@ string Input::GetName() const {
 	return name;
 }
 
+
+int Input::GetIDModule() const {
+    return idModule;    
+}
+
+int Input::GetIDModuleOutput() const {
+    return idModuleOutput;
+}
+
+void Input::SetIDModule(int newIDModule) {
+     idModule = newIDModule;
+}
+
+void Input::SetIDModuleOutput(int newIDModuleOutput) {     
+     idModuleOutput = newIDModuleOutput;
+}
+
 //------------------------------------------------------------------------------
 Output::Output(string name_) {
 	name = name_;
@@ -142,6 +159,7 @@ int Module::AddOutput(Output* output) {
 /**
  *	Laczy wejscie bierzacego modulu z wyjsciem innego
  */
+/*
 void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 	if(numInput > inputs.size()) {
 		TRACE3("Module::ConnectInputTo()", "Wejscie o id = ", numInput, " nie istnieje");
@@ -149,7 +167,18 @@ void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 	else {
 		GetInput(numInput)->SetSignal(sourceSignal);
 	}
+}*/
+void Module::ConnectInputTo(int numInput, float *sourceSignal, int idModule_, int idModuleOutput_) {
+	if(numInput > inputs.size()) {
+		TRACE3("Module::ConnectInputTo()", "Wejscie o id = ", numInput, " nie istnieje");
+	}
+	else {
+		GetInput(numInput)->SetSignal(sourceSignal);     
+		GetInput(numInput)->SetIDModule(idModule_);
+		GetInput(numInput)->SetIDModuleOutput(idModuleOutput_);
+    }
 }
+
 
 /**
  * Funckja przetwarzania. Musi zostac zredefiniowana w kazdym module.
@@ -187,4 +216,12 @@ string Module::GetType() const {
 
 int Module::GetParameterCount() const {
 	return parameters.size();
+}
+
+int Module::GetOutputCount() {
+    return outputs.size();   
+}
+
+int Module::GetInputCount() {
+    return inputs.size();
 }

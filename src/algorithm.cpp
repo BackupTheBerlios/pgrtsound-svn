@@ -100,7 +100,9 @@ void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int i
 	//#endif
 
 	modules[moduleId2]->ConnectInputTo(inputId,
-			modules[moduleId1]->GetOutput(outputId)->GetSignal() );
+			modules[moduleId1]->GetOutput(outputId)->GetSignal(),
+            moduleId1,
+            outputId);
   	
 	add_edge(moduleId1, moduleId2, graph);
 }
@@ -208,4 +210,12 @@ void Algorithm::Init() {
 		modules[i]->Init();
 	}
     TRACE("Algorithm::Init()", "Inicjalizacja modulow zakonczona");
+}
+
+
+Module* Algorithm::GetModule(string moduleName) const {
+    for(unsigned int i = 0; i < modules.size(); i++) {
+		if (moduleName == modules[i]->GetName()) return modules[i];
+	}    
+    return NULL;
 }

@@ -3,8 +3,8 @@
 Parameter::Parameter(string type_, string name_, int GUItype_) {
 	type = type_;
 	name = name_;
-	GUItype = GUItype_;
-	description = "";
+	GUItype =  GUItype_;
+	description =  "";
 	label = "";
 }
 
@@ -75,8 +75,8 @@ ParameterString::ParameterString(string name_, int GUItype_) :
 	Parameter("string", name_, GUItype_)
 {
 	description = "no description";
-	label = "no label";
-	text = "";
+	label       = "no label";
+	text        = "";
 }
 
 ParameterString::~ParameterString() {
@@ -87,7 +87,7 @@ string ParameterString::GetText() {
 }
 
 void ParameterString::SetText(string newText) {
-	text = newText;
+     text = newText;
 }
 
 

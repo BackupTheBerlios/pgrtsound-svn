@@ -57,16 +57,22 @@ class Input {
 		Input(string name_);
 		~Input();
 		int GetID() const;
+		int GetIDModule() const;
+		int GetIDModuleOutput() const;		
 		string GetName() const;
 		float* GetSignal();
 		void SetID(int newID);
+		void SetIDModule(int newIDModule);
+    	void SetIDModuleOutput(int newIDModuleOutput);
 		//void SetName(string newName);
 		void SetSignal(float* sig);
 
 	protected:
-		int		id;		/**< Numer idetyfikujacy wejscie */
-		string	name;	/**< Nazwa wejscia */
-		float*	signal;	/**< Wskaznik na podlaczony do wejscia bufor */
+		int		id;		           /**< Numer idetyfikujacy wejscie */
+		int     idModule;          /**< Numer idetyfikujacy modu³ pod³¹czyny */
+		int     idModuleOutput;    /**< Numer idetyfikujacy numer wyjsci modulu podlaczonego */
+		string	name;	           /**< Nazwa wejscia */
+		float*	signal;	           /**< Wskaznik na podlaczony do wejscia bufor */
 };
 
 //------------------------------------------------------------------------------
@@ -95,7 +101,8 @@ class Module {
 		int AddInput(Input* input);
 		int AddOutput(Output* output);
 		int AddParameter(Parameter* param);
-        void ConnectInputTo(int numInput, float *sourceSignal);
+//        void ConnectInputTo(int numInput, float *sourceSignal);
+        void ConnectInputTo(int numInput, float *sourceSignal, int idModule_, int idModuleOutput_);  
 		virtual void Process();
 		virtual void Init();
 		void SetID(int newID);
@@ -105,6 +112,8 @@ class Module {
 		string GetName() const;
 		Input* GetInput(int inputID);
 		Output* GetOutput(int outputID);
+		int GetOutputCount();
+		int GetInputCount();		
 		Parameter* GetParameter(int pID);
 		int GetParameterCount() const;
 

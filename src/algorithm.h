@@ -38,6 +38,7 @@ class Algorithm {
 		//void    SetFramesPerBlock(unsigned long fpb);
 		void    SetSampleRate(int sRate);
 		Module* GetModule(int moduleId) const;
+		Module* GetModule(string moduleName) const;
 		void    PrintInfo(void) const;
 		int     GetModulesCount() const;
 		void    Clear();
@@ -51,6 +52,7 @@ class Algorithm {
 		vector<Module*>		modules;
 		vector<Module*>		modulesQueue;
 };
+
 
 /**
  * Zwraca wskaznik do modulu o zadanym identyfikatorze.
