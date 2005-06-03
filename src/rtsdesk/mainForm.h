@@ -22,6 +22,7 @@ protected:
   virtual void OnSaveFile();
   virtual void OnLoadFile();
   virtual void OnNew();
+  virtual void OnDelete();
   
   virtual void AddNewModuleToDesk();
   virtual void ShowModuleParameters(DeskModule*  deskModule);
@@ -44,6 +45,7 @@ protected:
   Gtk::Fixed        dnd;
 
   //Parametry
+  Gtk::Button       btDelete;
   Gtk::Label        lbParams;
   Gtk::Label        lbName;
   Gtk::Label        lbType;

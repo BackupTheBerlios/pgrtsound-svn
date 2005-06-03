@@ -176,6 +176,19 @@ int Algorithm::GetModulesCount() const {
 	return modules.size();
 }
 
+/**
+ * Zwraca wskaznik do modulu o zadanym identyfikatorze.
+ * @param moduleId Identyfikator modulu
+ */
+Module* Algorithm::GetModule(int moduleId) const {	    
+    for(unsigned int i = 0; i < modules.size(); i++) {
+		if (moduleId == modules[i]->GetID()) return modules[i];
+	}    
+    return NULL;
+}
+
+
+
 void  Algorithm::Clear() {
 	TRACE("Algorithm::Clear()", "Czyszcze algorytm...");
 
@@ -223,3 +236,47 @@ Module* Algorithm::GetModule(string moduleName) const {
 	}    
     return NULL;
 }
+
+void Algorithm::DeleteModule(int moduleId) {
+    TRACE("Algorithm::DeleteModule()", "Usuwanie modulu..."); 
+
+    
+    //ToDo
+    //usuniecie wpisow z graph
+    
+    vector<Module*>::iterator moduleToDelete;
+    moduleToDelete = modules.begin();
+    moduleIterator = modules.begin();
+    while (moduleIterator != modules.end()) {
+        TRACE("Algorithm::DeleteModule()", "Warunek ");
+        if ((*moduleIterator)->GetID() == moduleId )
+        {
+            moduleToDelete = moduleIterator;
+            TRACE("Algorithm::DeleteModule()", "Znaleziony");
+        }
+        moduleIterator++;
+    }
+        
+    
+    
+    if ((*moduleToDelete)->GetID() == moduleId) {
+        //pierw usuwanie polaczen
+        for (int m = 0; m < modules.size(); m++) {
+            for (int c = 0; c < modules[m]->GetInputCount(); c++) {
+                if (modules[m]->GetInput(c)->GetIDModule() == moduleId) {
+                    modules[m]->GetInput(c)->SetIDModule(-1);
+                    modules[m]->GetInput(c)->SetIDModuleOutput(-1);
+                    modules[m]->GetInput(c)->SetSignal(NULL);
+                }
+            }            
+        }          
+        delete GetModule(moduleId);
+        modules.erase(moduleToDelete);
+        TRACE("Algorithm::DeleteModule()", "Modul usuniety"); 
+    } else {
+        TRACE("Algorithm::DeleteModule()", "Modul nie usunieto!!!");
+    }
+    TRACE("Algorithm::DeleteModule()", "end"); 
+       
+}
+

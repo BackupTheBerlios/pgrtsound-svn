@@ -45,8 +45,8 @@ class Desk
         int     FindInput(string nameModule,string inName);
         void    SetPosition(string nameModule,int x, int y);
         DeskModule* GetDeskModuleActive();
-        void        SetDeskModuleActive(DeskModule* deskModule);
-    
+        void    SetDeskModuleActive(DeskModule* deskModule);
+        void    DeleteActiveModule();
                
         //Zapisywanie do plik
         void SaveToFile(string filename);

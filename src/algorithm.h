@@ -32,6 +32,7 @@ class Algorithm {
 		~Algorithm();
 		void	Process();
 		int     AddModule(string type);
+		void    DeleteModule(int moduleId);
 		void    ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId);
 		void    CreateQueue(void);
 		void    SetQueueManually(int* order, int num);
@@ -51,16 +52,11 @@ class Algorithm {
 		ModuleFactory		moduleFactory;
 		vector<Module*>		modules;
 		vector<Module*>		modulesQueue;
+		vector<Module*>::iterator moduleIterator;
 };
 
 
-/**
- * Zwraca wskaznik do modulu o zadanym identyfikatorze.
- * @param moduleId Identyfikator modulu
- */
-inline Module* Algorithm::GetModule(int moduleId) const {
-	return modules[moduleId];
-}
+
 
 /**
  * Funckja przetwarzania algorytmu.

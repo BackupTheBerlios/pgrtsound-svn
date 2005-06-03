@@ -275,3 +275,8 @@ void Desk::Clear() {
     }
     
 }
+
+
+void Desk::DeleteActiveModule() {
+    algorithm->DeleteModule(GetDeskModuleActive()->rtsModule->GetID());
+}

@@ -26,6 +26,8 @@ void SetNullBuffer(unsigned long size) {
 //------------------------------------------------------------------------------
 Input::Input(string name_) {
    	name = name_;
+   	idModule        = -1;
+   	idModuleOutput  = -1;
    	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
    	signal = nullBuffer;
 }

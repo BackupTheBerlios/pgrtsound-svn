@@ -91,6 +91,8 @@ MainForm::MainForm(Desk *d) {
     lbName.set_text("Nazwa:");
     lbType.set_text("Typ:");
     lbParams.set_text("Parametry:");
+    lbID.set_text("ID:");    
+    btDelete.set_label("Usun modul");
     paramPanel.set_size_request(200,600);
     paramPanel.put(lbName,10,10);
     paramPanel.put(edName,100,10);
@@ -99,7 +101,12 @@ MainForm::MainForm(Desk *d) {
     paramPanel.put(lbID,10,70);  
     paramPanel.put(edID,100,70);
     paramPanel.put(lbParams,10,100);
+    paramPanel.put(btDelete,10,1);
   
+  
+    btDelete.signal_clicked().connect( sigc::mem_fun(*this, &MainForm::OnDelete) );
+    
+    
     //DnD
     area = new GtkDesk(desk);
     dnd.put(*area,0,0);
@@ -373,4 +380,11 @@ void MainForm::OnLoadFile()
     }
     TRACE("MainForm::OnLoadFile()", "AddNewModuleToDesk");
     AddNewModuleToDesk();
+}
+
+void MainForm::OnDelete() {
+    if (desk->GetDeskModuleActive() != NULL)
+    {
+       desk->DeleteActiveModule();           
+    }
 }
