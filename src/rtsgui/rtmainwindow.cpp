@@ -192,9 +192,9 @@ void RTMainWindow::OnOpenFile() {
 		    
 			ClearModules();
 
-			for(int i = 2; i < algo.GetModulesCount(); i++) {
-				if(algo.GetModule(i)->GetParameterCount() > 0)
-					AddModule(algo.GetModule(i));
+			Module* mod;
+			for(mod = algo.GetFirstModule(); mod; mod = algo.GetNextModule()) {
+				if(mod->GetParameterCount() > 0) AddModule(mod);
 			}
 
 			modulesBox.show_all_children();

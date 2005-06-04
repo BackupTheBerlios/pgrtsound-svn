@@ -12,14 +12,27 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/topological_sort.hpp>
+#include <boost/property_map.hpp>
 
 #include "modulefactory.h"
 
-
 typedef std::pair<std::size_t, std::size_t> Pair;
 
-// Boost Graph
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS> Graph;
+struct Connection {
+   	Output* source;
+	Input* sink;
+	int sourceId;
+	int destinationId;
+};
+
+typedef boost::adjacency_list<boost::listS, boost::listS, boost::bidirectionalS,
+	boost::property<boost::vertex_index_t, int,
+	boost::property<boost::vertex_name_t, Module*> >, Connection> Graph;
+typedef Graph::vertex_descriptor ModuleId;
+typedef Graph::edge_descriptor ConnectionId;
+typedef std::pair<ConnectionId, bool> ConnectionDescription;
+typedef boost::graph_traits<Graph>::vertex_iterator ModuleIterator;
+typedef boost::graph_traits<Graph>::edge_iterator ConnectionIterator;
 
 /**
  * Klasa bedaca najwyzsza struktura w systemie.
@@ -30,33 +43,40 @@ class Algorithm {
 	public:
   		Algorithm(unsigned long framesPerBlock);
 		~Algorithm();
-		void	Process();
-		int     AddModule(string type);
-		void    DeleteModule(int moduleId);
-		void    ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId);
-		void    CreateQueue(void);
-		void    SetQueueManually(int* order, int num);
-		//void    SetFramesPerBlock(unsigned long fpb);
-		void    SetSampleRate(int sRate);
-		Module* GetModule(int moduleId) const;
-		Module* GetModule(string moduleName) const;
-		void    PrintInfo(void) const;
-		int     GetModulesCount() const;
+		void Process();
+		ModuleId AddModule(string type, string name);
+		ConnectionId ConnectModules(ModuleId moduleId1, int outputId, ModuleId moduleId2, int inputId);
+		ConnectionId ConnectModules(string moduleName1, int outputId, string moduleName2, int inputId);
 		void    Clear();
 		void    Init();
-        
+		void    PrintInfo();
+		void    CreateQueue();
+		void 	SetSampleRate(float sRate);
+		Module* GetModule(ModuleId moduleId) const;
+		Module* GetModule(string moduleName) const;
+		int     GetModulesCount() const;
+		Module* GetInputPort() const;
+		Module* GetOutputPort() const;
+		Module* GetFirstModule();
+		Module* GetNextModule();
+		void    DeleteModule(ModuleId moduleId);
+		void    DeleteConnection(ConnectionId connectionI);
+
 	private:
-		Graph				graph;
-		int					sampleRate;
-		unsigned long		framesPerBlock;
-		ModuleFactory		moduleFactory;
-		vector<Module*>		modules;
-		vector<Module*>		modulesQueue;
-		vector<Module*>::iterator moduleIterator;
+		Graph					graph;
+		float					sampleRate;
+		unsigned long			framesPerBlock;
+		ModuleFactory			moduleFactory;
+		//vector<Module*>			modules;
+		vector<Module*>			modulesQueue;
+		map<string, ModuleId>	moduleName2IdMap; // mapa asocjacyjna nazwy z id
+		Module*					inputPort;
+		Module*					outputPort;
+		ModuleIterator		moduleIterator;
+		ModuleIterator		moduleIteratorLast;
+		
+		void InitAudioPorts();
 };
-
-
-
 
 /**
  * Funckja przetwarzania algorytmu.
@@ -65,11 +85,9 @@ class Algorithm {
  * framesPerBlock.
  */
 inline void Algorithm::Process() {
-	int i;
-	for(i = 0; i < modulesQueue.size(); i++) {
+	for(unsigned int i = 0; i < modulesQueue.size(); i++) {
 		modulesQueue[i]->Process();
 	}
 }
-
 
 #endif // ALGORITHM_H

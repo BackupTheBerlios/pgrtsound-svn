@@ -28,7 +28,7 @@ class XMLConfigFile
 	private:
 		string fileName;
 		TiXmlDocument document;
-		map <string, int>	moduleName2IdMap;	// mapa asocjacyjna nazwy z id
+		
 };
 
 #endif // XMLCONFIGFILE_H

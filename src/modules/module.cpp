@@ -4,7 +4,7 @@ int Module::framesPerBlock = 256;
 int Module::sampleRate = 44100;
 
 // uzyteczny, globabalny bufor zerowy
-static float* nullBuffer;
+float* nullBuffer;
 static bool allocateNullBuffer = true;
 
 void SetNullBuffer(unsigned long size) {
@@ -155,13 +155,11 @@ int Module::AddOutput(Output* output) {
  		outputs.push_back(output);
 		return output->GetID();
 	}
-
 }
 
 /**
  *	Laczy wejscie bierzacego modulu z wyjsciem innego
  */
-/*
 void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 	if(numInput > inputs.size()) {
 		TRACE3("Module::ConnectInputTo()", "Wejscie o id = ", numInput, " nie istnieje");
@@ -169,18 +167,7 @@ void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 	else {
 		GetInput(numInput)->SetSignal(sourceSignal);
 	}
-}*/
-void Module::ConnectInputTo(int numInput, float *sourceSignal, int idModule_, int idModuleOutput_) {
-	if(numInput > inputs.size()) {
-		TRACE3("Module::ConnectInputTo()", "Wejscie o id = ", numInput, " nie istnieje");
-	}
-	else {
-		GetInput(numInput)->SetSignal(sourceSignal);     
-		GetInput(numInput)->SetIDModule(idModule_);
-		GetInput(numInput)->SetIDModuleOutput(idModuleOutput_);
-    }
 }
-
 
 /**
  * Funckja przetwarzania. Musi zostac zredefiniowana w kazdym module.

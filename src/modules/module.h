@@ -101,8 +101,8 @@ class Module {
 		int AddInput(Input* input);
 		int AddOutput(Output* output);
 		int AddParameter(Parameter* param);
-//        void ConnectInputTo(int numInput, float *sourceSignal);
-        void ConnectInputTo(int numInput, float *sourceSignal, int idModule_, int idModuleOutput_);  
+		void ConnectInputTo(int numInput, float *sourceSignal);
+//        void ConnectInputTo(int numInput, float *sourceSignal, int idModule_, int idModuleOutput_);
 		virtual void Process();
 		virtual void Init();
 		void SetID(int newID);

@@ -3,280 +3,254 @@
 extern void SetNullBuffer(unsigned long);
 
 Algorithm::Algorithm(unsigned long fpb) {
-	Module* module;
-	
 	framesPerBlock = fpb;
 	Module::framesPerBlock = fpb;
 	SetNullBuffer(fpb);
 
-	// wyjscie i wyjscie audio jest zawsze
+	InitAudioPorts();
+}
+
+Algorithm::~Algorithm() {
+//	TRACE3("Algorithm", "Sprzatanie algorytmu (", modules.size(), " modulow)...");
+//
+//	delete modules[0];
+//	delete modules[1];
+//
+//    for (int i = 2; i < modules.size(); i++) {
+//        delete modules[i];
+//    }
+//
+//	TRACE("Algorithm", "Bye!");
+}
+
+void Algorithm::InitAudioPorts() {
+   	Module* module;
+	ModuleId moduleId;
+	
 	module = new AudioPortIn;
-	module->SetID(0);
-	modules.push_back(module);
-	add_vertex(graph);   // dodajemy do grafu (wierzcholek 0)
+	moduleId = add_vertex(graph);   // dodajemy do grafu
+	//graph[moduleId].module = module;
+	put(boost::vertex_name, graph, moduleId, module);
+	moduleName2IdMap.insert( make_pair("AudioPortIn", moduleId) );
+	inputPort = module;
 
 	module = new AudioPortOut;
-	module->SetID(1);
-	modules.push_back(module);
-	add_vertex(graph);// wierzcholek 1
+	moduleId = add_vertex(graph);
+	//graph[moduleId].module = module;
+	put(boost::vertex_name, graph, moduleId, module);
+	moduleName2IdMap.insert( make_pair("AudioPortOut", moduleId) );
+	outputPort = module;
 
 	TRACE("Algorithm::Algorithm()", "Dodano moduly AudioPortIn i AudioPortOut");
 }
 
-Algorithm::~Algorithm() {
-	TRACE3("Algorithm", "Sprzatanie algorytmu (", modules.size(), " modulow)..."); 
-
-	delete modules[0];
-	delete modules[1];
-
-    for (int i = 2; i < modules.size(); i++) {
-        delete modules[i];
-    } 
-
-	TRACE("Algorithm", "Bye!");
-}
-
-int Algorithm::AddModule(string type) {
+ModuleId Algorithm::AddModule(string type, string name) {
 	Module* mod = moduleFactory.CreateModule(type);
-	
-	for (int m = 0;m < modules.size(); m++)
-	   if (modules[m]->GetID() == modules.size())
-	       TRACE("Algorithm::AddModule", "B³êdne ID");
-	
-	mod->SetID( modules.size() );
-	modules.push_back(mod);
-	// dodajemy do grafu
-	add_vertex(graph);
+	mod->SetName(name);
+	ModuleId moduleId;
+	moduleId = add_vertex(graph);
+	//graph[*gm] = *(moduleFactory.CreateModule(type));
+	//graph[moduleId].module = mod;
+	put(boost::vertex_name, graph, moduleId, mod);
 
-	TRACE5("Algorithm", "Dodano modul typu ", mod->GetType(), "(", mod->GetID(), ")");
-	
-	return mod->GetID();
+	moduleName2IdMap.insert( make_pair(name, moduleId) );
+	TRACE4("Algorithm", "Dodano modul '", mod->GetName(), "' typu ", mod->GetType());
+	return moduleId;
 }
 
-void Algorithm::PrintInfo(void) const {
-	using namespace boost;
-	typedef graph_traits<Graph>::vertex_iterator vertex_iter;
-	graph_traits<Graph>::edge_iterator ei, ei_end;
-	typedef property_map<Graph, vertex_index_t>::type IndexMap;
-	
+void Algorithm::PrintInfo(void) {
 	cout << "Algorithm::PrintInfo(): Informacje o algorytmie... " << endl;
 
-	for(int i = 0; i < modules.size(); i++) {
-		cout << "    Modul id: " << modules[i]->GetID() <<
-		    "  " << modules[i]->GetName() <<
-			"(" << modules[i]->GetType() << ")" << endl;
+	Module* mod;
+
+	for(mod = GetFirstModule(); mod; mod = GetNextModule()) {
+		cout << "    Modul: " << mod->GetName() <<
+			"(" << mod->GetType() << ")" << endl;
 	}
+
+//	using namespace boost;
+//	typedef graph_traits<Graph>::vertex_iterator vertex_iter;
+//	graph_traits<Graph>::edge_iterator ei, ei_end;
+//	typedef property_map<Graph, vertex_index_t>::type IndexMap;
+//
+//	cout << "Algorithm::PrintInfo(): Informacje o algorytmie... " << endl;
+//
+//	for(int i = 0; i < modules.size(); i++) {
+//		cout << "    Modul id: " << modules[i]->GetID() <<
+//		    "  " << modules[i]->GetName() <<
+//			"(" << modules[i]->GetType() << ")" << endl;
+//	}
+//
+//    cout << "    vertices = ";
+//    std::pair<vertex_iter, vertex_iter> vp;
+//	IndexMap index = get(vertex_index, graph);
+//	for (vp = vertices(graph); vp.first != vp.second; ++vp.first)
+//      cout << index[*vp.first] <<  " ";
+//    cout << endl;
+//
+//    cout << "    edges = ";
+//    for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei)
+//        std::cout << "(" << index[source(*ei, graph)]
+//                  << "," << index[target(*ei, graph)] << ") ";
+//    std::cout << std::endl;
+//
+//	cout << "    kolejnosc przetwarzania: ";
+//	for(int i = 0; i < modulesQueue.size(); i++) {
+//		cout << modulesQueue[i]->GetID() << " ";
+//	}
+//	cout << endl;
+}
+
+
+/**
+ * Laczenie dwoch modulow
+ */
+ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId, ModuleId moduleId2, int inputId) {
+	#ifndef NDEBUG
+		cout << "    Lacze '" <<
+			GetModule(moduleId1)->GetName() << "'." << GetModule(moduleId1)->GetOutput(outputId)->GetName() << " -> '" <<
+			GetModule(moduleId2)->GetName() << "'." << GetModule(moduleId2)->GetInput(inputId)->GetName() << endl;
+	#endif
+
+	GetModule(moduleId2)->ConnectInputTo(
+		inputId,
+		GetModule(moduleId1)->GetOutput(outputId)->GetSignal()
+	);
+
+	ConnectionDescription c;
+	ConnectionId cId;
+	c = add_edge(moduleId1, moduleId2, graph);
+	cId = c.first;
+	graph[cId].sourceId = outputId;
+	graph[cId].destinationId = inputId;
+	graph[cId].source = GetModule(moduleId1)->GetOutput(outputId);
+	graph[cId].sink = GetModule(moduleId2)->GetInput(inputId);
 	
-    cout << "    vertices = ";
-    std::pair<vertex_iter, vertex_iter> vp;
-	IndexMap index = get(vertex_index, graph);
-	for (vp = vertices(graph); vp.first != vp.second; ++vp.first)
-      cout << index[*vp.first] <<  " ";
-    cout << endl;
-
-    cout << "    edges = ";
-    for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei)
-        std::cout << "(" << index[source(*ei, graph)]
-                  << "," << index[target(*ei, graph)] << ") ";
-    std::cout << std::endl;
-
-	cout << "    kolejnosc przetwarzania: ";
-	for(int i = 0; i < modulesQueue.size(); i++) {
-		cout << modulesQueue[i]->GetID() << " ";
-	}
-	cout << endl;
+	return cId;
 }
 
+ConnectionId Algorithm::ConnectModules(string moduleName1, int outputId, string moduleName2, int inputId) {
+	ModuleId moduleId1 = ( *moduleName2IdMap.find(moduleName1) ).second;
+	ModuleId moduleId2 = ( *moduleName2IdMap.find(moduleName2) ).second;
 
-/**
- * Laczenie dwoch blokow
- */
-void Algorithm::ConnectModules(int moduleId1, int outputId, int moduleId2, int inputId) {
-    if (moduleId1 >= modules.size())
-		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul (od) o takim id nie istnieje.");
-    if (moduleId2 >= modules.size())
-		throw RTSError("Algorithm::ConnectModules(): Bledne polaczenie. Modul (do) o takim id nie istnieje.");
-		
-	//#ifndef NDEBUG
-	//	cout << "    Lacze " <<
-	//		modules[moduleId1]->GetName() << "(" << modules[moduleId1]->GetOutput(outputId)->GetName() << ") -> " <<
-	//		modules[moduleId2]->GetName() << "(" << modules[moduleId2]->GetInput(inputId)->GetName() << ")" << endl;
-	//#endif
-
-	modules[moduleId2]->ConnectInputTo(inputId,
-			modules[moduleId1]->GetOutput(outputId)->GetSignal(),
-            moduleId1,
-            outputId);
-  	
-	add_edge(moduleId1, moduleId2, graph);
+	return ConnectModules(moduleId1, outputId, moduleId2, inputId);
 }
 
-/**
- * Dla celow testowych mozna za pomoca tej funckji ustawci recznie kolejnosc
- * przetwarzania modulow.
- */
-void Algorithm::SetQueueManually(int* order, int num) {
-	TRACE("Algorithm", "Reczne uxtawianie kolejki... ");
-
-	modulesQueue.clear();
-
-	for(int i = 0; i < num; i++) {
-		modulesQueue.push_back( modules[ order[i] ] );
-	}
-
-	TRACE("Algorithm", "Kolejka ustawiona");
-}
-
-//void Algorithm::SetFramesPerBlock(unsigned long fpb) {
-//	framesPerBlock = fpb;
-//
-//	Module::framesPerBlock = fpb; // wartos widoczna we wszystkich modulach
-//	TRACE2("Algorithm", "Module::framesPerBlock = ", Module::framesPerBlock);
-//
-//	SetNullBuffer(Module::framesPerBlock);
-//
-///* TODO (#1#): reinicjalizacja buforow wyjsciowych wszystkich
-//               modulow */
-//}
-
-void Algorithm::SetSampleRate(int sRate) {
+void Algorithm::SetSampleRate(float sRate) {
 	sampleRate = sRate;
 	Module::sampleRate = sRate; // wartos widoczna we wszystkich modulach
 
 	TRACE2("Algorithm", "Module::sampleRate = ", Module::sampleRate);
-
-/* TODO (#1#): trzeba dac znac modulom ze sie zmienilo  */
 }
 
 void Algorithm::CreateQueue(void) {
 	TRACE("Algorithm", "Tworzenie kolejki modulow...");
-	
+
 	using namespace boost;
 
-	typedef graph_traits<Graph>::vertex_descriptor Vertex;
-	typedef std::vector< Vertex > container;
-	typedef property_map<Graph, vertex_index_t>::type IndexMap;
-
+	typedef vector< ModuleId > container;
 	container c;
-	IndexMap index = get(vertex_index, graph);
+	property_map<Graph, vertex_index_t>::type index = get(vertex_index, graph);
+	property_map<Graph, vertex_name_t>::type name = get(vertex_name, graph);
+
+	// initialize the vertex_index property values
+	graph_traits<Graph>::vertex_iterator vi, vend;
+	graph_traits<Graph>::vertices_size_type cnt = 0;
+	for(tie(vi,vend) = vertices(graph); vi != vend; ++vi)
+	    put(index, *vi, cnt++);
 
 	modulesQueue.clear();
-	
-    topological_sort(graph, std::back_inserter(c));
+	topological_sort(graph, std::back_inserter(c));
 
-    cout << "A topological ordering: ";
-    for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii) {
-        cout << index[*ii] << " ";
-		modulesQueue.push_back( modules[index[*ii]]  );
-    }
+	std::cout << "A topological ordering: ";
+	for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii) {
+        cout << "'" << name[*ii]->GetName() << "' ";
+        modulesQueue.push_back(name[*ii]);
+	}
     cout << endl;
 }
 
 int Algorithm::GetModulesCount() const {
-	return modules.size();
+	return num_vertices(graph);
 }
-
-/**
- * Zwraca wskaznik do modulu o zadanym identyfikatorze.
- * @param moduleId Identyfikator modulu
- */
-Module* Algorithm::GetModule(int moduleId) const {	    
-    for(unsigned int i = 0; i < modules.size(); i++) {
-		if (moduleId == modules[i]->GetID()) return modules[i];
-	}    
-    return NULL;
-}
-
-
 
 void  Algorithm::Clear() {
 	TRACE("Algorithm::Clear()", "Czyszcze algorytm...");
 
-	for(unsigned int i = 0; i < modules.size(); i++) {
-		cout << "Usuwam vertex " << i << endl;
-	}
-	
-	for (unsigned int i = 2; i < modules.size(); i++) {
-		cout << "Usuwam modul " << i << endl;
-        delete GetModule(i);
-    }
-	
+//	for(unsigned int i = 0; i < modules.size(); i++) {
+//		cout << "Usuwam vertex " << i << endl;
+//	}
+//
+//	for (unsigned int i = 2; i < modules.size(); i++) {
+//		cout << "Usuwam modul " << i << endl;
+//        delete GetModule(i);
+//    }
+
 	modulesQueue.clear();
-	modules.clear();
 	graph.clear();
-	
-	Module* module;
-
-	// wyjscie i wyjscie audio jest zawsze
-	module = new AudioPortIn;
-	module->SetID(0);
-	modules.push_back(module);
-	add_vertex(graph);   // dodajemy do grafu (wierzcholek 0)
-
-	module = new AudioPortOut;
-	module->SetID(1);
-	modules.push_back(module);
-	add_vertex(graph);// wierzcholek 1
+	moduleName2IdMap.clear();
+	InitAudioPorts();
 	
 	TRACE("Algorithm::Clear()", "Algorytm wyczyszczony");
 }
 
 void Algorithm::Init() {
     TRACE("Algorithm::Init()", "Inicjalizacja modulow...");
-	for(unsigned int i = 0; i < modules.size(); i++) {
-		modules[i]->Init();
+    
+   	typedef boost::property_map<Graph, boost::vertex_name_t>::type Modules;
+    Modules index = get(boost::vertex_name, graph);
+
+    pair<ModuleIterator, ModuleIterator> vp;
+
+	for (vp = vertices(graph); vp.first != vp.second; ++vp.first) {
+		index[*vp.first]->Init();
 	}
+
     TRACE("Algorithm::Init()", "Inicjalizacja modulow zakonczona");
 }
 
-
 Module* Algorithm::GetModule(string moduleName) const {
-    for(unsigned int i = 0; i < modules.size(); i++) {
-		if (moduleName == modules[i]->GetName()) return modules[i];
-	}    
-    return NULL;
+	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
+	return GetModule(moduleId);
 }
 
-void Algorithm::DeleteModule(int moduleId) {
-    TRACE("Algorithm::DeleteModule()", "Usuwanie modulu..."); 
+/**
+ * Zwraca wskaznik do modulu o zadanym identyfikatorze.
+ * @param moduleId Identyfikator modulu
+ */
+Module* Algorithm::GetModule(ModuleId moduleId) const {
+	return boost::get(boost::vertex_name, graph, moduleId);
+}
 
-    
-    //ToDo
-    //usuniecie wpisow z graph
-    
-    vector<Module*>::iterator moduleToDelete;
-    moduleToDelete = modules.begin();
-    moduleIterator = modules.begin();
-    while (moduleIterator != modules.end()) {
-        TRACE("Algorithm::DeleteModule()", "Warunek ");
-        if ((*moduleIterator)->GetID() == moduleId )
-        {
-            moduleToDelete = moduleIterator;
-            TRACE("Algorithm::DeleteModule()", "Znaleziony");
-        }
-        moduleIterator++;
-    }
-        
-    
-    
-    if ((*moduleToDelete)->GetID() == moduleId) {
-        //pierw usuwanie polaczen
-        for (int m = 0; m < modules.size(); m++) {
-            for (int c = 0; c < modules[m]->GetInputCount(); c++) {
-                if (modules[m]->GetInput(c)->GetIDModule() == moduleId) {
-                    modules[m]->GetInput(c)->SetIDModule(-1);
-                    modules[m]->GetInput(c)->SetIDModuleOutput(-1);
-                    modules[m]->GetInput(c)->SetSignal(NULL);
-                }
-            }            
-        }          
-        delete GetModule(moduleId);
-        modules.erase(moduleToDelete);
-        TRACE("Algorithm::DeleteModule()", "Modul usuniety"); 
-    } else {
-        TRACE("Algorithm::DeleteModule()", "Modul nie usunieto!!!");
-    }
-    TRACE("Algorithm::DeleteModule()", "end"); 
-       
+Module* Algorithm::GetInputPort() const {
+	return inputPort;
+}
+
+Module* Algorithm::GetOutputPort() const {
+	return outputPort;
+}
+
+Module* Algorithm::GetFirstModule() {
+    boost::tie(moduleIterator, moduleIteratorLast) = vertices(graph);
+    return boost::get(boost::vertex_name, graph, *moduleIterator);
+}
+
+Module* Algorithm::GetNextModule() {
+	if(++moduleIterator != moduleIteratorLast)
+	    return boost::get(boost::vertex_name, graph, *moduleIterator);
+	else
+		return NULL;
+}
+
+void Algorithm::DeleteModule(ModuleId moduleId) {
+	delete GetModule(moduleId);
+	boost::clear_vertex(moduleId, graph);
+}
+
+void Algorithm::DeleteConnection(ConnectionId connectionId) {
+	extern float* nullBuffer;
+
+	graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
+	boost::remove_edge(connectionId, graph);
 }
 
