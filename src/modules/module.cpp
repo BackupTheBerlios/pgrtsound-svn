@@ -110,14 +110,14 @@ Module::~Module() {
 	int i;
 	float* temp;
 
-	TRACE2("Module::~Module", "Sprzatam modul ", id);
+	TRACE2("Module::~Module", "Sprzatam modul ", name);
 	// czy to naprawde usuwa bufory?
 	for(unsigned i = 0; i < outputs.size(); i++) {
         temp = outputs[i]->GetSignal();
 		delete []temp;
 	}
 
-	TRACE3("Module::~Module", "Modul ", id, " sprzatniety");
+	TRACE3("Module::~Module", "Modul ", name, " sprzatniety");
 }
 
 /**
@@ -183,17 +183,17 @@ void Module::Process() {
 void Module::Init() {
 }
 
-void Module::SetID(int newID) {
+/*void Module::SetID(int newID) {
 	id = newID;
-}
+}*/
 
 void Module::SetName(string newName) {
 	name = newName;
 }
 
-int Module::GetID() const {
+/*int Module::GetID() const {
 	return id;
-}
+}*/
 
 string Module::GetName() const {
 	return name;

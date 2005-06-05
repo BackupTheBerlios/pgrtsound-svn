@@ -8,10 +8,11 @@ Desk::Desk(Algorithm *algo)
 {
     algorithm           = algo;
     deskModuleActive    = NULL;
-    for (int m=0; m < algorithm->GetModulesCount(); m++)
+/*xx    for (int m=0; m < algorithm->GetModulesCount(); m++)
     {      
         AddModule(algorithm->GetModule(m)->GetID());
     }
+*/
 }
 
 Desk::~Desk()

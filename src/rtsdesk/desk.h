@@ -7,6 +7,18 @@
 #include "modules/module.h"
 #include "gtkModule.h"
 
+//boost
+#include <boost/config.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/topological_sort.hpp>
+#include <boost/property_map.hpp>
+
+
+
+
+typedef Graph::vertex_descriptor ModuleId;
+
 
 class DeskModule
 {
@@ -20,6 +32,11 @@ class DeskModule
         int             x,y;    //pozycja
         GtkModule*      widget;
         Gtk::Entry*     text;
+        
+        Module*         GetRTSModule();
+        
+    private:
+        ModuleId        moduleId;
         Module*         rtsModule;
 };
 

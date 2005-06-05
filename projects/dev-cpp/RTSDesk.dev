@@ -1,11 +1,11 @@
 [Project]
-FileName=..\..\RTSDesk.dev
+FileName=RTSDesk.dev
 Name=RTSDesk
 UnitCount=14
 Type=1
 Ver=1
 ObjFiles=
-Includes=C:\RTSound\src;C:\Dev-Cpp\the-agency\boost_1_31_0;C:\RTSound\lib\TinyXML;C:\RTSound\lib\portaudio\pa_common
+Includes=C:\RTSound\src;C:\RTSound\lib\boost_1_32_0;C:\RTSound\lib\TinyXML;C:\RTSound\lib\portaudio\pa_common
 Libs=C:\RTSound\lib\portaudio\lib
 PrivateResource=
 ResourceIncludes=

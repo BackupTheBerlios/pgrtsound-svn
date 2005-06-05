@@ -20,7 +20,7 @@ void Constant::Process() {
 		float *out = oValue.GetSignal();
 			
 		#ifndef NDEBUG
-			cout << "Constant(" << GetID() << "): zmiana wartosci z " << oldValue
+			cout << "Constant(" << GetName() << "): zmiana wartosci z " << oldValue
 				<< " na " << value << endl;
 		#endif
 		
