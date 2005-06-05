@@ -10,7 +10,7 @@
 		<Build>
 			<Target title="default">
 				<Option output="rtsgui.exe"/>
-				<Option working_dir=""/>
+				<Option working_dir="."/>
 				<Option object_output=".objs"/>
 				<Option deps_output=".deps"/>
 				<Option external_deps=""/>
@@ -27,9 +27,9 @@
 			<Add option="-IC:\Dev-Cpp\include\gtk-2.0 -IC:\Dev-Cpp\lib\gtk-2.0\include -IC:\Dev-Cpp\include\atk-1.0 -IC:\Dev-Cpp\include\pango-1.0 -IC:\Dev-Cpp\include\glib-2.0 -IC:\Dev-Cpp\lib\glib-2.0\include"/>
 			<Add option="-IC:\Dev-Cpp\include\gtkmm-2.4 -IC:\Dev-Cpp\lib\gtkmm-2.4\include -IC:\Dev-Cpp\include\glibmm-2.4 -IC:\Dev-Cpp\lib\glibmm-2.4\include -IC:\Dev-Cpp\include\gdkmm-2.4 -IC:\Dev-Cpp\lib\gdkmm-2.4\include -IC:\Dev-Cpp\include\pangomm-1.4 -IC:\Dev-Cpp\include\atkmm-1.6 -IC:\Dev-Cpp\include\gtk-2.0 -IC:\Dev-Cpp\include\sigc++-2.0 -IC:\Dev-Cpp\lib\sigc++-2.0\include -IC:\Dev-Cpp\include\glib-2.0 -IC:\Dev-Cpp\lib\glib-2.0\include -IC:\Dev-Cpp\lib\gtk-2.0\include -IC:\Dev-Cpp\include\pango-1.0 -IC:\Dev-Cpp\include\atk-1.0"/>
 			<Add option="-DTIXML_USE_STL"/>
-			<Add directory="C:\Dev-Cpp\the-agency\boost_1_31_0"/>
 			<Add directory="..\..\lib\portaudio\pa_common"/>
 			<Add directory="..\..\lib\tinyxml"/>
+			<Add directory="..\..\lib\boost_1_32_0"/>
 		</Compiler>
 		<Linker>
 			<Add option="-lportaudio"/>

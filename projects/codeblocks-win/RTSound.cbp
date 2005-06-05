@@ -10,7 +10,7 @@
 		<Build>
 			<Target title="default">
 				<Option output="rtsound.exe"/>
-				<Option working_dir=""/>
+				<Option working_dir="."/>
 				<Option object_output=".objs"/>
 				<Option deps_output=".deps"/>
 				<Option external_deps=""/>
@@ -29,7 +29,7 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add directory="C:\Dev-Cpp\the-agency\boost_1_31_0"/>
+			<Add directory="..\..\lib\boost_1_32_0"/>
 		</Compiler>
 		<Unit filename="..\..\lib\tinyxml\tinystr.cpp">
 			<Option compilerVar="CPP"/>
