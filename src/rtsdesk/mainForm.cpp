@@ -163,8 +163,8 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
     //dla poprzednio aktywnego
     if (desk->GetDeskModuleActive() != NULL)
     {
-        Module* rtsModuleActive = desk->GetDeskModuleActive()->rtsModule;
-        for (int i=0; i<desk->GetDeskModuleActive()->rtsModule->GetParameterCount(); i++)
+        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();
+        for (int i=0; i<desk->GetDeskModuleActive()->GetRTSModule()->GetParameterCount(); i++)
         {
             if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
             {
@@ -197,7 +197,7 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
     //dla aktualnie aktywnego
     if (desk->GetDeskModuleActive() != NULL)
     {
-        Module* rtsModuleActive = desk->GetDeskModuleActive()->rtsModule;
+        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();
         rtsModuleActive->GetName() = edName.get_text();
         for (int i=0; i<rtsModuleActive->GetParameterCount(); i++)
         {
@@ -230,7 +230,7 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
         }
         edType.set_text(rtsModuleActive->GetType());
         edName.set_text(rtsModuleActive->GetName());
-        edID.set_text(IntToString(rtsModuleActive->GetID()));
+//xx        edID.set_text(IntToString(rtsModuleActive->GetID()));
     }     
     
     show_all_children();  
@@ -245,7 +245,7 @@ void MainForm::AddNewModuleToDesk() {
         {
             TRACE("MainForm::AddNewModuleToDesk()", "widget");
             //Rysunek
-            GtkModule* module = new GtkModule(desk->deskModules[i]->rtsModule->GetInputCount(),desk->deskModules[i]->rtsModule->GetOutputCount());
+            GtkModule* module = new GtkModule(desk->deskModules[i]->GetRTSModule()->GetInputCount(),desk->deskModules[i]->GetRTSModule()->GetOutputCount());
             module->drag_source_set(listTargets);
             module->signal_drag_data_get().connect( sigc::mem_fun(*this, &MainForm::OnModuleDragDataGet));
             
@@ -258,7 +258,7 @@ void MainForm::AddNewModuleToDesk() {
             Gtk::Entry* text = new Gtk::Entry();
             text->set_editable(false);
            
-            text->set_text(desk->deskModules[i]->rtsModule->GetName());
+            text->set_text(desk->deskModules[i]->GetRTSModule()->GetName());
             text->set_max_length (20);
             text->set_width_chars (10);
             desk->deskModules[i]->text = text;

@@ -85,7 +85,7 @@ void NewModuleForm::onAdd()
     }
 
     //jesli portaudioin/out czy juz istnieja
-    if ((ok)&((type == "audioportin") | (type == "audioportout")))
+/*xx    if ((ok)&((type == "audioportin") | (type == "audioportout")))
     {
         for (int m = 0; m < desk->algorithm->GetModulesCount(); m++)
             if (desk->algorithm->GetModule(m)->GetType()==type)
@@ -96,9 +96,9 @@ void NewModuleForm::onAdd()
             dialog.run();    
         }
     }
-    
+*/    
     //czy poprawna nazwa
-    if ((ok)&((name == "") | (desk->FindModule(name) > 0)))
+    if ((ok)&((name == "") | (desk->FindModule(name) != NULL)))
     {
         Gtk::MessageDialog dialog(*this, "Niewlasciwa nazwa modulu!");
         dialog.set_secondary_text("");

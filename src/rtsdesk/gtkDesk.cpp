@@ -52,19 +52,19 @@ bool GtkDesk::on_expose_event(GdkEventExpose* /* event */)
     
     gc_->set_foreground(conColor_);
 
-    for (int c1=0; c1 < desk->deskModules.size(); c1++)
+/*xx    for (int c1=0; c1 < desk->deskModules.size(); c1++)
     {
-        for (int input = 0; input < desk->deskModules[c1]->rtsModule->GetInputCount(); input++)
+        for (int input = 0; input < desk->deskModules[c1]->GetRTSModule()->GetInputCount(); input++)
         {
             x2 = desk->deskModules[c1]->x;
             y2 = desk->deskModules[c1]->y+input*10;    
             
             for (int c2=0; c2 < desk->deskModules.size(); c2++)
             {
-                if (desk->deskModules[c2]->rtsModule->GetID() == desk->deskModules[c1]->rtsModule->GetInput(input)->GetIDModule())
+                if (desk->deskModules[c2]->GetRTSModule()->GetName() == desk->deskModules[c1]->GetRTSModule()->GetInput(input)->GetIDModule())
                 {
                     x1 = desk->deskModules[c2]->x+65;
-                    y1 = desk->deskModules[c2]->y+desk->deskModules[c1]->rtsModule->GetInput(input)->GetIDModuleOutput()*10;
+                    y1 = desk->deskModules[c2]->y+desk->deskModules[c1]->GetRTSModule()->GetInput(input)->GetIDModuleOutput()*10;
                     cout << desk->deskModules[c1]->rtsModule->GetID() <<","
                          <<input<<","
                          <<desk->deskModules[c2]->rtsModule->GetID()
@@ -89,6 +89,7 @@ bool GtkDesk::on_expose_event(GdkEventExpose* /* event */)
             }
         }    
     }
+*/    
 
     
     return true;

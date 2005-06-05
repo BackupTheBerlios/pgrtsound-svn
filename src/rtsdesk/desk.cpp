@@ -3,6 +3,20 @@
 #include "xmlconfigfile.h"
 #include "debug.h"
 
+
+
+Module* DeskModule::GetRTSModule() {
+    return rtsModule;    
+}
+
+void DeskModule::SetRTSModule(Module* rtsModule_) {
+    rtsModule = rtsModule_;    
+}
+
+void DeskModule::SetModuleId(ModuleId moduleId_) {
+    moduleId = moduleId_;    
+}
+
 //Konstruktor i destruktor -----------------------------------------------------
 Desk::Desk(Algorithm *algo)
 {
@@ -42,7 +56,7 @@ void Desk::AddModule(ModuleId moduleId)
 
 Module* Desk::FindModule(string name)
 {
-    if (algorithm->GetModule(name)!=NULL)
+    if (algorithm->GetModule(name) != NULL)
         return algorithm->GetModule(name);
     return NULL;
 }
@@ -277,5 +291,5 @@ void Desk::Clear() {
 
 
 void Desk::DeleteActiveModule() {
-    algorithm->DeleteModule(GetDeskModuleActive()->GetRTSModule()->GetID());
+//xx    algorithm->DeleteModule(GetDeskModuleActive()->GetRTSModule()->GetID());
 }

@@ -245,8 +245,16 @@ void Algorithm::Init() {
  * @param moduleName Nazwa dociekanego modulu
  */
 Module* Algorithm::GetModule(string moduleName) const {
-	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
-	return GetModule(moduleId);
+    //poprawiono b³¹d gdy modu³u nie by³o :)
+    if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
+        TRACE("Algorithm::GetModule(string moduleName)", "Znaleziono");
+    	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
+		return GetModule(moduleId);
+    } else {
+        TRACE("Algorithm::GetModule(string moduleName)", "Nie znaleziono");
+        return NULL;   
+    }
+        
 }
 
 /**

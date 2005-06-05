@@ -42,17 +42,7 @@ class DeskModule
         Module*         rtsModule;
 };
 
-Module* DeskModule::GetRTSModule() {
-    return rtsModule;    
-}
 
-void DeskModule::SetRTSModule(Module* rtsModule_) {
-    rtsModule = rtsModule_;    
-}
-
-void DeskModule::SetModuleId(ModuleId moduleId_) {
-    moduleId = moduleId_;    
-}
 
 
 

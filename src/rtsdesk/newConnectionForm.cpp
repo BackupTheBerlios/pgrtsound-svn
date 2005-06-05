@@ -24,7 +24,7 @@ NewConnectionForm::NewConnectionForm(Desk *d)
     table.attach(comboModule1,1,2,0,1);
     comboModule1.append_text("< ? >");
     for (int i = 0;i<desk->deskModules.size();i++)
-        comboModule1.append_text(desk->deskModules[i]->rtsModule->GetName());
+        comboModule1.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
     comboModule1.set_active_text("< ? >");
     
     lbOutput.set_label("Wyjscie modulu 1:");
@@ -43,7 +43,7 @@ NewConnectionForm::NewConnectionForm(Desk *d)
     table.attach(comboModule2,1,2,2,3);
     comboModule2.append_text("< ? >");
     for (int i = 0;i<desk->deskModules.size();i++)
-        comboModule2.append_text(desk->deskModules[i]->rtsModule->GetName());
+        comboModule2.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
     comboModule2.set_active_text("< ? >");
     
 
@@ -95,13 +95,13 @@ void NewConnectionForm::onAdd()
 
 void NewConnectionForm::on_comboModule1_changed()
 {
-    int id = desk->FindModule(comboModule1.get_active_text());
-    if (id != -1)
+    string name = comboModule1.get_active_text();
+    if (name != "")
     {
         comboOutput.clear();
         comboOutput.append_text("< ? >");
-        for (int i = 0; i < desk->algorithm->GetModule(id)->GetOutputCount(); i++)
-            comboOutput.append_text(desk->algorithm->GetModule(id)->GetOutput(i)->GetName());
+        for (int i = 0; i < desk->algorithm->GetModule(name)->GetOutputCount(); i++)
+            comboOutput.append_text(desk->algorithm->GetModule(name)->GetOutput(i)->GetName());
     } else {
         comboOutput.clear();    
     }
@@ -110,13 +110,13 @@ void NewConnectionForm::on_comboModule1_changed()
 
 void NewConnectionForm::on_comboModule2_changed()
 {
-    int id = desk->FindModule(comboModule2.get_active_text());
-    if (id != -1)
+    string name = comboModule2.get_active_text();
+    if (name != "")
     {
         comboInput.clear();
         comboInput.append_text("< ? >");
-        for (int i = 0; i < desk->algorithm->GetModule(id)->GetInputCount(); i++)
-            comboInput.append_text(desk->algorithm->GetModule(id)->GetInput(i)->GetName());
+        for (int i = 0; i < desk->algorithm->GetModule(name)->GetInputCount(); i++)
+            comboInput.append_text(desk->algorithm->GetModule(name)->GetInput(i)->GetName());
     } else {
         comboInput.clear();   
     }
