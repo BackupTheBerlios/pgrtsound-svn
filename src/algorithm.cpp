@@ -103,9 +103,16 @@ void Algorithm::PrintInfo(void) {
 
 
 /**
- * Laczenie dwoch modulow
+ * Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
+ * wejsciem i wyjsciem dwoch roznych modulow.
+ * @param moduleId1 Identyfikator modulu zrodlowego
+ * @param outputId Identyfiaktor wyjscia modulu zrodlowego
+ * @param moduleId2 Identyfikator modulu docelowego
+ * @param inputId Identyfiaktor wejscia modulu docelowego
  */
-ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId, ModuleId moduleId2, int inputId) {
+ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId,
+	ModuleId moduleId2, int inputId)
+{
 	#ifndef NDEBUG
 		cout << "    Lacze '" <<
 			GetModule(moduleId1)->GetName() << "'." << GetModule(moduleId1)->GetOutput(outputId)->GetName() << " -> '" <<
@@ -129,13 +136,26 @@ ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId, ModuleI
 	return cId;
 }
 
-ConnectionId Algorithm::ConnectModules(string moduleName1, int outputId, string moduleName2, int inputId) {
+/**
+ * Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
+ * wyjsciem i wyjsciem dwoch roznych modulow o podanych nazwach.
+ * @param moduleName1 Nazwa modulu zrodlowego
+ * @param outputId Identyfiaktor wyjscia modulu zrodlowego
+ * @param moduleName2 Nazwa modulu docelowego
+ * @param inputId Identyfiaktor wejscia modulu docelowego
+*/
+ConnectionId Algorithm::ConnectModules(string moduleName1, int outputId,
+	string moduleName2, int inputId)
+{
 	ModuleId moduleId1 = ( *moduleName2IdMap.find(moduleName1) ).second;
 	ModuleId moduleId2 = ( *moduleName2IdMap.find(moduleName2) ).second;
 
 	return ConnectModules(moduleId1, outputId, moduleId2, inputId);
 }
 
+/**
+ * Ustawienie czestotliwosci probkowania.
+ */
 void Algorithm::SetSampleRate(float sRate) {
 	sampleRate = sRate;
 	Module::sampleRate = sRate; // wartos widoczna we wszystkich modulach
@@ -143,7 +163,13 @@ void Algorithm::SetSampleRate(float sRate) {
 	TRACE2("Algorithm", "Module::sampleRate = ", Module::sampleRate);
 }
 
-void Algorithm::CreateQueue(void) {
+/**
+ * Tworzy kolejke modulow dla przetwarznia. Struktura grafu algorytmu zostaje
+ * przetworzona na odpowiadajaca mu szeregowa sekwencje modulow, zgodnie z ktora
+ * wywolane zostac musza ich funkcje przetwarzania aby zachowac zaleznosci
+ * wejscie/wyjscie medzy modulami w grafie.
+ */
+void Algorithm::CreateQueue() {
 	TRACE("Algorithm", "Tworzenie kolejki modulow...");
 
 	using namespace boost;
@@ -170,21 +196,26 @@ void Algorithm::CreateQueue(void) {
     cout << endl;
 }
 
+/**
+ * Zwraca ilosc modulow grafie algorytmu.
+ */
 int Algorithm::GetModulesCount() const {
 	return num_vertices(graph);
 }
 
+/**
+ * Czysczenie algorytmu. Powoduje wyczyszczenie wszystkich elementow
+ * przechowujacych strukture algorytmu. Po wycyzsczeniu algorytm nie spelnia
+ * zadnej funckji przetwarznia, ale gotowy jest do konfiguracji.
+ */
 void  Algorithm::Clear() {
 	TRACE("Algorithm::Clear()", "Czyszcze algorytm...");
 
-//	for(unsigned int i = 0; i < modules.size(); i++) {
-//		cout << "Usuwam vertex " << i << endl;
-//	}
-//
-//	for (unsigned int i = 2; i < modules.size(); i++) {
-//		cout << "Usuwam modul " << i << endl;
-//        delete GetModule(i);
-//    }
+	// usuniecie modulow
+	Module* mod;
+	for(mod = GetFirstModule(); mod; mod = GetNextModule()) {
+		delete mod;
+	}
 
 	modulesQueue.clear();
 	graph.clear();
@@ -194,28 +225,32 @@ void  Algorithm::Clear() {
 	TRACE("Algorithm::Clear()", "Algorytm wyczyszczony");
 }
 
+/**
+ * Inicjalizacjia algorytmu. Wywoluje funckje inicjalizujace wszytkich modulow
+ * w grafie.
+ */
 void Algorithm::Init() {
     TRACE("Algorithm::Init()", "Inicjalizacja modulow...");
     
-   	typedef boost::property_map<Graph, boost::vertex_name_t>::type Modules;
-    Modules index = get(boost::vertex_name, graph);
-
-    pair<ModuleIterator, ModuleIterator> vp;
-
-	for (vp = vertices(graph); vp.first != vp.second; ++vp.first) {
-		index[*vp.first]->Init();
+	Module* mod;
+	for (mod = GetFirstModule(); mod; mod = GetNextModule()) {
+		mod->Init();
 	}
 
     TRACE("Algorithm::Init()", "Inicjalizacja modulow zakonczona");
 }
 
+/**
+ * Dostep do modulu. Zwraca wskaznik do modulu o podanej nazwie.
+ * @param moduleName Nazwa dociekanego modulu
+ */
 Module* Algorithm::GetModule(string moduleName) const {
 	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
 	return GetModule(moduleId);
 }
 
 /**
- * Zwraca wskaznik do modulu o zadanym identyfikatorze.
+ * Dostep do modulu. Zwraca wskaznik do modulu o zadanym identyfikatorze.
  * @param moduleId Identyfikator modulu
  */
 Module* Algorithm::GetModule(ModuleId moduleId) const {

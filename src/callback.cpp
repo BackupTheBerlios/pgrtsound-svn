@@ -19,10 +19,10 @@ int paCallback( const void *inputBuffer, void *outputBuffer,
 	alg->Process();
 
 	for(i = 0; i < framesPerBuffer; i++) {
-			/* TODO (#1#): Zaimplementowac kanal lewy i prawy */
-			*put++ = ( (*in++) + (*in++) )*0.5f; // na razie miksowanie do mono
-			*out++ = *gen;
-			*out++ = *gen++;
+		/* TODO (#1#): Zaimplementowac kanal lewy i prawy */
+		*put++ = ( (*in++) + (*in++) )*0.5f; // na razie miksowanie do mono
+		*out++ = *gen;
+		*out++ = *gen++;
 	}
 
 	return 0;

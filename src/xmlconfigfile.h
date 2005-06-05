@@ -28,7 +28,6 @@ class XMLConfigFile
 	private:
 		string fileName;
 		TiXmlDocument document;
-		
 };
 
 #endif // XMLCONFIGFILE_H

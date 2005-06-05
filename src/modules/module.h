@@ -26,20 +26,19 @@ void SetNullBuffer(unsigned long size);
 //------------------------------------------------------------------------------
 /**
  * Wyjscie modulu
- * Jest to prosty kontener danych zwiazanych z kazdym wyjsciem modulu. Obiekty
- * tej klasy przechowuja miedzy innymi nazwe i identyfikator wjescia a takze
+ * Klasa obietkow zwiazanych z kazdym wyjsciem modulu. Obiekty
+ * te przechowuja miedzy innymi nazwe i identyfikator wjescia a takze
  * odpowiadaja za zarzadzanie buforem wyjsciowym.
  */
 class Output {
 	public:
-		Output(string name_);
-		~Output();
-		int GetID() const;
-		string GetName() const;
-		float* GetSignal() const;
-		void SetID(int newID);
-		//void SetName(string newName);
-		void SetSignal(float* sig);
+				Output(string name_);
+				~Output();
+		int		GetID() const;
+		string	GetName() const;
+		float*	GetSignal() const;
+		void	SetID(int newID);
+		void	SetSignal(float* sig);
 		
 	protected:
 		int		id;		/**< Numer idetyfikujacy wejscie */
@@ -54,23 +53,22 @@ class Output {
  */
 class Input {
 	public:
-		Input(string name_);
-		~Input();
-		int GetID() const;
-		int GetIDModule() const;
-		int GetIDModuleOutput() const;		
-		string GetName() const;
-		float* GetSignal();
-		void SetID(int newID);
-		void SetIDModule(int newIDModule);
-    	void SetIDModuleOutput(int newIDModuleOutput);
-		//void SetName(string newName);
-		void SetSignal(float* sig);
+				Input(string name_);
+				~Input();
+		int		GetID() const;
+		int		GetIDModule() const;
+		int 	GetIDModuleOutput() const;
+		string	GetName() const;
+		float*	GetSignal();
+		void	SetID(int newID);
+		void	SetIDModule(int newIDModule);
+    	void	SetIDModuleOutput(int newIDModuleOutput);
+		void	SetSignal(float* sig);
 
 	protected:
 		int		id;		           /**< Numer idetyfikujacy wejscie */
-		int     idModule;          /**< Numer idetyfikujacy modu³ pod³¹czyny */
-		int     idModuleOutput;    /**< Numer idetyfikujacy numer wyjsci modulu podlaczonego */
+//		int     idModule;          /**< Numer idetyfikujacy modu³ pod³¹czyny */
+//		int     idModuleOutput;    /**< Numer idetyfikujacy numer wyjsci modulu podlaczonego */
 		string	name;	           /**< Nazwa wejscia */
 		float*	signal;	           /**< Wskaznik na podlaczony do wejscia bufor */
 };
@@ -90,33 +88,30 @@ class Module {
         string	name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
 		int		id;		/**< Liczbowy identyfikator modulu. */
 		string	type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
-		
 
 	public:
-  		static int	framesPerBlock;
-		static int	sampleRate;
+  		static int		framesPerBlock;
+		static float	sampleRate;
 
-		Module(string type_, string name_);
-		~Module();
-		int AddInput(Input* input);
-		int AddOutput(Output* output);
-		int AddParameter(Parameter* param);
-		void ConnectInputTo(int numInput, float *sourceSignal);
-//        void ConnectInputTo(int numInput, float *sourceSignal, int idModule_, int idModuleOutput_);
-		virtual void Process();
-		virtual void Init();
-		void SetID(int newID);
-		void SetName(string newName);
-		int GetID() const;
-		string GetType() const;
-		string GetName() const;
-		Input* GetInput(int inputID);
-		Output* GetOutput(int outputID);
-		int GetOutputCount();
-		int GetInputCount();		
-		Parameter* GetParameter(int pID);
-		int GetParameterCount() const;
-
+				Module(string type_, string name_);
+				~Module();
+		int		AddInput(Input* input);
+		int		AddOutput(Output* output);
+		int		AddParameter(Parameter* param);
+		void	ConnectInputTo(int numInput, float *sourceSignal);
+		virtual void	Process();
+		virtual void	Init();
+		void	SetID(int newID);
+		void	SetName(string newName);
+		int		GetID() const;
+		string	GetType() const;
+		string	GetName() const;
+		int		GetOutputCount();
+		int		GetInputCount();
+		int		GetParameterCount() const;
+		Input*		GetInput(int inputID);
+		Output*		GetOutput(int outputID);
+		Parameter*	GetParameter(int pID);
 };
 
 inline Input* Module::GetInput(int inputID) {

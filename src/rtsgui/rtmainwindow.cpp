@@ -1,7 +1,9 @@
 #include "rtmainwindow.h"
 #include "../callback.h"
 
-RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(256) {
+#define FRAMES_PER_BUFFER 256
+
+RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER) {
 	set_title("Real Time GUI");
 	set_size_request(300, 550);
 
@@ -169,7 +171,6 @@ void RTMainWindow::OnOpenFile() {
 
 			try {
 			    xmlConfig.OpenFile(filename.c_str());
-    			//algo.SetFramesPerBlock(256);
 				algo.SetSampleRate(44100);
 				algo.Clear();
 				xmlConfig.LoadAlgorithm(&algo);
@@ -184,7 +185,7 @@ void RTMainWindow::OnOpenFile() {
 		        //audio.PrintDevices();
 				audio.SetCallback(paCallback, (void*)&algo);
 				audio.EnableInput();
-				audio.Open(44100.0, 256, 0); // gotowi do grania
+				audio.Open(44100.0, FRAMES_PER_BUFFER, 0); // gotowi do grania
 			}	catch (AudioDriverError& error) {
 		        cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
 		        exit(1);

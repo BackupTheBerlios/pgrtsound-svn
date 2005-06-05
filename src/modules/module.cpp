@@ -1,7 +1,7 @@
 #include "module.h"
 
-int Module::framesPerBlock = 256;
-int Module::sampleRate = 44100;
+int	Module::framesPerBlock = 256;
+float	Module::sampleRate = 44100;
 
 // uzyteczny, globabalny bufor zerowy
 float* nullBuffer;
@@ -26,8 +26,8 @@ void SetNullBuffer(unsigned long size) {
 //------------------------------------------------------------------------------
 Input::Input(string name_) {
    	name = name_;
-   	idModule        = -1;
-   	idModuleOutput  = -1;
+   	//idModule        = -1;
+   	//idModuleOutput  = -1;
    	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
    	signal = nullBuffer;
 }
@@ -57,19 +57,19 @@ string Input::GetName() const {
 
 
 int Input::GetIDModule() const {
-    return idModule;    
+    //return idModule;
 }
 
 int Input::GetIDModuleOutput() const {
-    return idModuleOutput;
+    //return idModuleOutput;
 }
 
 void Input::SetIDModule(int newIDModule) {
-     idModule = newIDModule;
+     //idModule = newIDModule;
 }
 
 void Input::SetIDModuleOutput(int newIDModuleOutput) {     
-     idModuleOutput = newIDModuleOutput;
+     //idModuleOutput = newIDModuleOutput;
 }
 
 //------------------------------------------------------------------------------

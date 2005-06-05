@@ -31,13 +31,17 @@ int main(int argc, char *argv[]) {
 		xmlConfig.LoadAlgorithm(&algo);
 		algo.Init();
 		algo.CreateQueue();
+
     } catch (RTSError& error) {
         cout << "Error: " << error.what() << endl;
         exit(1);
     }
 
 	algo.PrintInfo();
-
+	ModuleId mid  = algo.AddModule("gain", "moje gajn");
+	algo.PrintInfo();
+	algo.DeleteModule(mid);
+	
 	try {
 		audio.PrintDevices();
 		audio.SetCallback(paCallback, (void*)&algo);

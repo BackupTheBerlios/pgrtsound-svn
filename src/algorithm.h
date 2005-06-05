@@ -43,10 +43,7 @@ class Algorithm {
 	public:
   		Algorithm(unsigned long framesPerBlock);
 		~Algorithm();
-		void Process();
-		ModuleId AddModule(string type, string name);
-		ConnectionId ConnectModules(ModuleId moduleId1, int outputId, ModuleId moduleId2, int inputId);
-		ConnectionId ConnectModules(string moduleName1, int outputId, string moduleName2, int inputId);
+		void	Process();
 		void    Clear();
 		void    Init();
 		void    PrintInfo();
@@ -61,13 +58,17 @@ class Algorithm {
 		Module* GetNextModule();
 		void    DeleteModule(ModuleId moduleId);
 		void    DeleteConnection(ConnectionId connectionI);
+		ModuleId		AddModule(string type, string name);
+		ConnectionId	ConnectModules(ModuleId moduleId1, int outputId,
+							ModuleId moduleId2, int inputId);
+		ConnectionId	ConnectModules(string moduleName1, int outputId,
+							string moduleName2, int inputId);
 
 	private:
 		Graph					graph;
 		float					sampleRate;
 		unsigned long			framesPerBlock;
 		ModuleFactory			moduleFactory;
-		//vector<Module*>			modules;
 		vector<Module*>			modulesQueue;
 		map<string, ModuleId>	moduleName2IdMap; // mapa asocjacyjna nazwy z id
 		Module*					inputPort;
@@ -82,7 +83,6 @@ class Algorithm {
  * Funckja przetwarzania algorytmu.
  * Funkcja powoduje wywolanie funkcji przetwarzania wszystkich
  * wykorzystanych w budowie algorytmu modulow.
- * framesPerBlock.
  */
 inline void Algorithm::Process() {
 	for(unsigned int i = 0; i < modulesQueue.size(); i++) {
