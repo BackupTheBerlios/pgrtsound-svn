@@ -34,11 +34,27 @@ class DeskModule
         Gtk::Entry*     text;
         
         Module*         GetRTSModule();
+        void            SetModuleId(ModuleId moduleId_);
+        void            SetRTSModule(Module* rtsModule_);
         
     private:
         ModuleId        moduleId;
         Module*         rtsModule;
 };
+
+Module* DeskModule::GetRTSModule() {
+    return rtsModule;    
+}
+
+void DeskModule::SetRTSModule(Module* rtsModule_) {
+    rtsModule = rtsModule_;    
+}
+
+void DeskModule::SetModuleId(ModuleId moduleId_) {
+    moduleId = moduleId_;    
+}
+
+
 
 class Desk
 {
@@ -51,19 +67,18 @@ class Desk
         ~Desk();
         
         //Obs³uga modu³ów
-        void    Clear();
-        void    AddModule(string type, string name);
-        void    AddModule(int id);
-        int     FindModule(string name);
-        string  FindModule(int id);
-        int     FindOutput(int idModule,string outName);
-        int     FindOutput(string nameModule,string outName);
-        int     FindInput(int idModule,string inName);
-        int     FindInput(string nameModule,string inName);
-        void    SetPosition(string nameModule,int x, int y);
+        void        Clear();
+        void        AddModule(string type, string name);
+        void        AddModule(ModuleId moduleId);
+        Module*     FindModule(string name);
+        int         FindOutput(Module* module,string outName);
+        int         FindOutput(string nameModule,string outName);
+        int         FindInput(Module* module,string inName);
+        int         FindInput(string nameModule,string inName);
+        void        SetPosition(string nameModule,int x, int y);
         DeskModule* GetDeskModuleActive();
-        void    SetDeskModuleActive(DeskModule* deskModule);
-        void    DeleteActiveModule();
+        void        SetDeskModuleActive(DeskModule* deskModule);
+        void        DeleteActiveModule();
                
         //Zapisywanie do plik
         void SaveToFile(string filename);

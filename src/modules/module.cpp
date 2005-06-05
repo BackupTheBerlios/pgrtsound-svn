@@ -56,21 +56,21 @@ string Input::GetName() const {
 }
 
 
-int Input::GetIDModule() const {
+/*int Input::GetIDModule() const {
     //return idModule;
-}
+}*/
 
-int Input::GetIDModuleOutput() const {
+/*int Input::GetIDModuleOutput() const {
     //return idModuleOutput;
-}
+}*/
 
-void Input::SetIDModule(int newIDModule) {
+/*void Input::SetIDModule(int newIDModule) {
      //idModule = newIDModule;
-}
+}*/
 
-void Input::SetIDModuleOutput(int newIDModuleOutput) {     
+/*void Input::SetIDModuleOutput(int newIDModuleOutput) {     
      //idModuleOutput = newIDModuleOutput;
-}
+}*/
 
 //------------------------------------------------------------------------------
 Output::Output(string name_) {

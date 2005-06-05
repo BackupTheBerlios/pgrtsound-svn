@@ -24,32 +24,27 @@ Desk::~Desk()
 void Desk::AddModule(string type, string name)
 {
     DeskModule *deskModule = new DeskModule(0,0);
-    int id = algorithm->AddModule(type);
-    algorithm->GetModule(id)->SetName(name);          
-    deskModule->rtsModule  = algorithm->GetModule(id);
+    ModuleId moduleId = algorithm->AddModule(type,name);    
+    deskModule->SetModuleId(moduleId);
+    deskModule->SetRTSModule(algorithm->GetModule(moduleId));
     deskModules.push_back(deskModule);
+
 }
 
-void Desk::AddModule(int id)
+void Desk::AddModule(ModuleId moduleId)
 {
     DeskModule *deskModule = new DeskModule(0,0);          
-    deskModule->rtsModule  = algorithm->GetModule(id);
+    deskModule->SetModuleId(moduleId);
+    deskModule->SetRTSModule(algorithm->GetModule(moduleId));
     deskModules.push_back(deskModule);
+
 }
 
-int Desk::FindModule(string name)
+Module* Desk::FindModule(string name)
 {
     if (algorithm->GetModule(name)!=NULL)
-        return algorithm->GetModule(name)->GetID();
-    return -1;
-}
-
-string  Desk::FindModule(int id)
-{
-    for (int i = 0;i<deskModules.size();i++)
-        if (deskModules[i]->rtsModule->GetID() == id)
-            return (deskModules[i]->rtsModule->GetName());
-    return "";
+        return algorithm->GetModule(name);
+    return NULL;
 }
 
 int Desk::FindOutput(string nameModule,string outName)
@@ -58,11 +53,11 @@ int Desk::FindOutput(string nameModule,string outName)
 }
 
 
-int Desk::FindOutput(int idModule,string outName)
+int Desk::FindOutput(Module* module,string outName)
 {
-    for (int i = 0; i < algorithm->GetModule(idModule)->GetOutputCount(); i++)
-        if (algorithm->GetModule(idModule)->GetOutput(i)->GetName() == outName)
-            return algorithm->GetModule(idModule)->GetOutput(i)->GetID();
+    for (int i = 0; i < algorithm->GetModule(module)->GetOutputCount(); i++)
+        if (algorithm->GetModule(module)->GetOutput(i)->GetName() == outName)
+            return algorithm->GetModule(module)->GetOutput(i)->GetID();
     return -1;
 }
 
@@ -71,11 +66,11 @@ int Desk::FindInput(string nameModule,string inName)
     return FindInput(FindModule(nameModule),inName);
 }
 
-int Desk::FindInput(int idModule,string inName)
+int Desk::FindInput(Module* module,string inName)
 {
-    for (int i = 0; i < algorithm->GetModule(idModule)->GetInputCount(); i++)
-        if (algorithm->GetModule(idModule)->GetInput(i)->GetName() == inName)
-            return algorithm->GetModule(idModule)->GetInput(i)->GetID();
+    for (int i = 0; i < algorithm->GetModule(module)->GetInputCount(); i++)
+        if (algorithm->GetModule(module)->GetInput(i)->GetName() == inName)
+            return algorithm->GetModule(module)->GetInput(i)->GetID();
     return -1;
 }
 
@@ -83,8 +78,8 @@ void Desk::SetPosition(string nameModule,int x, int y)
 {
     TRACE("Desk::SetPosition()","start");
     for (int i = 0;i<deskModules.size();i++)
-        if (deskModules[i]->rtsModule != NULL)
-            if (deskModules[i]->rtsModule->GetName() == nameModule)
+        if (deskModules[i]->GetRTSModule() != NULL)
+            if (deskModules[i]->GetRTSModule()->GetName() == nameModule)
             {
                 deskModules[i]->x=x;
                 deskModules[i]->y=y;
@@ -122,20 +117,20 @@ void Desk::SaveToFile(string filename)
         xml+= "  <modules>\n";
         for (int i = 0;i<deskModules.size();i++)
         {
-            if ((deskModules[i]->rtsModule->GetType()!="audioportin")&(deskModules[i]->rtsModule->GetType()!="audioportout"))
+            if ((deskModules[i]->GetRTSModule()->GetType()!="audioportin")&(deskModules[i]->GetRTSModule()->GetType()!="audioportout"))
             {
-                xml+= "    <module type=\""+ deskModules[i]->rtsModule->GetType()+"\" name=\""+deskModules[i]->rtsModule->GetName()+"\">\n";            
-                if (deskModules[i]->rtsModule->GetParameterCount()>0)
-                    for (int p = 0;p<deskModules[i]->rtsModule->GetParameterCount();p++) {
-                        if ((deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtSlider) or 
-                            (deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtProperty))
+                xml+= "    <module type=\""+ deskModules[i]->GetRTSModule()->GetType()+"\" name=\""+deskModules[i]->GetRTSModule()->GetName()+"\">\n";            
+                if (deskModules[i]->GetRTSModule()->GetParameterCount()>0)
+                    for (int p = 0;p<deskModules[i]->GetRTSModule()->GetParameterCount();p++) {
+                        if ((deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtSlider) or 
+                            (deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtProperty))
                         {
-                            ParameterFloat* param =	(ParameterFloat*)deskModules[i]->rtsModule->GetParameter(p);
+                            ParameterFloat* param =	(ParameterFloat*)deskModules[i]->GetRTSModule()->GetParameter(p);
                             xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"float\">"+IntToString(param->GetValue())+"</parameter>";
                         }
                 
-                        if (deskModules[i]->rtsModule->GetParameter(p)->GetGUIType() == gtEditBox) {
-                            ParameterString* param = (ParameterString*)deskModules[i]->rtsModule->GetParameter(p);					
+                        if (deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtEditBox) {
+                            ParameterString* param = (ParameterString*)deskModules[i]->GetRTSModule()->GetParameter(p);					
 					       xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"string\">"+param->GetText()+"</parameter>";
                         }               
                     }            
@@ -145,18 +140,18 @@ void Desk::SaveToFile(string filename)
         xml+= "  </modules>\n";
     }
     
-    xml+= "  <connections>\n";
+/*xx    xml+= "  <connections>\n";
     for (int c1=0; c1 < deskModules.size(); c1++)
     {
-        for (int input = 0; input < deskModules[c1]->rtsModule->GetInputCount(); input++)
+        for (int input = 0; input < deskModules[c1]->GetRTSModule()->GetInputCount(); input++)
         {          
             for (int c2=0; c2 < deskModules.size(); c2++)
             {
-                if (deskModules[c2]->rtsModule->GetID() == deskModules[c1]->rtsModule->GetInput(input)->GetIDModule())
+                if (deskModules[c2]->GetRTSModule()->GetID() == deskModules[c1]->GetRTSModule()->GetInput(input)->GetIDModule())
                 {
-                xml+= "    <connection name1=\"" + deskModules[c2]->rtsModule->GetName() +
-                              "\" output=\"" + IntToString(deskModules[c1]->rtsModule->GetInput(input)->GetIDModuleOutput()) +
-                               "\" name2=\"" + deskModules[c1]->rtsModule->GetName() +
+                xml+= "    <connection name1=\"" + deskModules[c2]->GetRTSModule()->GetName() +
+                              "\" output=\"" + IntToString(deskModules[c1]->GetRTSModule()->GetInput(input)->GetIDModuleOutput()) +
+                               "\" name2=\"" + deskModules[c1]->GetRTSModule()->GetName() +
                                "\" input=\"" + IntToString(input) + "\"/> \n";
                 }    
             }
@@ -164,13 +159,13 @@ void Desk::SaveToFile(string filename)
         }    
     }
     xml+= "  </connections>\n";
-
+*/
     //czy sa jakies moduly ??
     if (deskModules.size()>0)
     {
         xml+= "  <modules_widget>\n";
         for (int i = 0;i<deskModules.size();i++)
-            xml+= "    <module_widget name=\"" + deskModules[i]->rtsModule->GetName() +
+            xml+= "    <module_widget name=\"" + deskModules[i]->GetRTSModule()->GetName() +
                                       "\" x=\"" + IntToString(deskModules[i]->x) +
                                       "\" y=\"" + IntToString(deskModules[i]->y) + "\" />\n";
         xml+= "  </modules_widget>\n";
@@ -222,10 +217,12 @@ void Desk::LoadFromFile(string filename)
     
     
     
+/*xx
     for (int m=0; m < algorithm->GetModulesCount(); m++)
     {      
         AddModule(algorithm->GetModule(m)->GetID());
     }
+*/
     
     TRACE("Desk::LoadFromFile()", "load widget position");
     
@@ -270,14 +267,15 @@ void Desk::Clear() {
     
     algorithm->Clear();
     
+/*xx
     for (int m=0; m < algorithm->GetModulesCount(); m++)
     {      
         AddModule(algorithm->GetModule(m)->GetID());
     }
-    
+*/    
 }
 
 
 void Desk::DeleteActiveModule() {
-    algorithm->DeleteModule(GetDeskModuleActive()->rtsModule->GetID());
+    algorithm->DeleteModule(GetDeskModuleActive()->GetRTSModule()->GetID());
 }

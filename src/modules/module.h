@@ -61,8 +61,8 @@ class Input {
 		string	GetName() const;
 		float*	GetSignal();
 		void	SetID(int newID);
-		void	SetIDModule(int newIDModule);
-    	void	SetIDModuleOutput(int newIDModuleOutput);
+//		void	SetIDModule(int newIDModule);
+//    	void	SetIDModuleOutput(int newIDModuleOutput);
 		void	SetSignal(float* sig);
 
 	protected:
