@@ -43,25 +43,27 @@ class Algorithm {
 	public:
   		Algorithm(unsigned long framesPerBlock);
 		~Algorithm();
-		void	Process();
-		void    Clear();
-		void    Init();
-		void    PrintInfo();
-		void    CreateQueue();
-		void 	SetSampleRate(float sRate);
-		Module* GetModule(ModuleId moduleId) const;
-		Module* GetModule(string moduleName) const;
-		int     GetModulesCount() const;
-		Module* GetInputPort() const;
-		Module* GetOutputPort() const;
-		Module* GetFirstModule();
-		Module* GetNextModule();
-		void    DeleteModule(ModuleId moduleId);
-		void    DeleteConnection(ConnectionId connectionI);
-		ModuleId		AddModule(string type, string name);
-		ConnectionId	ConnectModules(ModuleId moduleId1, int outputId,
+		void	     Process();
+		void          Clear();
+		void          Init();
+		void          PrintInfo();
+		void          CreateQueue();
+		void 	      SetSampleRate(float sRate);
+		Module*       GetModule(ModuleId moduleId) const;
+		Module*       GetModule(string moduleName) const;
+		ModuleId      GetModuleId(string moduleName) const;
+		int           GetModulesCount() const;
+		Module*       GetInputPort() const;
+		Module*       GetOutputPort() const;
+		Module*       GetFirstModule();
+		Module*       GetNextModule();
+		void          DeleteModule(ModuleId moduleId);
+		void          DeleteConnection(ConnectionId connectionId);
+		void          DeleteConnection(ModuleId moduleId);
+		ModuleId      AddModule(string type, string name);
+		ConnectionId  ConnectModules(ModuleId moduleId1, int outputId,
 							ModuleId moduleId2, int inputId);
-		ConnectionId	ConnectModules(string moduleName1, int outputId,
+		ConnectionId  ConnectModules(string moduleName1, int outputId,
 							string moduleName2, int inputId);
 
 	private:
@@ -73,8 +75,8 @@ class Algorithm {
 		map<string, ModuleId>	moduleName2IdMap; // mapa asocjacyjna nazwy z id
 		Module*					inputPort;
 		Module*					outputPort;
-		ModuleIterator		moduleIterator;
-		ModuleIterator		moduleIteratorLast;
+		ModuleIterator		    moduleIterator;
+		ModuleIterator		    moduleIteratorLast;
 		
 		void InitAudioPorts();
 };

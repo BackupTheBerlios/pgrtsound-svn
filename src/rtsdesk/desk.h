@@ -29,6 +29,10 @@ class DeskModule
             y       = y_;
             widget  = NULL;
         }
+        ~DeskModule() {
+            delete widget;
+            delete text;   
+        };
         int             x,y;    //pozycja
         GtkModule*      widget;
         Gtk::Entry*     text;
@@ -81,6 +85,7 @@ class Desk
         
     private:
         DeskModule*                 deskModuleActive;
+        
 
 };
 

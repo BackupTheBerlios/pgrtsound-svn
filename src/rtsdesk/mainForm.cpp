@@ -30,10 +30,14 @@ MainForm::MainForm(Desk *d) {
     m_refActionGroup->add( Gtk::Action::create("FileLoad", Gtk::Stock::OPEN),
                            sigc::mem_fun(*this, &MainForm::OnLoadFile) );
     //Module menu:
-    m_refActionGroup->add( Gtk::Action::create("ModuleMenu", "Moduly & polaczenia") );
+    m_refActionGroup->add( Gtk::Action::create("ModuleMenu", "Moduly") );
     m_refActionGroup->add( Gtk::Action::create("ModuleNew", Gtk::Stock::ADD , "Nowy modul...", "Dodaj nowy modul"),
                            sigc::mem_fun(*this, &MainForm::OnNewModule) );
-    m_refActionGroup->add( Gtk::Action::create("ModuleConnectionNew", Gtk::Stock::CONNECT , "Nowe polaczenie...", "Dodaj nowe polaczenie"),
+    m_refActionGroup->add( Gtk::Action::create("ModuleDelete", Gtk::Stock::DELETE , "Usun modul", "Usuwanie modulu"),
+                           sigc::mem_fun(*this, &MainForm::OnDelete) );                           
+    //Polaczenia menu:
+    m_refActionGroup->add( Gtk::Action::create("ConnectionMenu", "Polaczenia") );
+    m_refActionGroup->add( Gtk::Action::create("ConnectionNew", Gtk::Stock::CONNECT , "Nowe polaczenie...", "Dodaj nowe polaczenie"),
                            sigc::mem_fun(*this, &MainForm::OnNewConnection) );
 
     //Help menu:
@@ -57,15 +61,19 @@ MainForm::MainForm(Desk *d) {
             "    </menu>"
             "    <menu action='ModuleMenu'>"
             "      <menuitem action='ModuleNew'/>"
-            "      <menuitem action='ModuleConnectionNew'/>"
+            "      <menuitem action='ModuleDelete'/>"
             "    </menu>"
+            "    <menu action='ConnectionMenu'>"
+            "      <menuitem action='ConnectionNew'/>"
+            "    </menu>"            
             "    <menu action='HelpMenu'>"
             "      <menuitem action='HelpAbout'/>"
             "    </menu>"
             "  </menubar>"
             "  <toolbar  name='ToolBar'>"
             "    <toolitem action='ModuleNew'/>"
-            "    <toolitem action='ModuleConnectionNew'/>"
+            "    <toolitem action='ModuleDelete'/>"
+            "    <toolitem action='ConnectionNew'/>"
             "    <toolitem action='FileQuit'/>"
             "  </toolbar>"
             "</ui>";

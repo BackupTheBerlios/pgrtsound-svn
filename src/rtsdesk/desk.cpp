@@ -69,9 +69,14 @@ int Desk::FindOutput(string nameModule,string outName)
 
 int Desk::FindOutput(Module* module,string outName)
 {
-    for (int i = 0; i < algorithm->GetModule(module)->GetOutputCount(); i++)
-        if (algorithm->GetModule(module)->GetOutput(i)->GetName() == outName)
-            return algorithm->GetModule(module)->GetOutput(i)->GetID();
+    if (module == NULL ) return -1;
+    TRACE("Desk::FindOutput()","1");
+    for (int i = 0; i < module->GetOutputCount(); i++)
+    {
+        TRACE("Desk::FindOutput()","*");
+        if (module->GetOutput(i)->GetName() == outName)
+            return module->GetOutput(i)->GetID();
+    }
     return -1;
 }
 
@@ -82,9 +87,10 @@ int Desk::FindInput(string nameModule,string inName)
 
 int Desk::FindInput(Module* module,string inName)
 {
-    for (int i = 0; i < algorithm->GetModule(module)->GetInputCount(); i++)
-        if (algorithm->GetModule(module)->GetInput(i)->GetName() == inName)
-            return algorithm->GetModule(module)->GetInput(i)->GetID();
+    if (module == NULL ) return -1;
+    for (int i = 0; i < module->GetInputCount(); i++)
+        if (module->GetInput(i)->GetName() == inName)
+            return module->GetInput(i)->GetID();
     return -1;
 }
 
@@ -290,6 +296,23 @@ void Desk::Clear() {
 }
 
 
-void Desk::DeleteActiveModule() {
-//xx    algorithm->DeleteModule(GetDeskModuleActive()->GetRTSModule()->GetID());
+void Desk::DeleteActiveModule() { 
+    TRACE("Desk::DeleteActiveModule()", "start");   
+    algorithm->DeleteModule(algorithm->GetModuleId(GetDeskModuleActive()->GetRTSModule()->GetName()));
+    TRACE("Desk::DeleteActiveModule()", "1");
+    
+    vector<DeskModule*>::iterator iter;
+    
+    for (iter = deskModules.begin(); (*iter)!=deskModuleActive; iter++) {      
+    }
+    if ((*iter)==deskModuleActive) {
+            TRACE("Desk::DeleteActiveModule()", "1.5");
+            deskModules.erase(iter);
+            TRACE("Desk::DeleteActiveModule()", "1.6");
+        
+    TRACE("Desk::DeleteActiveModule()", "2");
+    delete deskModuleActive;
+    deskModuleActive = NULL;
+    }
+    TRACE("Desk::DeleteActiveModule()", "end"); 
 }

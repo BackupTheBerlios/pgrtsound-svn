@@ -13,8 +13,6 @@ NewModuleForm::NewModuleForm(Desk *d)
     set_modal(true);
     set_border_width(10);
     
-    
-    
     add(table);
   
     lbModuleType.set_label("Typ modulu:");
@@ -26,9 +24,7 @@ NewModuleForm::NewModuleForm(Desk *d)
 //ToDo
 //póki co rêcznie ale to raczej z jakiego mo¿e pliku configuruj¹cego czy cóœ =]
     comboType.clear();
-    comboType.append_text("< ? >");
-//    comboType.append_text("audioportin");
-//    comboType.append_text("audioportout");     
+    comboType.append_text("< ? >");   
     comboType.append_text("constant");
     comboType.append_text("gain");   
     comboType.append_text("sinosc2");
@@ -41,7 +37,7 @@ NewModuleForm::NewModuleForm(Desk *d)
     table.attach(comboType,1,2,0,1);
     comboType.signal_changed().connect( sigc::mem_fun(*this, &NewModuleForm::onComboTypeChanged) );
 
-    edName.set_text(comboType.get_active_text()+" "+IntToString(desk->deskModules.size() + 1));
+    edName.set_text(comboType.get_active_text());
     table.attach(edName,1,2,1,2);
 
     table.attach(hbox,0,2,2,3);
@@ -84,19 +80,7 @@ void NewModuleForm::onAdd()
         ok = false;
     }
 
-    //jesli portaudioin/out czy juz istnieja
-/*xx    if ((ok)&((type == "audioportin") | (type == "audioportout")))
-    {
-        for (int m = 0; m < desk->algorithm->GetModulesCount(); m++)
-            if (desk->algorithm->GetModule(m)->GetType()==type)
-                ok = false; 
-        if (!ok) {
-            Gtk::MessageDialog dialog(*this, "Modul tego typu juz istnieje!");
-            dialog.set_secondary_text("Modul specjalny moze istniec tylko jeden.");
-            dialog.run();    
-        }
-    }
-*/    
+
     //czy poprawna nazwa
     if ((ok)&((name == "") | (desk->FindModule(name) != NULL)))
     {
@@ -121,5 +105,5 @@ void NewModuleForm::onComboTypeChanged()
     if (comboType.get_active_text()!= "< ? >")
         edName.set_text(comboType.get_active_text()+" "+IntToString(desk->deskModules.size() + 1) );
     else 
-        edName.set_text("");
+        edName.set_text("< ? >");
 }

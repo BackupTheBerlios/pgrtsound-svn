@@ -23,8 +23,10 @@ NewConnectionForm::NewConnectionForm(Desk *d)
     comboModule1.signal_changed().connect( sigc::mem_fun(*this, &NewConnectionForm::on_comboModule1_changed) );
     table.attach(comboModule1,1,2,0,1);
     comboModule1.append_text("< ? >");
-    for (int i = 0;i<desk->deskModules.size();i++)
-        comboModule1.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
+    for (int i = 0;i<desk->deskModules.size();i++) {
+        if (desk->deskModules[i]->GetRTSModule()->GetOutputCount() > 0)    
+            comboModule1.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
+    }
     comboModule1.set_active_text("< ? >");
     
     lbOutput.set_label("Wyjscie modulu 1:");
@@ -42,8 +44,10 @@ NewConnectionForm::NewConnectionForm(Desk *d)
     comboModule2.signal_changed().connect( sigc::mem_fun(*this, &NewConnectionForm::on_comboModule2_changed) );
     table.attach(comboModule2,1,2,2,3);
     comboModule2.append_text("< ? >");
-    for (int i = 0;i<desk->deskModules.size();i++)
-        comboModule2.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
+    for (int i = 0;i<desk->deskModules.size();i++) {
+        if (desk->deskModules[i]->GetRTSModule()->GetInputCount() > 0)
+            comboModule2.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
+    }
     comboModule2.set_active_text("< ? >");
     
 
@@ -68,7 +72,7 @@ NewConnectionForm::NewConnectionForm(Desk *d)
     hbox.pack_start(btAdd);
     btAdd.signal_clicked().connect( sigc::mem_fun(*this, &NewConnectionForm::onAdd) );
   
-    show_all_children();
+    show_all_children(); 
 
 }
 
@@ -85,17 +89,19 @@ void NewConnectionForm::onCancel()
 
 void NewConnectionForm::onAdd()
 {
-    desk->algorithm->ConnectModules( desk->FindModule(comboModule1.get_active_text())
+    desk->algorithm->ConnectModules( comboModule1.get_active_text()
                                     ,desk->FindOutput(comboModule1.get_active_text(),comboOutput.get_active_text())
-                                    ,desk->FindModule(comboModule2.get_active_text())
-                                    ,desk->FindInput(comboModule2.get_active_text(),comboInput.get_active_text()) );
-    cout << desk->FindModule(comboModule1.get_active_text()) <<" , " <<desk->FindOutput(comboModule1.get_active_text(),comboOutput.get_active_text())<< "," << desk->FindModule(comboModule2.get_active_text()) << "," <<desk->FindInput(comboModule2.get_active_text(),comboInput.get_active_text())<<endl;
+                                    ,comboModule2.get_active_text()
+                                    ,desk->FindInput(comboModule2.get_active_text(),comboInput.get_active_text()) 
+                                    );
+    //cout << desk->FindModule(comboModule1.get_active_text()) <<" , " <<desk->FindOutput(comboModule1.get_active_text(),comboOutput.get_active_text())<< "," << desk->FindModule(comboModule2.get_active_text()) << "," <<desk->FindInput(comboModule2.get_active_text(),comboInput.get_active_text())<<endl;
     hide();
 }
 
 void NewConnectionForm::on_comboModule1_changed()
 {
     string name = comboModule1.get_active_text();
+    if (name != "< ? >")
     if (name != "")
     {
         comboOutput.clear();
@@ -111,6 +117,7 @@ void NewConnectionForm::on_comboModule1_changed()
 void NewConnectionForm::on_comboModule2_changed()
 {
     string name = comboModule2.get_active_text();
+    if (name != "< ? >")
     if (name != "")
     {
         comboInput.clear();

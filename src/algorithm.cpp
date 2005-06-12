@@ -258,6 +258,23 @@ Module* Algorithm::GetModule(string moduleName) const {
 }
 
 /**
+ * Dostep do ModuluId. Zwraca  ModulId o podanej nazwie.
+ * @param moduleName Nazwa dociekanego ModuluId
+ */
+
+ModuleId  Algorithm::GetModuleId(string moduleName) const {
+    //poprawiono b³¹d gdy modu³u nie by³o :)
+    if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
+        TRACE("Algorithm::GetModuleId(string moduleName)", "Znaleziono");
+    	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
+		return moduleId;
+    } else {
+        TRACE("Algorithm::GetModuleId(string moduleName)", "Nie znaleziono");
+        return NULL;   
+    }    
+}
+
+/**
  * Dostep do modulu. Zwraca wskaznik do modulu o zadanym identyfikatorze.
  * @param moduleId Identyfikator modulu
  */
@@ -286,7 +303,11 @@ Module* Algorithm::GetNextModule() {
 }
 
 void Algorithm::DeleteModule(ModuleId moduleId) {
+    //usuwanie z mapy
+	moduleName2IdMap.erase(GetModule(moduleId)->GetName());
+	//usuwanie z pamieci modulu
 	delete GetModule(moduleId);
+	//usuwanie grafu
 	boost::clear_vertex(moduleId, graph);
 }
 
@@ -295,5 +316,9 @@ void Algorithm::DeleteConnection(ConnectionId connectionId) {
 
 	graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
 	boost::remove_edge(connectionId, graph);
+}
+
+void Algorithm::DeleteConnection(ModuleId moduleId) {
+    
 }
 

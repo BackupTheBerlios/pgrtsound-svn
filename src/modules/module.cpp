@@ -26,8 +26,6 @@ void SetNullBuffer(unsigned long size) {
 //------------------------------------------------------------------------------
 Input::Input(string name_) {
    	name = name_;
-   	//idModule        = -1;
-   	//idModuleOutput  = -1;
    	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
    	signal = nullBuffer;
 }
@@ -56,21 +54,6 @@ string Input::GetName() const {
 }
 
 
-/*int Input::GetIDModule() const {
-    //return idModule;
-}*/
-
-/*int Input::GetIDModuleOutput() const {
-    //return idModuleOutput;
-}*/
-
-/*void Input::SetIDModule(int newIDModule) {
-     //idModule = newIDModule;
-}*/
-
-/*void Input::SetIDModuleOutput(int newIDModuleOutput) {     
-     //idModuleOutput = newIDModuleOutput;
-}*/
 
 //------------------------------------------------------------------------------
 Output::Output(string name_) {
@@ -111,12 +94,22 @@ Module::~Module() {
 	float* temp;
 
 	TRACE2("Module::~Module", "Sprzatam modul ", name);
-	// czy to naprawde usuwa bufory?
+/*	// czy to naprawde usuwa bufory?
 	for(unsigned i = 0; i < outputs.size(); i++) {
         temp = outputs[i]->GetSignal();
 		delete []temp;
 	}
-
+*/	
+    for (int i = 0; i < GetInputCount(); i++) {
+        delete inputs[i];        
+    }
+    inputs.clear();
+    
+    for (int i = 0; i < GetOutputCount(); i++) {
+        delete outputs[i];
+    }
+    outputs.clear();
+    
 	TRACE3("Module::~Module", "Modul ", name, " sprzatniety");
 }
 

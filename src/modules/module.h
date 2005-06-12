@@ -61,14 +61,10 @@ class Input {
 		string	GetName() const;
 		float*	GetSignal();
 		void	SetID(int newID);
-//		void	SetIDModule(int newIDModule);
-//    	void	SetIDModuleOutput(int newIDModuleOutput);
 		void	SetSignal(float* sig);
 
 	protected:
 		int		id;		           /**< Numer idetyfikujacy wejscie */
-//		int     idModule;          /**< Numer idetyfikujacy modu³ pod³¹czyny */
-//		int     idModuleOutput;    /**< Numer idetyfikujacy numer wyjsci modulu podlaczonego */
 		string	name;	           /**< Nazwa wejscia */
 		float*	signal;	           /**< Wskaznik na podlaczony do wejscia bufor */
 };
@@ -86,7 +82,6 @@ class Module {
         vector<Output*>		outputs;	    /**< Wektor wyjsc. */
         vector<Parameter*>	parameters;		/**< Wektor parametrow. */
         string	name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
-//		int		id;		/**< Liczbowy identyfikator modulu. */
 		string	type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
 
 	public:
@@ -101,9 +96,7 @@ class Module {
 		void	ConnectInputTo(int numInput, float *sourceSignal);
 		virtual void	Process();
 		virtual void	Init();
-//		void	SetID(int newID);
 		void	SetName(string newName);
-//		int		GetID() const;
 		string	GetType() const;
 		string	GetName() const;
 		int		GetOutputCount();
