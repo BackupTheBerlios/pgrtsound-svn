@@ -99,15 +99,12 @@ MainForm::MainForm(Desk *d) {
     lbName.set_text("Nazwa:");
     lbType.set_text("Typ:");
     lbParams.set_text("Parametry:");
-    lbID.set_text("ID:");    
     btDelete.set_label("Usun modul");
     paramPanel.set_size_request(200,600);
     paramPanel.put(lbName,10,10);
     paramPanel.put(edName,100,10);
     paramPanel.put(lbType,10,40);  
     paramPanel.put(edType,100,40);  
-    paramPanel.put(lbID,10,70);  
-    paramPanel.put(edID,100,70);
     paramPanel.put(lbParams,10,100);
     paramPanel.put(btDelete,10,1);
   
@@ -143,15 +140,9 @@ MainForm::~MainForm() {
 
 void MainForm::OnNew( ){
     TRACE("MainForm::OnNew()", "start");
-    //delete desk;
-
-//    Algorithm *algo= new Algorithm(FRAMES_PER_BLOCK);
-//    desk = new Desk(algo);  
-//    area -> desk = desk;
+    //Czyszczenie biurka
     desk->Clear();
-    
-//    area->on_expose_event(NULL);
-    
+    //dodanie inputport i outputport
     AddNewModuleToDesk();
     TRACE("MainForm::OnNew()", "end");
 }
@@ -161,7 +152,8 @@ void MainForm::OnNew( ){
 void MainForm::OnMenuFileQuit()
 {
     TRACE("MainForm::OnMenuFileQuit()", "bye");
-    hide(); //Zamkniecie okna
+    //Zamkniecie okna
+    hide();
 }
 
 
@@ -172,6 +164,8 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
     if (desk->GetDeskModuleActive() != NULL)
     {
         Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();
+        rtsModuleActive->SetName(edName.get_text());
+        desk->GetDeskModuleActive()->text->set_text(edName.get_text());
         for (int i=0; i<desk->GetDeskModuleActive()->GetRTSModule()->GetParameterCount(); i++)
         {
             if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
@@ -197,7 +191,10 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
                 delete  widgetList[2*i+1];
             }
         }
-    }   
+    } else {
+        edName.set_text("");
+        edType.set_text("");
+    }  
         
     //zmiana aktywnego
     desk->SetDeskModuleActive(deskModule);
@@ -205,8 +202,7 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
     //dla aktualnie aktywnego
     if (desk->GetDeskModuleActive() != NULL)
     {
-        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();
-        rtsModuleActive->GetName() = edName.get_text();
+        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();        
         for (int i=0; i<rtsModuleActive->GetParameterCount(); i++)
         {
             if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
@@ -238,7 +234,6 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
         }
         edType.set_text(rtsModuleActive->GetType());
         edName.set_text(rtsModuleActive->GetName());
-//xx        edID.set_text(IntToString(rtsModuleActive->GetID()));
     }     
     
     show_all_children();  
@@ -390,7 +385,25 @@ void MainForm::OnLoadFile()
     AddNewModuleToDesk();
 }
 
+//------------------------------------------------------------------------------
 void MainForm::OnDelete() {
+    //usuniecie wizualizacji parametrow
+    if (desk->GetDeskModuleActive() != NULL)
+    {
+        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();
+        for (int i=0; i<desk->GetDeskModuleActive()->GetRTSModule()->GetParameterCount(); i++)
+        {
+            if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
+            {
+                delete  widgetList[2*i];
+                delete  widgetList[2*i+1];
+            }
+        }
+    }
+    edName.set_text("");
+    edType.set_text("");
+    
+    //usuniecie modulu
     if (desk->GetDeskModuleActive() != NULL)
     {
        desk->DeleteActiveModule();           

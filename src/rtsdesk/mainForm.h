@@ -49,10 +49,8 @@ protected:
   Gtk::Label        lbParams;
   Gtk::Label        lbName;
   Gtk::Label        lbType;
-  Gtk::Label        lbID;  
   Gtk::Entry        edName;
   Gtk::Entry        edType;
-  Gtk::Entry        edID;
   
   Gtk::Widget       *widgetList[50];
   
