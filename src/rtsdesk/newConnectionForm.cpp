@@ -94,7 +94,6 @@ void NewConnectionForm::onAdd()
                                     ,comboModule2.get_active_text()
                                     ,desk->FindInput(comboModule2.get_active_text(),comboInput.get_active_text()) 
                                     );
-    //cout << desk->FindModule(comboModule1.get_active_text()) <<" , " <<desk->FindOutput(comboModule1.get_active_text(),comboOutput.get_active_text())<< "," << desk->FindModule(comboModule2.get_active_text()) << "," <<desk->FindInput(comboModule2.get_active_text(),comboInput.get_active_text())<<endl;
     hide();
 }
 

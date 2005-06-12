@@ -17,7 +17,6 @@ public:
   Desk *desk;
 protected:
   
-  //Overridden default signal handlers:
   virtual void on_realize();
  
 

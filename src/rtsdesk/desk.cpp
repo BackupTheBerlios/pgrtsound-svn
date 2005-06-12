@@ -22,11 +22,7 @@ Desk::Desk(Algorithm *algo)
 {
     algorithm           = algo;
     deskModuleActive    = NULL;
-/*xx    for (int m=0; m < algorithm->GetModulesCount(); m++)
-    {      
-        AddModule(algorithm->GetModule(m)->GetID());
-    }
-*/
+    AddAllModuleToDesk();
 }
 
 Desk::~Desk()
@@ -47,10 +43,12 @@ void Desk::AddModule(string type, string name)
 
 void Desk::AddModule(ModuleId moduleId)
 {
+    TRACE("Desk::AddModule()","start");
     DeskModule *deskModule = new DeskModule(0,0);          
     deskModule->SetModuleId(moduleId);
     deskModule->SetRTSModule(algorithm->GetModule(moduleId));
     deskModules.push_back(deskModule);
+    TRACE("Desk::AddModule()","end");
 
 }
 
@@ -99,11 +97,14 @@ void Desk::SetPosition(string nameModule,int x, int y)
     TRACE("Desk::SetPosition()","start");
     for (int i = 0;i<deskModules.size();i++)
         if (deskModules[i]->GetRTSModule() != NULL)
+        {
+            TRACE("Desk::SetPosition()","znaleziono");
             if (deskModules[i]->GetRTSModule()->GetName() == nameModule)
             {
                 deskModules[i]->x=x;
                 deskModules[i]->y=y;
             }
+        }
     TRACE("Desk::SetPosition()","end");
 }
 
@@ -206,6 +207,20 @@ void Desk::SaveToFile(string filename)
 	doc.SaveFile();
 }
 
+
+//------------------------------------------------------------------------------
+void Desk::AddAllModuleToDesk() {
+    bool eom = false;
+    Module* mod = algorithm->GetFirstModule();
+    while(!eom)
+    {           
+        AddModule(algorithm->GetModuleId(mod->GetName()));
+        mod = algorithm->GetNextModule();  
+        TRACE("Desk::LoadFromFile()", "*");
+        if (mod==NULL) eom = true;
+    }    
+}
+
 //Odczyt z pliku ---------------------------------------------------------------
 void Desk::LoadFromFile(string filename)
 {
@@ -236,13 +251,10 @@ void Desk::LoadFromFile(string filename)
 ////////////////////////////////////////////////    
     
     
-    
-/*xx
-    for (int m=0; m < algorithm->GetModulesCount(); m++)
-    {      
-        AddModule(algorithm->GetModule(m)->GetID());
-    }
-*/
+
+
+    AddAllModuleToDesk();
+
     
     TRACE("Desk::LoadFromFile()", "load widget position");
     
@@ -266,7 +278,7 @@ void Desk::LoadFromFile(string filename)
 		for( moduleXMLNode = parent; moduleXMLNode; moduleXMLNode = moduleXMLNode->NextSibling("module_widget") ) {
 			moduleXMLElem = moduleXMLNode->ToElement();
             SetPosition(moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
-            TRACE3("Pozycaj",moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
+            TRACE3("Pozycja",moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
   		}
 	}
 	TRACE("Desk::LoadFromFile()", "end");
@@ -287,12 +299,7 @@ void Desk::Clear() {
     
     algorithm->Clear();
     
-/*xx
-    for (int m=0; m < algorithm->GetModulesCount(); m++)
-    {      
-        AddModule(algorithm->GetModule(m)->GetID());
-    }
-*/    
+    AddAllModuleToDesk();
 }
 
 

@@ -13,7 +13,7 @@ streambuf* out = cout.rdbuf(logfile.rdbuf());
 int main (int argc, char *argv[])
 {
     Algorithm *algo= new Algorithm(FRAMES_PER_BLOCK);
-    //algo->SetFramesPerBlock(FRAMES_PER_BLOCK);
+
     algo->SetSampleRate(SAMPLE_RATE);
 
     Desk *desk = new Desk(algo);

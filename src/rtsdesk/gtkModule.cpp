@@ -10,8 +10,6 @@ void GtkModule::SetSelected(bool selected_)
 
 GtkModule::GtkModule(int iCount, int oCount)
 {
-  // get_window() would return 0 because the Gdk::Window has not yet been realized
-  // So we can only allocate the colors here - the rest will happen in on_realize().
   Glib::RefPtr<Gdk::Colormap> colormap = get_default_colormap ();
 
   bgColorSelected_      = Gdk::Color("gray");
@@ -46,10 +44,8 @@ GtkModule::~GtkModule()
 
 void GtkModule::on_realize()
 {
-  // We need to call the base on_realize()
   Gtk::DrawingArea::on_realize();
 
-  // Now we can allocate any additional resources we need
   Glib::RefPtr<Gdk::Window> window = get_window();
   gc_ = Gdk::GC::create(window);
 
@@ -59,7 +55,7 @@ void GtkModule::on_realize()
 
 bool GtkModule::on_expose_event(GdkEventExpose* /* event */)
 {
-  // This is where we draw on the window
+  
   Glib::RefPtr<Gdk::Window> window = get_window();
   window->clear();
   if (selected)

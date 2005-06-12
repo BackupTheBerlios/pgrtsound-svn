@@ -73,6 +73,7 @@ class Desk
         DeskModule* GetDeskModuleActive();
         void        SetDeskModuleActive(DeskModule* deskModule);
         void        DeleteActiveModule();
+        void        AddAllModuleToDesk();
                
         //Zapisywanie do plik
         void SaveToFile(string filename);
