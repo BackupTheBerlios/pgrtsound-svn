@@ -4,7 +4,8 @@
 #include "module.h"
 
 /**
- * No description
+ * Modul liczbowej wartosci stalej.
+ * Na wyjsciu modul pojawia sie non stop ustalona wartosc.
  */
 class Constant : public Module {
 	public:

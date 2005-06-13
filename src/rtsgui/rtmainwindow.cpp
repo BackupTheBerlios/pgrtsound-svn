@@ -93,47 +93,38 @@ RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER) {
 	TRACE("RTMainWindow::RTMainWindow()", "Okno aplikacji utworzone");
 }
 
-RTMainWindow::~RTMainWindow()
-{
-	TRACE("RTMainWindow::~RTMainWindow()", "Usuwanie parametrow i modulow...");
+RTMainWindow::~RTMainWindow() {
+//	TRACE("RTMainWindow::~RTMainWindow()", "Usuwanie parametrow i modulow...");
 //	for(int i = 0; i < guiParameters.size(); i++) {
 //		delete guiParameters[i];
 //	}
 
-	for(int i = 0; i < guiModules.size(); i++) {
-		delete guiModules[i];
-	}
-	TRACE("RTMainWindow::~RTMainWindow()", "Usuniete");
+//	for(int i = 0; i < guiModules.size(); i++) {
+//		delete guiModules[i];
+//	}
+//	TRACE("RTMainWindow::~RTMainWindow()", "Usuniete");
 }
 
 void RTMainWindow::AddModule(Module* module) {
-	GuiParameterSlider*	slider;
-	GuiModule*			guiModule;
-	Parameter*			param;
-	int					paramCount;
+	ModuleGui*	moduleGui;
+	Parameter*	param;
+	int			paramCount;
 
 	paramCount = module->GetParameterCount();
 
 	for(int m = 0; m < paramCount; m++) {
 		param = module->GetParameter(m);
 
-		if((param->GetGUIType() != gtInvisible) && (param->GetGUIType() != gtProperty) ) {
-           	TRACE2("RTMainWindow::AddModule()", "Dodaje modul ", module->GetName());
+		if( param->GetGUIType() == gtParameter ) {
+           	TRACE2("RTMainWindow::AddModule()", "Dodaje modul...", module->GetName());
 			// beda jakies widoczne parametry tego modulu wiec go dodajmy
-			guiModule = new GuiModule;
-			guiModules.push_back(guiModule);
-			guiModule->set_label( module->GetName() );
+			moduleGui = module->GetGui();
+			guiModules.push_back(moduleGui);
+			moduleGui->set_label( module->GetName() );
 			
-			for(int i = 0; i < paramCount; i++) {
-				param = module->GetParameter(i);
-				if(param->GetGUIType() != gtInvisible) {
-					guiModule->AddParameter(param);
-				}
-			}
-			
-			modulesBox.pack_start(*guiModule, Gtk::PACK_SHRINK);
+			modulesBox.pack_start(*moduleGui, Gtk::PACK_SHRINK);
 			TRACE("RTMainWindow::AddModule()", "Modul dodany");
-			break;
+			//break;
 		}
 	}
 }
@@ -218,12 +209,9 @@ void RTMainWindow::OnMenuFileQuit() {
 
 void RTMainWindow::ClearModules() {
 	TRACE("RTMainWindow::ClearModules()", "Czyszcze moduly...");
-	for(int i = 0; i < guiModules.size(); i++) {
-		guiModules[i]->Clear();
-		delete guiModules[i];
-	}
 
 	guiModules.clear();
+
 	TRACE("RTMainWindow::ClearModules()", "Moduly wyczyszczone");
 	show_all_children();
 }

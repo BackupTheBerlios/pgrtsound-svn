@@ -3,6 +3,8 @@
 
 #include "module.h"
 
+
+
 /**
  * No description
  */
@@ -13,6 +15,7 @@ class Slider : public Module
 		~Slider();
 		void Process();
 		void Init();
+		ModuleGui* GetGui();
 		
 	protected:
 		Output			oOut;

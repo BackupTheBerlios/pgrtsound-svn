@@ -4,7 +4,7 @@
 #include "module.h"
 
 /*
- * Interfejs wyjscia karty dzwiekowej
+ * Interfejs wyjscia systemu (algorytmu)
  */
 class AudioPortOut : public Module {
 	public:

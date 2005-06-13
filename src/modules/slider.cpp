@@ -1,8 +1,9 @@
 #include "slider.h"
+#include "guis/slidergui.h"
 
 // class constructor
 Slider::Slider() : Module("slider", "New Slider"),
-	oOut("wy"), pMin("min", gtProperty), pMax("max", gtProperty), pValue("value", gtSlider)
+	oOut("wy"), pMin("min", gtProperty), pMax("max", gtProperty), pValue("value", gtParameter)
 {
 	AddOutput(&oOut);
 	AddParameter(&pMin);
@@ -12,6 +13,9 @@ Slider::Slider() : Module("slider", "New Slider"),
 
 
 Slider::~Slider() {
+//   	TRACE3("Slider::~Slider()", GetName(), " Sprzatam GUI: ", gui);
+//   	delete gui;
+//  	gui = NULL;
 }
 
 void Slider::Init() {
@@ -28,4 +32,12 @@ void Slider::Process() {
 	for (n = 0; n < Module::framesPerBlock; n++) {
 			*out++ = value;
 	}
+}
+
+ModuleGui* Slider::GetGui() {
+	if(gui == NULL) {
+		gui = new SliderGui(this);
+	}
+	TRACE("Slider::GetGui()", gui);
+	return gui;
 }

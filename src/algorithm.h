@@ -1,3 +1,16 @@
+/*! \mainpage System przetwarznia dzwieku w czasie rzeczywsitym
+ *
+ * \section intro_sec Wprowadzenie
+ *
+ * Zadaniem systemu jest przetwarzanie dzwikeu w czasie rzeczywistym.
+ * To jest test.
+ *
+ * \section install_sec Instalacja
+ *
+ * \subsection step1 Krok 1: Rozpakowanie archiwow
+ *
+ */
+
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 

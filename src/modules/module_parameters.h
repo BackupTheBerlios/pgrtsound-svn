@@ -11,8 +11,7 @@ using namespace std;
 enum {
 	gtInvisible,
 	gtProperty,
-   	gtSlider,
-	gtEditBox
+   	gtParameter,
 };
 
 //------------------------------------------------------------------------------

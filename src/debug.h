@@ -1,6 +1,10 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#include <iostream>
+
+using namespace std;
+
 #ifndef NDEBUG
 	#define TRACE(kto, co) cout << kto << ": " << co << endl
 	#define TRACE2(kto, co1, co2) cout << kto << ": " << co1 << co2 << endl
@@ -17,8 +21,6 @@
 
 #include <stdexcept>
 #include <string>
-
-using namespace std;
 
 class RTSError : public runtime_error {
     public:

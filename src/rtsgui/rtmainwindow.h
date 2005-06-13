@@ -1,17 +1,11 @@
 #ifndef RTMAINWINDOW_H
 #define RTMAINWINDOW_H
 
-//#include <gtkmm/main.h>
-//#include <gtkmm/button.h>
-//#include <gtkmm/window.h>
-//#include <gtkmm/frame.h>
-//#include <gtkmm/notebook.h>
-
 #include <vector>
 #include <gtkmm.h>
 
 #include "../xmlconfigfile.h"
-#include "guimodule.h"
+#include "../modules/module.h"
 
 /*
  * No description
@@ -29,7 +23,7 @@ class RTMainWindow : public Gtk::Window {
 		bool OnTimeOut();
 
 	private:
-		std::vector<GuiModule*>	guiModules;
+		std::vector<ModuleGui*>	guiModules;
         Gtk::ScrolledWindow		scrollWindow;
         Gtk::VBox				mainBox, modulesBox;
         Gtk::Label              cpuUsageLabel;

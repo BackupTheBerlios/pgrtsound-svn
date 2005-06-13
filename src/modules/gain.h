@@ -4,7 +4,8 @@
 #include "module.h"
 
 /**
- * Modul mnozenia. Mnozy skalarnie dwa sygnaly wejsciowe.
+ * Modul mnozenia.
+ * Mnozy skalarnie dwa sygnaly wejsciowe.
  */
 class Gain : public Module
 {

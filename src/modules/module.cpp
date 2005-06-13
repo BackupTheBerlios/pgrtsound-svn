@@ -61,6 +61,7 @@ Output::Output(string name_) {
 }
 
 Output::~Output() {
+	delete signal;
 }
 
 void  Output::SetSignal(float* sig) {
@@ -84,37 +85,28 @@ float* Output::GetSignal() const {
 }
 
 //------------------------------------------------------------------------------
+/**
+ * Konstruktor.
+ * Poprawne utworzenie obiektu modulu wymaga podania jego typu oraz nazwy.
+ * @param type_ Rozpoznawany przez system typ modulu
+ * @param name_ Oczekiwana nazwa modulu
+ */
 Module::Module(string type_, string name_) {
 	type = type_;
 	name = name_;
+	gui = NULL;
 }
 
 Module::~Module() {
-	int i;
-	float* temp;
-
-	TRACE2("Module::~Module", "Sprzatam modul ", name);
-/*	// czy to naprawde usuwa bufory?
-	for(unsigned i = 0; i < outputs.size(); i++) {
-        temp = outputs[i]->GetSignal();
-		delete []temp;
-	}
-*/	
-    for (int i = 0; i < GetInputCount(); i++) {
-        delete inputs[i];        
-    }
-    inputs.clear();
-    
-    for (int i = 0; i < GetOutputCount(); i++) {
-        delete outputs[i];
-    }
-    outputs.clear();
-    
-	TRACE3("Module::~Module", "Modul ", name, " sprzatniety");
+	TRACE3("Module::~Module()", GetName(), " Sprzatam GUI: ", gui);
+   	delete gui;
+  	gui = NULL;
 }
 
 /**
- * Dodanie parametru
+ * Dodanie parametru do modulu.
+ * Po dodaniu parametru, zwraca numer identyfikujacy je w module.
+ * @param param Wskaznik do obiektu parametru, ktory chcemy dodac
  */
 int Module::AddParameter(Parameter *param) {
 	parameters.push_back(param);
@@ -122,8 +114,9 @@ int Module::AddParameter(Parameter *param) {
 }
 
 /**
- * Dodanie wejscia
- * Funkcja po dodaniu wejscia zwraca numer idnetyfikujacy to wejscie w module.
+ * Dodanie wejscia do modulu.
+ * Funkcja po dodaniu wejscia, zwraca numer idnetyfikujacy to wejscie w module.
+ * @param input Wskaznik do obiektu wejscia, ktory chcemy dodac
  */
 int Module::AddInput(Input* input) {
 	input->SetID( inputs.size() );
@@ -132,7 +125,9 @@ int Module::AddInput(Input* input) {
 }
 
 /**
- * Dodanie wyjscia
+ * Dodanie wyjscia do modulu.
+ * Po dodania wyjscia zwraca numer identyfikujacy je w module.
+ * @param output Wskaznik do obiektu wyjscia, ktory chcemy dodac
  */
 int Module::AddOutput(Output* output) {
 	float* outBuff;
@@ -151,7 +146,9 @@ int Module::AddOutput(Output* output) {
 }
 
 /**
- *	Laczy wejscie bierzacego modulu z wyjsciem innego
+ *	Laczy wejscie biezacego modulu z wyjsciem innego.
+ * @param numInput Numer wejscia beirzacego modulu
+ * @param sourceSignal Wskaznik do bufora wyjciowego wysjcia, do ktorege sie podlaczamy
  */
 void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 	if(numInput > inputs.size()) {
@@ -163,7 +160,9 @@ void Module::ConnectInputTo(int numInput, float *sourceSignal) {
 }
 
 /**
- * Funckja przetwarzania. Musi zostac zredefiniowana w kazdym module.
+ * Funckja przetwarzania.
+ * Definiuje realizowana przez modul funckje DSP. Funkcja ta wywolywana jest przez
+ * algorytm raz dla pojedynczego kroku (dlugosci bloku probek) syntezy.
  */
 void Module::Process() {
 	// nic sie nie dzieje
@@ -176,34 +175,54 @@ void Module::Process() {
 void Module::Init() {
 }
 
-/*void Module::SetID(int newID) {
-	id = newID;
-}*/
-
+/**
+ * Ustalenie nazwy modulu.
+ * Nazwa modulu musi byc jest jednoznaczna w skali calego systemu.
+ */
 void Module::SetName(string newName) {
 	name = newName;
 }
 
-/*int Module::GetID() const {
-	return id;
-}*/
-
+/**
+ * Zwraca nazwe obiektu.
+ */
 string Module::GetName() const {
 	return name;
 }
 
+/**
+ * Zwraca typ modulu.
+ */
 string Module::GetType() const {
 	return type;
 }
 
+/**
+ * Zwraca liczbe parametrow modulu.
+ */
 int Module::GetParameterCount() const {
 	return parameters.size();
 }
 
+/**
+ * Zwraca liczbe wyjsc modulu.
+ */
 int Module::GetOutputCount() {
     return outputs.size();   
 }
 
+/**
+ * Zwraca liczbe wejsc modulu.
+ */
 int Module::GetInputCount() {
     return inputs.size();
+}
+
+/**
+ * Zwraca wskaznik do obiektu interfejsu graficznego modulu.
+ * Jezeli modul nie ma zdefiniowanego interfejsu zwraca NULL. W przeciwnym wypadku
+ * zwrocony powinien zostac wskaznik typu ModuleGui.
+ */
+ModuleGui*  Module::GetGui() {
+	return NULL;
 }

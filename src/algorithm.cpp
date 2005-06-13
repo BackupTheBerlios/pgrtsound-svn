@@ -2,6 +2,11 @@
 
 extern void SetNullBuffer(unsigned long);
 
+/** Konstruktor.
+ * Utworznie obiektu algorytmu wymaga podania dlugosci bloku probek (przetwarznie
+ * odbywa sie blokowo).
+ * @param fpb Dlugosc bloku probek (frames per block).
+ */
 Algorithm::Algorithm(unsigned long fpb) {
 	framesPerBlock = fpb;
 	Module::framesPerBlock = fpb;
@@ -11,16 +16,14 @@ Algorithm::Algorithm(unsigned long fpb) {
 }
 
 Algorithm::~Algorithm() {
-//	TRACE3("Algorithm", "Sprzatanie algorytmu (", modules.size(), " modulow)...");
-//
-//	delete modules[0];
-//	delete modules[1];
-//
-//    for (int i = 2; i < modules.size(); i++) {
-//        delete modules[i];
-//    }
-//
-//	TRACE("Algorithm", "Bye!");
+	TRACE3("Algorithm", "Sprzatanie algorytmu (", GetModulesCount(), " modulow)...");
+
+	Module* mod;
+	for(mod = GetFirstModule(); mod; mod = GetNextModule()) {
+		delete mod;
+	}
+
+	TRACE("Algorithm", "Bye!");
 }
 
 void Algorithm::InitAudioPorts() {
@@ -44,6 +47,10 @@ void Algorithm::InitAudioPorts() {
 	TRACE("Algorithm::Algorithm()", "Dodano moduly AudioPortIn i AudioPortOut");
 }
 
+/** Dodanie modulu.
+ * @param type Rozpoznawany prez system typ modulu.
+ * @param name Oczekwiana nazwa modulu.
+ */
 ModuleId Algorithm::AddModule(string type, string name) {
 	Module* mod = moduleFactory.CreateModule(type);
 	mod->SetName(name);
@@ -104,7 +111,7 @@ void Algorithm::PrintInfo(void) {
 
 /**
  * Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
- * wejsciem i wyjsciem dwoch roznych modulow.
+ * wejsciem i wejsciem dwoch roznych modulow.
  * @param moduleId1 Identyfikator modulu zrodlowego
  * @param outputId Identyfiaktor wyjscia modulu zrodlowego
  * @param moduleId2 Identyfikator modulu docelowego
@@ -138,7 +145,7 @@ ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId,
 
 /**
  * Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
- * wyjsciem i wyjsciem dwoch roznych modulow o podanych nazwach.
+ * wyjsciem i wejsciem dwoch roznych modulow o podanych nazwach.
  * @param moduleName1 Nazwa modulu zrodlowego
  * @param outputId Identyfiaktor wyjscia modulu zrodlowego
  * @param moduleName2 Nazwa modulu docelowego
@@ -197,7 +204,7 @@ void Algorithm::CreateQueue() {
 }
 
 /**
- * Zwraca ilosc modulow grafie algorytmu.
+ * Zwraca ilosc modulow w grafie algorytmu.
  */
 int Algorithm::GetModulesCount() const {
 	return num_vertices(graph);
@@ -247,11 +254,11 @@ void Algorithm::Init() {
 Module* Algorithm::GetModule(string moduleName) const {
     //poprawiono b³¹d gdy modu³u nie by³o :)
     if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
-        TRACE("Algorithm::GetModule(string moduleName)", "Znaleziono");
+        //TRACE("Algorithm::GetModule(string moduleName)", "Znaleziono");
     	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
 		return GetModule(moduleId);
     } else {
-        TRACE("Algorithm::GetModule(string moduleName)", "Nie znaleziono");
+        //TRACE("Algorithm::GetModule(string moduleName)", "Nie znaleziono");
         return NULL;   
     }
         
@@ -261,15 +268,14 @@ Module* Algorithm::GetModule(string moduleName) const {
  * Dostep do ModuluId. Zwraca  ModulId o podanej nazwie.
  * @param moduleName Nazwa dociekanego ModuluId
  */
-
 ModuleId  Algorithm::GetModuleId(string moduleName) const {
     //poprawiono b³¹d gdy modu³u nie by³o :)
     if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
-        TRACE("Algorithm::GetModuleId(string moduleName)", "Znaleziono");
+        //TRACE("Algorithm::GetModuleId(string moduleName)", "Znaleziono");
     	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
 		return moduleId;
     } else {
-        TRACE("Algorithm::GetModuleId(string moduleName)", "Nie znaleziono");
+        //TRACE("Algorithm::GetModuleId(string moduleName)", "Nie znaleziono");
         return NULL;   
     }    
 }
@@ -290,11 +296,17 @@ Module* Algorithm::GetOutputPort() const {
 	return outputPort;
 }
 
+/**
+ * Zwraca pierwszy modulu w grafie algorytmu.
+*/
 Module* Algorithm::GetFirstModule() {
     boost::tie(moduleIterator, moduleIteratorLast) = vertices(graph);
     return boost::get(boost::vertex_name, graph, *moduleIterator);
 }
 
+/**
+  Zwraca kolejny modulu w grafie algorytmu.
+*/
 Module* Algorithm::GetNextModule() {
 	if(++moduleIterator != moduleIteratorLast)
 	    return boost::get(boost::vertex_name, graph, *moduleIterator);
@@ -302,6 +314,10 @@ Module* Algorithm::GetNextModule() {
 		return NULL;
 }
 
+/**
+ * Usuwanie modulu z grafu.
+ * @param moduleId Identyfikator modulu
+*/
 void Algorithm::DeleteModule(ModuleId moduleId) {
     //usuwanie z mapy
 	moduleName2IdMap.erase(GetModule(moduleId)->GetName());

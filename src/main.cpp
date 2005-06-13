@@ -37,11 +37,6 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-	algo.PrintInfo();
-	ModuleId mid  = algo.AddModule("gain", "moje gajn");
-	algo.PrintInfo();
-	algo.DeleteModule(mid);
-	
 	try {
 		audio.PrintDevices();
 		audio.SetCallback(paCallback, (void*)&algo);
@@ -64,7 +59,8 @@ int main(int argc, char *argv[]) {
 			running = false;
 		}
 	}
-
+	
+	algo.Clear();
 
 	return EXIT_SUCCESS;
 }

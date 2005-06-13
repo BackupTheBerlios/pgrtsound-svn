@@ -8,6 +8,7 @@
 #include <math.h>
 
 #include "module_parameters.h"
+#include "guis/modulegui.h"
 #include "../debug.h"
 
 #ifndef M_PI
@@ -25,10 +26,10 @@ void SetNullBuffer(unsigned long size);
 
 //------------------------------------------------------------------------------
 /**
- * Wyjscie modulu
+ * Wyjscie modulu.
  * Klasa obietkow zwiazanych z kazdym wyjsciem modulu. Obiekty
  * te przechowuja miedzy innymi nazwe i identyfikator wjescia a takze
- * odpowiadaja za zarzadzanie buforem wyjsciowym.
+ * buforem wyjsciowym.
  */
 class Output {
 	public:
@@ -41,9 +42,9 @@ class Output {
 		void	SetSignal(float* sig);
 		
 	protected:
-		int		id;		/**< Numer idetyfikujacy wejscie */
-		string	name;	/**< Nazwa wejscia */
-		float*	signal;	/**< Wskaznik na bufor wyjscia */
+		int		id;		// numer idetyfikujacy wejscie
+		string	name;	// nazwa wejscia
+		float*	signal;	// wskaznik na bufor wyjsciowy
 };
 
 //------------------------------------------------------------------------------
@@ -81,8 +82,9 @@ class Module {
         vector<Input*>		inputs;			/**< Wektor wejsc. */
         vector<Output*>		outputs;	    /**< Wektor wyjsc. */
         vector<Parameter*>	parameters;		/**< Wektor parametrow. */
-        string	name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
-		string	type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+        string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
+		string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+		ModuleGui*	gui;
 
 	public:
   		static int		framesPerBlock;
@@ -105,6 +107,7 @@ class Module {
 		Input*		GetInput(int inputID);
 		Output*		GetOutput(int outputID);
 		Parameter*	GetParameter(int pID);
+		virtual ModuleGui* GetGui();
 };
 
 inline Input* Module::GetInput(int inputID) {

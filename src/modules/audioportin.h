@@ -4,7 +4,7 @@
 #include "module.h"
 
 /**
- * No description
+ * Modul wejscia audio systemu (algorytmu)
  */
 class AudioPortIn : public Module {
 	public:

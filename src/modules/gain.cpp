@@ -1,7 +1,7 @@
 #include "gain.h"
 
 Gain::Gain() : Module("gain", "New gain"),
-	iIn("inputexxxx"), oOut("output"), pGain("gain", gtSlider)
+	iIn("inputexxxx"), oOut("output"), pGain("gain", gtInvisible)
  {
 	AddInput(&iIn);
 	AddOutput(&oOut);
