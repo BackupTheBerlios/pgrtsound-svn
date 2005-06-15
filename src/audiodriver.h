@@ -53,6 +53,7 @@ class AudioDriver
 		void SetHost(PaHostApiIndex hNum);
 		void SetDevices(PaDeviceIndex inDevNum, PaDeviceIndex outDevNum);
 		float GetCPUUsage() const;
+		double GetSampleRate() const;
 		int GetInputDeviceCount() const;
 		int GetOutputDeviceCount() const;
 		int GetHostCount() const;

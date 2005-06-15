@@ -319,3 +319,7 @@ void AudioDriver::SetHost(PaHostApiIndex hNum) {
 	hostNum = hNum;
 }
 
+double AudioDriver::GetSampleRate() const {
+	return sampleRate;
+}
+

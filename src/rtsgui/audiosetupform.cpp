@@ -64,6 +64,9 @@ AudioSetupForm::AudioSetupForm(AudioDriver* audioDrv) :
 	cboxHost.set_active( audioDriver->GetCurrentHostNum() );
 	cboxInDevice.set_active( audioDriver->GetCurrentInputDeviceNum() );
 	cboxOutDevice.set_active( audioDriver->GetCurrentOutputDeviceNum() );
+	// czest. probkowania hmmm... brzydko
+	char txt[10]; g_snprintf( txt, 10, "%#d", (int)audioDriver->GetSampleRate() );
+	cboxSR.set_active_text(txt);
 
 	// sygnaly przyciskow i comboboxow
 	buttonApply.signal_clicked().connect( sigc::mem_fun(this, &AudioSetupForm::OnApply) );
