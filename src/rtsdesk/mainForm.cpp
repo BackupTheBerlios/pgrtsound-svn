@@ -171,15 +171,14 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
             if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
             {
                 //zczytanie wartosci parametru do modu³u
-                if ((rtsModuleActive->GetParameter(i)->GetGUIType() == gtSlider) or 
-                    (rtsModuleActive->GetParameter(i)->GetGUIType() == gtProperty))
+                if ((rtsModuleActive->GetParameter(i)->GetGUIType() == gtProperty))
                 {
                     ParameterFloat* param =
 						(ParameterFloat*)rtsModuleActive->GetParameter(i);					
 					param->SetValue(atof(((Gtk::Entry *)widgetList[2*i+1])->get_text().c_str()));
                 }
                 
-                if (rtsModuleActive->GetParameter(i)->GetGUIType() == gtEditBox)
+                if (rtsModuleActive->GetParameter(i)->GetGUIType() == gtParameter)
                 {
                     ParameterString* param =
 						(ParameterString*)rtsModuleActive->GetParameter(i);					
@@ -212,8 +211,7 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
                 widgetList[2*i] = label;    
                 
                 //Float parameter
-                if ((rtsModuleActive->GetParameter(i)->GetGUIType() == gtSlider) or 
-                    (rtsModuleActive->GetParameter(i)->GetGUIType() == gtProperty))
+                if ((rtsModuleActive->GetParameter(i)->GetGUIType() == gtProperty))
                 {
                     Gtk::Entry* entry = new Gtk::Entry();                   
                     entry->set_text(IntToString(((ParameterFloat*)rtsModuleActive->GetParameter(i))->GetValue()));   
@@ -222,7 +220,7 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
                 }
                 
                 //String parameter    
-                if (rtsModuleActive->GetParameter(i)->GetGUIType() == gtEditBox)
+                if (rtsModuleActive->GetParameter(i)->GetGUIType() == gtParameter)
                 {
                     Gtk::Entry* entry = new Gtk::Entry();  
                     ParameterString* param = (ParameterString*)rtsModuleActive->GetParameter(i);					              

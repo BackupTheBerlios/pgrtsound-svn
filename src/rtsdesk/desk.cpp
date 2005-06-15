@@ -143,14 +143,13 @@ void Desk::SaveToFile(string filename)
                 xml+= "    <module type=\""+ deskModules[i]->GetRTSModule()->GetType()+"\" name=\""+deskModules[i]->GetRTSModule()->GetName()+"\">\n";            
                 if (deskModules[i]->GetRTSModule()->GetParameterCount()>0)
                     for (int p = 0;p<deskModules[i]->GetRTSModule()->GetParameterCount();p++) {
-                        if ((deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtSlider) or 
-                            (deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtProperty))
+                        if ((deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtProperty))
                         {
                             ParameterFloat* param =	(ParameterFloat*)deskModules[i]->GetRTSModule()->GetParameter(p);
                             xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"float\">"+IntToString(param->GetValue())+"</parameter>";
                         }
                 
-                        if (deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtEditBox) {
+                        if (deskModules[i]->GetRTSModule()->GetParameter(p)->GetGUIType() == gtParameter) {
                             ParameterString* param = (ParameterString*)deskModules[i]->GetRTSModule()->GetParameter(p);					
 					       xml+= "        <parameter number=\""+IntToString(p)+"\" type=\"string\">"+param->GetText()+"</parameter>";
                         }               
