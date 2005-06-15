@@ -1,11 +1,21 @@
 #ifndef SINOSC2_H
 #define SINOSC2_H
 
-#include "module.h" // inheriting class's header file
+#include <math.h>
+
+#include "module.h"
 
 /**
- * No description
- */
+ Oscylator sisnusoidalny.
+ Prosty tablicoyw oscylator o sinusoidalnym ksztlacie fali. Zakres i skos
+ czestoltiowsc oscylatora jest ograniczony wymiarami tablicy.
+
+ - Wejscia
+    -# freq Zadaje czestotliowsc [Hz] oscylatora
+    -# ampl Decyduje o amplitudzie przebiegu wyjsciowego
+ - Wyjscia
+    -# out Przebieg sinusoidalny o wartosciach z przedzialu [-1; 1]
+*/
 class SinOsc2 : public Module {
 	public:
 		SinOsc2();

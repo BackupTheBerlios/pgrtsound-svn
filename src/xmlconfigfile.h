@@ -20,6 +20,7 @@ class XMLConfigFile
 		
 		void OpenFile(const char * fileName);
 		void LoadAlgorithm(Algorithm* algo);
+		void LoadAlgorithmSettings(Algorithm* algo);
 		void LoadAudioDriveSettings(AudioDriver* audio);
 		void LoadModules(Algorithm* algo);
 		void LoadParameters(Algorithm* algo);

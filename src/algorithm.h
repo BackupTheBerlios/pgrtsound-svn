@@ -56,12 +56,14 @@ class Algorithm {
 	public:
   		Algorithm(unsigned long framesPerBlock);
 		~Algorithm();
-		void	     Process();
-		void          Clear();
-		void          Init();
-		void          PrintInfo();
-		void          CreateQueue();
-		void 	      SetSampleRate(float sRate);
+		void			Process();
+		void			Clear();
+		void			Init();
+		void			PrintInfo();
+		void			CreateQueue();
+		void			SetSampleRate(float sRate);
+		void            SetName(string newName);
+		string          GetName();
 		Module*       GetModule(ModuleId moduleId) const;
 		Module*       GetModule(string moduleName) const;
 		ModuleId      GetModuleId(string moduleName) const;
@@ -80,6 +82,7 @@ class Algorithm {
 							string moduleName2, int inputId);
 
 	private:
+		string                  name;
 		Graph					graph;
 		float					sampleRate;
 		unsigned long			framesPerBlock;
@@ -90,7 +93,7 @@ class Algorithm {
 		Module*					outputPort;
 		ModuleIterator		    moduleIterator;
 		ModuleIterator		    moduleIteratorLast;
-		
+
 		void InitAudioPorts();
 };
 

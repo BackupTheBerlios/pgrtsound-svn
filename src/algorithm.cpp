@@ -11,7 +11,7 @@ Algorithm::Algorithm(unsigned long fpb) {
 	framesPerBlock = fpb;
 	Module::framesPerBlock = fpb;
 	SetNullBuffer(fpb);
-
+	name = "New algorithm";
 	InitAudioPorts();
 }
 
@@ -44,7 +44,7 @@ void Algorithm::InitAudioPorts() {
 	moduleName2IdMap.insert( make_pair("AudioPortOut", moduleId) );
 	outputPort = module;
 
-	TRACE("Algorithm::Algorithm()", "Dodano moduly AudioPortIn i AudioPortOut");
+	TRACE("Algorithm::InitAudioPorts()", "Dodano moduly AudioPortIn i AudioPortOut");
 }
 
 /** Dodanie modulu.
@@ -335,6 +335,12 @@ void Algorithm::DeleteConnection(ConnectionId connectionId) {
 }
 
 void Algorithm::DeleteConnection(ModuleId moduleId) {
-    
 }
 
+void Algorithm::SetName(string newName) {
+	name = newName;
+}
+
+string Algorithm::GetName() {
+	return name;
+}

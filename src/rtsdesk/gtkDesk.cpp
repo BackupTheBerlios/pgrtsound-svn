@@ -35,7 +35,6 @@ void GtkDesk::on_realize()
 
 bool GtkDesk::on_expose_event(GdkEventExpose* /* event */)
 { 
-
     // This is where we draw on the window
     int x1=-1,y1=-1,x2=-1,y2=-1;
     Glib::RefPtr<Gdk::Window> window = get_window();

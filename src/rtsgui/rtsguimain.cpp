@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <gtkmm/main.h>
+
 #include "rtmainwindow.h"
 
 // logowanie do pliku

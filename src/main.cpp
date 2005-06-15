@@ -17,9 +17,10 @@ streambuf* out = cout.rdbuf(logfile.rdbuf());
 
 //------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
-	AudioDriver audio;
     Algorithm algo(FRAMES_PER_BLOCK);
+	AudioDriver audio;
 	XMLConfigFile xmlConfig;
+
 	char c = ' ';
     bool running = false;
 
@@ -40,8 +41,8 @@ int main(int argc, char *argv[]) {
 	try {
 		audio.PrintDevices();
 		audio.SetCallback(paCallback, (void*)&algo);
-		audio.EnableInput();
-		audio.Open(SAMPLE_RATE, FRAMES_PER_BLOCK, 0); // gotowi do grania
+		audio.SetSampleRate(SAMPLE_RATE);
+		audio.Open(); // gotowi do grania
 	}	catch (AudioDriverError& error) {
         cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
         exit(1);

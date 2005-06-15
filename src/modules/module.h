@@ -5,10 +5,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <math.h>
 
 #include "module_parameters.h"
-#include "guis/modulegui.h"
+#include "module_io.h"
 #include "../debug.h"
 
 #ifndef M_PI
@@ -24,53 +23,6 @@ using namespace std;
 
 void SetNullBuffer(unsigned long size);
 
-//------------------------------------------------------------------------------
-/**
- * Wyjscie modulu.
- * Klasa obietkow zwiazanych z kazdym wyjsciem modulu. Obiekty
- * te przechowuja miedzy innymi nazwe i identyfikator wjescia a takze
- * buforem wyjsciowym.
- */
-class Output {
-	public:
-				Output(string name_);
-				~Output();
-		int		GetID() const;
-		string	GetName() const;
-		float*	GetSignal() const;
-		void	SetID(int newID);
-		void	SetSignal(float* sig);
-		
-	protected:
-		int		id;		// numer idetyfikujacy wejscie
-		string	name;	// nazwa wejscia
-		float*	signal;	// wskaznik na bufor wyjsciowy
-};
-
-//------------------------------------------------------------------------------
-/**
- * Wejscie modulu.
- * Pelni zadanie podobne jak klasa Output, ale dla wejsc modulu.
- */
-class Input {
-	public:
-				Input(string name_);
-				~Input();
-		int		GetID() const;
-		int		GetIDModule() const;
-		int 	GetIDModuleOutput() const;
-		string	GetName() const;
-		float*	GetSignal();
-		void	SetID(int newID);
-		void	SetSignal(float* sig);
-
-	protected:
-		int		id;		           /**< Numer idetyfikujacy wejscie */
-		string	name;	           /**< Nazwa wejscia */
-		float*	signal;	           /**< Wskaznik na podlaczony do wejscia bufor */
-};
-
-//------------------------------------------------------------------------------
 /**
  * Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
  * Takze autorzy zewnetrznych modulow musza dostosowac sie do tego interfejsu.
@@ -84,7 +36,6 @@ class Module {
         vector<Parameter*>	parameters;		/**< Wektor parametrow. */
         string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
 		string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
-		ModuleGui*	gui;
 
 	public:
   		static int		framesPerBlock;
@@ -107,7 +58,6 @@ class Module {
 		Input*		GetInput(int inputID);
 		Output*		GetOutput(int outputID);
 		Parameter*	GetParameter(int pID);
-		virtual ModuleGui* GetGui();
 };
 
 inline Input* Module::GetInput(int inputID) {

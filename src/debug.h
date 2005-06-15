@@ -5,6 +5,8 @@
 
 using namespace std;
 
+#define PR(x) cout << #x ": " << x << endl;
+
 #ifndef NDEBUG
 	#define TRACE(kto, co) cout << kto << ": " << co << endl
 	#define TRACE2(kto, co1, co2) cout << kto << ": " << co1 << co2 << endl

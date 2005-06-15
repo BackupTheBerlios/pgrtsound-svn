@@ -4,33 +4,38 @@
 #define FRAMES_PER_BUFFER 256
 
 RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER) {
+	TRACE("RTMainWindow::RTMainWindow()", "Tworze okno...");
+
 	set_title("Real Time GUI");
 	set_size_request(300, 550);
 
-	TRACE("RTMainWindow::RTMainWindow()", "Tworze okno...");
-
 	// menu i akcje
-	m_refActionGroup = Gtk::ActionGroup::create();
+	ActionGroup = Gtk::ActionGroup::create();
 
 	//File menu:
-	m_refActionGroup->add( Gtk::Action::create("FileMenu", "File") );
-	m_refActionGroup->add( Gtk::Action::create("OpenFile", Gtk::Stock::OPEN),
+	ActionGroup->add( Gtk::Action::create("FileMenu", "File") );
+	ActionGroup->add( Gtk::Action::create("OpenFile", Gtk::Stock::OPEN),
 		sigc::mem_fun(*this, &RTMainWindow::OnOpenFile) );
-	m_refActionGroup->add( Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
+	ActionGroup->add( Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
 		sigc::mem_fun(*this, &RTMainWindow::OnMenuFileQuit) );
 
 	//Transport menu:
-	m_refActionGroup->add( Gtk::Action::create("TransportMenu", "Transport") );
-	m_refActionGroup->add( Gtk::Action::create("Play", Gtk::Stock::MEDIA_PLAY, "Play", "Starts audio"),
+	ActionGroup->add( Gtk::Action::create("TransportMenu", "Transport") );
+	ActionGroup->add( Gtk::Action::create("Play", Gtk::Stock::MEDIA_PLAY, "Play", "Starts audio"),
 		sigc::mem_fun(*this, &RTMainWindow::OnPlay) );
-	m_refActionGroup->add( Gtk::Action::create("Stop", Gtk::Stock::MEDIA_STOP, "Stop", "Stops audio"),
+	ActionGroup->add( Gtk::Action::create("Stop", Gtk::Stock::MEDIA_STOP, "Stop", "Stops audio"),
 		sigc::mem_fun(*this, &RTMainWindow::OnStop) );
+
+	// Setup menu
+	ActionGroup->add( Gtk::Action::create("SetupMenu", "Setup") );
+	ActionGroup->add( Gtk::Action::create("AudioDevices", Gtk::Stock::PREFERENCES, "Audio devices...", "Setup audio devices"),
+		sigc::mem_fun(*this, &RTMainWindow::OnAudioSetup) );
 
 	//Help menu:
 	//  m_refActionGroup->add( Gtk::Action::create("HelpMenu", "Help") );
-	m_refUIManager = Gtk::UIManager::create();
-	m_refUIManager->insert_action_group(m_refActionGroup);
-	add_accel_group(m_refUIManager->get_accel_group());
+	UIManager = Gtk::UIManager::create();
+	UIManager->insert_action_group(ActionGroup);
+	add_accel_group(UIManager->get_accel_group());
 
 	//Layout the actions in a menubar and toolbar:
 	try	{
@@ -46,6 +51,9 @@ RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER) {
 		    "      <menuitem action='Play'/>"
 		    "      <menuitem action='Stop'/>"
 		    "    </menu>"
+   		    "    <menu action='SetupMenu'>"
+		    "      <menuitem action='AudioDevices'/>"
+		    "    </menu>"
 		    "  </menubar>"
 		    "  <toolbar  name='ToolBar'>"
 		    "    <toolitem action='Play'/>"
@@ -53,21 +61,20 @@ RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER) {
 		    "    <toolitem action='FileQuit'/>"
 		    "  </toolbar>"
 		    "</ui>";
-
-			m_refUIManager->add_ui_from_string(ui_info);
+			UIManager->add_ui_from_string(ui_info);
 	}
 	catch(const Glib::Error& ex) {
 		std::cerr << "building menus failed: " <<  ex.what();
 	}
-	
+
     add(mainBox);
 
    	//Get the menubar and toolbar widgets, and add them to a container widget:
-	Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
+	Gtk::Widget* pMenubar = UIManager->get_widget("/MenuBar");
 	if(pMenubar)
     	mainBox.pack_start(*pMenubar, Gtk::PACK_SHRINK);
     	
-	Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar") ;
+	Gtk::Widget* pToolbar = UIManager->get_widget("/ToolBar") ;
 	if(pToolbar)
 		mainBox.pack_start(*pToolbar, Gtk::PACK_SHRINK);
 
@@ -86,46 +93,41 @@ RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER) {
 
 	scrollWindow.add(modulesBox);
 
-	// timer
+	// timer CPU usage
 	my_slot = sigc::mem_fun(*this, &RTMainWindow::OnTimeOut);
 	conn = Glib::signal_timeout().connect(my_slot, 1000);
+
+	fileLoaded = false;
+	AllowPlay(false);
+	AllowStop(false);
 
 	TRACE("RTMainWindow::RTMainWindow()", "Okno aplikacji utworzone");
 }
 
 RTMainWindow::~RTMainWindow() {
-//	TRACE("RTMainWindow::~RTMainWindow()", "Usuwanie parametrow i modulow...");
-//	for(int i = 0; i < guiParameters.size(); i++) {
-//		delete guiParameters[i];
-//	}
-
-//	for(int i = 0; i < guiModules.size(); i++) {
-//		delete guiModules[i];
-//	}
-//	TRACE("RTMainWindow::~RTMainWindow()", "Usuniete");
+	TRACE("RTMainWindow::~RTMainWindow()", "Usuwanie parametrow i modulow...");
+	ClearModules();
+	TRACE("RTMainWindow::~RTMainWindow()", "Usuniete");
 }
 
 void RTMainWindow::AddModule(Module* module) {
-	ModuleGui*	moduleGui;
-	Parameter*	param;
-	int			paramCount;
+   	TRACE3("RTMainWindow::AddModule()", "Dodaje GUI dla modul '", module->GetName(), "'");
+    GuiModule*		guiModule;
+    Gtk::Widget*	gui;
 
-	paramCount = module->GetParameterCount();
-
-	for(int m = 0; m < paramCount; m++) {
-		param = module->GetParameter(m);
-
-		if( param->GetGUIType() == gtParameter ) {
-           	TRACE2("RTMainWindow::AddModule()", "Dodaje modul...", module->GetName());
-			// beda jakies widoczne parametry tego modulu wiec go dodajmy
-			moduleGui = module->GetGui();
-			guiModules.push_back(moduleGui);
-			moduleGui->set_label( module->GetName() );
-			
-			modulesBox.pack_start(*moduleGui, Gtk::PACK_SHRINK);
-			TRACE("RTMainWindow::AddModule()", "Modul dodany");
-			//break;
-		}
+	// tworzymy GuiModule
+	guiModule = guiModuleFactory.CreateGuiModule(module);
+	guiModules.push_back(guiModule);
+	
+	gui = guiModule->GetGui();
+	if(gui != NULL) {
+		// jest GUI, wiec tworzymy ramke i dodajemy je
+		Gtk::Frame* frame = new Gtk::Frame;
+		guis.push_back(frame);
+		frame->add(*gui);
+		frame->set_label( module->GetName() );
+		modulesBox.pack_start(*frame, Gtk::PACK_SHRINK);
+		TRACE("RTMainWindow::AddModule()", "GUI dodane");
 	}
 }
 
@@ -161,7 +163,7 @@ void RTMainWindow::OnOpenFile() {
 		    }
 
 			try {
-			    xmlConfig.OpenFile(filename.c_str());
+			    xmlConfig.OpenFile( filename.c_str() );
 				algo.SetSampleRate(44100);
 				algo.Clear();
 				xmlConfig.LoadAlgorithm(&algo);
@@ -175,8 +177,8 @@ void RTMainWindow::OnOpenFile() {
 			try {
 		        //audio.PrintDevices();
 				audio.SetCallback(paCallback, (void*)&algo);
-				audio.EnableInput();
-				audio.Open(44100.0, FRAMES_PER_BUFFER, 0); // gotowi do grania
+				audio.SetSampleRate(44100.0);
+				audio.Open();
 			}	catch (AudioDriverError& error) {
 		        cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
 		        exit(1);
@@ -186,9 +188,14 @@ void RTMainWindow::OnOpenFile() {
 
 			Module* mod;
 			for(mod = algo.GetFirstModule(); mod; mod = algo.GetNextModule()) {
-				if(mod->GetParameterCount() > 0) AddModule(mod);
+				//if(mod->GetParameterCount() > 0) AddModule(mod);
+				AddModule(mod);
 			}
 
+			fileLoaded = true;
+			AllowPlay(true);
+
+			set_title( "Real Time GUI - " + algo.GetName() );
 			modulesBox.show_all_children();
 			break;
 		}
@@ -197,10 +204,14 @@ void RTMainWindow::OnOpenFile() {
 
 void RTMainWindow::OnPlay() {
 	audio.Start();
+	AllowPlay(false);
+	AllowStop(true);
 }
 
 void RTMainWindow::OnStop() {
     audio.Stop();
+   	AllowStop(false);
+  	if(fileLoaded) AllowPlay(true);
 }
 
 void RTMainWindow::OnMenuFileQuit() {
@@ -208,12 +219,26 @@ void RTMainWindow::OnMenuFileQuit() {
 }
 
 void RTMainWindow::ClearModules() {
-	TRACE("RTMainWindow::ClearModules()", "Czyszcze moduly...");
+	TRACE("RTMainWindow::ClearModules()", "Czyszcze...");
 
+    typedef vector<GuiModule*>::iterator GuiModIt;
+	for(GuiModIt it = guiModules.begin(); it != guiModules.end(); it++) {
+		delete *it;
+	}
 	guiModules.clear();
+	
+	TRACE("RTMainWindow::ClearModules()", "GuiModules wyczyszczone");
+	
+    typedef vector<Gtk::Frame*>::iterator GuiIt;
+	for(GuiIt it = guis.begin(); it != guis.end(); it++) {
+		delete *it;
+	}
+	guis.clear();
+	TRACE("RTMainWindow::ClearModules()", "GUI's wyczyszczone");
 
-	TRACE("RTMainWindow::ClearModules()", "Moduly wyczyszczone");
 	show_all_children();
+	TRACE("RTMainWindow::ClearModules()", "Moduly wyczyszczone");
+	
 }
 
 bool RTMainWindow::OnTimeOut() {
@@ -222,4 +247,25 @@ bool RTMainWindow::OnTimeOut() {
 	cpuUsageLabel.set_label(txt);
 	
 	return true;
+}
+
+void RTMainWindow::OnAudioSetup() {
+    TRACE("RTMainWindow::OnAudioSetup()", "Uruchamiam okno konfiguracji urzadzen audio...");
+    
+	OnStop();
+
+	AudioSetupForm asForm(&audio);
+    Gtk::Main::run(asForm);
+    //area->on_expose_event(NULL);
+    show_all_children();
+	TRACE("RTMainWindow::OnAudioSetup()", "Konfiguracja zakonczona");
+}
+
+void RTMainWindow::AllowPlay(bool allow) {
+	//Glib::RefPtr<Gtk::Action>::cast_static( ActionGroup->get_action("Play") )->set_sensitive(allow);
+	ActionGroup->get_action("Play")->set_sensitive(allow);
+}
+
+void RTMainWindow::AllowStop(bool allow) {
+	ActionGroup->get_action("Stop")->set_sensitive(allow);
 }

@@ -21,11 +21,33 @@ void XMLConfigFile::OpenFile(const char * filename) {
 }
 
 /**
- * Wczytuje algorytm opisany w pliku
- * @param algo Wskaznik do konfigurowanego algorytmu
+ Wczytuje atrybuty algorytmu.
+ Wczytana zostaje miedzy innymi nazwa alogrytmu.
+ 
+ @param algo Wskaznik do konfigurowanego algorytmu
+*/
+void XMLConfigFile::LoadAlgorithmSettings(Algorithm* algo) {
+    TRACE("XMLConfigFile::LoadAlgorithmSettings()", "Wczytywanie ustawien algorytmu...");
+	TiXmlElement* algoXmlElem;
+	TiXmlNode* algoXmlNode;
+	string algoName;
+
+    TiXmlHandle docHandle( &document );
+	algoXmlNode = docHandle.FirstChild( "algorithm" ).Node();
+	if(algoXmlElem != NULL) {
+       	algoXmlElem = algoXmlNode->ToElement();
+		if( algoXmlElem->Attribute("name") )
+			algo->SetName( algoXmlElem->Attribute("name") );
+	}
+}
+
+/**
+ Wczytuje algorytm opisany w pliku
+ @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadAlgorithm(Algorithm* algo) {
 	TRACE("XMLConfigFile::LoadModules()", "Wczytywanie calego algorytmu...");
+	LoadAlgorithmSettings(algo);
 	LoadModules(algo);
 	LoadParameters(algo);
 	LoadConnections(algo);
@@ -37,7 +59,6 @@ void XMLConfigFile::LoadAlgorithm(Algorithm* algo) {
   * @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadModules(Algorithm* algo) {
-
     TRACE("XMLConfigFile::LoadModules()", "Wczytywanie modulow...");
 
 	TiXmlElement* moduleXMLElem;
@@ -45,10 +66,6 @@ void XMLConfigFile::LoadModules(Algorithm* algo) {
 	string moduleName;
 	//int moduleId;
 	ModuleId moduleId;
-
-    // zmapowanie modulow specjlanych
-	//moduleName2IdMap.insert(make_pair("AudioPortIn", 0));
-	//moduleName2IdMap.insert(make_pair("AudioPortOut", 1));
 
     TiXmlHandle docHandle( &document );
 	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules" ).Child("module", 0).Node();
@@ -59,7 +76,6 @@ void XMLConfigFile::LoadModules(Algorithm* algo) {
 			moduleXMLElem = moduleXMLNode->ToElement();
 			moduleName = moduleXMLElem->Attribute("name");
 			moduleId = algo->AddModule( moduleXMLElem->Attribute("type"), moduleName );
-//			moduleName2IdMap.insert(make_pair(moduleName, graphModule));
   		}
 	}
 

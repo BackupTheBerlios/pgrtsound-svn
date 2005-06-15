@@ -24,67 +24,6 @@ void SetNullBuffer(unsigned long size) {
 }
 
 //------------------------------------------------------------------------------
-Input::Input(string name_) {
-   	name = name_;
-   	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
-   	signal = nullBuffer;
-}
-
-Input::~Input() {
-}
-
-float* Input::GetSignal() {
-	return signal;
-}
-
-void Input::SetID(int newID) {
-	id = newID;
-}
-
-void Input::SetSignal(float* sig) {
-	signal = sig;
-}
-
-int Input::GetID() const {
-	return id;
-}
-
-string Input::GetName() const {
-	return name;
-}
-
-
-
-//------------------------------------------------------------------------------
-Output::Output(string name_) {
-	name = name_;
-}
-
-Output::~Output() {
-	delete signal;
-}
-
-void  Output::SetSignal(float* sig) {
-	signal = sig;
-}
-
-void Output::SetID(int newID) {
-	id = newID;
-}
-
-int Output::GetID() const {
-	return id;
-}
-
-string Output::GetName() const {
-	return name;
-}
-
-float* Output::GetSignal() const {
-	return signal;
-}
-
-//------------------------------------------------------------------------------
 /**
  * Konstruktor.
  * Poprawne utworzenie obiektu modulu wymaga podania jego typu oraz nazwy.
@@ -94,13 +33,9 @@ float* Output::GetSignal() const {
 Module::Module(string type_, string name_) {
 	type = type_;
 	name = name_;
-	gui = NULL;
 }
 
 Module::~Module() {
-	TRACE3("Module::~Module()", GetName(), " Sprzatam GUI: ", gui);
-   	delete gui;
-  	gui = NULL;
 }
 
 /**
@@ -216,13 +151,4 @@ int Module::GetOutputCount() {
  */
 int Module::GetInputCount() {
     return inputs.size();
-}
-
-/**
- * Zwraca wskaznik do obiektu interfejsu graficznego modulu.
- * Jezeli modul nie ma zdefiniowanego interfejsu zwraca NULL. W przeciwnym wypadku
- * zwrocony powinien zostac wskaznik typu ModuleGui.
- */
-ModuleGui*  Module::GetGui() {
-	return NULL;
 }

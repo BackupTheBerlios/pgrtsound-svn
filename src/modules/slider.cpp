@@ -1,5 +1,4 @@
 #include "slider.h"
-#include "guis/slidergui.h"
 
 // class constructor
 Slider::Slider() : Module("slider", "New Slider"),
@@ -34,10 +33,3 @@ void Slider::Process() {
 	}
 }
 
-ModuleGui* Slider::GetGui() {
-	if(gui == NULL) {
-		gui = new SliderGui(this);
-	}
-	TRACE("Slider::GetGui()", gui);
-	return gui;
-}

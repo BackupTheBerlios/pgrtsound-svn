@@ -3,11 +3,14 @@
 
 #include "module.h"
 
-
-
 /**
- * No description
- */
+ Modul suwaka GUI.
+ Suwak widoczny w GUI decyduje o wartosci widczone jna wyjsciu tego modulu.
+ Ustaleniu podlega przedzial, z ktorego wartosci mozlwie sa do ustawienia.
+
+- wyjscia
+	 -# value Widoczna ustlaona polozeniem suwaka wartosc
+*/
 class Slider : public Module
 {
 	public:
@@ -15,8 +18,7 @@ class Slider : public Module
 		~Slider();
 		void Process();
 		void Init();
-		ModuleGui* GetGui();
-		
+
 	protected:
 		Output			oOut;
 		ParameterFloat	pMin;
