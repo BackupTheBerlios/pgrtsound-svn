@@ -8,6 +8,52 @@ AudioDriver::AudioDriver() {
 	framesPerBuffer = 256;
 	callbackFunction = NULL;
 	callbackData = NULL;
+	
+// 	Pa_Initialize();
+// 
+// 	// domyslnie brak urzadzen
+// 	outputParameters.device = Pa_GetDefaultOutputDevice();
+// 	//outputParameters.device = 1;
+// 	outputParameters.channelCount = 2;
+// 	outputParameters.sampleFormat = paFloat32;
+// 	outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
+// 	outputParameters.hostApiSpecificStreamInfo = NULL;
+// 
+// 	inputParameters.device = Pa_GetDefaultInputDevice();
+// 	//inputParameters.device = 1;
+// 	inputParameters.channelCount = 2;
+// 	inputParameters.sampleFormat = paFloat32;
+// 	inputParameters.suggestedLatency = Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency;
+// 	inputParameters.hostApiSpecificStreamInfo = NULL;
+	
+// 	inputParameters.device = paNoDevice;
+// 	inputParameters.channelCount = 0;
+// 	inputParameters.sampleFormat = paFloat32;
+// 	inputParameters.suggestedLatency = 0;
+// 	inputParameters.hostApiSpecificStreamInfo = NULL;
+
+	
+// 	const PaHostApiInfo* ai;
+// 	for(int i = 0; i < Pa_GetHostApiCount(); i++) {
+// 		ai = Pa_GetHostApiInfo(i);
+// 		PR(ai->name);
+// 		PR(ai->deviceCount);
+// 		cout << endl;
+// 	}	
+// 	
+// 	
+// 	int devs = Pa_GetDeviceCount();
+// 	const PaDeviceInfo* di;
+// 
+// 	for(int i = 0; i < devs; i++) {
+// 		di =Pa_GetDeviceInfo(i);
+// 		PR(di->name);
+// 		PR(di->hostApi);
+// 		PR(di->maxInputChannels);
+// 		PR(di->maxOutputChannels);
+// 		cout << endl;
+// 	}	
+
 
 	// domyslnie brak urzadzen
 	outputParameters.device = paNoDevice;
@@ -30,21 +76,12 @@ AudioDriver::AudioDriver() {
 	if(devCount <= 0) {
 		TRACE("AudioDriver::AudioDriver()",  "Nie wykryto urzadzenia audio");
 	} else {
-       	// jest jakas karta dzwiekowa
-       	
 		// domyslny host i urzadzenia
 		hostId = Pa_GetDefaultHostApi();
 		outputDeviceId = Pa_GetDefaultOutputDevice();
 		inputDeviceId = Pa_GetDefaultInputDevice();
 
 		// raczej bezpieczne wartosci domyslne
-		outputParameters.device = outputDeviceId;
-		outputParameters.channelCount = 2;				/* stereo output */
-		outputParameters.sampleFormat = paFloat32;		/* 32 bit floating point output */
-		outputParameters.suggestedLatency =
-			Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
-		outputParameters.hostApiSpecificStreamInfo = NULL;
-
 		inputParameters.device = inputDeviceId;
 		inputParameters.channelCount = 2;
 		inputParameters.sampleFormat = paFloat32;
@@ -52,64 +89,76 @@ AudioDriver::AudioDriver() {
 			Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency;
 		inputParameters.hostApiSpecificStreamInfo = NULL;
 
-		cout << "wykrycie sterow" << endl;
+		outputParameters.device = outputDeviceId;
+		outputParameters.channelCount = 2;
+		outputParameters.sampleFormat = paFloat32;
+		outputParameters.suggestedLatency =
+			Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
+		outputParameters.hostApiSpecificStreamInfo = NULL;
+
+
+		hostCount = -1;
+		const PaHostApiInfo* apiInfo;
 		// wykrywanie steorwnikow
-	    PaHostApiIndex hostCount = 0;
-	    const PaHostApiInfo* apiInfo;
-		hostCount = Pa_GetHostApiCount();
-		PR(hostCount);
-		for(PaHostApiIndex i = 0; i < hostCount-1; i++) {
-			HostInfo hi;
-			apiInfo = Pa_GetHostApiInfo(i);
+		for(PaHostApiIndex hi = 0; hi < Pa_GetHostApiCount(); hi++) {
+			apiInfo = Pa_GetHostApiInfo(hi);
+			// wykrywanie urzadzen
 			if(apiInfo->deviceCount > 0) {
-				hi.id = i;
-				hi.name = apiInfo->name;
-				hosts.push_back(hi);
+				//PR(apiInfo->deviceCount);
+				hostCount++;
+				hosts.push_back(*apiInfo);
+                		// domyslny host?
+				if(hostId == hi) hostNum = hosts.size() - 1;
+				// dodajmy to host API
 				InputDevices in; perHostInDevs.push_back(in);
 				OutputDevices out; perHostOutDevs.push_back(out);
-				// domyslny host?
-				if(hostId == i)
-				    hostNum = hosts.size() - 1;
-			}
-		}
 
-		cout << "wykrycie wejsc" << endl;
-		// wykrycie urzadzen wejsciowych
+            			const PaDeviceInfo* paDevInfo;
+  				for(PaDeviceIndex di = 0; di < apiInfo->deviceCount; di++) {
+					int devIdx = Pa_HostApiDeviceIndexToDeviceIndex( hi, di);
+					paDevInfo = Pa_GetDeviceInfo(devIdx);
+					//PR(paDevInfo->name); PR(paDevInfo->hostApi);
 
-		const PaDeviceInfo* devInfo;
-		for(PaDeviceIndex i = 0; i < devCount; i++) {
-			devInfo = Pa_GetDeviceInfo(i);
-			if( devInfo->maxInputChannels >=2 ) {
-				DeviceInfo di;
-				di.id = i;
-				di.hostApiId = devInfo->hostApi;
-				di.name = devInfo->name;
-				perHostInDevs[devInfo->hostApi].push_back(di);
-				// czy urzadzenie o id = i jest domyslnym?
-				if( (inputDeviceId == i) and (hostId == devInfo->hostApi) )
-				    inputDeviceNum = perHostInDevs[devInfo->hostApi].size() - 1;
-			}
-	  	}
+					// wykrycie urzadzen wejsciowych
+					if( paDevInfo->maxInputChannels >=2 ) {
+						DeviceInfo deviceInfo;
+						deviceInfo.deviceId = devIdx;
+						deviceInfo.hostApiId = paDevInfo->hostApi;
+						deviceInfo.name = paDevInfo->name;
+						perHostInDevs[hostCount].push_back(deviceInfo);
+						// czy urzadzenie o id = i jest domyslnym?
+						if( inputDeviceId == deviceInfo.deviceId )
+						    inputDeviceNum = perHostInDevs[paDevInfo->hostApi].size() - 1;
+					}
 
-		cout << "wykrycie wyjsc" << endl;
-	   // wykrycie urzadzen wyjsciowych
-	  	for(PaDeviceIndex i = 0; i < devCount; i++) {
-			devInfo = Pa_GetDeviceInfo(i);
-			if( devInfo->maxOutputChannels >=2 ) {
-				DeviceInfo di;
-				di.id = i;
-				di.hostApiId = devInfo->hostApi;
-				di.name = devInfo->name;
-				perHostOutDevs[devInfo->hostApi].push_back(di);
-				//inputDevices.push_back(di);
-				// czy urzadzenie o id = i jest domyslnym?
-				if( (outputDeviceId == i) and (hostId == devInfo->hostApi) )
-				    outputDeviceNum = perHostOutDevs[devInfo->hostApi].size() - 1;
+					// wykrycie urzadzen wyjsciowych
+					if( paDevInfo->maxOutputChannels >=2 ) {
+						DeviceInfo deviceInfo;
+						//deviceInfo.deviceId = Pa_HostApiDeviceIndexToDeviceIndex( hi, di);
+						deviceInfo.deviceId = devIdx;
+						deviceInfo.hostApiId = paDevInfo->hostApi;
+						deviceInfo.name = paDevInfo->name;
+						perHostOutDevs[hostCount].push_back(deviceInfo);
+						// czy urzadzenie o id = i jest domyslnym?
+						if( outputDeviceId == deviceInfo.deviceId )
+						    outputDeviceNum = perHostOutDevs[paDevInfo->hostApi].size() - 1;
+					}
+				}
 			}
 	  	}
+
 
 		TRACE("AudioDriver::AudioDriver()", "Zainicjowany");
 	}
+	
+// 		PR(hostId);
+// 		PR(inputDeviceId);
+// 		PR(outputDeviceId);
+// 
+// 	PR(hostNum);
+// 	PR(inputDeviceNum);
+// 	PR(outputDeviceNum);
+
 }
 
 AudioDriver::~AudioDriver() {
@@ -181,27 +230,29 @@ void AudioDriver::PrintDevices() {
 		
 		cout << "    Uradzenia wejsciowe:" << endl;
 		for(int d = 0; d < perHostInDevs[h].size(); d++) {
-            cout << "        " << "[" << perHostInDevs[h][d].id << "] "
+            cout << "        " << "[" << perHostInDevs[h][d].deviceId << "] "
 				<< perHostInDevs[h][d].name << " ("
-				<< hosts[perHostInDevs[h][d].hostApiId].name << ")" << endl;
+				<< hosts[h].name << ")" << endl;
 		}
 		
 		cout << "    Uradzenia wyjsciowe:" << endl;
 		for(int d = 0; d < perHostOutDevs[h].size(); d++) {
-            cout << "        " << "[" << perHostOutDevs[h][d].id << "] "
+            cout << "        " << "[" << perHostOutDevs[h][d].deviceId << "] "
 				<< perHostOutDevs[h][d].name << " ("
-				<< hosts[perHostOutDevs[h][d].hostApiId].name << ")" << endl;
+				<< hosts[h].name << ")" << endl;
 		}
 	}
 }
 
 void  AudioDriver::PrintConfiguration() {
-//	TRACE("AudioDriver::PrintConfiguration()", "Biezaca konfiguracja sterownikia...");
-//	cout << "    Urzadzenie wejsciowe: " << perHostInDevs[hostNum][inputDeviceNum].name
-//		<< " ("	<< hosts[ perHostInDevs[hostNum][inputDeviceNum].hostApiId ].name << ")" << endl;
-//	cout << "    Urzadzenie wyjsciowe: " << perHostOutDevs[hostNum][outputDeviceNum].name
-//		<< " ("	<< hosts[ perHostOutDevs[hostNum][outputDeviceNum].hostApiId ].name << ")" << endl;
-//	cout << "    Czest. probkowania: " << sampleRate << endl;
+	TRACE("AudioDriver::PrintConfiguration()", "Biezaca konfiguracja sterownikia...");
+	cout << "    Urzadzenie wejsciowe: " << inputParameters.device << endl;
+	cout << "                 kanalow: " << inputParameters.channelCount << endl;
+	cout << "              opoznienie: " << inputParameters.suggestedLatency << endl;
+	cout << "    Urzadzenie wyjsciowe: " << outputParameters.device << endl;
+	cout << "                 kanalow: " << outputParameters.channelCount << endl;
+	cout << "              opoznienie: " << outputParameters.suggestedLatency << endl;
+	cout << "      Czest. probkowania: " << sampleRate << endl;
 }
 
 void AudioDriver::Open() {
@@ -209,12 +260,13 @@ void AudioDriver::Open() {
 
 	Stop();
 	Close();
-
+	
 	PrintConfiguration();
 
 	error = Pa_OpenStream(
 			&stream,
 			&inputParameters,
+			//NULL,
 			&outputParameters,
 			sampleRate,
 			framesPerBuffer,
@@ -291,10 +343,10 @@ bool AudioDriver::IsConfigValid() {
 
 void AudioDriver::SetDevices(PaDeviceIndex inNum, PaDeviceIndex outNum) {
 	inputDeviceNum = inNum;
-	inputParameters.device = perHostInDevs[hostNum][inNum].id;
+	inputParameters.device = perHostInDevs[hostNum][inNum].deviceId;
 	
 	outputDeviceNum = outNum;
-	outputParameters.device = perHostOutDevs[hostNum][outNum].id;
+	outputParameters.device = perHostOutDevs[hostNum][outNum].deviceId;
 }
 
 string AudioDriver::GetLastErrorDescription() const {

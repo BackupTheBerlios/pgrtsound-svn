@@ -25,6 +25,8 @@ int main(int argc, char *argv[]) {
     bool running = false;
 
     algo.SetSampleRate(SAMPLE_RATE);
+
+    audio.PrintDevices();
     
  	try {
         xmlConfig.OpenFile("../../examples/fm2.xml");
@@ -39,7 +41,6 @@ int main(int argc, char *argv[]) {
     }
 
 	try {
-		audio.PrintDevices();
 		audio.SetCallback(paCallback, (void*)&algo);
 		audio.SetSampleRate(SAMPLE_RATE);
 		audio.Open(); // gotowi do grania

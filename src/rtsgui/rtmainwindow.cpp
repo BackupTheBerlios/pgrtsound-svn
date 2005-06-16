@@ -127,7 +127,7 @@ void RTMainWindow::AddModule(Module* module) {
 		frame->add(*gui);
 		frame->set_label( module->GetName() );
 		modulesBox.pack_start(*frame, Gtk::PACK_SHRINK);
-		TRACE("RTMainWindow::AddModule()", "GUI dodane");
+		//TRACE("RTMainWindow::AddModule()", "GUI dodane");
 	}
 }
 

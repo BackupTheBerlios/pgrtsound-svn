@@ -23,15 +23,17 @@ typedef int (PortAudioCallback)( const void *inputBuffer, void *outputBuffer,
 	PaStreamCallbackFlags statusFlags, void *userData );
 
 struct DeviceInfo {
-    PaDeviceIndex id;
+    PaDeviceIndex deviceId;
     PaHostApiIndex hostApiId;
 	string name;
 };
 
-struct HostInfo {
-    PaHostApiIndex id;
-	string name;
-};
+
+//
+//struct HostInfo {
+//    PaHostApiIndex id;
+//	string name;
+//};
 
 /**
  * PortAudio wrapper
@@ -74,18 +76,17 @@ class AudioDriver
 		PaHostApiIndex      hostId;
 		int                 outputDeviceNum, inputDeviceNum;
 		int                 numOutputChannels, numInputChannels;
-		int                 hostNum;
+		int                 hostNum, hostCount;
 		PaSampleFormat      sampleFormat;
 		void*				callbackData;
 		PortAudioCallback*	callbackFunction;
 		PaStream*			stream;
 		PaStreamParameters	inputParameters, outputParameters;
 		PaError				error;
-		vector<HostInfo>    hosts;
-		
+
+		vector<PaHostApiInfo>    hosts;
 		typedef vector<DeviceInfo> InputDevices;
 		typedef vector<DeviceInfo> OutputDevices;
-		
 		vector< InputDevices > perHostInDevs;
 		vector< OutputDevices > perHostOutDevs;
 };
