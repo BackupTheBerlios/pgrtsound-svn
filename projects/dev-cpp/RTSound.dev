@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSound.dev
 Name=rtsound
-UnitCount=41
+UnitCount=45
 Type=1
 Ver=1
 ObjFiles=
@@ -20,7 +20,7 @@ ObjectOutput=objs\
 OverrideOutput=0
 OverrideOutputName=RTSound.exe
 HostApplication=
-Folders=modules,tinyxml
+Folders=modules,modules/filters,modules/math,modules/synthesis,tinyxml
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -122,7 +122,7 @@ BuildCmd=
 [Unit14]
 FileName=..\..\src\modules\sinosc2.h
 CompileCpp=1
-Folder=modules
+Folder=modules/synthesis
 Compile=1
 Link=1
 Priority=1000
@@ -152,7 +152,7 @@ BuildCmd=
 [Unit17]
 FileName=..\..\src\modules\sum.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -162,7 +162,7 @@ BuildCmd=
 [Unit18]
 FileName=..\..\src\modules\sum.h
 CompileCpp=1
-Folder=modules
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -220,7 +220,7 @@ BuildCmd=
 [Unit26]
 FileName=..\..\src\modules\constant.h
 CompileCpp=1
-Folder=modules
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -250,7 +250,7 @@ BuildCmd=
 [Unit25]
 FileName=..\..\src\modules\constant.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -310,7 +310,7 @@ BuildCmd=
 [Unit33]
 FileName=..\..\src\modules\multiplication.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -320,7 +320,7 @@ BuildCmd=
 [Unit35]
 FileName=..\..\src\modules\sinosc2.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/synthesis
 Compile=1
 Link=1
 Priority=1000
@@ -380,7 +380,7 @@ BuildCmd=
 [Unit34]
 FileName=..\..\src\modules\multiplication.h
 CompileCpp=1
-Folder=modules
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -438,9 +438,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit45]
-FileName=..\..\src\modules\guis\slidergui.h
+FileName=..\..\src\modules\filters\filter12db.cpp
 CompileCpp=1
-Folder=modules/guis
+Folder=modules/filters
 Compile=1
 Link=1
 Priority=1000
@@ -458,9 +458,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit42]
-FileName=..\..\src\modules\guis\modulegui.cpp
+FileName=..\..\src\modules\synthesis\noise.h
 CompileCpp=1
-Folder=modules/guis
+Folder=modules/synthesis
 Compile=1
 Link=1
 Priority=1000
@@ -468,9 +468,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit43]
-FileName=..\..\src\modules\guis\modulegui.h
+FileName=..\..\src\modules\synthesis\noise.cpp
 CompileCpp=1
-Folder=modules/guis
+Folder=modules/synthesis
 Compile=1
 Link=1
 Priority=1000
@@ -481,6 +481,16 @@ BuildCmd=
 FileName=..\..\src\modules\module_io.cpp
 CompileCpp=1
 Folder=modules
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit44]
+FileName=..\..\src\modules\filters\filter12db.h
+CompileCpp=1
+Folder=modules/filters
 Compile=1
 Link=1
 Priority=1000
