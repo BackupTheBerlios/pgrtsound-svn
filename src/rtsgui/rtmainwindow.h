@@ -5,17 +5,14 @@
 
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
-//#include <gtkmm/frame.h>
 #include <gtkmm/label.h>
-//#include <gtkmm/comboboxtext.h>
-//#include <gtkmm/table.h>
 #include <gtkmm/enums.h>
 #include <gtkmm/button.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/uimanager.h>
-//#include <gtkmm/alignment.h>
-//#include <gtkmm/messagedialog.h>
+#include <gtkmm/main.h>
+#include <gtkmm/filechooserbutton.h>
 
 #include "../xmlconfigfile.h"
 #include "../modules/module.h"
