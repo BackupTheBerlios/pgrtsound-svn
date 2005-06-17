@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     audio.PrintDevices();
     
  	try {
-        xmlConfig.OpenFile("../../examples/filter_noise.xml");
+        xmlConfig.OpenFile("../../examples/noise_filtering.xml");
         algo.Clear(); // test
 		xmlConfig.LoadAlgorithm(&algo);
 		algo.Init();

@@ -1,7 +1,7 @@
 #ifndef GUIMODULE_H
 #define GUIMODULE_H
 
-#include <gtkmm.h>
+#include <gtkmm/widget.h>
 
 #include "../../modules/module.h"
 

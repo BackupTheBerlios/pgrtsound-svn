@@ -7,7 +7,7 @@ GuiModuleFactory::~GuiModuleFactory() {
 }
 
 /**
- 	Towrzy obiekt modulu GUI.
+ 	Tworzy obiekt modulu GUI.
 	Jesli GUI dla modulu podanego typu istnieje zostanie ono utworzone a
 	fnckja zwroci do niego wskaznik. Jesli specjalne GUI dla modulu podanego
 	typu nie jest w systemie zdefiniowane zwracany jest zwykly obiekt GuiModule.
