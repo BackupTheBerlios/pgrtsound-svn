@@ -12,12 +12,11 @@ Sum::~Sum() {
 }
 
 void Sum::Process() {
-	int n;
 	float* in1 = i1.GetSignal();
 	float* in2 = i2.GetSignal();
 	float* sum = oSum.GetSignal();
 	
-	for(n = 0; n < Module::framesPerBlock; n++)	{
+	for(int n = 0; n < Module::framesPerBlock; n++)	{
 		*sum++ = (*in1++) + (*in2++);
 	}	
 }

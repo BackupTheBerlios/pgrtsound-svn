@@ -1,12 +1,6 @@
 #include "modulefactory.h"
-//#include "ltdl.h" 
 
 ModuleFactory::ModuleFactory() {
-  /*  LTDL_SET_PRELOADED_SYMBOLS();
-    if (lt_dlinit() != 0) {
-        throw RTSError("ModuleFactory::ModuleFactory(): LibTool - '");// + string(lt_dlerror()) + "'");
-    } 
-  */
 }
 
 ModuleFactory::~ModuleFactory() {
@@ -40,17 +34,17 @@ Module* ModuleFactory::CreateModule(string type) {
 		return new Multiplication;
 	}
 
+	if (type == "filter12db") {
+		return new Filter12dB;
+	}
+
+	if (type == "noise") {
+		return new Noise;
+	}
+
 	if (type == "textfileout") {
 		return new TextFileOut;
 	}
-
-//	if (type == "audioportin") {
-//		return new AudioPortIn;
-//	}
-	
-//	if (type == "audioportout") {
-//		return new AudioPortOut;
-//	}
 
     throw RTSError("ModuleFactory::CreateModule(): Nie ma modulu '" + type + "'");
 }

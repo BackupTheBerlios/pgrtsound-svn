@@ -4,6 +4,7 @@
 #include "guimodules/guimodule.h"
 #include "guimodules/slidergui.h"
 #include "guimodules/sinosc2testgui.h"
+#include "guimodules/gaingui.h"
 
 /**
 	Dodawanie interfjesow graficznych dla modulow.

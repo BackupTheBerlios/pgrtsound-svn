@@ -4,9 +4,9 @@
 #include "module.h"
 
 /**
- * Modul mnozenia.
- * Mnozy skalarnie dwa sygnaly wejsciowe.
- */
+ Modul wzmocnienia.
+ Reguleje wzmocnienie 
+*/
 class Gain : public Module
 {
 	public:

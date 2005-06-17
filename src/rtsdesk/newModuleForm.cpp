@@ -31,6 +31,8 @@ NewModuleForm::NewModuleForm(Desk *d)
     comboType.append_text("slider");
     comboType.append_text("sumator");
     comboType.append_text("textfileout");
+    comboType.append_text("noise");
+    comboType.append_text("butt12db");
     
     //ustawienie aktywnego
     comboType.set_active_text("< ? >");

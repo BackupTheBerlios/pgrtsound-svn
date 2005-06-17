@@ -26,6 +26,10 @@ GuiModule* GuiModuleFactory::CreateGuiModule(Module* module) {
 	if (type == "sinosc2") {
 		return new SinOsc2TestGui(module);
 	}
+	
+	if (type == "gain") {
+		return new GainGui(module);
+	}
 
 	// nie ma specjalistycznego GuiModule zwracamy zwykly
 	return new GuiModule(module);

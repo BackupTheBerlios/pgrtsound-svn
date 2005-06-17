@@ -12,6 +12,8 @@
 #include "modules/textfileout.h"
 #include "modules/slider.h"
 #include "modules/multiplication.h"
+#include "modules/synthesis/noise.h"
+#include "modules/filters/filter12db.h"
 
 /**
  * Docelowo klasa ma sie zjamowac ladowaniem wtyczek i ich tworzeniem.
