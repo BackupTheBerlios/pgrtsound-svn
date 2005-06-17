@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <algorithm name="Filtracja szumu">
     <modules>
-        <module type="butt12db" name="Filtr">
+        <module type="filter12db" name="Filtr">
             <parameter number="0" type="float">2000</parameter>
         </module>
         <module type="noise" name="Generator szumu" />
         <module type="gain" name="Wzmocnienie">
-        	<parameter number="0" type="float">0.4</parameter>
+        	<parameter number="0" type="float">0.3</parameter>
         </module>>
     </modules>
     
