@@ -4,10 +4,11 @@
 #include <gtkmm.h>
 #include "desk.h"
 
-class NewModuleForm : public Gtk::Window
-{
+/* Klasa okna dodawania nowego modu³u do algorytmu
+ */
+class NewModuleForm : public Gtk::Window {
     public:
-        NewModuleForm(Desk *d);
+        NewModuleForm(Desk *desk_);
         virtual ~NewModuleForm();
     protected:
         Gtk::Table          table;
@@ -18,13 +19,15 @@ class NewModuleForm : public Gtk::Window
         Gtk::Button         btAdd;
         Gtk::Button         btCancel;
         Gtk::HBox           hbox;
-    //Algorithm
+    
         Desk *desk;
 
-    //Signal handlers:
-        virtual void onCancel();
-        virtual void onAdd();
-        virtual void onComboTypeChanged();
+        void SetComboType();
+    //Sygna³y do obs³ugi przycisków       
+        virtual void OnAdd();
+        virtual void OnCancel();
+        virtual void OnComboTypeChanged();
+        
 };
 
 #endif

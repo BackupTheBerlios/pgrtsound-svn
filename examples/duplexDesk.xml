@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<algorithm>
+    <modules />
+    <connections>
+        <connection name1="AudioPortIn" output="0" name2="AudioPortOut" input="0" />
+    </connections>
+    <modules_widget>
+        <module_widget name="AudioPortIn" x="169" y="227" />
+        <module_widget name="AudioPortOut" x="348" y="118" />
+    </modules_widget>
+</algorithm>

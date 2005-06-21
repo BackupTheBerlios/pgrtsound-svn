@@ -13,6 +13,10 @@ class GuiModule {
 		GuiModule(Module* moduleToAttach);
 		~GuiModule();
 		virtual Gtk::Widget* GetGui();
+		int GetX();
+		int GetY();
+		void SetXY(int x_, int y_);
+		Module* GetModule();
 
 	private:
 		Module* module;

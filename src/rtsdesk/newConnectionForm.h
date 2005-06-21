@@ -8,7 +8,7 @@
 class NewConnectionForm : public Gtk::Window
 {
     public:
-        NewConnectionForm(Desk *d);
+        NewConnectionForm(Desk *desk_);
         virtual ~NewConnectionForm();
     protected:
         Gtk::Table          table;
@@ -23,14 +23,14 @@ class NewConnectionForm : public Gtk::Window
         Gtk::Button         btAdd;
         Gtk::Button         btCancel;
         Gtk::HBox           hbox;
-    //Algorithm
+
         Desk *desk;
 
     //Signal handlers:
-        virtual void onCancel();
-        virtual void onAdd();
-        virtual void on_comboModule1_changed();
-        virtual void on_comboModule2_changed();
+        virtual void OnCancel();
+        virtual void OnAdd();
+        virtual void OnComboModule1Changed();
+        virtual void OnComboModule2Changed();
 };
 
 #endif

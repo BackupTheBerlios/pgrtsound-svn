@@ -6,6 +6,7 @@
 #include "tinyxml.h"
 #include "modules/module.h"
 #include "gtkModule.h"
+#include "../gui/guimodulefactory.h"
 
 //boost
 #include <boost/config.hpp>
@@ -20,41 +21,10 @@
 typedef Graph::vertex_descriptor ModuleId;
 
 
-class DeskModule
-{
-    public:
-        DeskModule(int x_, int y_)
-        {
-            x       = x_;
-            y       = y_;
-            widget  = NULL;
-        }
-        ~DeskModule() {
-            delete widget;
-            delete text;   
-        };
-        int             x,y;    //pozycja
-        GtkModule*      widget;
-        Gtk::Entry*     text;
-        
-        Module*         GetRTSModule();
-        void            SetModuleId(ModuleId moduleId_);
-        void            SetRTSModule(Module* rtsModule_);
-        
-    private:
-        ModuleId        moduleId;
-        Module*         rtsModule;
-};
-
-
-
-
 
 class Desk
 {
     public:
-
-
       //Metody
         //Konstruktor i destruktor
         Desk(Algorithm *algo);
@@ -70,8 +40,8 @@ class Desk
         int         FindInput(Module* module,string inName);
         int         FindInput(string nameModule,string inName);
         void        SetPosition(string nameModule,int x, int y);
-        DeskModule* GetDeskModuleActive();
-        void        SetDeskModuleActive(DeskModule* deskModule);
+        GuiModule*  GetDeskModuleActive();
+        void        SetDeskModuleActive(GuiModule* deskModule);
         void        DeleteActiveModule();
         void        AddAllModuleToDesk();
                
@@ -82,11 +52,13 @@ class Desk
         
       //Parametry
         Algorithm                   *algorithm;
-        vector<DeskModule*>         deskModules;
+        vector<GuiModule*>         guiModules;
+        vector<GtkModule*>         gtkModules;
+        vector<Gtk::Entry*>        entryModules;
         
     private:
-        DeskModule*                 deskModuleActive;
-        
+        GuiModule*                 deskModuleActive;
+        GuiModuleFactory           guiModuleFactory;
 
 };
 

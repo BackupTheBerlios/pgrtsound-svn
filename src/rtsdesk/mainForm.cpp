@@ -1,5 +1,6 @@
 #include "mainForm.h"
 #include "newModuleForm.h"
+#include "moduleForm.h"
 #include "newConnectionForm.h"
 #include <iostream>
 #include "core_mp.h"
@@ -100,6 +101,7 @@ MainForm::MainForm(Desk *d) {
     lbType.set_text("Typ:");
     lbParams.set_text("Parametry:");
     btDelete.set_label("Usun modul");
+    btModule.set_label("Parametry");
     paramPanel.set_size_request(200,600);
     paramPanel.put(lbName,10,10);
     paramPanel.put(edName,100,10);
@@ -107,9 +109,11 @@ MainForm::MainForm(Desk *d) {
     paramPanel.put(edType,100,40);  
     paramPanel.put(lbParams,10,100);
     paramPanel.put(btDelete,10,1);
+    paramPanel.put(btModule,100,1);
   
   
     btDelete.signal_clicked().connect( sigc::mem_fun(*this, &MainForm::OnDelete) );
+    btModule.signal_clicked().connect( sigc::mem_fun(*this, &MainForm::OnModule) );
     
     
     //DnD
@@ -158,28 +162,25 @@ void MainForm::OnMenuFileQuit()
 
 
 //------------------------------------------------------------------------------
-void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
+void MainForm::ShowModuleParameters(GuiModule*  deskModule) {
     TRACE("MainForm::ShowModuleParameters()", "start");
     //dla poprzednio aktywnego
+    
+    Module* rtsModuleActive = NULL;
+    int w = 0;
+    
     if (desk->GetDeskModuleActive() != NULL)
     {
-        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();
+        rtsModuleActive = desk->GetDeskModuleActive()->GetModule();
         rtsModuleActive->SetName(edName.get_text());
-        desk->GetDeskModuleActive()->text->set_text(edName.get_text());
-        for (int i=0; i<desk->GetDeskModuleActive()->GetRTSModule()->GetParameterCount(); i++)
+//        desk->GetDeskModuleActive()->text->set_text(edName.get_text());
+        for (int i=0; i<desk->GetDeskModuleActive()->GetModule()->GetParameterCount(); i++)
         {
-            if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
-            {
-                //zczytanie wartosci parametru do modu³u
-                if ((rtsModuleActive->GetParameter(i)->GetGUIType() == gtProperty))
-                {
+                if (((Parameter*) rtsModuleActive->GetParameter(i))->GetType() =="float") {
                     ParameterFloat* param =
-						(ParameterFloat*)rtsModuleActive->GetParameter(i);					
+						(ParameterFloat*)rtsModuleActive->GetParameter(i);
 					param->SetValue(atof(((Gtk::Entry *)widgetList[2*i+1])->get_text().c_str()));
-                }
-                
-                if (rtsModuleActive->GetParameter(i)->GetGUIType() == gtParameter)
-                {
+                } else {
                     ParameterString* param =
 						(ParameterString*)rtsModuleActive->GetParameter(i);					
 					param->SetText(((Gtk::Entry *)widgetList[2*i+1])->get_text().c_str());
@@ -188,12 +189,14 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
                 //usuwanie z formy
                 delete  widgetList[2*i];
                 delete  widgetList[2*i+1];
-            }
         }
+       
     } else {
         edName.set_text("");
         edType.set_text("");
     }  
+    
+    
         
     //zmiana aktywnego
     desk->SetDeskModuleActive(deskModule);
@@ -201,69 +204,66 @@ void MainForm::ShowModuleParameters(DeskModule*  deskModule) {
     //dla aktualnie aktywnego
     if (desk->GetDeskModuleActive() != NULL)
     {
-        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();        
+        rtsModuleActive = desk->GetDeskModuleActive()->GetModule();        
         for (int i=0; i<rtsModuleActive->GetParameterCount(); i++)
         {
-            if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
-            {
                 Gtk::Label* label = new Gtk::Label(rtsModuleActive->GetParameter(i)->GetName());
                 paramPanel.put(*label,10,130 + i *20);
                 widgetList[2*i] = label;    
                 
                 //Float parameter
-                if ((rtsModuleActive->GetParameter(i)->GetGUIType() == gtProperty))
-                {
+                if (((Parameter*) rtsModuleActive->GetParameter(i))->GetType() =="float") {
                     Gtk::Entry* entry = new Gtk::Entry();                   
                     entry->set_text(IntToString(((ParameterFloat*)rtsModuleActive->GetParameter(i))->GetValue()));   
                     paramPanel.put(*entry,100,130 + i *20);
                     widgetList[2*i + 1] = entry;    
-                }
-                
-                //String parameter    
-                if (rtsModuleActive->GetParameter(i)->GetGUIType() == gtParameter)
-                {
+                } else {              
                     Gtk::Entry* entry = new Gtk::Entry();  
                     ParameterString* param = (ParameterString*)rtsModuleActive->GetParameter(i);					              
                     entry->set_text(param->GetText());   
                     paramPanel.put(*entry,100,130 + i *20);
                     widgetList[2*i + 1] = entry;    
                 }
-            }
+
         }
         edType.set_text(rtsModuleActive->GetType());
         edName.set_text(rtsModuleActive->GetName());
-    }     
+            
+    }
     
+    
+     
     show_all_children();  
+    
     TRACE("MainForm::ShowModuleParameters()", "end");
 }
 
 //------------------------------------------------------------------------------
 void MainForm::AddNewModuleToDesk() {
     TRACE("MainForm::AddNewModuleToDesk()", "start");
-    for (int i = 0;i<desk->deskModules.size();i++)
-        if (desk->deskModules[i]->widget == NULL)
+    for (int i = 0;i<desk->gtkModules.size();i++)
+        if (desk->gtkModules[i] == NULL)
         {
             TRACE("MainForm::AddNewModuleToDesk()", "widget");
             //Rysunek
-            GtkModule* module = new GtkModule(desk->deskModules[i]->GetRTSModule()->GetInputCount(),desk->deskModules[i]->GetRTSModule()->GetOutputCount());
+            GtkModule* module = new GtkModule(desk->guiModules[i]->GetModule()->GetInputCount(),desk->guiModules[i]->GetModule()->GetOutputCount());
             module->drag_source_set(listTargets);
             module->signal_drag_data_get().connect( sigc::mem_fun(*this, &MainForm::OnModuleDragDataGet));
             
             
-            dnd.put(*module,desk->deskModules[i]->x,desk->deskModules[i]->y);
-            desk->deskModules[i]->widget = module;
+            dnd.put(*module,desk->guiModules[i]->GetX(),desk->guiModules[i]->GetY());
+            desk->gtkModules[i] = module;
             //module->signal_drag_begin().connect( sigc::mem_fun(*this, &MainForm::onModuleClick) );
             TRACE("MainForm::AddNewModuleToDesk()", "entry");
             //Nazwa
             Gtk::Entry* text = new Gtk::Entry();
             text->set_editable(false);
            
-            text->set_text(desk->deskModules[i]->GetRTSModule()->GetName());
+            text->set_text(desk->guiModules[i]->GetModule()->GetName());
             text->set_max_length (20);
             text->set_width_chars (10);
-            desk->deskModules[i]->text = text;
-            dnd.put(*text,desk->deskModules[i]->x,desk->deskModules[i]->y+module->size+3);
+            desk->entryModules[i] = text;
+            dnd.put(*text,desk->guiModules[i]->GetX(),desk->guiModules[i]->GetY()+module->GetSize()+3);
             
            
                  
@@ -301,14 +301,15 @@ void MainForm::OnModuleDragDataGet(const Glib::RefPtr<Gdk::DragContext>&, Gtk::S
 void MainForm::OnModuleDropDragDataReceived(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, const Gtk::SelectionData& selection_data, guint info, guint time) {
     TRACE("MainForm::OnModuleDropDragDataReceived()", "drop");
     dnd.move ( *(Gtk::Widget::drag_get_source_widget(context)), x,y);
-    for (int i = 0;i<desk->deskModules.size();i++)
-        if (desk->deskModules[i]->widget == (Gtk::Widget::drag_get_source_widget(context))) {            
-            ShowModuleParameters(desk->deskModules[i]);
-            dnd.move ( *desk->deskModules[i]->text, x,y+30);
-            desk->deskModules[i]->x=x;
-            desk->deskModules[i]->y=y;        
+    
+    for (int i = 0;i<desk->gtkModules.size();i++)
+        if (desk->gtkModules[i] == (Gtk::Widget::drag_get_source_widget(context))) {            
+            ShowModuleParameters(desk->guiModules[i]);
+            dnd.move ( *desk->entryModules[i], x,y+30);
+            desk->guiModules[i]->SetXY(x,y);
+                
         }  
-    area->on_expose_event(NULL);
+    area->on_expose_event(NULL); 
 }
 
 //------------------------------------------------------------------------------
@@ -388,14 +389,11 @@ void MainForm::OnDelete() {
     //usuniecie wizualizacji parametrow
     if (desk->GetDeskModuleActive() != NULL)
     {
-        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetRTSModule();
-        for (int i=0; i<desk->GetDeskModuleActive()->GetRTSModule()->GetParameterCount(); i++)
+        Module* rtsModuleActive = desk->GetDeskModuleActive()->GetModule();
+        for (int i=0; i<desk->GetDeskModuleActive()->GetModule()->GetParameterCount(); i++)
         {
-            if (rtsModuleActive->GetParameter(i)->GetGUIType()!= gtInvisible)
-            {
-                delete  widgetList[2*i];
-                delete  widgetList[2*i+1];
-            }
+            delete  widgetList[2*i];
+            delete  widgetList[2*i+1];
         }
     }
     edName.set_text("");
@@ -406,4 +404,20 @@ void MainForm::OnDelete() {
     {
        desk->DeleteActiveModule();           
     }
+}
+
+
+//------------------------------------------------------------------------------
+void MainForm::OnModule() {
+    //usuniecie wizualizacji parametrow
+    if (desk->GetDeskModuleActive() != NULL)
+    {
+        TRACE("MainForm::OnModule()", "start");
+        ModuleForm form(desk);        
+        Gtk::Main::run(form);
+        area->on_expose_event(NULL);
+        show_all_children();
+        TRACE("MainForm::OnModule()", "end");
+    }
+  
 }

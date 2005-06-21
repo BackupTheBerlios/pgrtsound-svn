@@ -37,16 +37,16 @@
         <connection name1="Amplituda nosnej" output="0" name2="Nosna" input="1" />
     </connections>
     <modules_widget>
-        <module_widget name="AudioPortIn" x="336" y="53" />
-        <module_widget name="AudioPortOut" x="508" y="296" />
-        <module_widget name="Czestotliwosc modulatora" x="18" y="135" />
-        <module_widget name="Amplituda modulatora" x="38" y="370" />
-        <module_widget name="Modulator" x="128" y="295" />
-        <module_widget name="Glebokosc modulacji" x="81" y="506" />
-        <module_widget name="Mnozenie" x="229" y="370" />
-        <module_widget name="Czestotliwosc nosnej" x="197" y="205" />
-        <module_widget name="Suma" x="293" y="155" />
-        <module_widget name="Amplituda nosnej" x="322" y="367" />
-        <module_widget name="Nosna" x="420" y="166" />
+        <module_widget name="AudioPortIn" x="502" y="348" />
+        <module_widget name="AudioPortOut" x="504" y="33" />
+        <module_widget name="Czestotliwosc modulatora" x="4" y="12" />
+        <module_widget name="Amplituda modulatora" x="13" y="223" />
+        <module_widget name="Modulator" x="84" y="130" />
+        <module_widget name="Glebokosc modulacji" x="61" y="382" />
+        <module_widget name="Mnozenie" x="166" y="351" />
+        <module_widget name="Czestotliwosc nosnej" x="147" y="44" />
+        <module_widget name="Suma" x="281" y="140" />
+        <module_widget name="Amplituda nosnej" x="285" y="250" />
+        <module_widget name="Nosna" x="412" y="127" />
     </modules_widget>
 </algorithm>

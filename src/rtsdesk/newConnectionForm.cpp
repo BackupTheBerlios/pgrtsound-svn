@@ -3,29 +3,26 @@
 #include <iostream>
 #include "core_mp.h"
 
-NewConnectionForm::NewConnectionForm(Desk *d)
-{
-    desk    = d;
+NewConnectionForm::NewConnectionForm(Desk *desk_) {
+    desk    = desk_;
     set_title("Add a new connection");
     set_default_size(200, 200);
     set_modal(true);
     set_border_width(10);
     
-    
-    
-    add(table);
+   add(table);
 
 // module 1
     lbModule1.set_label("Modul 1:");
     table.attach(lbModule1,0,1,0,1);
     
     comboModule1.clear();
-    comboModule1.signal_changed().connect( sigc::mem_fun(*this, &NewConnectionForm::on_comboModule1_changed) );
+    comboModule1.signal_changed().connect( sigc::mem_fun(*this, &NewConnectionForm::OnComboModule1Changed) );
     table.attach(comboModule1,1,2,0,1);
     comboModule1.append_text("< ? >");
-    for (int i = 0;i<desk->deskModules.size();i++) {
-        if (desk->deskModules[i]->GetRTSModule()->GetOutputCount() > 0)    
-            comboModule1.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
+    for (int i = 0;i<desk->guiModules.size();i++) {
+        if (desk->guiModules[i]->GetModule()->GetOutputCount() > 0)    
+            comboModule1.append_text(desk->guiModules[i]->GetModule()->GetName());
     }
     comboModule1.set_active_text("< ? >");
     
@@ -41,12 +38,12 @@ NewConnectionForm::NewConnectionForm(Desk *d)
     lbModule2.set_label("Modul 2:");
     table.attach(lbModule2,0,1,2,3);
     comboModule2.clear();
-    comboModule2.signal_changed().connect( sigc::mem_fun(*this, &NewConnectionForm::on_comboModule2_changed) );
+    comboModule2.signal_changed().connect( sigc::mem_fun(*this, &NewConnectionForm::OnComboModule2Changed) );
     table.attach(comboModule2,1,2,2,3);
     comboModule2.append_text("< ? >");
-    for (int i = 0;i<desk->deskModules.size();i++) {
-        if (desk->deskModules[i]->GetRTSModule()->GetInputCount() > 0)
-            comboModule2.append_text(desk->deskModules[i]->GetRTSModule()->GetName());
+    for (int i = 0;i<desk->guiModules.size();i++) {
+        if (desk->guiModules[i]->GetModule()->GetInputCount() > 0)
+            comboModule2.append_text(desk->guiModules[i]->GetModule()->GetName());
     }
     comboModule2.set_active_text("< ? >");
     
@@ -59,36 +56,30 @@ NewConnectionForm::NewConnectionForm(Desk *d)
     comboInput.set_active_text("< ? >");
     table.attach(comboInput,1,2,3,4);
 
-
-//Dodaj lub anuluj =)
-
     table.attach(hbox,0,2,4,5);
 
     btCancel.set_label("Anuluj");
     hbox.pack_start(btCancel);
-    btCancel.signal_clicked().connect( sigc::mem_fun(*this, &NewConnectionForm::onCancel) );
+    btCancel.signal_clicked().connect( sigc::mem_fun(*this, &NewConnectionForm::OnCancel) );
     
     btAdd.set_label("Dodaj");
     hbox.pack_start(btAdd);
-    btAdd.signal_clicked().connect( sigc::mem_fun(*this, &NewConnectionForm::onAdd) );
+    btAdd.signal_clicked().connect( sigc::mem_fun(*this, &NewConnectionForm::OnAdd) );
   
     show_all_children(); 
 
 }
 
-NewConnectionForm::~NewConnectionForm()
-{
+NewConnectionForm::~NewConnectionForm() {
 }
 
-//SIGNALS ----------------------------------------------------------------------
-void NewConnectionForm::onCancel()
-{
+//SYGNALY ----------------------------------------------------------------------
+void NewConnectionForm::OnCancel() {
     hide();
 }
 
 
-void NewConnectionForm::onAdd()
-{
+void NewConnectionForm::OnAdd() {
     desk->algorithm->ConnectModules( comboModule1.get_active_text()
                                     ,desk->FindOutput(comboModule1.get_active_text(),comboOutput.get_active_text())
                                     ,comboModule2.get_active_text()
@@ -97,12 +88,10 @@ void NewConnectionForm::onAdd()
     hide();
 }
 
-void NewConnectionForm::on_comboModule1_changed()
-{
+void NewConnectionForm::OnComboModule1Changed() {
     string name = comboModule1.get_active_text();
     if (name != "< ? >")
-    if (name != "")
-    {
+    if (name != "") {
         comboOutput.clear();
         comboOutput.append_text("< ? >");
         for (int i = 0; i < desk->algorithm->GetModule(name)->GetOutputCount(); i++)
@@ -113,8 +102,7 @@ void NewConnectionForm::on_comboModule1_changed()
     comboOutput.set_active_text("< ? >");
 }
 
-void NewConnectionForm::on_comboModule2_changed()
-{
+void NewConnectionForm::OnComboModule2Changed() {
     string name = comboModule2.get_active_text();
     if (name != "< ? >")
     if (name != "")

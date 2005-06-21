@@ -22,10 +22,10 @@ class Parameter {
 		Parameter(string type_, string name_);
 		~Parameter();
 		int GetID() const;
+		string GetType() const;
 		string GetName() const;
 		string GetLabel() const;
 		string GetDescription() const;
-		string GetType() const;
 		void SetID(int newID);
 		void SetLabel(string newLabel);
 		void SetDescription(string newDesc);

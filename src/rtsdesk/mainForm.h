@@ -23,9 +23,10 @@ protected:
   virtual void OnLoadFile();
   virtual void OnNew();
   virtual void OnDelete();
+  virtual void OnModule();
   
   virtual void AddNewModuleToDesk();
-  virtual void ShowModuleParameters(DeskModule*  deskModule);
+  virtual void ShowModuleParameters(GuiModule*  deskModule);
 
   //DnD
   virtual void OnModuleDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
@@ -46,6 +47,7 @@ protected:
 
   //Parametry
   Gtk::Button       btDelete;
+  Gtk::Button       btModule;
   Gtk::Label        lbParams;
   Gtk::Label        lbName;
   Gtk::Label        lbType;
