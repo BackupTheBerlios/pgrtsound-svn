@@ -1,26 +1,24 @@
 #include "module_io.h"
+#include "module.h"
 
-extern float* nullBuffer;
+//extern float* nullBuffer;
 
 Input::Input(string name_) {
    	name = name_;
    	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
-   	signal = nullBuffer;
+   //signal = NULL;
 }
 
 Input::~Input() {
 }
 
+/* TODO (#1#): zrobic inline */
 float* Input::GetSignal() {
-	return signal;
+	return outputConnected->GetSignal();
 }
 
 void Input::SetID(int newID) {
 	id = newID;
-}
-
-void Input::SetSignal(float* sig) {
-	signal = sig;
 }
 
 int Input::GetID() const {
@@ -31,11 +29,21 @@ string Input::GetName() const {
 	return name;
 }
 
-
+/**
+ Laczy wejscie biezacego modulu z wyjsciem innego.
+ @param output Wskaznik do wyjscia, do ktorego podlaczone ma byc biezace wejscie.
+*/
+void Input::ConnectTo(Output* output) {
+	outputConnected = output;
+}
 
 //------------------------------------------------------------------------------
 Output::Output(string name_) {
 	name = name_;
+	signal = NULL;
+
+	/* TODO (#1#): zrobic try block */
+	SetBufferSize(Module::framesPerBlock);
 }
 
 Output::~Output() {
@@ -60,4 +68,23 @@ string Output::GetName() const {
 
 float* Output::GetSignal() const {
 	return signal;
+}
+
+void Output::SetBufferSize(unsigned long newBufferSize) {
+	float* outBuff;
+
+	// kasowanie bufora poprzedniego o ile isnieje
+	if(signal != NULL) {
+		delete []signal;
+		signal = (float*)NULL;
+	}
+	
+	// stworzenie bufora wyjsciowego o dlugosci newBufferSize
+	outBuff = new float[newBufferSize];
+	if(outBuff == NULL) {
+        throw RTSError("Output::SetBufferSize(): Nie mozna zaalokowac pamieci na bufor wyjsciowy");
+	}
+	else {
+		signal = outBuff;
+	}
 }

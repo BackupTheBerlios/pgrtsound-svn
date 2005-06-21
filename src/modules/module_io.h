@@ -3,7 +3,34 @@
 
 #include <string>
 
+#include "../debug.h"
+
 using namespace std;
+
+class Output;
+
+/**
+ Wejscie modulu.
+ Klasa reprezentujaca wyjscia modulow. Najisotniejsza jej metoda jest
+ ConnectTo() pozwalajaca podlaczyc aktualne wejscie do zadanego wyjscia.
+*/
+class Input {
+	public:
+				Input(string name_);
+				~Input();
+		int		GetID() const;
+		int		GetIDModule() const;
+		int 	GetIDModuleOutput() const;
+		string	GetName() const;
+		float*	GetSignal();
+		void	SetID(int newID);
+		void    ConnectTo(Output* output);
+
+	protected:
+		Output* outputConnected;	/**< Wkaznik do wyjscia, do ktorego wejscie jest podlaczone */
+		int		id;					/**< Numer idetyfikujacy wejscie */
+		string	name;				/**< Nazwa wejscia */
+};
 
 /**
  * Wyjscie modulu.
@@ -20,34 +47,12 @@ class Output {
 		float*	GetSignal() const;
 		void	SetID(int newID);
 		void	SetSignal(float* sig);
+		void    SetBufferSize(unsigned long newBufferSize);
 
 	protected:
 		int		id;		// numer idetyfikujacy wejscie
 		string	name;	// nazwa wejscia
 		float*	signal;	// wskaznik na bufor wyjsciowy
-};
-
-//------------------------------------------------------------------------------
-/**
- * Wejscie modulu.
- * Pelni zadanie podobne jak klasa Output, ale dla wejsc modulu.
- */
-class Input {
-	public:
-				Input(string name_);
-				~Input();
-		int		GetID() const;
-		int		GetIDModule() const;
-		int 	GetIDModuleOutput() const;
-		string	GetName() const;
-		float*	GetSignal();
-		void	SetID(int newID);
-		void	SetSignal(float* sig);
-
-	protected:
-		int		id;		           /**< Numer idetyfikujacy wejscie */
-		string	name;	           /**< Nazwa wejscia */
-		float*	signal;	           /**< Wskaznik na podlaczony do wejscia bufor */
 };
 
 #endif // MODULE_IO_H
