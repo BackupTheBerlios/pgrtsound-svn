@@ -3,9 +3,9 @@
 Multiplication::Multiplication() : Module("multiplication", "New multiplication"),
 	iIn1("input 1"), iIn2("input 2"), oOut("out")
 {
-   	AddInput(&iIn1);
-	AddInput(&iIn2);
-	AddOutput(&oOut);
+   	AddInput(iIn1);
+	AddInput(iIn2);
+	AddOutput(oOut);
 }
 
 Multiplication::~Multiplication(){

@@ -40,9 +40,9 @@ class Module {
 
 				Module(string type_, string name_);
 				~Module();
-		int		AddInput(Input* input);
-		int		AddOutput(Output* output);
-		int		AddParameter(Parameter* param);
+		int		AddInput(Input& input);
+		int		AddOutput(Output& output);
+		int		AddParameter(Parameter& param);
 		virtual void	Process();
 		virtual void	Init();
 		void	SetName(string newName);
@@ -82,7 +82,7 @@ class NullModuleSingleton : public Module {
 		static NullModuleSingleton NullModule;
 	
 		NullModuleSingleton() : Module("null", "null"), oNull("null") {
-			AddOutput(&oNull);
+			AddOutput(oNull);
 			BlockSizeChanged();
 	}
 

@@ -4,10 +4,10 @@
 Slider::Slider() : Module("slider", "New Slider"),
 	oOut("wy"), pMin("min"), pMax("max"), pValue("value")
 {
-	AddOutput(&oOut);
-	AddParameter(&pMin);
-	AddParameter(&pMax);
-	AddParameter(&pValue);
+	AddOutput(oOut);
+	AddParameter(pMin);
+	AddParameter(pMax);
+	AddParameter(pValue);
 }
 
 

@@ -28,9 +28,10 @@ Module::~Module() {
  * Po dodaniu parametru, zwraca numer identyfikujacy je w module.
  * @param param Wskaznik do obiektu parametru, ktory chcemy dodac
  */
-int Module::AddParameter(Parameter *param) {
-	parameters.push_back(param);
-	return param->GetID();
+int Module::AddParameter(Parameter& param) {
+	param.SetID( parameters.size() );
+	parameters.push_back(&param);
+	return param.GetID();
 }
 
 /**
@@ -38,11 +39,11 @@ int Module::AddParameter(Parameter *param) {
  * Funkcja po dodaniu wejscia, zwraca numer idnetyfikujacy to wejscie w module.
  * @param input Wskaznik do obiektu wejscia, ktory chcemy dodac
  */
-int Module::AddInput(Input* input) {
-	input->SetID( inputs.size() );
-	input->ConnectTo( nullModule.GetOutput(0) );
-	inputs.push_back(input);
-	return input->GetID();
+int Module::AddInput(Input& input) {
+	input.SetID( inputs.size() );
+	input.ConnectTo( nullModule.GetOutput(0) );
+	inputs.push_back(&input);
+	return input.GetID();
 }
 
 /**
@@ -50,10 +51,10 @@ int Module::AddInput(Input* input) {
  * Po dodania wyjscia zwraca numer identyfikujacy je w module.
  * @param output Wskaznik do obiektu wyjscia, ktory chcemy dodac
  */
-int Module::AddOutput(Output* output) {
-	output->SetID( outputs.size() );
-	outputs.push_back(output);
-	return output->GetID();
+int Module::AddOutput(Output& output) {
+	output.SetID( outputs.size() );
+	outputs.push_back(&output);
+	return output.GetID();
 }
 
 

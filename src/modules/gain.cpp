@@ -3,10 +3,10 @@
 Gain::Gain() : Module("gain", "New gain"),
 	iIn("inputexxxx"), oOut("output"), pGain("gain")
  {
-	AddInput(&iIn);
-	AddOutput(&oOut);
+	AddInput(iIn);
+	AddOutput(oOut);
 	pGain.Bound(0, 1, 0.01);    // ograczniczenie wartosci
-	AddParameter(&pGain);
+	AddParameter(pGain);
 }
 
 Gain::~Gain() {

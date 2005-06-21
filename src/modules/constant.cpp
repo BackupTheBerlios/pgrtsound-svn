@@ -3,8 +3,8 @@
 Constant::Constant() : Module("constant", "New constant"),
 	oValue("wy"), pValue("value")
 {
-	AddOutput(&oValue);
-	AddParameter(&pValue);
+	AddOutput(oValue);
+	AddParameter(pValue);
 	oldValue = 0;
 }
 

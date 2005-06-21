@@ -3,9 +3,9 @@
 Sum::Sum() : Module("sumator", "New sumator"),
 	i1("input 1"), i2("input 2"), oSum("sum")
 {
-	AddInput(&i1);
-	AddInput(&i2);
-	AddOutput(&oSum);
+	AddInput(i1);
+	AddInput(i2);
+	AddOutput(oSum);
 }
 
 Sum::~Sum() {

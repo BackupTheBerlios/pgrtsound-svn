@@ -3,7 +3,7 @@
 AudioPortOut::AudioPortOut() : Module("audioportout", "AudioPortOut"),
 	inLeft("wejscie L")
 {
-	AddInput(&inLeft);
+	AddInput(inLeft);
 }
 
 AudioPortOut::~AudioPortOut() {

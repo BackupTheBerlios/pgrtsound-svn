@@ -5,9 +5,9 @@ SinOsc2::SinOsc2() : Module("sinosc2", "New oscillator v2"),
 	float	*sample, tableSizeInverted;
 	tableSize = 16384;
 
-	AddInput(&iFreq);
-	AddInput(&iAmp);
- 	AddOutput(&oOut);
+	AddInput(iFreq);
+	AddInput(iAmp);
+ 	AddOutput(oOut);
 
 	sinTable = new float[tableSize + 1];
 	sample = sinTable;
