@@ -7,13 +7,6 @@
 
 using namespace std;
 
-// Paramter GUI types
-enum {
-	gtInvisible,
-	gtProperty,
-   	gtParameter,
-};
-
 //------------------------------------------------------------------------------
 class Parameter {
    	protected:
@@ -24,16 +17,15 @@ class Parameter {
 	private:
    		string	type;
    		string	name;
-   		int		GUItype;
 
 	public:
-		Parameter(string type_, string name_, int GUItype_);
+		Parameter(string type_, string name_);
 		~Parameter();
 		int GetID() const;
 		string GetName() const;
 		string GetLabel() const;
 		string GetDescription() const;
-		int GetGUIType() const;
+		string GetType() const;
 		void SetID(int newID);
 		void SetLabel(string newLabel);
 		void SetDescription(string newDesc);
@@ -42,10 +34,9 @@ class Parameter {
 //------------------------------------------------------------------------------
 class ParameterFloat : public Parameter {
 	public:
-		ParameterFloat(string name_, int GUItype_);
+		ParameterFloat(string name_);
 		~ParameterFloat() {};
 		void Bound(float min, float max, float step);
-		//virtual void SetValue(float newValue);
 		virtual void SetValue(float newValue);
 		virtual float GetValue() const;
 		virtual float GetMin() const;
@@ -79,7 +70,7 @@ inline float ParameterFloat::GetValue() const {
 //------------------------------------------------------------------------------
 class ParameterString : public Parameter {
 	public:
-   		ParameterString(string name_, int GUItype_);
+   		ParameterString(string name_);
    		~ParameterString();
 		virtual void SetText(string newText);
 		virtual string GetText();

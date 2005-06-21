@@ -1,9 +1,8 @@
 #include "module_parameters.h"
 
-Parameter::Parameter(string type_, string name_, int GUItype_) {
+Parameter::Parameter(string type_, string name_) {
 	type = type_;
 	name = name_;
-	GUItype =  GUItype_;
 	description =  "";
 	label = "";
 }
@@ -19,16 +18,15 @@ string Parameter::GetName() const {
 	return name;
 }
 
+string Parameter::GetType() const {
+	return type;
+}
 string Parameter::GetLabel() const {
 	return label;
 }
 
 string Parameter::GetDescription() const {
 	return description;
-}
-
-int Parameter::GetGUIType() const {
-	return GUItype;
 }
 
 void Parameter::SetID(int newID) {
@@ -44,8 +42,8 @@ void Parameter::SetDescription(string newDesc) {
 }
 
 //------------------------------------------------------------------------------
-ParameterFloat::ParameterFloat(string name_, int GUItype_) :
-	Parameter("float", name_, GUItype_)
+ParameterFloat::ParameterFloat(string name_) :
+	Parameter("float", name_)
 {
     value = 0;
     bounded = false;
@@ -71,8 +69,8 @@ float ParameterFloat::GetStep() const {
 }
 
 //------------------------------------------------------------------------------
-ParameterString::ParameterString(string name_, int GUItype_) :
-	Parameter("string", name_, GUItype_)
+ParameterString::ParameterString(string name_) :
+	Parameter("string", name_)
 {
 	description = "no description";
 	label       = "no label";
