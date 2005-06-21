@@ -13,6 +13,7 @@ using namespace std;
 	#define TRACE3(kto, co1, co2, co3) cout << kto << ": " << co1 << co2 << co3 << endl
 	#define TRACE4(kto, co1, co2, co3, co4) cout << kto << ": " << co1 << co2 << co3 << co4 << endl
 	#define TRACE5(kto, co1, co2, co3, co4, co5) cout << kto << ": " << co1 << co2 << co3 << co4 << co5 << endl
+	#define TRACE6(kto, co1, co2, co3, co4, co5, co6) cout << kto << ": " << co1 << co2 << co3 << co4 << co5 << co6 << endl
 #else
 	#define TRACE(kto, co)
 	#define TRACE2(kto, co1, co2)

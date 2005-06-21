@@ -9,52 +9,6 @@ AudioDriver::AudioDriver() {
 	callbackFunction = NULL;
 	callbackData = NULL;
 	
-// 	Pa_Initialize();
-// 
-// 	// domyslnie brak urzadzen
-// 	outputParameters.device = Pa_GetDefaultOutputDevice();
-// 	//outputParameters.device = 1;
-// 	outputParameters.channelCount = 2;
-// 	outputParameters.sampleFormat = paFloat32;
-// 	outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
-// 	outputParameters.hostApiSpecificStreamInfo = NULL;
-// 
-// 	inputParameters.device = Pa_GetDefaultInputDevice();
-// 	//inputParameters.device = 1;
-// 	inputParameters.channelCount = 2;
-// 	inputParameters.sampleFormat = paFloat32;
-// 	inputParameters.suggestedLatency = Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency;
-// 	inputParameters.hostApiSpecificStreamInfo = NULL;
-	
-// 	inputParameters.device = paNoDevice;
-// 	inputParameters.channelCount = 0;
-// 	inputParameters.sampleFormat = paFloat32;
-// 	inputParameters.suggestedLatency = 0;
-// 	inputParameters.hostApiSpecificStreamInfo = NULL;
-
-	
-// 	const PaHostApiInfo* ai;
-// 	for(int i = 0; i < Pa_GetHostApiCount(); i++) {
-// 		ai = Pa_GetHostApiInfo(i);
-// 		PR(ai->name);
-// 		PR(ai->deviceCount);
-// 		cout << endl;
-// 	}	
-// 	
-// 	
-// 	int devs = Pa_GetDeviceCount();
-// 	const PaDeviceInfo* di;
-// 
-// 	for(int i = 0; i < devs; i++) {
-// 		di =Pa_GetDeviceInfo(i);
-// 		PR(di->name);
-// 		PR(di->hostApi);
-// 		PR(di->maxInputChannels);
-// 		PR(di->maxOutputChannels);
-// 		cout << endl;
-// 	}	
-
-
 	// domyslnie brak urzadzen
 	outputParameters.device = paNoDevice;
 	outputParameters.channelCount = 0;
@@ -96,7 +50,6 @@ AudioDriver::AudioDriver() {
 			Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
 		outputParameters.hostApiSpecificStreamInfo = NULL;
 
-
 		hostCount = -1;
 		const PaHostApiInfo* apiInfo;
 		// wykrywanie steorwnikow
@@ -107,14 +60,14 @@ AudioDriver::AudioDriver() {
 				//PR(apiInfo->deviceCount);
 				hostCount++;
 				hosts.push_back(*apiInfo);
-                		// domyslny host?
+				// domyslny host?
 				if(hostId == hi) hostNum = hosts.size() - 1;
 				// dodajmy to host API
 				InputDevices in; perHostInDevs.push_back(in);
 				OutputDevices out; perHostOutDevs.push_back(out);
 
-            			const PaDeviceInfo* paDevInfo;
-  				for(PaDeviceIndex di = 0; di < apiInfo->deviceCount; di++) {
+				const PaDeviceInfo* paDevInfo;
+				for(PaDeviceIndex di = 0; di < apiInfo->deviceCount; di++) {
 					int devIdx = Pa_HostApiDeviceIndexToDeviceIndex( hi, di);
 					paDevInfo = Pa_GetDeviceInfo(devIdx);
 					//PR(paDevInfo->name); PR(paDevInfo->hostApi);
@@ -151,25 +104,22 @@ AudioDriver::AudioDriver() {
 		TRACE("AudioDriver::AudioDriver()", "Zainicjowany");
 	}
 	
-// 		PR(hostId);
-// 		PR(inputDeviceId);
-// 		PR(outputDeviceId);
-// 
-// 	PR(hostNum);
-// 	PR(inputDeviceNum);
-// 	PR(outputDeviceNum);
+//	PR(hostId);
+//	PR(inputDeviceId);
+//	PR(outputDeviceId);
+//
+//	PR(hostNum);
+//	PR(inputDeviceNum);
+//	PR(outputDeviceNum);
 
 }
 
 AudioDriver::~AudioDriver() {
-	TRACE("AudioDriver::AudioDriver()", "Koncze...");
+	TRACE("AudioDriver::~AudioDriver()", "Koncze...");
 
-	if(Pa_IsStreamActive(stream)) {
-		Stop();
-	}
-
+	Stop();
 	Close();
-	
+
 	error = Pa_Terminate();
 	if(error != paNoError)
 	    // desktruktor nie powinien rzucac wyjatkow!
@@ -200,7 +150,6 @@ void AudioDriver::Stop() {
 	if(stream != NULL) {
 		if(Pa_IsStreamActive(stream)) {
 			error = Pa_StopStream(stream);
-
 			if(error != paNoError)
 				throw AudioDriverError( "AudioDriver::Stop(): " + string(Pa_GetErrorText(error)) );
 			else
@@ -253,6 +202,7 @@ void  AudioDriver::PrintConfiguration() {
 	cout << "                 kanalow: " << outputParameters.channelCount << endl;
 	cout << "              opoznienie: " << outputParameters.suggestedLatency << endl;
 	cout << "      Czest. probkowania: " << sampleRate << endl;
+	cout << "          Rozmiar bufora: " << framesPerBuffer << endl;
 }
 
 void AudioDriver::Open() {
@@ -261,7 +211,7 @@ void AudioDriver::Open() {
 	Stop();
 	Close();
 	
-	PrintConfiguration();
+	//PrintConfiguration();
 
 	error = Pa_OpenStream(
 			&stream,
@@ -277,7 +227,7 @@ void AudioDriver::Open() {
 	if(error != paNoError)
 		throw AudioDriverError( "AudioDriver::Open(): " + string(Pa_GetErrorText(error)) );
 	else
-		TRACE3("AudioDriver::Open()", "Otwarty strumien ", sampleRate, " Hz ");
+		TRACE5("AudioDriver::Open()", "Otwarty strumien ", sampleRate, " Hz, ", framesPerBuffer, " ramek/bufor");
 }
 
 float AudioDriver::GetCPUUsage() const {
@@ -375,3 +325,6 @@ double AudioDriver::GetSampleRate() const {
 	return sampleRate;
 }
 
+void AudioDriver::SetBufferSize(unsigned long newBufferSize) {
+	framesPerBuffer = newBufferSize;
+}

@@ -29,7 +29,8 @@ int main(int argc, char *argv[]) {
     audio.PrintDevices();
     
  	try {
-        xmlConfig.OpenFile("../../examples/noise_filtering.xml");
+		//xmlConfig.OpenFile("../../examples/noise_filtering.xml");
+		xmlConfig.OpenFile("../../examples/fm2.xml");
         algo.Clear(); // test
 		xmlConfig.LoadAlgorithm(&algo);
 		algo.Init();
@@ -39,7 +40,6 @@ int main(int argc, char *argv[]) {
         cout << "Error: " << error.what() << endl;
         exit(1);
     }
-
 	try {
 		audio.SetCallback(paCallback, (void*)&algo);
 		audio.SetSampleRate(SAMPLE_RATE);
@@ -61,8 +61,31 @@ int main(int argc, char *argv[]) {
 			running = false;
 		}
 	}
-	
-	algo.Clear();
+
+	//TEST zmiany rozmiaru bloku
+//	audio.Stop();
+//	audio.Close();
+//
+//	audio.SetBufferSize(512);
+//	algo.SetBlockSize(512);
+//
+//	audio.Open();
+//
+//	c = ' ';
+//
+//     while(c != 'q') {
+//		c = cin.get();
+//
+//		if(!running) {
+//			audio.Start();
+//			running = true;
+//		}
+//		else {
+//			audio.Stop();
+//			running = false;
+//		}
+//	}
+
 
 	return EXIT_SUCCESS;
 }

@@ -64,6 +64,7 @@ class Algorithm {
 		void			SetSampleRate(float sRate);
 		void            SetName(string newName);
 		string          GetName();
+		void            SetBlockSize(unsigned long newBlockSize);
 		Module*       GetModule(ModuleId moduleId) const;
 		Module*       GetModule(string moduleName) const;
 		ModuleId      GetModuleId(string moduleName) const;
@@ -74,7 +75,7 @@ class Algorithm {
 		Module*       GetNextModule();
 		void          DeleteModule(ModuleId moduleId);
 		void          DeleteConnection(ConnectionId connectionId);
-		void          DeleteConnection(ModuleId moduleId);
+		//void          DeleteConnection(ModuleId moduleId);
 		ModuleId      AddModule(string type, string name);
 		ConnectionId  ConnectModules(ModuleId moduleId1, int outputId,
 							ModuleId moduleId2, int inputId);

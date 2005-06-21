@@ -78,14 +78,16 @@ RTMainWindow::RTMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER) {
 	if(pToolbar)
 		mainBox.pack_start(*pToolbar, Gtk::PACK_SHRINK);
 
+	//cpuUsageLabel.set_justify(Gtk::JUSTIFY_LEFT);
+    cpuUsageLabel.set_label("CPU usage");
+	cpuUsageLabel.set_alignment(0, 0.5);
+	cpuUsageLabel.set_width_chars(100);
+	
 	mainBox.set_homogeneous(false);
     mainBox.pack_start(scrollWindow);
-    mainBox.pack_end(cpuUsageLabel, Gtk::PACK_SHRINK);
+    mainBox.pack_start(cpuUsageLabel,  Gtk::PACK_SHRINK, Gtk::FILL, 0);
 
-	cpuUsageLabel.set_justify(Gtk::JUSTIFY_LEFT);
-    cpuUsageLabel.set_label("CPU usage");
-
-   	scrollWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	scrollWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
 	modulesBox.set_border_width(5);
 	modulesBox.set_homogeneous(false);
@@ -242,8 +244,9 @@ void RTMainWindow::ClearModules() {
 }
 
 bool RTMainWindow::OnTimeOut() {
-	char txt[20];
-    g_snprintf(txt, 20, "CPU Usage: %#.2f %%", audio.GetCPUUsage()*100);
+	char txt[60];
+    g_snprintf(txt, 60, "CPU usage: %#.2f %%  in: %#.1f ms  out: %#.1f ms", audio.GetCPUUsage()*100,
+		audio.GetInputLatency()*1000, audio.GetOutputLatency()*1000 );
 	cpuUsageLabel.set_label(txt);
 	
 	return true;

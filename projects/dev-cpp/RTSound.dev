@@ -20,7 +20,7 @@ ObjectOutput=objs\
 OverrideOutput=0
 OverrideOutputName=RTSound.exe
 HostApplication=
-Folders=modules,modules/filters,modules/math,modules/synthesis,tinyxml
+Folders=modules,modules/filters,modules/interface,modules/math,modules/synthesis,modules/tools,tinyxml
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -132,7 +132,7 @@ BuildCmd=
 [Unit15]
 FileName=..\..\src\modules\slider.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/interface
 Compile=1
 Link=1
 Priority=1000
@@ -142,7 +142,7 @@ BuildCmd=
 [Unit16]
 FileName=..\..\src\modules\slider.h
 CompileCpp=1
-Folder=modules
+Folder=modules/interface
 Compile=1
 Link=1
 Priority=1000
@@ -172,7 +172,7 @@ BuildCmd=
 [Unit19]
 FileName=..\..\src\modules\textfileout.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/tools
 Compile=1
 Link=1
 Priority=1000
@@ -340,7 +340,7 @@ BuildCmd=
 [Unit20]
 FileName=..\..\src\modules\textfileout.h
 CompileCpp=1
-Folder=modules
+Folder=modules/tools
 Compile=1
 Link=1
 Priority=1000

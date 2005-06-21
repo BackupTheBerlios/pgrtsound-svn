@@ -28,13 +28,6 @@ struct DeviceInfo {
 	string name;
 };
 
-
-//
-//struct HostInfo {
-//    PaHostApiIndex id;
-//	string name;
-//};
-
 /**
  * PortAudio wrapper
  */
@@ -54,6 +47,7 @@ class AudioDriver
 		void SetSampleRate(double newSampleRate);
 		void SetHost(PaHostApiIndex hNum);
 		void SetDevices(PaDeviceIndex inDevNum, PaDeviceIndex outDevNum);
+		void SetBufferSize(unsigned long newBufferSize);
 		float GetCPUUsage() const;
 		double GetSampleRate() const;
 		int GetInputDeviceCount() const;
