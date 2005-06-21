@@ -110,8 +110,8 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 		{
 			if(paramElem != NULL) {
                 paramTxt = paramElem->FirstChild();
-                paramType = paramElem->Attribute("type");
 				paramId = atoi(paramElem->Attribute("number"));
+                paramType = algo->GetModule(moduleName)->GetParameter(paramId)->GetType();
 
 				if(paramTxt != NULL) {
 					paramValue = paramTxt->Value();
