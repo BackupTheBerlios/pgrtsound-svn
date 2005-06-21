@@ -18,10 +18,7 @@
 #define M_2PI  (6.2831853f)
 #endif
 
-
 using namespace std;
-
-void SetNullBuffer(unsigned long size);
 
 /**
  * Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
@@ -46,7 +43,6 @@ class Module {
 		int		AddInput(Input* input);
 		int		AddOutput(Output* output);
 		int		AddParameter(Parameter* param);
-		void	ConnectInputTo(int numInput, float *sourceSignal);
 		virtual void	Process();
 		virtual void	Init();
 		void	SetName(string newName);
@@ -58,6 +54,9 @@ class Module {
 		Input*		GetInput(int inputID);
 		Output*		GetOutput(int outputID);
 		Parameter*	GetParameter(int pID);
+		void		UpdateBlockSize();
+		virtual void SampleRateChanged();
+		virtual void BlockSizeChanged();
 };
 
 inline Input* Module::GetInput(int inputID) {
@@ -71,5 +70,38 @@ inline Output* Module::GetOutput(int outputID) {
 inline Parameter* Module::GetParameter(int pID) {
 	return parameters[pID];
 }
+
+/**
+ Globalny modul 'zerowy'.
+ Pomocniczy obiekt-singleton pozwalajac realizowac wewnetrznie 'wiszace'
+ (nie polaczone) wejscia modulow.
+*/
+class NullModuleSingleton : public Module {
+	private:
+		Output oNull;
+		static NullModuleSingleton NullModule;
+	
+		NullModuleSingleton() : Module("null", "null"), oNull("null") {
+			AddOutput(&oNull);
+			BlockSizeChanged();
+	}
+
+	public:
+		static NullModuleSingleton& Instance() {
+			return NullModule;
+		}
+
+		void BlockSizeChanged() {
+       		//TRACE2("NullModule::NullModule()", "Alokuje bufor zerowy rozmiaru ", Module::framesPerBlock);
+			float* buff;
+			buff = oNull.GetSignal();
+
+			buff = new float[Module::framesPerBlock];
+			for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
+				*buff++ = 0.0f;
+			}
+			//TRACE2("module.cpp", "Bufor zerowy zaalokowany ", buff);
+		}
+};
 
 #endif // MODULE_H

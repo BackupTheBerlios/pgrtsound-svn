@@ -1,27 +1,12 @@
 #include "module.h"
 
+// domyslne
 int	Module::framesPerBlock = 256;
-float	Module::sampleRate = 44100;
+float Module::sampleRate = 44100;
 
-// uzyteczny, globabalny bufor zerowy
-float* nullBuffer;
-static bool allocateNullBuffer = true;
-
-void SetNullBuffer(unsigned long size) {
-	if(allocateNullBuffer) {
-		TRACE2("module.cpp", "Alokuje bufor zerowy rozmiaru ", size);
-		float* buff;
-		nullBuffer = new float[size];
-		buff = nullBuffer;
-
-	 	for(unsigned long i = 0; i < size; i++) {
-			*buff++ = 0.0f;
-		}
-		allocateNullBuffer = false;
-
-		TRACE2("module.cpp", "Bufor zerowy zaalokowany ", nullBuffer);
-	}
-}
+// gloablny modul wysylajacy zera
+NullModuleSingleton NullModuleSingleton::NullModule;
+NullModuleSingleton& nullModule = NullModuleSingleton::Instance();
 
 //------------------------------------------------------------------------------
 /**
@@ -55,6 +40,7 @@ int Module::AddParameter(Parameter *param) {
  */
 int Module::AddInput(Input* input) {
 	input->SetID( inputs.size() );
+	input->ConnectTo( nullModule.GetOutput(0) );
 	inputs.push_back(input);
 	return input->GetID();
 }
@@ -65,34 +51,11 @@ int Module::AddInput(Input* input) {
  * @param output Wskaznik do obiektu wyjscia, ktory chcemy dodac
  */
 int Module::AddOutput(Output* output) {
-	float* outBuff;
-
-	// stworzenie bufora wyjsciowego o dlugosci framesPerBlock
-	outBuff = new float[Module::framesPerBlock];
-	if(outBuff == NULL) {
-        throw RTSError("Module::AddOutput(): Nie mozna zaalokowac pamieci na bufor wyjsciowy");
-	}
-	else {
-        output->SetID( outputs.size() );
-		output->SetSignal(outBuff);
- 		outputs.push_back(output);
-		return output->GetID();
-	}
+	output->SetID( outputs.size() );
+	outputs.push_back(output);
+	return output->GetID();
 }
 
-/**
- *	Laczy wejscie biezacego modulu z wyjsciem innego.
- * @param numInput Numer wejscia beirzacego modulu
- * @param sourceSignal Wskaznik do bufora wyjciowego wysjcia, do ktorege sie podlaczamy
- */
-void Module::ConnectInputTo(int numInput, float *sourceSignal) {
-	if(numInput > inputs.size()) {
-		TRACE3("Module::ConnectInputTo()", "Wejscie o id = ", numInput, " nie istnieje");
-	}
-	else {
-		GetInput(numInput)->SetSignal(sourceSignal);
-	}
-}
 
 /**
  * Funckja przetwarzania.
@@ -152,3 +115,40 @@ int Module::GetOutputCount() {
 int Module::GetInputCount() {
     return inputs.size();
 }
+
+/**
+ Powiadomienie modulu zmianie czest. probkowania.
+ Funcka jest wywolywana gdy nastapi zmiana dlugosci czest. probkowania (w
+ funckji UpdateBlockSize()).Redefinicja omawianej funkcji wirtualnej w module
+ pozwala na jego odpowiednie dostosowanie do nowej czest. probkowania,
+ jesli realizowany algorytmy tego wymaga.
+*/
+void Module::SampleRateChanged() {
+	// nadpisywac w modulach
+}
+
+/**
+ Powiadomienie modulu zmianie dlugosci bloku przetwarzania.
+*/
+void Module::BlockSizeChanged() {
+	// nadpisywac w modulach
+}
+
+/**
+ Aktualziacja rozmiaru bloku.
+ Funckja wykonuje czynnosci potrzbne po zmianie dlugosci bloku (Module::framesPerBlock).
+ Nanlezy wywolac ja dla wszsytkich modulow, m.in. w celu aktualizacji dlugosci
+ buforow wyjsc.
+*/
+void Module::UpdateBlockSize() {
+	//zmiana rozmiaru buforow wyjsc
+	for(int i = 0; i < outputs.size(); i++) {
+        TRACE6("Output::SetBufferSize()", "Wyjscie [", name, "].[", outputs[i]->GetName(),
+			"] zmienia rozmiar bufora na ", Module::framesPerBlock);
+		outputs[i]->SetBufferSize(Module::framesPerBlock);
+	}
+	
+	// niech modul obsluzy fakt zmiany rozmiaru bloku
+	BlockSizeChanged();
+}
+
