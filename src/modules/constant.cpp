@@ -1,7 +1,7 @@
 #include "constant.h"
 
 Constant::Constant() : Module("constant", "New constant"),
-	oValue("wy"), pValue("value", gtProperty)
+	oValue("wy"), pValue("value")
 {
 	AddOutput(&oValue);
 	AddParameter(&pValue);

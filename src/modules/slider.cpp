@@ -2,7 +2,7 @@
 
 // class constructor
 Slider::Slider() : Module("slider", "New Slider"),
-	oOut("wy"), pMin("min", gtProperty), pMax("max", gtProperty), pValue("value", gtParameter)
+	oOut("wy"), pMin("min"), pMax("max"), pValue("value")
 {
 	AddOutput(&oOut);
 	AddParameter(&pMin);

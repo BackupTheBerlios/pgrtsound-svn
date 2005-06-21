@@ -1,9 +1,9 @@
 #include "noise.h"
 
-int const q = 15;
-float const c1 = (1 << q) - 1;
-float const c2 = ((int)(c1 / 3)) + 1;
-float const c3 = 1.f / c1;
+const int  Noise::q = 15;
+const float Noise::c1 = (1 << q) - 1;
+const float Noise::c2 = ((int)(c1 / 3)) + 1;
+const float Noise::c3 = 1.f / c1;
 
 Noise::Noise() : Module("noise", "New noise generator"), oOut("out") {
 	AddOutput(&oOut);
@@ -13,8 +13,6 @@ Noise::Noise() : Module("noise", "New noise generator"), oOut("out") {
 
 	/* Generate a new random seed from system time - do this once in your constructor */
 	srand(time(0));
-	
-	PR(RAND_MAX);
 }
 
 Noise::~Noise() {

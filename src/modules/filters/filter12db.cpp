@@ -1,7 +1,7 @@
 #include "Filter12dB.h"
 
 Filter12dB::Filter12dB() : Module("filter12db", "Nowy filtr Butterwortha"),
-	iIn("input"), oOut("output"), pFreq("frequency", gtProperty)
+	iIn("input"), oOut("output"), pFreq("frequency")
 {
 	AddInput(&iIn);
 	AddOutput(&oOut);

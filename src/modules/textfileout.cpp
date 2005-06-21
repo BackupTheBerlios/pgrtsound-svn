@@ -3,7 +3,7 @@
 using namespace std;
 
 TextFileOut::TextFileOut() : Module("textfileout", "New text file"),
-	iIn("input"), pFileName("filename", gtProperty), pFreq("freq", gtProperty)
+	iIn("input"), pFileName("filename"), pFreq("freq")
   {
 	AddInput(&iIn);
 	AddParameter(&pFileName);

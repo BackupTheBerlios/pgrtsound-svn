@@ -1,8 +1,6 @@
 #ifndef NOISE_H
 #define NOISE_H
 
-//#define RAND_MAX = 1
-
 #include <cstdlib>
 #include <ctime>
 
@@ -20,11 +18,13 @@ class Noise : public Module
 		
 	private:
 		Output oOut;
-//		/* Setup constants */
-//		const static int q;
-//		const static float c1;
-//		const static float c2;
-//		const static float c3;
+
+		/* Setup constants */
+		const static int q;
+		const static float c1;
+		const static float c2;
+		const static float c3;
+
 		/* random number in range 0 - 1 not including 1 */
 		float random;
 		/* the white noise */

@@ -5,6 +5,15 @@
 
 #include "../module.h"
 
+//class ParameterFilterType : public ParameterString {
+//	void SetText(string newFilteType);
+//}
+//
+//
+//void ParameterFilterType::SetText(string newFilteType) {
+//
+//}
+
 /**
  * Filtr dolnoprzepustowy.
  Moduly reazliuje filtracje DP z wykorzystaniem cyfroewj imlpementacji
@@ -22,6 +31,7 @@ class Filter12dB : public Module
 		Input iIn;
 		Output oOut;
 		ParameterFloat pFreq;
+		//ParameterString pFreq;
 		float a0, a1, a2, b0, b1, b2, a0inv;
 		float omega, frequency, K, Q, V;
 		float xn, yn, z1n, z1m, z2n, z2m;
