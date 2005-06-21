@@ -6,7 +6,7 @@
         </module>
         <module type="noise" name="Generator szumu" />
         <module type="gain" name="Wzmocnienie">
-        	<parameter number="0" type="float">0.3</parameter>
+        	<parameter number="0">0.3</parameter>
         </module>>
     </modules>
     

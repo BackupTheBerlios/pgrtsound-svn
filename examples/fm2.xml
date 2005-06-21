@@ -4,39 +4,39 @@
 	<modules>
 
 		<module type="slider" name="Czestotliwosc modulatora">
-			<parameter number="0" type="float">5</parameter>
-			<parameter number="1" type="float">50</parameter>
-			<parameter number="2" type="float">5</parameter>
+			<parameter number="0">5</parameter>
+			<parameter number="1">50</parameter>
+			<parameter number="2">5</parameter>
 		</module>
 
 		<module type="constant" name="Amplituda modulatora">
-			<parameter number="0" type="float">1</parameter>
+			<parameter number="0">1</parameter>
 		</module>	
 
 		<module type="sinosc2" name="Modulator"/>
 		
 		<module type="slider" name="Glebokosc modulacji">
-			<parameter number="0" type="float">0</parameter>
-			<parameter number="1" type="float">100</parameter>
-			<parameter number="2" type="float">50</parameter>
+			<parameter number="0">0</parameter>
+			<parameter number="1">100</parameter>
+			<parameter number="2">50</parameter>
 		</module>
 		
 		<module type="multiplication" name="Mnozenie"/>
 
 		<module type="constant" name="Czestotliwosc nosnej">
-			<parameter number="0" type="float">220</parameter>
+			<parameter number="0">220</parameter>
 		</module>
 
 		<module type="sumator" name="Suma"/>
 
 		<module type="constant" name="Amplituda nosnej">
-			<parameter number="0" type="float">0.5</parameter>
+			<parameter number="0">0.5</parameter>
 		</module>
 
 		<module type="sinosc2" name="Nosna"/>
 
 <!-- 		<module type="textfileout" name="rekorder">
-			<parameter number="0" type="string">rekorder.txt</parameter>
+			<parameter number="0">rekorder.txt</parameter>
 		</module> -->
 
 	</modules>	
