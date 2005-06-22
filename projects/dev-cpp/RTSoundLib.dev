@@ -1,5 +1,5 @@
 [Project]
-FileName=RTSound.dev
+FileName=RTSoundLib.dev
 Name=rtsound
 UnitCount=44
 Type=2
@@ -20,7 +20,7 @@ ObjectOutput=objs\
 OverrideOutput=0
 OverrideOutputName=RTSound.exe
 HostApplication=
-Folders=modules,modules/filters,modules/interface,modules/math,modules/synthesis,modules/tools,tinyxml
+Folders=modules,modules/filters,modules/interface,modules/math,modules/special,modules/synthesis,modules/tools,tinyxml
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -200,7 +200,7 @@ AutoIncBuildNr=0
 [Unit21]
 FileName=..\..\src\modules\audioportin.h
 CompileCpp=1
-Folder=modules
+Folder=modules/special
 Compile=1
 Link=1
 Priority=1000
@@ -330,7 +330,7 @@ BuildCmd=
 [Unit20]
 FileName=..\..\src\modules\audioportin.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/special
 Compile=1
 Link=1
 Priority=1000
@@ -340,7 +340,7 @@ BuildCmd=
 [Unit22]
 FileName=..\..\src\modules\audioportout.cpp
 CompileCpp=1
-Folder=modules
+Folder=modules/special
 Compile=1
 Link=1
 Priority=1000
@@ -350,7 +350,7 @@ BuildCmd=
 [Unit23]
 FileName=..\..\src\modules\audioportout.h
 CompileCpp=1
-Folder=modules
+Folder=modules/special
 Compile=1
 Link=1
 Priority=1000
