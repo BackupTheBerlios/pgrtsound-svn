@@ -12,7 +12,7 @@ ResourceIncludes=
 MakeIncludes=
 Compiler=
 CppCompiler=-IC:/Dev-Cpp/include/gtkmm-2.4 -IC:/Dev-Cpp/lib/gtkmm-2.4/include -IC:/Dev-Cpp/include/glibmm-2.4 -IC:/Dev-Cpp/lib/glibmm-2.4/include -IC:/Dev-Cpp/include/gdkmm-2.4 -IC:/Dev-Cpp/lib/gdkmm-2.4/include -IC:/Dev-Cpp/include/pangomm-1.4 -IC:/Dev-Cpp/include/atkmm-1.6 -IC:/Dev-Cpp/include/gtk-2.0 -IC:/Dev-Cpp/include/sigc++-2.0 -IC:/Dev-Cpp/lib/sigc++-2.0/include -IC:/Dev-Cpp/include/glib-2.0 -IC:/Dev-Cpp/lib/glib-2.0/include -IC:/Dev-Cpp/lib/gtk-2.0/include -IC:/Dev-Cpp/include/pango-1.0 -IC:/Dev-Cpp/include/atk-1.0_@@__@@_-IC:/MinGW/include/gtkmm-2.4 -IC:/MinGW/lib/gtkmm-2.4/include -IC:/MinGW/include/glibmm-2.4 -IC:/MinGW/lib/glibmm-2.4/include -IC:/MinGW/include/gdkmm-2.4 -IC:/MinGW/lib/gdkmm-2.4/include -IC:/MinGW/include/pangomm-1.4 -IC:/MinGW/include/atkmm-1.6 -IC:/MinGW/include/gtk-2.0 -IC:/MinGW/include/sigc++-2.0 -IC:/MinGW/lib/sigc++-2.0/include -IC:/MinGW/include/glib-2.0 -IC:/MinGW/lib/glib-2.0/include -IC:/MinGW/lib/gtk-2.0/include -IC:/MinGW/include/pango-1.0 -IC:/MinGW/include/atk-1.0 _@@_
-Linker=_@@_objs/algorithm.o_@@_objs/audiodriver.o_@@_objs/audioportin.o_@@_objs/audioportout.o_@@_objs/callback.o_@@_objs/constant.o_@@_objs/debug.o_@@_objs/filter12db.o_@@_objs/gain.o_@@_objs/module.o_@@_objs/module_io.o_@@_objs/module_parameters.o_@@_objs/modulefactory.o_@@_objs/multiplication.o_@@_objs/noise.o_@@_objs/sinosc2.o_@@_objs/slider.o_@@_objs/sum.o_@@_objs/textfileout.o_@@_objs/tinystr.o_@@_objs/tinyxml.o_@@_objs/tinyxmlerror.o_@@_objs/tinyxmlparser.o_@@_objs/xmlconfigfile.o_@@__@@__@@_-LC:/Dev-Cpp/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv_@@__@@_-LC:/MinGW/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv _@@__@@_-lportaudio_@@_-lwinmm_@@_-lole32_@@__@@__@@_
+Linker=-LC:/Dev-Cpp/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv_@@__@@_-LC:/MinGW/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv _@@__@@_RTSoundLib.a_@@_-lportaudio_@@_-lwinmm_@@_-lole32_@@__@@_
 IsCpp=1
 Icon=
 ExeOutput=
@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=0000000000000000000000
+CompilerSettings=0000000000000000010000
 
 [VersionInfo]
 Major=0
