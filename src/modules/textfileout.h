@@ -1,9 +1,10 @@
 #ifndef TextFileOut_H
 #define TextFileOut_H
 
-#include "module.h"
 #include <fstream>
 #include <iostream>
+
+#include "module.h"
 
 using namespace std;
 
