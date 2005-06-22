@@ -12,22 +12,24 @@ TextFileOut::TextFileOut() : Module("textfileout", "New text file"),
 	AddParameter(pFreq);
 
 	frames = 0;
+	ofstream out(pFileName.GetText().c_str(), ofstream::out | ofstream::app);
 }
 
 TextFileOut::~TextFileOut() {
+	out.close();
+}
+
+Module* TextFileOut::Create() {
+	return new TextFileOut;
 }
 
 void TextFileOut::Process() {
 	float* in = iIn.GetSignal();
 	float pFreq1 = pFreq.GetValue();
-    
-	ofstream out(pFileName.GetText().c_str(), ofstream::out | ofstream::app);
 
 	for (int n = 0; n < Module::framesPerBlock; n++) {
 		frames++;
         if (frames % (unsigned long)pFreq1 == 0)
     	   out << (*in++) << endl;
 	}
-	
-	out.close();
 }

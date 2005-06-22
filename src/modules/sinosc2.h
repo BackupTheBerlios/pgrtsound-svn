@@ -21,7 +21,7 @@ class SinOsc2 : public Module {
 		SinOsc2();
 		~SinOsc2();
 		void Process();
-		
+		static Module* Create();
 	private:
 		Input	iFreq, iAmp;
 		Output	oOut;

@@ -17,6 +17,10 @@ Slider::~Slider() {
 //  	gui = NULL;
 }
 
+Module* Slider::Create() {
+	return new Slider;
+}
+
 void Slider::Init() {
    	pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1f);
 }

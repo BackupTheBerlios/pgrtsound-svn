@@ -11,6 +11,10 @@ Multiplication::Multiplication() : Module("multiplication", "New multiplication"
 Multiplication::~Multiplication(){
 }
 
+Module* Multiplication::Create() {
+	return new Multiplication;
+}
+
 void Multiplication::Process() {
 	float* in1 = iIn1.GetSignal();
 	float* in2 = iIn2.GetSignal();

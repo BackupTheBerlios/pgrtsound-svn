@@ -11,7 +11,7 @@ class Sum : public Module {
 		Sum();
 		~Sum();
 		void Process();
-	
+	static Module* Create();
 	private:
 		Input i1, i2;
 		Output oSum;

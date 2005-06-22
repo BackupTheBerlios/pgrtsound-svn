@@ -14,6 +14,10 @@ Filter12dB::Filter12dB() : Module("filter12db", "Nowy filtr Butterwortha"),
 Filter12dB::~Filter12dB() {
 }
 
+Module* Filter12dB::Create() {
+	return new Filter12dB;
+}
+
 void Filter12dB::Init() {
 	frequency = pFreq.GetValue();
 	omega = 2.0*M_PI*frequency / Module::sampleRate;

@@ -13,7 +13,7 @@ class Gain : public Module
 		Gain();
 		~Gain();
 		void Process();
-	
+	static Module* Create();
 	private:
 		Input iIn;
 		Output oOut;

@@ -18,6 +18,7 @@ class Slider : public Module
 		~Slider();
 		void Process();
 		void Init();
+		static Module* Create();
 
 	protected:
 		Output			oOut;

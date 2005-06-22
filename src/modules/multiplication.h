@@ -12,7 +12,7 @@ class Multiplication : public Module
 		Multiplication();
 		~Multiplication();
 		void Process();
-
+static Module* Create();
 	protected:
 		Input   iIn1, iIn2;
 		Output  oOut;

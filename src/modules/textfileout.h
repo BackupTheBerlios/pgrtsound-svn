@@ -16,8 +16,9 @@ class TextFileOut : public Module
 		TextFileOut();
 		~TextFileOut();
 		void Process();
-	
+			static Module* Create();
 	private:
+		ofstream out;
         unsigned long frames;
 		ParameterString pFileName;
 		ParameterFloat pFreq;

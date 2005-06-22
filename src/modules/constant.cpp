@@ -11,6 +11,10 @@ Constant::Constant() : Module("constant", "New constant"),
 Constant::~Constant() {
 }
 
+Module* Constant::Create() {
+	return new Constant;
+}
+
 void Constant::Process() {
 	// jesli w tym bloku zmienila sie wartosc to wypelnij bufor wyjsciowy
 	if (oldValue != pValue.GetValue())

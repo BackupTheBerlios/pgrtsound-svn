@@ -18,6 +18,10 @@ Noise::Noise() : Module("noise", "New noise generator"), oOut("out") {
 Noise::~Noise() {
 }
 
+Module* Noise::Create() {
+	return new Noise;
+}
+
 void Noise::Process() {
 	float* out = oOut.GetSignal();
 

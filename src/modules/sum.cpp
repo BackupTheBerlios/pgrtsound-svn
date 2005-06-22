@@ -11,6 +11,10 @@ Sum::Sum() : Module("sumator", "New sumator"),
 Sum::~Sum() {
 }
 
+Module* Sum::Create() {
+	return new Sum;
+}
+
 void Sum::Process() {
 	float* in1 = i1.GetSignal();
 	float* in2 = i2.GetSignal();

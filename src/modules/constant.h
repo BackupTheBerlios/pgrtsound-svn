@@ -12,7 +12,7 @@ class Constant : public Module {
 		Constant();
 		~Constant();
 		void Process();
-		
+		static Module* Create();
 	private:
         float oldValue;
         

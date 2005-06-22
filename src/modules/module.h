@@ -45,6 +45,7 @@ class Module {
 		int		AddParameter(Parameter& param);
 		virtual void	Process();
 		virtual void	Init();
+		static Module* Create();
 		void	SetName(string newName);
 		string	GetType() const;
 		string	GetName() const;

@@ -12,6 +12,10 @@ Gain::Gain() : Module("gain", "New gain"),
 Gain::~Gain() {
 }
 
+Module* Gain::Create(){
+	return new Gain;
+}
+
 void Gain::Process() {
 	int n;
 	float* in = iIn.GetSignal();
