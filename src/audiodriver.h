@@ -29,7 +29,7 @@ struct DeviceInfo {
 };
 
 /**
- * PortAudio wrapper
+ * PortAudio wrapper.
  */
 class AudioDriver
 {

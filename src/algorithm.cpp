@@ -1,6 +1,5 @@
 #include "algorithm.h"
 
-//extern void SetNullBuffer(unsigned long);
 extern NullModuleSingleton& nullModule;
 
 /** Konstruktor.
@@ -301,17 +300,14 @@ void Algorithm::DeleteModule(ModuleId moduleId) {
  @param connectionId identyfikator polaczenia do usuniecia
 */
 void Algorithm::DeleteConnection(ConnectionId connectionId) {
-	extern float* nullBuffer;
-
 	//graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
 	graph[connectionId].sink->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
 	boost::remove_edge(connectionId, graph);
 }
 
-
 /**
  Ustawienie nazwy algorytmu.
- Nazwa w zamysle ma okreslac w zwiezly sposob dzialanie algorytmu.
+ Nazwa w zamysle ma okreslac w zwiezly opis sposobu dzialania algorytmu.
 */
 void Algorithm::SetName(string newName) {
 	name = newName;

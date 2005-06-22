@@ -6,7 +6,7 @@
 #include "../../modules/module.h"
 
 /**
- * Interfejs modulow dla graficznego interfejsu uzytkownika
+ * Interfejs modulow dla graficznego interfejsu uzytkownika.
  */
 class GuiModule {
 	public:
