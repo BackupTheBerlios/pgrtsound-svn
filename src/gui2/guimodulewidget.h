@@ -8,7 +8,7 @@
 #include "debug.h"
 #include "guimodules/guimodule.h"
 
-// deklaracja potrzebna (naglowek "algorithmview.h" dalby petle)
+// deklaracja potrzebna (naglowek "algorithmview.h" dalby petle plikow naglowkowych)
 class AlgorithmView;
 
 /**
@@ -28,14 +28,11 @@ class GuiModuleWidget : public Gtk::EventBox {
 		int GetCurrentOutputNumber();
 		bool on_leave_notify_event(GdkEventCrossing* event);
 		bool on_enter_notify_event(GdkEventCrossing* event);
-		//bool on_button_press_event(GdkEventButton* event);
-		//bool on_button_release_event(GdkEventButton* event);
-		//bool on_motion_notify_event (GdkEventMotion* event);
 		bool on_expose_event(GdkEventExpose* e);
 		void on_realize();
 		
-		static const int xputSize;
-		static const int xputSizeDoubled;
+		static const int socketSize;
+		static const int socketSizeDoubled;
 
 	protected:
 		int width, height;
@@ -52,13 +49,5 @@ class GuiModuleWidget : public Gtk::EventBox {
 		
 		GuiModule* guiModule;
 };
-
-//int GuiModuleWidget::GetWidth() const {
-//	return width;
-//}
-//
-//int GuiModuleWidget::GetHeight() const {
-//	return height;
-//}
 
 #endif // GUIMODULEWIDGET_H

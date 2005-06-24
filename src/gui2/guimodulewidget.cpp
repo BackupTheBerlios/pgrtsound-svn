@@ -2,8 +2,8 @@
 #include "algorithmview.h"
 
 // rozmiar kwadracikow gniazdek
-const int GuiModuleWidget::xputSize = 7;
-const int GuiModuleWidget::xputSizeDoubled = 2 * GuiModuleWidget::xputSize;
+const int GuiModuleWidget::socketSize = 7;
+const int GuiModuleWidget::socketSizeDoubled = 2 * GuiModuleWidget::socketSize;
 
 GuiModuleWidget::GuiModuleWidget(GuiModule* guiMod, AlgorithmView* algoView,
 	 int inCount, int outCount)
@@ -16,8 +16,8 @@ GuiModuleWidget::GuiModuleWidget(GuiModule* guiMod, AlgorithmView* algoView,
 
 	// ustalenie rozmiarow (zaleznie od ilosci wejsc/wyjsc)
     height = (inputCount < outputCount)? outputCount : inputCount;
-    height = height * xputSizeDoubled;
-    if (height < 3 * xputSizeDoubled) height = 3 * xputSizeDoubled;
+    height = height * socketSizeDoubled;
+    if (height < 3 * socketSizeDoubled) height = 3 * socketSizeDoubled;
     width = 100;
 
     set_size_request(width, height);
@@ -55,32 +55,53 @@ bool GuiModuleWidget::on_expose_event(GdkEventExpose* e) {
 	window->set_background(bgColor);
 	window->clear();
 
+	// glowny prostokat modulu
 	window->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
 
+	// gniazda wejsc
     for (int i = 1; i <= inputCount; i++) {
-        window->draw_rectangle(gc, true, 0, (i - 1)*xputSizeDoubled, xputSize,
-			xputSize);
+        window->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled, socketSize,
+			socketSize);
     }
 
+	// gniazda wyjsc
     for (int i = 1; i <= outputCount; i++) {
-        window->draw_rectangle(gc, true, width - xputSize, (i - 1)*xputSizeDoubled,
-			xputSize, xputSize);
+        window->draw_rectangle(gc, true, width - socketSize, (i - 1)*socketSizeDoubled,
+			socketSize, socketSize);
     }
 
     return true;
 }
 
+/*
+ Docelowo modul mia miec tekst na srodku z jego nazwa.
+ Ponizsza funckja bedzie pozwalala zmieniac ten tekst.
+*/
 void GuiModuleWidget::SetText(string newText) {
 	text = newText;
 }
 
+/*
+ Kursor wchodzi nad modul.
+ 'Aktywujemy' ten modul w AlgorithmView.
+*/
+bool GuiModuleWidget::on_enter_notify_event(GdkEventCrossing* event) {
+	//cout << "Entering " << guiModule->GetModule()->GetName() << endl;
+	algorithmView->SelectWidget(this);
+	return true;
+}
+
+/*
+ Kursor opuszcza modul.
+ Dajemy znac AlgorithmView, ze nie jet on juz aktywnym modulem.
+*/
 bool GuiModuleWidget::on_leave_notify_event(GdkEventCrossing* event) {
     //cout << "Leaving " << guiModule->GetModule()->GetName() << endl;
     if( currentInput > -1 ) PaintInput(currentInput, false);
 	if( currentOutput > -1 ) PaintOutput(currentOutput, false);
 	
-	// podczas szybkiego przesuwania modulu kursor moze wyjsc poza modul :(
-	// ponizej obrona
+	// podczas szybkiego przesuwania modulu kursor moze wyjsc poza modul
+	// co by go zdeaktywowalo, stad ponizszy warunek zanik deaktywacja
 	if( !algorithmView->IsDraggingModule() ) {
 		algorithmView->SelectWidget(NULL);
 	}
@@ -88,26 +109,33 @@ bool GuiModuleWidget::on_leave_notify_event(GdkEventCrossing* event) {
 	return true;
 }
 
-bool GuiModuleWidget::on_enter_notify_event(GdkEventCrossing* event) {
-	//cout << "Entering " << guiModule->GetModule()->GetName() << endl;
-	//algorithmView->StartModuleDrag(this, x, y);
-	algorithmView->SelectWidget(this);
-	return true;
-}
-
+/*
+ Rysowanie gniadka wejscia.
+ @param num NUmer wejscia
+ @param isSel Gniazdko zapalone czy nie?
+*/
 void GuiModuleWidget::PaintInput(int num, bool isSel) {
 	Glib::RefPtr<Gdk::Window> window = get_window();
 	(isSel)? gc->set_foreground( bgColor ) : gc->set_foreground( fgColor );
-    window->draw_rectangle(gc, true, 0, num*xputSizeDoubled, xputSize, xputSize);
+    window->draw_rectangle(gc, true, 0, num*socketSizeDoubled, socketSize, socketSize);
 }
 
+/*
+ Rysowanie gniadka wyjscia.
+ @param num NUmer wejscia
+ @param isSel Gniazdko zapalone czy nie?
+*/
 void GuiModuleWidget::PaintOutput(int num, bool isSel) {
 	Glib::RefPtr<Gdk::Window> window = get_window();
 	(isSel)? gc->set_foreground( bgColor ) : gc->set_foreground( fgColor );
-    window->draw_rectangle(gc, true, width - xputSize, num*xputSizeDoubled,
-		xputSize , xputSize);
+    window->draw_rectangle(gc, true, width - socketSize, num*socketSizeDoubled,
+		socketSize , socketSize);
 }
 
+/*
+ Na podstawie podanyc wspolrzednych (w ramach widgeta modulu) aktywuje
+ wewnetrznie wejscie lub wyjscie, nad ktorym jest kursor.
+*/
 void GuiModuleWidget::FindXput(int x, int y) {
 	// numery znalezionego w*jscia
 	int inFound = -1, outFound = -1;
@@ -115,7 +143,7 @@ void GuiModuleWidget::FindXput(int x, int y) {
 	float temp;
 
 	// biezaca wysokosc przez rozmiar kwadracika gniazdka
-	temp = (float)y / (float)xputSize;
+	temp = (float)y / (float)socketSize;
 	temp = fabs(temp);
 	num = (int)temp;
 
@@ -124,11 +152,11 @@ void GuiModuleWidget::FindXput(int x, int y) {
 		// num ptencjalny numer w*jscia
 		num = num/2;
 		// wesjcie
-		if( (x > 0) && (x <= xputSize) && (num < inputCount) ) {
+		if( (x > 0) && (x <= socketSize) && (num < inputCount) ) {
 			inFound = num;
 		}
 		// wyjscie
-		if ( (x < width - 1) && (x >= (width - xputSize)) && (num < outputCount) ) {
+		if ( (x < width - 1) && (x >= (width - socketSize)) && (num < outputCount) ) {
 			outFound = num;
 		}
 	}
@@ -160,7 +188,6 @@ int GuiModuleWidget::GetCurrentInputNumber() {
 	return currentInput;
 }
 
-
 int GuiModuleWidget::GetCurrentOutputNumber() {
 	return currentOutput;
 }
@@ -169,54 +196,3 @@ GuiModule* GuiModuleWidget::GetGuiModule() {
 	return guiModule;
 }
 
-//bool GuiModuleWidget::on_button_press_event(GdkEventButton* event) {
-//	int x, y;
-//	get_pointer(x, y);
-//
-//	if( currentOutput > -1 ) {
-//		// sygnalizujemy mozliwosc rysowaina polaczenia
-//		algorithmView->StartConnectionDrag();
-//	} else if (currentInput > -1 ) {
-//		// nic
-//	} else {
-//		// sygnalizujemy mozliwosc przesuwania modulu
-//		algorithmView->StartModuleDrag(this, x, y);
-//	}
-//
-////	if( (x > xputSize) && (x < width - xputSize) )
-//
-//	// propagujemy dalej event
-//	return false;
-//}
-
-//bool GuiModuleWidget::on_motion_notify_event(GdkEventMotion* event) {
-//	//cout << "move" << endl;
-//
-//	if(event && event->window) {
-//		const Glib::RefPtr<Gdk::Window> refWindow =
-//			Glib::wrap((GdkWindowObject*) event->window, true); // true == take_copy
-//
-//		if(refWindow) {
-//			int x = 0, y = 0;
-//			Gdk::ModifierType state = Gdk::ModifierType(0);
-//			refWindow->get_pointer(x, y, state);
-//
-//			//get_pointer(x, y);
-//			algorithmView->StartModuleDrag(this, x, y);
-////			char txt[40];
-////			g_snprintf(txt, 40, "x: %d    y: %d", x, y);
-////			cout << txt << endl;
-//
-//			//FindXput(x, y);
-//		}
-//	}
-//
-//	// proppagujemy event dalej
-//	return false;
-//}
-
-
-//bool GuiModuleWidget::on_button_release_event(GdkEventButton* event) {
-//	cout << "Relesed on " << guiModule->GetModule()->GetName() << endl;
-//	return false;
-//}

@@ -19,8 +19,6 @@ class AlgorithmView : public Gtk::Layout {
 		~AlgorithmView();
 		void AddModule(string type, string name, int x, int y);
 		void SelectWidget(GuiModuleWidget* wdg);
-		void StartModuleDrag(GuiModuleWidget* wdg, int wdgX, int wdgY);
-		void StartConnectionDrag();
 		bool IsDraggingModule();
 		bool on_motion_notify_event(GdkEventMotion* even);
 		bool on_button_press_event(GdkEventButton* event);

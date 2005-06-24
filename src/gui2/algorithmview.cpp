@@ -16,7 +16,8 @@ AlgorithmView::AlgorithmView(Algorithm* algo) {
 		Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK |
 		Gdk::BUTTON_RELEASE_MASK );
 
-	// parsuj algorytm i utworz grafike
+	// TODO: wywolanie metody 'parsuj algorytm i go rysuj'
+	
 	TRACE("AlgorithmView::AlgorithmView()", "Done!");
 }
 
@@ -24,12 +25,14 @@ AlgorithmView::~AlgorithmView() {
     TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja...");
     currentWidget = NULL;
 
+	// usuwamy widgety
 	typedef list<GuiModuleWidget*>::iterator GMLIt;
 	for(GMLIt it = widgets.begin(); it != widgets.end(); it++) {
 		delete *it;
 	}
 	widgets.clear();
 	
+	// pozbywamy sie GuiModulow
 	typedef list<GuiModule*>::iterator GMIt;
 	for(GMIt it = guiModules.begin(); it != guiModules.end(); it++) {
 		delete *it;
@@ -39,6 +42,10 @@ AlgorithmView::~AlgorithmView() {
     TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja pomyslna");
 }
 
+/*
+ Obsluga ruchu myszki.
+ Przesuwa modul, robi polaczenie itp. zaleznie od ustawionych flag.
+*/
 bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 	if(event && event->window) {
        	int x = 0, y = 0;
@@ -49,22 +56,25 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 
 		if(refWindow) {
 			refWindow->get_pointer(x, y, state);
+			
+			// uwzgledniamy ustawienia scrollbarow
 			adjh = get_hadjustment();
 			adjv = get_vadjustment();
-			// wspolrzedne kursora w layout
+			
+			// mamy bezwgledne wspolrzedne kursora w layout
 			x += (int)adjh->get_value();
 			y += (int)adjv->get_value();
 
+			// kursor nad modulem
 			if(currentWidget != NULL) {
 				int xpos, ypos;
 				currentWidget->get_window()->get_position(xpos, ypos);
+				// zapalmy w*jscie jesli kusor nad jakims
 				currentWidget->FindXput(x - xpos, y - ypos);
-				//cout << "    x = " << x << "    y = " << y << endl;
 			}
 
 			// przesuwamy modul
 			if(isDraggingModule) {
-
 				int newX, newY;
 				if( (state & Gdk::BUTTON1_MASK) != 0 ) {
 					if(currentWidget != NULL) {
@@ -94,11 +104,17 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 	return true;
 }
 
+/*
+ Obluga kliku myszka.
+ Sprawdza czy kliknieto modul -> molziwe przsuwanie modulu, czy moze kliknieto
+ jakies wyjscie -> mozliwe tworzenie polaczenia.
+*/
 bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 	int x, y;
 	get_pointer(x, y);
 	adjh = get_hadjustment();
 	adjv = get_vadjustment();
+	// bezwzgledne wspolrzedne kursora w layout
 	x += (int)adjh->get_value();
 	y += (int)adjv->get_value();
 
@@ -108,17 +124,17 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 		currentWidgetX = x - posx;
 		currentWidgetY = y - posy;
 		currentWidget->get_window()->raise();
-		
+
+		// mozna ruszac modulem tylko gdy kursor *nie* jest nad w*jciem
 		if( (currentWidget->GetCurrentInputNumber() == -1) &&
 			(currentWidget->GetCurrentOutputNumber() == -1) )
 		{
-			// mozna ruszac modulem tylko gdy kursor nie jest nad w*jciem
 			isDraggingModule = true;
 		}
 
+		// jesli kliknieto wyjscie - mozliwe tworzenie polaczenia
 		if( (currentWidget->GetCurrentOutputNumber() > -1) ) {
-			// kliknieto wyjscie = mozliwe tworzenie polaczenia
-	   		connSourceWidget = currentWidget;
+		 	connSourceWidget = currentWidget;
 	   		connSourceNumber = connSourceWidget->GetCurrentOutputNumber();
 			isDraggingConnection = true;
 		}
@@ -128,7 +144,10 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 	return true;
 }
 
-
+/*
+ Puszczono przycisku myszki.
+ Sprawdzamy czy aby nie w trakcie tworzenia polaczenia itp.
+*/
 bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 	// koniec przesuwnia modulu
 	if(isDraggingModule) {
@@ -140,8 +159,10 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 	if(isDraggingConnection) {
 		connDestWidget = currentWidget;
 		if(connDestWidget && (connDestWidget != connSourceWidget) ) {
+			// opuszczono nad innym modulem niz poczatkowy
 			connDestNumber = connDestWidget->GetCurrentInputNumber();
 			if(connDestNumber > -1) {
+				// opuszczono nad wejsciem - mamy polaczenie!
 				cout << "Connection: " <<
 					connSourceWidget->GetGuiModule()->GetModule()->GetName() <<
 					" [" << connSourceNumber << "]   ->   " <<
@@ -156,6 +177,9 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 	return false;
 }
 
+/*
+ Dodawanie do widoku modulu.
+*/
 void AlgorithmView::AddModule(string type, string name, int x, int y) {
 	TRACE3("AlgorithmView::AddModule()", "Dodaje modul typu '", type, "'");
     ModuleId modId = algorithm->AddModule(type, name);
@@ -168,17 +192,12 @@ void AlgorithmView::AddModule(string type, string name, int x, int y) {
 	widgets.push_back(widget);
     this->put(*widget, x, y);
     
-   	cout << "     Widget dodany" << endl;
     TRACE("AlgorithmView::AddModule()", "Gotowe");
 }
 
-void AlgorithmView::StartModuleDrag(GuiModuleWidget* wdgt, int wdgtX, int wdgtY) {
-//    isDraggingModule = true;
-//	currentWidget = wdgt;
-	currentWidgetX = wdgtX;
-	currentWidgetY = wdgtY;
-}
-
+/*
+ Aktywacja (focus) wybranego modulu.
+*/
 void AlgorithmView::SelectWidget(GuiModuleWidget* wdg) {
 	if( (currentWidget == NULL) && (wdg != NULL)  ) {
 		currentWidget = wdg;
@@ -186,11 +205,6 @@ void AlgorithmView::SelectWidget(GuiModuleWidget* wdg) {
 	else if( (currentWidget != NULL) && (wdg == NULL)  ) {
 		currentWidget = wdg;
 	}
-}
-
-void AlgorithmView::StartConnectionDrag() {
-	cout << "connection drag..." << endl;
-	isDraggingConnection = true;
 }
 
 bool AlgorithmView::IsDraggingModule() {
