@@ -62,17 +62,19 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 				//cout << "    x = " << x << "    y = " << y << endl;
 			}
 
+			// przesuwamy modul
 			if(isDraggingModule) {
+
 				int newX, newY;
 				if( (state & Gdk::BUTTON1_MASK) != 0 ) {
 					if(currentWidget != NULL) {
 						x = x - currentWidgetX;
 						y = y - currentWidgetY;
 
+						// modul nie moze wyjsc poza layout
 						if( x < 0 ) x = 0;
 						if( ( x + currentWidget->get_width() ) > width )
 							x = width - currentWidget->get_width();
-
 						if( y < 0 ) y = 0;
 						if( ( y + currentWidget->get_height() ) > height )
 							y = height - currentWidget->get_height();
@@ -81,6 +83,11 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 					}
 				}
 			}
+			
+			if(isDraggingConnection) {
+				//TODO: rysowanie drucika podczas ruchu myszka
+			}
+			
 		}
 	}
 
