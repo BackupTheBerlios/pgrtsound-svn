@@ -121,6 +121,13 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 		currentGuiModuleY = y - posy;
 		currentGuiModule->get_window()->raise();
 
+		// podwojny klik na module
+		if(event->type == Gdk::DOUBLE_BUTTON_PRESS) {
+			cout << "Double click" << endl;
+			// funkcja pusta na razie
+			CreateModuleWindow(currentGuiModule);
+		}
+
 		// mozna ruszac modulem tylko gdy kursor *nie* jest nad w*jciem
 		if( (currentGuiModule->GetCurrentInputNumber() == -1) &&
 			(currentGuiModule->GetCurrentOutputNumber() == -1) )
@@ -159,6 +166,8 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 			connDestNumber = connDestModule->GetCurrentInputNumber();
 			if(connDestNumber > -1) {
 				// opuszczono nad wejsciem - mamy polaczenie!
+				// ponizej pusta funckja
+				ConnectModules(connSourceModule, connSourceNumber, connDestModule, connDestNumber);
 				cout << "Connection: " <<
 					connSourceModule->GetModule()->GetName() <<
 					" [" << connSourceNumber << "]   ->   " <<
@@ -203,4 +212,20 @@ void AlgorithmView::SelectGuiModule(GuiModule* guiMod) {
 
 bool AlgorithmView::IsDraggingModule() {
 	return isDraggingModule;
+}
+
+void AlgorithmView::ConnectModules(GuiModule* from, int fomNumoutput, GuiModule* to,
+	int toNuminput)
+{
+	// TODO: tworzenie polaczenia
+	// algorithm->ConnectModules(from->GetModule(), ...)
+	// rysowanie druta
+}
+
+void AlgorithmView::DrawAlgorithm() {
+	// TODO: rysowanie calego algorytmu (po wczytaniu z pliku)
+}
+
+void AlgorithmView::CreateModuleWindow(GuiModule* gui) {
+	// TODO: wywolanie okna z interfejsem modulu
 }

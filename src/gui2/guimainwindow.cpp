@@ -109,7 +109,7 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER)
 	TRACE("GuiMainWindow::GuiMainWindow()", "Okno aplikacji utworzone");
 	
 	// TEST ONLY
-	algoView.AddModule("sumator", "modul1", 100, 100);
+	algoView.AddModule("slider", "modul1", 100, 100);
 	algoView.AddModule("sumator", "modul2", 300, 200);
 }
 
