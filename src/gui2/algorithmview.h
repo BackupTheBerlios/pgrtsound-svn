@@ -8,7 +8,7 @@
 #include "../debug.h"
 #include "../algorithm.h"
 #include "guimodulefactory.h"
-#include "guimodulewidget.h"
+#include "guimodules/guimodule.h"
 
 /**
  * Widok graficznych reprezentacji modulow.
@@ -18,7 +18,7 @@ class AlgorithmView : public Gtk::Layout {
 		AlgorithmView(Algorithm* algo);
 		~AlgorithmView();
 		void AddModule(string type, string name, int x, int y);
-		void SelectWidget(GuiModuleWidget* wdg);
+		void SelectGuiModule(GuiModule* guiMod);
 		bool IsDraggingModule();
 		bool on_motion_notify_event(GdkEventMotion* even);
 		bool on_button_press_event(GdkEventButton* event);
@@ -30,20 +30,19 @@ class AlgorithmView : public Gtk::Layout {
 		int width, height;
 		
 		// modul pod kursorem
-		GuiModuleWidget* currentWidget;
+		GuiModule* currentGuiModule;
 
 		// moduly miedzy ktorymi chcemy polaczenie
-		GuiModuleWidget* connSourceWidget, * connDestWidget;
+		GuiModule* connSourceModule, * connDestModule;
 
 		// numer wejscia i wyjscia dla tworzonego polaczenia
 		int connSourceNumber, connDestNumber;
 
 		// gdzie byl kursor nad kliknietym widgecie po kliknieciu
-		int currentWidgetX, currentWidgetY;
+		int currentGuiModuleX, currentGuiModuleY;
 		
 		Gtk::Adjustment* adjh, * adjv;
 		std::list<GuiModule*> guiModules;
-		std::list<GuiModuleWidget*> widgets;
 
 		Algorithm* algorithm;
 		GuiModuleFactory guiFactory;

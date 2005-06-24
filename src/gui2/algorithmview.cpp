@@ -6,7 +6,7 @@ AlgorithmView::AlgorithmView(Algorithm* algo) {
 	TRACE("AlgorithmView::AlgorithmView()", "Konstrukcja...");
 	algorithm = algo;
 	isDraggingModule = false;
-	currentWidget = NULL;
+	currentGuiModule = NULL;
 	width = 1000;
 	height = 1000;
 	set_size(width, height);
@@ -23,15 +23,8 @@ AlgorithmView::AlgorithmView(Algorithm* algo) {
 
 AlgorithmView::~AlgorithmView() {
     TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja...");
-    currentWidget = NULL;
+    currentGuiModule = NULL;
 
-	// usuwamy widgety
-	typedef list<GuiModuleWidget*>::iterator GMLIt;
-	for(GMLIt it = widgets.begin(); it != widgets.end(); it++) {
-		delete *it;
-	}
-	widgets.clear();
-	
 	// pozbywamy sie GuiModulow
 	typedef list<GuiModule*>::iterator GMIt;
 	for(GMIt it = guiModules.begin(); it != guiModules.end(); it++) {
@@ -66,30 +59,30 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 			y += (int)adjv->get_value();
 
 			// kursor nad modulem
-			if(currentWidget != NULL) {
+			if(currentGuiModule != NULL) {
 				int xpos, ypos;
-				currentWidget->get_window()->get_position(xpos, ypos);
+				currentGuiModule->get_window()->get_position(xpos, ypos);
 				// zapalmy w*jscie jesli kusor nad jakims
-				currentWidget->FindXput(x - xpos, y - ypos);
+				currentGuiModule->FindXput(x - xpos, y - ypos);
 			}
 
 			// przesuwamy modul
 			if(isDraggingModule) {
 				int newX, newY;
 				if( (state & Gdk::BUTTON1_MASK) != 0 ) {
-					if(currentWidget != NULL) {
-						x = x - currentWidgetX;
-						y = y - currentWidgetY;
+					if(currentGuiModule != NULL) {
+						x = x - currentGuiModuleX;
+						y = y - currentGuiModuleY;
 
 						// modul nie moze wyjsc poza layout
 						if( x < 0 ) x = 0;
-						if( ( x + currentWidget->get_width() ) > width )
-							x = width - currentWidget->get_width();
+						if( ( x + currentGuiModule->get_width() ) > width )
+							x = width - currentGuiModule->get_width();
 						if( y < 0 ) y = 0;
-						if( ( y + currentWidget->get_height() ) > height )
-							y = height - currentWidget->get_height();
+						if( ( y + currentGuiModule->get_height() ) > height )
+							y = height - currentGuiModule->get_height();
 
-						move(*currentWidget, x, y);
+						move(*currentGuiModule, x, y);
 					}
 				}
 			}
@@ -118,24 +111,24 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 	x += (int)adjh->get_value();
 	y += (int)adjv->get_value();
 
-	if( currentWidget != NULL) {
+	if( currentGuiModule != NULL) {
         int posx, posy;
-		currentWidget->get_window()->get_position(posx, posy);
-		currentWidgetX = x - posx;
-		currentWidgetY = y - posy;
-		currentWidget->get_window()->raise();
+		currentGuiModule->get_window()->get_position(posx, posy);
+		currentGuiModuleX = x - posx;
+		currentGuiModuleY = y - posy;
+		currentGuiModule->get_window()->raise();
 
 		// mozna ruszac modulem tylko gdy kursor *nie* jest nad w*jciem
-		if( (currentWidget->GetCurrentInputNumber() == -1) &&
-			(currentWidget->GetCurrentOutputNumber() == -1) )
+		if( (currentGuiModule->GetCurrentInputNumber() == -1) &&
+			(currentGuiModule->GetCurrentOutputNumber() == -1) )
 		{
 			isDraggingModule = true;
 		}
 
 		// jesli kliknieto wyjscie - mozliwe tworzenie polaczenia
-		if( (currentWidget->GetCurrentOutputNumber() > -1) ) {
-		 	connSourceWidget = currentWidget;
-	   		connSourceNumber = connSourceWidget->GetCurrentOutputNumber();
+		if( (currentGuiModule->GetCurrentOutputNumber() > -1) ) {
+		 	connSourceModule = currentGuiModule;
+	   		connSourceNumber = connSourceModule->GetCurrentOutputNumber();
 			isDraggingConnection = true;
 		}
 	}
@@ -152,21 +145,21 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 	// koniec przesuwnia modulu
 	if(isDraggingModule) {
        	isDraggingModule = false;
-		//currentWidget = NULL;
+		//currentModule = NULL;
 	}
 
 	// sprawdzic czy opuszczono kursor nad jakims wejsciem
 	if(isDraggingConnection) {
-		connDestWidget = currentWidget;
-		if(connDestWidget && (connDestWidget != connSourceWidget) ) {
+		connDestModule = currentGuiModule;
+		if(connDestModule && (connDestModule != connSourceModule) ) {
 			// opuszczono nad innym modulem niz poczatkowy
-			connDestNumber = connDestWidget->GetCurrentInputNumber();
+			connDestNumber = connDestModule->GetCurrentInputNumber();
 			if(connDestNumber > -1) {
 				// opuszczono nad wejsciem - mamy polaczenie!
 				cout << "Connection: " <<
-					connSourceWidget->GetGuiModule()->GetModule()->GetName() <<
+					connSourceModule->GetModule()->GetName() <<
 					" [" << connSourceNumber << "]   ->   " <<
-					connDestWidget->GetGuiModule()->GetModule()->GetName() <<
+					connDestModule->GetModule()->GetName() <<
 					" [" << connDestNumber << "]" << endl;
 			}
 		}
@@ -186,11 +179,9 @@ void AlgorithmView::AddModule(string type, string name, int x, int y) {
     Module* mod = algorithm->GetModule(modId);
 
 	GuiModule* guiMod = guiFactory.CreateGuiModule(mod);
+	guiMod->SetParentView(this); // konieczne na razie :(
 	guiModules.push_back(guiMod);
-	GuiModuleWidget* widget = new GuiModuleWidget( guiMod, this,
-		mod->GetInputCount(), mod->GetOutputCount() );
-	widgets.push_back(widget);
-    this->put(*widget, x, y);
+    this->put(*guiMod, x, y);
     
     TRACE("AlgorithmView::AddModule()", "Gotowe");
 }
@@ -198,12 +189,12 @@ void AlgorithmView::AddModule(string type, string name, int x, int y) {
 /*
  Aktywacja (focus) wybranego modulu.
 */
-void AlgorithmView::SelectWidget(GuiModuleWidget* wdg) {
-	if( (currentWidget == NULL) && (wdg != NULL)  ) {
-		currentWidget = wdg;
+void AlgorithmView::SelectGuiModule(GuiModule* guiMod) {
+	if( (currentGuiModule == NULL) && (guiMod != NULL)  ) {
+		currentGuiModule = guiMod;
 	}
-	else if( (currentWidget != NULL) && (wdg == NULL)  ) {
-		currentWidget = wdg;
+	else if( (currentGuiModule != NULL) && (guiMod == NULL)  ) {
+		currentGuiModule = guiMod;
 	}
 }
 

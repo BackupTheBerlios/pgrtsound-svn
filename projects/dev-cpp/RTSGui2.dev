@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSGui2.dev
 Name=RTS GUI
-UnitCount=21
+UnitCount=19
 Type=1
 Ver=1
 ObjFiles=
@@ -16,7 +16,7 @@ Linker=-LC:/Dev-Cpp/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpa
 IsCpp=1
 Icon=
 ExeOutput=
-ObjectOutput=objs/rtsgui/
+ObjectOutput=objs/rtsgui2/
 OverrideOutput=0
 OverrideOutputName=Real Time GUI.exe
 HostApplication=
@@ -391,16 +391,6 @@ BuildCmd=
 FileName=..\..\src\gui2\algorithmview.cpp
 CompileCpp=1
 Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit20]
-FileName=..\..\src\gui2\guimodulewidget.cpp
-CompileCpp=1
-Folder=RTS GUI
 Compile=1
 Link=1
 Priority=1000
