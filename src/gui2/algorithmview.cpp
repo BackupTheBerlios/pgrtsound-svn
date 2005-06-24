@@ -82,13 +82,16 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 						if( ( y + currentGuiModule->get_height() ) > height )
 							y = height - currentGuiModule->get_height();
 
+						currentGuiModule->SetXY(x, y);
 						move(*currentGuiModule, x, y);
+						
+						// TODO: odswiezanie polaczen do biezacego modulu
 					}
 				}
 			}
 			
 			if(isDraggingConnection) {
-				//TODO: rysowanie drucika podczas ruchu myszka
+				// TODO: rysowanie drucika podczas ruchu myszka
 			}
 			
 		}
