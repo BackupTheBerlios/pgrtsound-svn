@@ -4,17 +4,12 @@
 //extern float* nullBuffer;
 
 Input::Input(string name_) {
-   	name = name_;
-   	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
-   //signal = NULL;
+	name = name_;
+	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
+	//signal = NULL;
 }
 
 Input::~Input() {
-}
-
-/* TODO (#1#): zrobic inline */
-float* Input::GetSignal() {
-	return outputConnected->GetSignal();
 }
 
 void Input::SetID(int newID) {

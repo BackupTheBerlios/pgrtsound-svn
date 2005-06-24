@@ -27,49 +27,49 @@ using namespace std;
  * wejsc, wyjsc oraz parmaetrow modulu.
  */
 class Module {
-  	protected:
-        vector<Input*>		inputs;			/**< Wektor wejsc. */
-        vector<Output*>		outputs;	    /**< Wektor wyjsc. */
-        vector<Parameter*>	parameters;		/**< Wektor parametrow. */
-        string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
-		string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+	protected:
+	    vector<Input*>		inputs;			/**< Wektor wejsc. */
+	    vector<Output*>		outputs;	    /**< Wektor wyjsc. */
+	    vector<Parameter*>	parameters;		/**< Wektor parametrow. */
+	    string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
+	    string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
 
 	public:
-  		static int		framesPerBlock;
-		static float	sampleRate;
+	    static int		framesPerBlock;
+	    static float	sampleRate;
 
-				Module(string type_, string name_);
-				~Module();
-		int		AddInput(Input& input);
-		int		AddOutput(Output& output);
-		int		AddParameter(Parameter& param);
-		virtual void	Process();
-		virtual void	Init();
-		static Module* Create();
-		void	SetName(string newName);
-		string	GetType() const;
-		string	GetName() const;
-		int		GetOutputCount();
-		int		GetInputCount();
-		int		GetParameterCount() const;
-		Input*		GetInput(int inputID);
-		Output*		GetOutput(int outputID);
-		Parameter*	GetParameter(int pID);
-		void		UpdateBlockSize();
-		virtual void SampleRateChanged();
-		virtual void BlockSizeChanged();
+	    Module(string type_, string name_);
+	    ~Module();
+	    int		AddInput(Input& input);
+	    int		AddOutput(Output& output);
+	    int		AddParameter(Parameter& param);
+	    virtual void	Process();
+	    virtual void	Init();
+	    static Module* Create();
+	    void	SetName(string newName);
+	    string	GetType() const;
+	    string	GetName() const;
+	    int		GetOutputCount();
+	    int		GetInputCount();
+	    int		GetParameterCount() const;
+	    Input*		GetInput(int inputID);
+	    Output*		GetOutput(int outputID);
+	    Parameter*	GetParameter(int pID);
+	    void		UpdateBlockSize();
+	    virtual void SampleRateChanged();
+	    virtual void BlockSizeChanged();
 };
 
 inline Input* Module::GetInput(int inputID) {
-	return inputs[inputID];
+    return inputs[inputID];
 }
 
 inline Output* Module::GetOutput(int outputID) {
-	return outputs[outputID];
+    return outputs[outputID];
 }
 
 inline Parameter* Module::GetParameter(int pID) {
-	return parameters[pID];
+    return parameters[pID];
 }
 
 /**
@@ -79,30 +79,30 @@ inline Parameter* Module::GetParameter(int pID) {
 */
 class NullModuleSingleton : public Module {
 	private:
-		Output oNull;
-		static NullModuleSingleton NullModule;
-	
-		NullModuleSingleton() : Module("null", "null"), oNull("null") {
-			AddOutput(oNull);
-			BlockSizeChanged();
-	}
+	    Output oNull;
+	    static NullModuleSingleton NullModule;
+
+	NullModuleSingleton() : Module("null", "null"), oNull("null") {
+	        AddOutput(oNull);
+	        BlockSizeChanged();
+	    }
 
 	public:
-		static NullModuleSingleton& Instance() {
-			return NullModule;
-		}
+	    static NullModuleSingleton& Instance() {
+	        return NullModule;
+	    }
 
-		void BlockSizeChanged() {
-       		//TRACE2("NullModule::NullModule()", "Alokuje bufor zerowy rozmiaru ", Module::framesPerBlock);
-			float* buff;
-			buff = oNull.GetSignal();
+	    void BlockSizeChanged() {
+	        //TRACE2("NullModule::NullModule()", "Alokuje bufor zerowy rozmiaru ", Module::framesPerBlock);
+	        float* buff;
+	        buff = oNull.GetSignal();
 
-			buff = new float[Module::framesPerBlock];
-			for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
-				*buff++ = 0.0f;
-			}
-			//TRACE2("module.cpp", "Bufor zerowy zaalokowany ", buff);
-		}
+	        buff = new float[Module::framesPerBlock];
+	        for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
+	            *buff++ = 0.0f;
+	        }
+	        //TRACE2("module.cpp", "Bufor zerowy zaalokowany ", buff);
+	    }
 };
 
 #endif // MODULE_H

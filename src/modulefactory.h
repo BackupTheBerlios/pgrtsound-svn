@@ -4,7 +4,6 @@
 #include <map>
 
 #include "modules/module.h"
-//#include "modules/sinosc.h"
 #include "modules/sinosc2.h"
 #include "modules/constant.h"
 #include "modules/sum.h"
@@ -14,8 +13,8 @@
 #include "modules/textfileout.h"
 #include "modules/slider.h"
 #include "modules/multiplication.h"
-#include "modules/synthesis/noise.h"
-#include "modules/filters/filter12db.h"
+#include "modules/noise.h"
+#include "modules/filter12db.h"
 
 using namespace std;
 

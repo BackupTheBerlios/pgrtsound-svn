@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 //		}
 //	}
 
-
-
+	Gain g;
+	
 	return EXIT_SUCCESS;
 }

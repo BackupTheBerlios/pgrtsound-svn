@@ -92,17 +92,15 @@ ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId,
 			GetModule(moduleId2)->GetName() << "'." << GetModule(moduleId2)->GetInput(inputId)->GetName() << endl;
 	#endif
 
-//	GetModule(moduleId2)->ConnectInputTo(
-//		inputId,
-//		GetModule(moduleId1)->GetOutput(outputId)->GetSignal()
-//	);
 	// polacz wejscie do wyjscia
 	GetModule(moduleId2)->GetInput(inputId)->ConnectTo(
 		GetModule(moduleId1)->GetOutput(outputId) );
-		
+
 	ConnectionDescription c;
 	ConnectionId cId;
+	// utworzenie polaczenia w grafie
 	c = add_edge(moduleId1, moduleId2, graph);
+	// identyfikator polaczenia w grafie
 	cId = c.first;
 	graph[cId].sourceId = outputId;
 	graph[cId].destinationId = inputId;
@@ -221,7 +219,6 @@ void Algorithm::Init() {
  * @param moduleName Nazwa dociekanego modulu
  */
 Module* Algorithm::GetModule(string moduleName) const {
-    //poprawiono b³¹d gdy modu³u nie by³o :)
     if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
         //TRACE("Algorithm::GetModule(string moduleName)", "Znaleziono");
     	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
@@ -233,7 +230,7 @@ Module* Algorithm::GetModule(string moduleName) const {
 }
 
 /**
- * Dostep do ModuluId. Zwraca identyfikator modulu o podanej nazwie.
+ * Zwraca identyfikator modulu o podanej nazwie.
  * @param moduleName Nazwa dociekanego modulu
  */
 ModuleId Algorithm::GetModuleId(string moduleName) const {
@@ -307,7 +304,7 @@ void Algorithm::DeleteConnection(ConnectionId connectionId) {
 
 /**
  Ustawienie nazwy algorytmu.
- Nazwa w zamysle ma okreslac w zwiezly opis sposobu dzialania algorytmu.
+ Nazwa w zamysle ma w zwiezly sposob opisywac dzialanie algorytmu.
 */
 void Algorithm::SetName(string newName) {
 	name = newName;

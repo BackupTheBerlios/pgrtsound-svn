@@ -16,18 +16,30 @@ ModuleFactory::~ModuleFactory() {
 }
 
 /**
- * Towrzy modul wybranego typu i zwraca do niego wskaznik
- */
+ Tworzy modul wybranego typu.
+ Po pomyslnym utworzeiu modulu zostaje zwrocony wskaznik od niego. Usuwaniem
+ utoworznych modulow musi zajac sie programista.
+ @param type Typ modulu.
+*/
 Module* ModuleFactory::CreateModule(string type) {
-	CreateFuncPtr funcPtr = ( *type2CreateFuncMap.find(type) ).second;
+	CreateFuncPtr funcPtr = NULL;
+	funcPtr = ( *type2CreateFuncMap.find(type) ).second;
 	if( funcPtr != NULL) {
+		// tworzymu modul danego typu
 		return (*funcPtr)();
 	}
 
     throw RTSError("ModuleFactory::CreateModule(): Nie ma modulu '" + type + "'");
 }
 
+/**
+ Zarejstroawnie typu modulu.
+ Aby modul stal sie dostepny w systemie, konieczne jest zaresjtrowanie jego
+ typu oraz zdefiniowanie funkcji ktora zajmuje sie tworzeniem obiektow tego typu.
+ @param type Typ modulu do zarejstrowania - musi byc unikatowy w calym systemie
+ @param funcPtr wskazink do funkcji tworzacej moduly rejestrowanego typu
+*/
 void ModuleFactory::RegisterModuleType(string type, CreateFuncPtr funcPtr) {
 	type2CreateFuncMap.insert( make_pair(type, funcPtr) );
-	TRACE2("ModuleFactory::RegisterModuleType", "Zarejestrowany typ ", type);
+	TRACE3("ModuleFactory::RegisterModuleType()", "Zarejestrowany typ '", type, "'");
 }

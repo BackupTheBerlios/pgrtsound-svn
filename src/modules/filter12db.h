@@ -27,7 +27,7 @@ class Filter12dB : public Module
 		void Process();
 		void Init();
 		static Module* Create();
-		
+				
 	private:
 		Input iIn;
 		Output oOut;
