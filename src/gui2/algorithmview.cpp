@@ -6,6 +6,7 @@ AlgorithmView::AlgorithmView(Algorithm* algo) {
 	TRACE("AlgorithmView::AlgorithmView()", "Konstrukcja...");
 	algorithm = algo;
 	isDraggingModule = false;
+	isDraggingConnection = false;
 	currentGuiModule = NULL;
 	width = 1000;
 	height = 1000;
@@ -16,8 +17,6 @@ AlgorithmView::AlgorithmView(Algorithm* algo) {
 		Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK |
 		Gdk::BUTTON_RELEASE_MASK );
 
-	// TODO: wywolanie metody 'parsuj algorytm i go rysuj'
-	
 	TRACE("AlgorithmView::AlgorithmView()", "Done!");
 }
 
@@ -71,19 +70,19 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 				int newX, newY;
 				if( (state & Gdk::BUTTON1_MASK) != 0 ) {
 					if(currentGuiModule != NULL) {
-						x = x - currentGuiModuleX;
-						y = y - currentGuiModuleY;
+						newX = x - currentGuiModuleX;
+						newY = y - currentGuiModuleY;
 
 						// modul nie moze wyjsc poza layout
-						if( x < 0 ) x = 0;
-						if( ( x + currentGuiModule->get_width() ) > width )
-							x = width - currentGuiModule->get_width();
-						if( y < 0 ) y = 0;
-						if( ( y + currentGuiModule->get_height() ) > height )
-							y = height - currentGuiModule->get_height();
+						if( newX < 0 ) newX = 0;
+						if( ( newX + currentGuiModule->get_width() ) > width )
+							newX = width - currentGuiModule->get_width();
+						if( newY < 0 ) newY = 0;
+						if( ( newY + currentGuiModule->get_height() ) > height )
+							newY = height - currentGuiModule->get_height();
 
-						currentGuiModule->SetXY(x, y);
-						move(*currentGuiModule, x, y);
+						currentGuiModule->SetXY(newX, newY);
+						move(*currentGuiModule, newX, newY);
 						
 						// TODO: odswiezanie polaczen do biezacego modulu
 					}
@@ -102,7 +101,7 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 
 /*
  Obluga kliku myszka.
- Sprawdza czy kliknieto modul -> molziwe przsuwanie modulu, czy moze kliknieto
+ Sprawdza czy kliknieto modul -> mozliwe przesuwanie modulu, czy moze kliknieto
  jakies wyjscie -> mozliwe tworzenie polaczenia.
 */
 bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
