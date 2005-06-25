@@ -48,7 +48,17 @@ ProductVersion=
 AutoIncBuildNr=0
 
 [Unit5]
-FileName=..\..\src\gui2\guimodules\guimodule.cpp
+FileName=..\..\src\gui2\guimain.cpp
+CompileCpp=1
+Folder=RTS GUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit16]
+FileName=..\..\src\gui2\guimodules\sinosc2testgui.cpp
 CompileCpp=1
 Folder=guimodules
 Compile=1
@@ -57,20 +67,10 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit16]
-FileName=..\..\src\gui2\audiosetupform.cpp
-CompileCpp=1
-Folder=RTS GUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit17]
-FileName=..\..\src\gui2\audiosetupform.h
+FileName=..\..\src\gui2\guimodules\sinosc2testgui.h
 CompileCpp=1
-Folder=RTS GUI
+Folder=guimodules
 Compile=1
 Link=1
 Priority=1000
@@ -78,9 +78,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit18]
-FileName=..\..\src\gui2\algorithmview.h
+FileName=..\..\src\gui2\guimodules\slidergui.cpp
 CompileCpp=1
-Folder=
+Folder=guimodules
 Compile=1
 Link=1
 Priority=1000
@@ -248,7 +248,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit11]
-FileName=..\..\src\gui2\guimodules\slidergui.cpp
+FileName=..\..\src\gui2\guimodules\gaingui.h
 CompileCpp=1
 Folder=guimodules
 Compile=1
@@ -258,26 +258,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=..\..\src\gui2\guimodules\gaingui.cpp
-CompileCpp=1
-Folder=guimodules
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit12]
-FileName=..\..\src\gui2\guimodules\slidergui.h
-CompileCpp=1
-Folder=guimodules
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit13]
 FileName=..\..\src\gui2\guimainwindow.cpp
 CompileCpp=1
 Folder=RTS GUI
@@ -287,10 +267,30 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit14]
-FileName=..\..\src\gui2\guimainwindow.h
+[Unit12]
+FileName=..\..\src\gui2\guimodules\guimodule.cpp
 CompileCpp=1
-Folder=RTS GUI
+Folder=guimodules
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit13]
+FileName=..\..\src\gui2\guimodules\guimodule.h
+CompileCpp=1
+Folder=guimodules
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit14]
+FileName=..\..\src\gui2\guimodules\mygtkslider.cpp
+CompileCpp=1
+Folder=guimodules
 Compile=1
 Link=1
 Priority=1000
@@ -318,9 +318,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=..\..\src\gui2\guimodules\gaingui.h
+FileName=..\..\src\gui2\guimainwindow.h
 CompileCpp=1
-Folder=guimodules
+Folder=RTS GUI
 Compile=1
 Link=1
 Priority=1000
@@ -328,9 +328,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=..\..\src\gui2\guimodules\guimodule.h
+FileName=..\..\src\gui2\audiosetupform.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=RTS GUI
 Compile=1
 Link=1
 Priority=1000
@@ -338,9 +338,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=..\..\src\gui2\guimodules\mygtkslider.cpp
+FileName=..\..\src\gui2\audiosetupform.h
 CompileCpp=1
-Folder=guimodules
+Folder=RTS GUI
 Compile=1
 Link=1
 Priority=1000
@@ -348,9 +348,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit8]
-FileName=..\..\src\gui2\guimodules\mygtkslider.h
+FileName=..\..\src\gui2\algorithmview.h
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -358,9 +358,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit9]
-FileName=..\..\src\gui2\guimodules\sinosc2testgui.cpp
+FileName=..\..\src\gui2\algorithmview.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -368,7 +368,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=..\..\src\gui2\guimodules\sinosc2testgui.h
+FileName=..\..\src\gui2\guimodules\gaingui.cpp
 CompileCpp=1
 Folder=guimodules
 Compile=1
@@ -378,9 +378,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit15]
-FileName=..\..\src\gui2\guimain.cpp
+FileName=..\..\src\gui2\guimodules\mygtkslider.h
 CompileCpp=1
-Folder=RTS GUI
+Folder=guimodules
 Compile=1
 Link=1
 Priority=1000
@@ -388,9 +388,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit19]
-FileName=..\..\src\gui2\algorithmview.cpp
+FileName=..\..\src\gui2\guimodules\slidergui.h
 CompileCpp=1
-Folder=
+Folder=guimodules
 Compile=1
 Link=1
 Priority=1000
