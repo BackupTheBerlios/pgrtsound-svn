@@ -10,11 +10,11 @@
  Prosty tablicoyw oscylator o sinusoidalnym ksztlacie fali. Zakres i skos
  czestoltiowsc oscylatora jest ograniczony wymiarami tablicy.
 
- - Wejscia
-    -# freq Zadaje czestotliowsc [Hz] oscylatora
-    -# ampl Decyduje o amplitudzie przebiegu wyjsciowego
- - Wyjscia
-    -# out Przebieg sinusoidalny o wartosciach z przedzialu [-1; 1]
+- Wejscia
+	- [0] \e freq Zadaje czestotliowsc [Hz] oscylatora
+	- [1] \e ampl Decyduje o amplitudzie przebiegu wyjsciowego
+- Wyjscia
+	- [0] \e out Przebieg sinusoidalny o wartosciach z przedzialu [-1; 1]
 */
 class SinOsc2 : public Module {
 	public:

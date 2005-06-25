@@ -101,7 +101,7 @@ class Algorithm {
 		float					sampleRate;
 		unsigned long			framesPerBlock;
 		ModuleFactory			moduleFactory;
-		std::vector<Module*>			modulesQueue;
+		std::vector<Module*>	modulesQueue;
 		std::map<string, ModuleId>	moduleName2IdMap; // mapa asocjacyjna nazwy z id
 		Module*					inputPort;
 		Module*					outputPort;

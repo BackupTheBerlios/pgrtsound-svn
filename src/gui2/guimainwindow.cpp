@@ -3,8 +3,8 @@
 
 #define FRAMES_PER_BUFFER 256
 
-GuiMainWindow::GuiMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER)
-	, algoView(&algo)
+GuiMainWindow::GuiMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER),
+	algoView(&algo)
 {
 	TRACE("GuiMainWindow::GuiMainWindow()", "Tworze okno...");
 
@@ -172,7 +172,7 @@ void GuiMainWindow::OnOpenFile() {
 			    xmlConfig.OpenFile( filename.c_str() );
 				algo.SetSampleRate(44100);
 				algo.Clear();
-				xmlConfig.LoadAlgorithm(&algo);
+				xmlConfig.LoadAlgorithmView(&algoView);
 				algo.Init();
 				algo.CreateQueue();
 		    } catch (RTSError& error) {

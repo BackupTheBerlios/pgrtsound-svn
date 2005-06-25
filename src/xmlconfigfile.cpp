@@ -188,3 +188,48 @@ void XMLConfigFile::LoadConnections(Algorithm* algo) {
 
     TRACE("XMLConfigFile::LoadConnections()", "Moduly polaczone");
 }
+
+/**
+ Wczytuje modu³y zadeklarowane w pliku.
+ @param algo Wskaznik do konfigurowanego algorytmu
+*/
+void XMLConfigFile::LoadGuiModules(AlgorithmView* algoView) {
+    TRACE("XMLConfigFile::LoadModules()", "Wczytywanie modulow...");
+
+	TiXmlElement* moduleXMLElem;
+	TiXmlNode* moduleXMLNode, * parent;
+	string moduleName;
+	int x, y;
+	ModuleId moduleId;
+
+    TiXmlHandle docHandle( &document );
+	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules" ).Child("module", 0).Node();
+
+	// przez wszystkie inne moduly
+	if(parent != NULL) {
+		for( moduleXMLNode = parent; moduleXMLNode; moduleXMLNode = moduleXMLNode->NextSibling("module") ) {
+			moduleXMLElem = moduleXMLNode->ToElement();
+			moduleName = moduleXMLElem->Attribute("name");
+			x = atoi( moduleXMLElem->Attribute("x") );
+			y = atoi( moduleXMLElem->Attribute("y") );
+			algoView->AddModule( moduleXMLElem->Attribute("type"), moduleName, x, y );
+  		}
+	}
+
+	TRACE("XMLConfigFile::LoadModules()", "Moduly wczytane");
+}
+
+
+/**
+ Wczytuje algorytm opisany w pliku
+ @param algo Wskaznik do konfigurowanego algorytmu
+*/
+void XMLConfigFile::LoadAlgorithmView(AlgorithmView* algoView) {
+	TRACE("XMLConfigFile::LoadModules()", "Wczytywanie calego algorytmu...");
+	LoadAlgorithmSettings( algoView->GetAlgorithm() );
+	LoadGuiModules(algoView);
+	LoadParameters( algoView->GetAlgorithm() );
+	LoadConnections( algoView->GetAlgorithm() );
+	TRACE("XMLConfigFile::LoadModules()", "Algorytm wczytany");
+}
+

@@ -1,5 +1,5 @@
-#ifndef GUIMODULESVIEW_H
-#define AlgorithmView_H
+#ifndef ALGORITHMVIEW_H
+#define ALGORITHMVIEW_H
 
 #include <list>
 
@@ -33,6 +33,7 @@ class AlgorithmView : public Gtk::Layout {
 		void Clear();
 		//void DrawConnectionDrag();
 		bool IsDraggingModule();
+		Algorithm* GetAlgorithm();
 		bool on_motion_notify_event(GdkEventMotion* even);
 		bool on_button_press_event(GdkEventButton* event);
 		bool on_button_release_event(GdkEventButton* event);
@@ -64,4 +65,4 @@ class AlgorithmView : public Gtk::Layout {
 		GuiModuleFactory guiFactory;
 };
 
-#endif // AlgorithmView_H
+#endif // ALGORITHMVIEW_H
