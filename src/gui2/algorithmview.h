@@ -30,6 +30,7 @@ class AlgorithmView : public Gtk::Layout {
 		void SelectGuiModule(GuiModule* guiMod);
 		void DrawAlgorithm();
 		void CreateModuleWindow(GuiModule* gui);
+		void Clear();
 		//void DrawConnectionDrag();
 		bool IsDraggingModule();
 		bool on_motion_notify_event(GdkEventMotion* even);

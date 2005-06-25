@@ -24,12 +24,7 @@ AlgorithmView::~AlgorithmView() {
     TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja...");
     currentGuiModule = NULL;
 
-	// pozbywamy sie GuiModulow
-	typedef list<GuiModule*>::iterator GMIt;
-	for(GMIt it = guiModules.begin(); it != guiModules.end(); it++) {
-		delete *it;
-	}
-	guiModules.clear();
+	Clear();
 
     TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja pomyslna");
 }
@@ -122,7 +117,8 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 
 		// podwojny klik na module
 		if(event->type == Gdk::DOUBLE_BUTTON_PRESS) {
-			cout << "Double click" << endl;
+			cout << "Double click na module '" << currentGuiModule->GetModule()
+				->GetName() << "'" << endl;
 			// funkcja pusta na razie
 			CreateModuleWindow(currentGuiModule);
 		}
@@ -227,6 +223,8 @@ void AlgorithmView::DrawAlgorithm() {
 
 	int x = 100, y = 100;
 
+	Clear();
+
 	ModuleIdIterator mit;
 	for(mit = algorithm->ModuleIdIteratorBegin(); mit != algorithm->ModuleIdIteratorEnd(); mit++) {
 		GuiModule* guiMod = guiFactory.CreateGuiModule( algorithm->GetModule(*mit) );
@@ -245,4 +243,13 @@ void AlgorithmView::DrawAlgorithm() {
 
 void AlgorithmView::CreateModuleWindow(GuiModule* gui) {
 	// TODO: wywolanie okna z interfejsem modulu
+}
+
+void AlgorithmView::Clear() {
+	// pozbywamy sie GuiModulow
+	typedef list<GuiModule*>::iterator GMIt;
+	for(GMIt it = guiModules.begin(); it != guiModules.end(); it++) {
+		delete *it;
+	}
+	guiModules.clear();
 }
