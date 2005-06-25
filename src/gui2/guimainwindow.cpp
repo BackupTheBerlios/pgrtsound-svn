@@ -107,10 +107,6 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER)
 	AllowStop(false);
 
 	TRACE("GuiMainWindow::GuiMainWindow()", "Okno aplikacji utworzone");
-	
-	// TEST ONLY
-	algoView.AddModule("slider", "modul1", 100, 100);
-	algoView.AddModule("sumator", "modul2", 300, 200);
 }
 
 GuiMainWindow::~GuiMainWindow() {
@@ -194,8 +190,10 @@ void GuiMainWindow::OnOpenFile() {
 		        exit(1);
 		    }
 		    
-			ClearModules();
-
+			//ClearModules();
+			
+			algoView.DrawAlgorithm();
+			
 			//Module* mod;
 			//for(mod = algo.GetFirstModule(); mod; mod = algo.GetNextModule()) {
 				//if(mod->GetParameterCount() > 0) AddModule(mod);

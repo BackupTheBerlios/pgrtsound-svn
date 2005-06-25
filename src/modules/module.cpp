@@ -118,11 +118,10 @@ int Module::GetInputCount() {
 }
 
 /**
- Powiadomienie modulu zmianie czest. probkowania.
- Funcka jest wywolywana gdy nastapi zmiana dlugosci czest. probkowania (w
- funckji UpdateBlockSize()).Redefinicja omawianej funkcji wirtualnej w module
- pozwala na jego odpowiednie dostosowanie do nowej czest. probkowania,
- jesli realizowany algorytmy tego wymaga.
+ Powiadomienie modulu o zmianie czest. probkowania.
+ Funcka jest wywolywana gdy nastapi zmiana czest. probkowania.
+ Redefinicja omawianej funkcji wirtualnej w module pozwala na jego odpowiednie
+ dostosowanie do nowej czest. probkowania, jesli realizowany algorytmy tego wymaga.
 */
 void Module::SampleRateChanged() {
 	// nadpisywac w modulach
@@ -130,6 +129,9 @@ void Module::SampleRateChanged() {
 
 /**
  Powiadomienie modulu zmianie dlugosci bloku przetwarzania.
+ Funcka jest wywolywana gdy nastapi zmiana dlugosci bloku przetwarzania.
+ Redefinicja omawianej funkcji wirtualnej w module  pozwala na jego odpowiednie
+ dostosowanie do nowej czest. probkowania, jesli realizowany algorytmy tego wymaga.
 */
 void Module::BlockSizeChanged() {
 	// nadpisywac w modulach

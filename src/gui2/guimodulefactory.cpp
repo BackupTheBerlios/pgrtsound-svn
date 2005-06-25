@@ -18,18 +18,19 @@ GuiModule* GuiModuleFactory::CreateGuiModule(Module* module) {
     //TRACE2("GuiModuleFactory::CreateGuiModule()", "Tworze GUI dla typu ", module->GetType());
 
 	string type = module->GetType();
-
 	if (type == "slider") {
 		return new SliderGui(module);
 	}
-	
+
 	if (type == "sinosc2") {
 		return new SinOsc2TestGui(module);
 	}
-	
+
 	if (type == "gain") {
 		return new GainGui(module);
 	}
+
+	//TRACE("GuiModuleFactory::CreateGuiModule()", "Dodaje zwykly GuiModule");
 
 	// nie ma specjalistycznego GuiModule zwracamy zwykly
 	return new GuiModule(module);

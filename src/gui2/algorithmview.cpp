@@ -213,7 +213,7 @@ bool AlgorithmView::IsDraggingModule() {
 	return isDraggingModule;
 }
 
-void AlgorithmView::ConnectModules(GuiModule* from, int fomNumoutput, GuiModule* to,
+void AlgorithmView::ConnectModules(GuiModule* from, int fomNumOutput, GuiModule* to,
 	int toNuminput)
 {
 	// TODO: tworzenie polaczenia
@@ -223,6 +223,24 @@ void AlgorithmView::ConnectModules(GuiModule* from, int fomNumoutput, GuiModule*
 
 void AlgorithmView::DrawAlgorithm() {
 	// TODO: rysowanie calego algorytmu (po wczytaniu z pliku)
+	TRACE("AlgorithmView::DrawAlgorithm()", "Rysuje algorytm...");
+
+	int x = 100, y = 100;
+
+	ModuleIdIterator mit;
+	for(mit = algorithm->ModuleIdIteratorBegin(); mit != algorithm->ModuleIdIteratorEnd(); mit++) {
+		GuiModule* guiMod = guiFactory.CreateGuiModule( algorithm->GetModule(*mit) );
+		cout << "dodaje " << algorithm->GetModule(*mit)->GetName() << endl;
+		guiMod->SetParentView(this); // konieczne na razie :(
+		guiModules.push_back(guiMod);
+		this->put(*guiMod, x, y);
+		x += 10;
+		y += 10;
+	}
+	
+	show_all();
+	
+	TRACE("AlgorithmView::DrawAlgorithm()", "Narysowany");
 }
 
 void AlgorithmView::CreateModuleWindow(GuiModule* gui) {

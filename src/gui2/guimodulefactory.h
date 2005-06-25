@@ -1,6 +1,7 @@
 #ifndef GUIMODULEFACTORY_H
 #define GUIMODULEFACTORY_H
 
+#include "../debug.h"
 #include "guimodules/guimodule.h"
 #include "guimodules/slidergui.h"
 #include "guimodules/sinosc2testgui.h"

@@ -12,8 +12,8 @@
 using namespace std;
 
 // logowanie do pliku
-ofstream logfile("RTSoundlog.txt");
-streambuf* out = cout.rdbuf(logfile.rdbuf());
+//ofstream logfile("RTSoundlog.txt");
+//streambuf* out = cout.rdbuf(logfile.rdbuf());
 
 //------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
@@ -29,8 +29,8 @@ int main(int argc, char *argv[]) {
     audio.PrintDevices();
     
  	try {
-		xmlConfig.OpenFile("../../examples/noise_filtering.xml");
-		//xmlConfig.OpenFile("../../examples/fm2.xml");
+		//xmlConfig.OpenFile("../../examples/noise_filtering.xml");
+		xmlConfig.OpenFile("../../examples/fm2.xml");
         algo.Clear(); // test
 		xmlConfig.LoadAlgorithm(&algo);
 		algo.Init();
@@ -48,6 +48,8 @@ int main(int argc, char *argv[]) {
         cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
         exit(1);
     }
+    
+    algo.PrintEdges();
 
     while(c != 'q') {
 		c = cin.get();

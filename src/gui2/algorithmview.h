@@ -10,6 +10,13 @@
 #include "guimodulefactory.h"
 #include "guimodules/guimodule.h"
 
+struct GuiConnection {
+	ConnectionId connectionId;
+	int sourceX, sourceY;
+	int destinationX, destinationY;
+	// TODO: Gtk::EventBox strzalka;
+};
+
 /**
  * Widok graficznych reprezentacji modulow.
  */
@@ -23,6 +30,7 @@ class AlgorithmView : public Gtk::Layout {
 		void SelectGuiModule(GuiModule* guiMod);
 		void DrawAlgorithm();
 		void CreateModuleWindow(GuiModule* gui);
+		//void DrawConnectionDrag();
 		bool IsDraggingModule();
 		bool on_motion_notify_event(GdkEventMotion* even);
 		bool on_button_press_event(GdkEventButton* event);
@@ -45,8 +53,11 @@ class AlgorithmView : public Gtk::Layout {
 		// gdzie byl kursor nad kliknietym widgecie po kliknieciu
 		int currentGuiModuleX, currentGuiModuleY;
 		
+		// zakresy scrollbarow
 		Gtk::Adjustment* adjh, * adjv;
+		
 		std::list<GuiModule*> guiModules;
+		std::list<GuiConnection> connections;
 
 		Algorithm* algorithm;
 		GuiModuleFactory guiFactory;
