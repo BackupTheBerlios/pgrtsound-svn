@@ -27,7 +27,6 @@ class GuiMainWindow : public Gtk::Window {
 	public:
 		GuiMainWindow();
 		~GuiMainWindow();
-   		void AddModule(Module* module);
    		void ClearModules();
    		void AllowPlay(bool allow);
    		void AllowStop(bool allow);

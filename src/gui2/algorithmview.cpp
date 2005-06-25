@@ -221,21 +221,23 @@ void AlgorithmView::DrawAlgorithm() {
 	// TODO: rysowanie calego algorytmu (po wczytaniu z pliku)
 	TRACE("AlgorithmView::DrawAlgorithm()", "Rysuje algorytm...");
 
-//	int x = 100, y = 100;
-//
-//	Clear();
-//
-//	ModuleIdIterator mit;
-//	for(mit = algorithm->ModuleIdIteratorBegin(); mit != algorithm->ModuleIdIteratorEnd(); mit++) {
-//		//GuiModule* guiMod = guiFactory.CreateGuiModule( algorithm->GetModule(*mit) );
-//		//cout << "dodaje " << algorithm->GetModule(*mit)->GetName() << endl;
-//		//guiMod->SetParentView(this); // konieczne na razie :(
-//		//guiModules.push_back(guiMod);
-//		//this->put(*guiMod, x, y);
-//		x += 10;
-//		y += 10;
-//	}
-//
+	int x = 100, y = 100;
+
+	Clear();
+
+	ModuleIdIterator mit;
+	for(mit = algorithm->ModuleIdIteratorBegin(); mit != algorithm->ModuleIdIteratorEnd(); mit++) {
+		GuiModule* guiMod = guiFactory.CreateGuiModule( algorithm->GetModule(*mit) );
+		cout << "dodaje " << algorithm->GetModule(*mit)->GetName() << endl;
+		guiMod->SetParentView(this); // konieczne na razie :(
+		guiModules.push_back(guiMod);
+		this->put(*guiMod, x, y);
+		//guiMod->SetXY(x, y);
+		x += 10;
+		y += 10;
+	}
+
+
 	show_all();
 	
 	TRACE("AlgorithmView::DrawAlgorithm()", "Narysowany");
@@ -257,3 +259,65 @@ void AlgorithmView::Clear() {
 Algorithm* AlgorithmView::GetAlgorithm() {
 	return algorithm;
 }
+//
+//void Desk::LoadFromFile(string filename)
+//{
+////    Clear();
+////
+////    TRACE("Desk::LoadFromFile()", "load algorithm");
+////    XMLConfigFile xmlConfig;
+//// 	try {
+////        xmlConfig.OpenFile(filename.c_str());
+////		xmlConfig.LoadAlgorithm(algorithm);
+////    } catch (RTSError& error) {
+////        cout << "Error: " << error.what() << endl;
+////        exit(1);
+////    }
+////
+////    TRACE("Desk::LoadFromFile()", "put module&widget on desk");
+//
+////
+////    for (int i = 0;i<gtkModules.size();i++)
+////    {
+////         delete gtkModules[i];
+////         delete entryModules[i];
+////    }
+////
+////    guiModules.clear();
+////    gtkModules.clear();
+////    entryModules.clear();
+////
+////    deskModuleActive = NULL;
+////
+////
+////    AddAllModuleToDesk();
+//
+//
+//    TRACE("Desk::LoadFromFile()", "load widget position");
+//
+//    TiXmlDocument document;
+//    if ( !document.LoadFile(filename.c_str()) ) {
+//		throw RTSError("Nie mozna wczytac pliku " + (string)filename +
+//			"! Error: " + document.ErrorDesc());
+//    }
+//
+//    TiXmlElement* moduleXMLElem;
+//	TiXmlNode* moduleXMLNode, * parent;
+//	string moduleName;
+//	int moduleId;
+//
+//
+//    TiXmlHandle docHandle( &document );
+//	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "modules_widget" ).Child("module_widget", 0).Node();
+//
+//	// przez wszystkie inne moduly
+//	if(parent != NULL) {
+//		for( moduleXMLNode = parent; moduleXMLNode; moduleXMLNode = moduleXMLNode->NextSibling("module_widget") ) {
+//			moduleXMLElem = moduleXMLNode->ToElement();
+//            SetPosition(moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
+//            TRACE3("Pozycja",moduleXMLElem->Attribute("name"),atoi(moduleXMLElem->Attribute("x")),atoi(moduleXMLElem->Attribute("y")));
+//  		}
+//	}
+//	TRACE("Desk::LoadFromFile()", "end");
+//
+//}

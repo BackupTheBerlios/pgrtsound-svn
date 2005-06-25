@@ -115,27 +115,6 @@ GuiMainWindow::~GuiMainWindow() {
 	TRACE("GuiMainWindow::~GuiMainWindow()", "Usuniete");
 }
 
-void GuiMainWindow::AddModule(Module* module) {
-//   	TRACE3("GuiMainWindow::AddModule()", "Dodaje GUI dla modul '", module->GetName(), "'");
-//    GuiModule*		guiModule;
-//    Gtk::Widget*	gui;
-
-	// tworzymy GuiModule
-	//guiModule = guiModuleFactory.CreateGuiModule(module);
-	//guiModules.push_back(guiModule);
-	
-//	gui = guiModule->GetGui();
-//	if(gui != NULL) {
-//		// jest GUI, wiec tworzymy ramke i dodajemy je
-//		Gtk::Frame* frame = new Gtk::Frame;
-//		guis.push_back(frame);
-//		frame->add(*gui);
-//		frame->set_label( module->GetName() );
-//		modulesBox.pack_start(*frame, Gtk::PACK_SHRINK);
-//		//TRACE("GuiMainWindow::AddModule()", "GUI dodane");
-//	}
-}
-
 void GuiMainWindow::OnOpenFile() {
 	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_OPEN);
 	dialog.set_transient_for(*this);
@@ -173,7 +152,7 @@ void GuiMainWindow::OnOpenFile() {
 				algo.SetSampleRate(44100);
 				algo.Clear();
 				algoView.Clear();
-				xmlConfig.LoadAlgorithmView(&algoView);
+				xmlConfig.LoadAlgorithm(&algo);
 				algo.Init();
 				algo.CreateQueue();
 		    } catch (RTSError& error) {
