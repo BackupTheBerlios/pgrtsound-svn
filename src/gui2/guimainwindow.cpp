@@ -172,6 +172,7 @@ void GuiMainWindow::OnOpenFile() {
 			    xmlConfig.OpenFile( filename.c_str() );
 				algo.SetSampleRate(44100);
 				algo.Clear();
+				algoView.Clear();
 				xmlConfig.LoadAlgorithmView(&algoView);
 				algo.Init();
 				algo.CreateQueue();
