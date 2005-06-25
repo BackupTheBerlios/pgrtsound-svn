@@ -15,11 +15,11 @@ Algorithm::Algorithm(unsigned long fpb) {
 }
 
 Algorithm::~Algorithm() {
-	TRACE3("Algorithm", "Sprzatanie algorytmu (", GetModulesCount(), " modulow)...");
+	TRACE3("Algorithm", "Sprzatanie algorytmu (", GetModuleCount(), " modulow)...");
 
-	Module* mod;
-	for(mod = GetFirstModule(); mod; mod = GetNextModule()) {
-		delete mod;
+	ModuleIdIterator mit;
+	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
+		delete GetModule(*mit);
 	}
 
 	TRACE("Algorithm", "Bye!");
@@ -31,15 +31,15 @@ void Algorithm::InitAudioPorts() {
 	
 	module = new AudioPortIn;
 	moduleId = add_vertex(graph);   // dodajemy do grafu
-	//graph[moduleId].module = module;
-	put(boost::vertex_name, graph, moduleId, module);
+	graph[moduleId].module = module;
+	//put(boost::vertex_name, graph, moduleId, module);
 	moduleName2IdMap.insert( make_pair("AudioPortIn", moduleId) );
 	inputPort = module;
 
 	module = new AudioPortOut;
 	moduleId = add_vertex(graph);
-	//graph[moduleId].module = module;
-	put(boost::vertex_name, graph, moduleId, module);
+	graph[moduleId].module = module;
+	//put(boost::vertex_name, graph, moduleId, module);
 	moduleName2IdMap.insert( make_pair("AudioPortOut", moduleId) );
 	outputPort = module;
 
@@ -56,8 +56,8 @@ ModuleId Algorithm::AddModule(string type, string name) {
 	ModuleId moduleId;
 	moduleId = add_vertex(graph);
 	//graph[*gm] = *(moduleFactory.CreateModule(type));
-	//graph[moduleId].module = mod;
-	put(boost::vertex_name, graph, moduleId, mod);
+	graph[moduleId].module = mod;
+	//put(boost::vertex_name, graph, moduleId, mod);
 
 	moduleName2IdMap.insert( make_pair(name, moduleId) );
 	TRACE4("Algorithm", "Dodano modul '", mod->GetName(), "' typu ", mod->GetType());
@@ -69,9 +69,10 @@ void Algorithm::PrintInfo(void) {
 
 	Module* mod;
 
-	for(mod = GetFirstModule(); mod; mod = GetNextModule()) {
-		cout << "    Modul: " << mod->GetName() <<
-			"(" << mod->GetType() << ")" << endl;
+	ModuleIdIterator mit;
+	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
+		cout << "    Modul: " << GetModule(*mit)->GetName() <<
+			"(" << GetModule(*mit)->GetType() << ")" << endl;
 	}
 }
 
@@ -102,11 +103,16 @@ ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId,
 	c = add_edge(moduleId1, moduleId2, graph);
 	// identyfikator polaczenia w grafie
 	cId = c.first;
-	graph[cId].sourceId = outputId;
-	graph[cId].destinationId = inputId;
-	graph[cId].source = GetModule(moduleId1)->GetOutput(outputId);
-	graph[cId].sink = GetModule(moduleId2)->GetInput(inputId);
-	
+	graph[cId].sourceModule = GetModule(moduleId1);
+	graph[cId].sourceOutputId = outputId;
+	graph[cId].destinationModule = GetModule(moduleId2);
+	graph[cId].destinationInputId = inputId;
+
+//	graph[cId].sourceId = outputId;
+//	graph[cId].destinationId = inputId;
+//	graph[cId].source = GetModule(moduleId1)->GetOutput(outputId);
+//	graph[cId].destination = GetModule(moduleId2)->GetInput(inputId);
+
 	return cId;
 }
 
@@ -151,7 +157,8 @@ void Algorithm::CreateQueue() {
 	typedef vector< ModuleId > container;
 	container c;
 	property_map<Graph, vertex_index_t>::type index = get(vertex_index, graph);
-	property_map<Graph, vertex_name_t>::type name = get(vertex_name, graph);
+//	property_map<Graph, vertex_name_t>::type name = get(vertex_name, graph);
+	property_map<Graph, Module* GraphModule::*>::type mods = get(&GraphModule::module, graph);
 
 	// initialize the vertex_index property values
 	graph_traits<Graph>::vertex_iterator vi, vend;
@@ -164,8 +171,9 @@ void Algorithm::CreateQueue() {
 
 	std::cout << "A topological ordering: ";
 	for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii) {
-        cout << "'" << name[*ii]->GetName() << "' ";
-        modulesQueue.push_back(name[*ii]);
+//        cout << "'" << name[*ii]->GetName() << "' ";
+        cout << "'" << mods[*ii]->GetName() << "' ";
+        modulesQueue.push_back(mods[*ii]);
 	}
     cout << endl;
 }
@@ -173,8 +181,12 @@ void Algorithm::CreateQueue() {
 /**
  * Zwraca ilosc modulow w grafie algorytmu.
  */
-int Algorithm::GetModulesCount() const {
+int Algorithm::GetModuleCount() const {
 	return num_vertices(graph);
+}
+
+int Algorithm::GetConnectionCount() {
+	return num_edges(graph);
 }
 
 /**
@@ -186,9 +198,9 @@ void  Algorithm::Clear() {
 	TRACE("Algorithm::Clear()", "Czyszcze algorytm...");
 
 	// usuniecie modulow
-	Module* mod;
-	for(mod = GetFirstModule(); mod; mod = GetNextModule()) {
-		delete mod;
+	ModuleIdIterator mit;
+	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
+		delete GetModule(*mit);
 	}
 
 	modulesQueue.clear();
@@ -206,9 +218,9 @@ void  Algorithm::Clear() {
 void Algorithm::Init() {
     TRACE("Algorithm::Init()", "Inicjalizacja modulow...");
     
-	Module* mod;
-	for (mod = GetFirstModule(); mod; mod = GetNextModule()) {
-		mod->Init();
+	ModuleIdIterator mit;
+	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
+		GetModule(*mit)->Init();
 	}
 
     TRACE("Algorithm::Init()", "Inicjalizacja modulow zakonczona");
@@ -250,7 +262,8 @@ ModuleId Algorithm::GetModuleId(string moduleName) const {
  * @param moduleId Identyfikator modulu
  */
 Module* Algorithm::GetModule(ModuleId moduleId) const {
-	return boost::get(boost::vertex_name, graph, moduleId);
+//	return boost::get(boost::vertex_name, graph, moduleId);
+    return graph[moduleId].module;
 }
 
 Module* Algorithm::GetInputPort() const {
@@ -261,23 +274,18 @@ Module* Algorithm::GetOutputPort() const {
 	return outputPort;
 }
 
-/**
- Zwraca pierwszy modulu w grafie algorytmu.
-*/
-Module* Algorithm::GetFirstModule() {
-    boost::tie(moduleIterator, moduleIteratorLast) = vertices(graph);
-    return boost::get(boost::vertex_name, graph, *moduleIterator);
-}
-
-/**
- Zwraca kolejny modulu w grafie algorytmu.
-*/
-Module* Algorithm::GetNextModule() {
-	if(++moduleIterator != moduleIteratorLast)
-	    return boost::get(boost::vertex_name, graph, *moduleIterator);
-	else
-		return NULL;
-}
+//ConnectionId  Algorithm::GetFirstConnectionId() {
+//	boost::tie(connectionIterator, connectionIteratorLat) = boost::edges(graph);
+//    return *connectionIterator;
+//}
+//
+//ConnectionId  Algorithm::GetNextConnectionId() {
+//	if(++moduleIterator != moduleIteratorLast)
+//		//return boost::get(boost::vertex_name, graph, *moduleIterator);
+//	    return graph[*moduleIterator].module;
+//	else
+//		return --moduleIterator;
+//}
 
 /**
  * Usuwanie modulu z grafu.
@@ -298,7 +306,8 @@ void Algorithm::DeleteModule(ModuleId moduleId) {
 */
 void Algorithm::DeleteConnection(ConnectionId connectionId) {
 	//graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
-	graph[connectionId].sink->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
+	graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
+		->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
 	boost::remove_edge(connectionId, graph);
 }
 
@@ -325,8 +334,43 @@ void Algorithm::SetBlockSize(unsigned long newBlockSize) {
 	TRACE("Algorithm::SetBlockSize()", "Zmieniam rozmiar bloku...");
 	Module::framesPerBlock = newBlockSize;
 	nullModule.UpdateBlockSize();
-	for(Module* m = GetFirstModule(); m; m = GetNextModule()) {
-		m->UpdateBlockSize();
+	ModuleIdIterator mit;
+	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
+		GetModule(*mit)->UpdateBlockSize();
 	}
+	
 	TRACE("Algorithm::SetBlockSize()", "Rozmiar bloku zmieniony");
+}
+
+void Algorithm::PrintEdges() {
+	ConnectionIdIterator ei;
+	for(ei = ConnectionIdIteratorBegin(); ei != ConnectionIdIteratorEnd(); ei++) {
+		std::cout << "(" << GetConnection(*ei)->sourceModule->GetName()
+			<< "," << GetConnection(*ei)->destinationModule->GetName() << ") " << std::endl;
+	}
+}
+
+ModuleIdIterator Algorithm::ModuleIdIteratorBegin() {
+	boost::tie(moduleIterator, moduleIteratorLast) = boost::vertices(graph);
+	return moduleIterator;
+}
+
+ModuleIdIterator Algorithm::ModuleIdIteratorEnd() {
+	boost::tie(moduleIterator, moduleIteratorLast) = boost::vertices(graph);
+	return moduleIteratorLast;
+}
+
+ConnectionIdIterator Algorithm::ConnectionIdIteratorBegin() {
+	boost::tie(connectionIterator, connectionIteratorLast) = boost::edges(graph);
+	return connectionIterator;
+}
+
+ConnectionIdIterator Algorithm::ConnectionIdIteratorEnd() {
+	boost::tie(connectionIterator, connectionIteratorLast) = boost::edges(graph);
+	return connectionIteratorLast;
+}
+
+Connection* Algorithm::GetConnection(ConnectionId connectionId) {
+	// TODO: idiotodpornosc i inline
+	return &graph[connectionId];
 }
