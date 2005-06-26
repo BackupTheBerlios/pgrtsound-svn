@@ -1,10 +1,10 @@
 #ifndef GUIMODULEFACTORY_H
 #define GUIMODULEFACTORY_H
 
-#include "guimodules/guimodule.h"
-#include "guimodules/slidergui.h"
-#include "guimodules/sinosc2testgui.h"
-#include "guimodules/gaingui.h"
+#include "../gui2/guimodules/guimodule.h"
+#include "../gui2/guimodules/slidergui.h"
+#include "../gui2/guimodules/sinosc2testgui.h"
+#include "../gui2/guimodules/gaingui.h"
 
 /**
 	Dodawanie interfjesow graficznych dla modulow.

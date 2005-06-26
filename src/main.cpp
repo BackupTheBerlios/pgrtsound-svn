@@ -12,8 +12,8 @@
 using namespace std;
 
 // logowanie do pliku
-//ofstream logfile("RTSoundlog.txt");
-//streambuf* out = cout.rdbuf(logfile.rdbuf());
+ofstream logfile("RTSoundlog.txt");
+streambuf* out = cout.rdbuf(logfile.rdbuf());
 
 //------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {

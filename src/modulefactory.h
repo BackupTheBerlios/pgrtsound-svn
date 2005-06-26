@@ -16,6 +16,9 @@
 #include "modules/noise.h"
 #include "modules/filter12db.h"
 
+
+#include <gmodule.h>
+
 using namespace std;
 
 // wskanzik do statycznych metod Module::Create()
@@ -30,8 +33,11 @@ class ModuleFactory {
 	public:
 		ModuleFactory();
 		~ModuleFactory();
+		void RegisterPlugin(string filename);
 		void RegisterModuleType(string type, CreateFuncPtr funcPtr);
-		Module* CreateModule(string type);
+		void RegisterAllPlugins();
+        Module* CreateModule(string type);
+		
 		
 	private:
 		map<string, CreateFuncPtr> type2CreateFuncMap;

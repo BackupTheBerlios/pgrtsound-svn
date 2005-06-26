@@ -1,15 +1,20 @@
 #include "modulefactory.h"
+#include <dirent.h>
 
 ModuleFactory::ModuleFactory() {
 	RegisterModuleType("constant", Constant::Create);
 	RegisterModuleType("sinosc2", SinOsc2::Create);
-	RegisterModuleType("sumator", Sum::Create);
+	//RegisterModuleType("sumator", Sum::Create);
 	RegisterModuleType("slider", Slider::Create);
 	RegisterModuleType("gain", Gain::Create);
 	RegisterModuleType("multiplication", Multiplication::Create);
 	RegisterModuleType("filter12db", Filter12dB::Create);
 	RegisterModuleType("noise", Noise::Create);
 	RegisterModuleType("textfileout", TextFileOut::Create);
+	
+	if (g_module_supported() == TRUE) {
+    	RegisterAllPlugins();
+    }
 }
 
 ModuleFactory::~ModuleFactory() {
@@ -43,3 +48,46 @@ void ModuleFactory::RegisterModuleType(string type, CreateFuncPtr funcPtr) {
 	type2CreateFuncMap.insert( make_pair(type, funcPtr) );
 	TRACE3("ModuleFactory::RegisterModuleType()", "Zarejestrowany typ '", type, "'");
 }
+
+
+
+void ModuleFactory::RegisterAllPlugins() {
+    TRACE("ModuleFactory::RegisterAllPlugins()", "start");
+    DIR* dir;
+    struct dirent* entry;
+    dir = opendir(".\\plugins\\");    
+    while ((entry = readdir(dir)) != NULL) {  
+        TRACE3("ModuleFactory::RegisterAllPlugins()", "wczytuje: ", entry->d_name ,"");
+        RegisterPlugin (entry->d_name);
+    }
+    TRACE("ModuleFactory::RegisterAllPlugins()", "end");
+}
+
+
+
+void ModuleFactory::RegisterPlugin(string filename) {
+    typedef string (* GetTypeFunc) ();
+    typedef Module *(* CreateFunc) ();   
+    GetTypeFunc  GetType;
+    CreateFunc   Create;
+    GError       **error;
+    
+    GModule*  gm = g_module_open(filename.c_str(),G_MODULE_BIND_MASK);
+    if (gm!=NULL) {
+        if (g_module_symbol (gm, "GetType", (gpointer *)&GetType)==TRUE){                
+            if (g_module_symbol (gm, "Create", (gpointer *)&Create)==TRUE){
+                RegisterModuleType(GetType(), Create);
+            } else {
+                TRACE3("ModuleFactory::RegisterPlugin(string filename)",g_module_error ()," w plku ", filename);
+            }
+        } else {
+            TRACE3("ModuleFactory::RegisterPlugin(string filename)",g_module_error ()," w plku ", filename);
+        }                        
+        TRACE3("ModuleFactory::RegisterPlugin(string filename)",g_module_error ()," w plku ", filename);
+    }
+
+    
+}
+
+
+
