@@ -218,3 +218,19 @@ int GuiModule::GetCurrentInputNumber() {
 int GuiModule::GetCurrentOutputNumber() {
 	return currentOutput;
 }
+
+void GuiModule::GetInputPosition(int inNum, int& xx, int& yy) {
+	xx = x;
+	yy = y + inNum * GuiModule::socketSizeDoubled + GuiModule::socketSize/2;
+
+}
+
+void GuiModule::GetOutputPosition(int outNum, int& xx, int& yy) {
+  	xx = x + width;
+	yy = y + outNum * GuiModule::socketSizeDoubled + GuiModule::socketSize/2;
+}
+
+void GuiModule::GetPosition(int& xx, int& yy) {
+	xx = x;
+	yy = y;
+}

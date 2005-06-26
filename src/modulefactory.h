@@ -16,7 +16,6 @@
 #include "modules/noise.h"
 #include "modules/filter12db.h"
 
-
 #include <gmodule.h>
 
 using namespace std;

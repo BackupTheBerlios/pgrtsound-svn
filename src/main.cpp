@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
  	try {
 		//xmlConfig.OpenFile("../../examples/noise_filtering.xml");
 		xmlConfig.OpenFile("../../examples/fm2.xml");
+
         algo.Clear(); // test
 		xmlConfig.LoadAlgorithm(&algo);
 		algo.Init();

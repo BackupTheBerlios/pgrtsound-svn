@@ -14,9 +14,9 @@
 #include <gtkmm/main.h>
 #include <gtkmm/filechooserbutton.h>
 
-#include "../xmlconfigfile.h"
+#include "xmlconfigfile.h"
 #include "../modules/module.h"
-#include "../gui/guimodulefactory.h"
+#include "guimodulefactory.h"
 #include "audiosetupform.h"
 #include "algorithmview.h"
 
@@ -38,21 +38,21 @@ class GuiMainWindow : public Gtk::Window {
 		void OnAudioSetup();
 
 	private:
-        Algorithm					algo;
-		AlgorithmView               algoView;
-		XMLConfigFile				xmlConfig;
-		AudioDriver					audio;
-		
-		bool                    	fileLoaded;
-		std::vector<GuiModule*>		guiModules;
-		std::vector<Gtk::Frame*>	guis;
-        Gtk::ScrolledWindow			scrollWindow;
-        Gtk::VBox					mainBox;
-        Gtk::Label              	cpuUsageLabel;
-		sigc::slot<bool>			my_slot; // sygnal aktualziacji obciazenia CPU
-		sigc::connection			conn;
-		Glib::RefPtr<Gtk::UIManager>      UIManager;
-		Glib::RefPtr<Gtk::ActionGroup>    ActionGroup;
+		AlgorithmView algoView;
+		Algorithm *algo;
+		XMLConfigFile xmlConfig;
+		AudioDriver audio;
+
+		bool fileLoaded;
+		std::vector<GuiModule*> guiModules;
+		std::vector<Gtk::Frame*> guis;
+        Gtk::ScrolledWindow scrollWindow;
+        Gtk::VBox mainBox;
+        Gtk::Label cpuUsageLabel;
+		sigc::slot<bool> my_slot; // sygnal aktualziacji obciazenia CPU
+		sigc::connection conn;
+		Glib::RefPtr<Gtk::UIManager> UIManager;
+		Glib::RefPtr<Gtk::ActionGroup> ActionGroup;
 };
 
 #endif // GUIMAINWINDOW_H

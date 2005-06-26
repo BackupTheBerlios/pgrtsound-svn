@@ -1,12 +1,14 @@
 #include "module_io.h"
 #include "module.h"
 
-//extern float* nullBuffer;
+extern NullModuleSingleton& nullModule;
 
 Input::Input(string name_) {
 	name = name_;
-	// niepodlaczone wejscie bedzie pobierac dane z bufora nullBuffer
-	//signal = NULL;
+	isConnected = false;
+	outputConnected =  nullModule.GetOutput(0);
+		// niepodlaczone wejscie do gloablnego zerowego modulu
+	//input.ConnectTo( nullModule.GetOutput(0) );
 }
 
 Input::~Input() {
@@ -30,8 +32,17 @@ string Input::GetName() const {
 */
 void Input::ConnectTo(Output* output) {
 	outputConnected = output;
+	isConnected = true;
 }
 
+void Input::Disconnect() {
+    isConnected = false;
+    outputConnected =  nullModule.GetOutput(0);
+}
+
+bool Input::InputIsConnected() {
+	return isConnected;
+}
 //------------------------------------------------------------------------------
 Output::Output(string name_) {
 	name = name_;

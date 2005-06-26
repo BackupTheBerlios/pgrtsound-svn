@@ -23,8 +23,11 @@ class Input	{
 		inline float* GetSignal();
 		void SetID( int newID );
 		void ConnectTo( Output* output );
+		void Disconnect();
+		bool InputIsConnected();
 		
 	protected:
+		bool isConnected;
 		Output* outputConnected; /**< Wkaznik do wyjscia, do ktorego wejscie jest podlaczone */
 		int id;     /**< Numer idetyfikujacy wejscie */
 		string name;    /**< Nazwa wejscia */

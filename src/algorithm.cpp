@@ -306,8 +306,10 @@ void Algorithm::DeleteModule(ModuleId moduleId) {
 */
 void Algorithm::DeleteConnection(ConnectionId connectionId) {
 	//graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
+	//graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
+	//	->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
 	graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
-		->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
+		->Disconnect(); // rozlaczamy wejscie modulu 2 ???
 	boost::remove_edge(connectionId, graph);
 }
 

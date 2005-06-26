@@ -1,12 +1,10 @@
 #include "guimainwindow.h"
 #include "../callback.h"
 
-#define FRAMES_PER_BUFFER 256
-
-GuiMainWindow::GuiMainWindow() : mainBox(false, 0), algo(FRAMES_PER_BUFFER),
-	algoView(&algo)
-{
+GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 	TRACE("GuiMainWindow::GuiMainWindow()", "Tworze okno...");
+
+	algo = algoView.GetAlgorithm();
 
 	set_title("RTSGUI");
 	set_size_request(600, 400);
@@ -148,13 +146,13 @@ void GuiMainWindow::OnOpenFile() {
 		    }
 
 			try {
-			    xmlConfig.OpenFile( filename.c_str() );
-				algo.SetSampleRate(44100);
-				algo.Clear();
 				algoView.Clear();
-				xmlConfig.LoadAlgorithm(&algo);
-				algo.Init();
-				algo.CreateQueue();
+			    xmlConfig.OpenFile( filename.c_str() );
+				xmlConfig.LoadAlgorithm(algo);
+				algo->Init();
+				xmlConfig.LoadGuiModules(&algoView);
+				algoView.GetAlgorithm()->Init();
+				algoView.GetAlgorithm()->CreateQueue();
 		    } catch (RTSError& error) {
 		        cout << "Error: " << error.what() << endl;
 		        exit(1);
@@ -162,7 +160,7 @@ void GuiMainWindow::OnOpenFile() {
 
 			try {
 		        //audio.PrintDevices();
-				audio.SetCallback(paCallback, (void*)&algo);
+				audio.SetCallback( paCallback, (void*)algo );
 				audio.SetSampleRate(44100.0);
 				audio.Open();
 			}	catch (AudioDriverError& error) {
@@ -172,7 +170,7 @@ void GuiMainWindow::OnOpenFile() {
 		    
 			//ClearModules();
 			
-			algoView.DrawAlgorithm();
+			algoView.CreateConnections();
 			
 			//Module* mod;
 			//for(mod = algo.GetFirstModule(); mod; mod = algo.GetNextModule()) {
@@ -183,7 +181,7 @@ void GuiMainWindow::OnOpenFile() {
 			fileLoaded = true;
 			AllowPlay(true);
 
-			set_title( "Real Time GUI - " + algo.GetName() );
+			set_title( "Real Time GUI - " + algo->GetName() );
 			//modulesBox.show_all_children();
 			break;
 		}

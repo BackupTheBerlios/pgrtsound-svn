@@ -1,6 +1,7 @@
 #include "slidergui.h"
 
-SliderGui::SliderGui(Module* module) : GuiModule(module), guiSlider(0, 1, 0.1) {
+SliderGui::SliderGui(Module* module) : GuiModule(module),
+	guiSlider(0, 1, 0.1) {
 	//TRACE("    SliderGui::SliderGui()", "Konstruuuje...");
 	ParameterFloat* param = (ParameterFloat*)module->GetParameter(2); // parametr value
 	guiSlider.SetParameter(param);

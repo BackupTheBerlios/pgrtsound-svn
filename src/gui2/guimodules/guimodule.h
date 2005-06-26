@@ -4,7 +4,8 @@
 #include <string>
 #include <gtkmm/eventbox.h>
 
-#include "debug.h"
+//#include "../../algorithm.h"
+#include "../../debug.h"
 #include "../../modules/module.h"
 
 // deklaracja potrzebna (naglowek "algorithmview.h" dalby petle plikow naglowkowych)
@@ -29,8 +30,11 @@ class GuiModule : public Gtk::EventBox {
 		void PaintInput(int num, bool isSelected);
 		void PaintOutput(int num, bool isSelected);
 		void FindXput(int x, int y);
+		void GetPosition(int& x, int& y);
 		int GetCurrentInputNumber();
 		int GetCurrentOutputNumber();
+		void GetInputPosition(int inNum, int& x, int& y);
+		void GetOutputPosition(int outNum, int& x, int& y);
 		bool on_leave_notify_event(GdkEventCrossing* event);
 		bool on_enter_notify_event(GdkEventCrossing* event);
 		bool on_expose_event(GdkEventExpose* e);
@@ -46,13 +50,12 @@ class GuiModule : public Gtk::EventBox {
 		int inputCount, outputCount;
 		int currentInput, currentOutput;
 		std::string text;
-
 		// graphic context i kolory
 		Glib::RefPtr<Gdk::GC> gc;
 		Gdk::Color fgColor, bgColor;
-
 		// wskaznik do GuiModuleView - rodzica
 		AlgorithmView* algorithmView;
+		//std::list<GuiConnection*> connections;
 };
 
 #endif // GUIMODULE_H

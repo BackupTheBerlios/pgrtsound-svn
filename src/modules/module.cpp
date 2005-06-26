@@ -41,7 +41,6 @@ int Module::AddParameter(Parameter& param) {
  */
 int Module::AddInput(Input& input) {
 	input.SetID( inputs.size() );
-	input.ConnectTo( nullModule.GetOutput(0) );
 	inputs.push_back(&input);
 	return input.GetID();
 }

@@ -187,4 +187,37 @@ void XMLConfigFile::LoadConnections(Algorithm* algo) {
     TRACE("XMLConfigFile::LoadConnections()", "Moduly polaczone");
 }
 
+/**
+ * Wczytuje modu³y zadeklarowane w pliku
+  * @param algo Wskaznik do konfigurowanego algorytmu
+*/
+void XMLConfigFile::LoadGuiModules(AlgorithmView* algoView) {
+    TRACE("XMLConfigFile::LoadModules()", "Wczytywanie modulow...");
+
+	TiXmlElement* moduleXMLElem;
+	TiXmlNode* moduleXMLNode, * parent;
+	string moduleName;
+	int x, y;
+	ModuleId moduleId;
+
+    TiXmlHandle docHandle( &document );
+	parent = docHandle.FirstChild( "algorithm" ).FirstChild( "gui" ).Child("guimodule", 0).Node();
+
+	// przez wszystkie inne moduly
+	if(parent != NULL) {
+		for( moduleXMLNode = parent; moduleXMLNode;
+			moduleXMLNode = moduleXMLNode->NextSibling("guimodule") )
+		{
+			moduleXMLElem = moduleXMLNode->ToElement();
+			moduleName = moduleXMLElem->Attribute("name");
+			x = atoi( moduleXMLElem->Attribute("x") );
+			y = atoi( moduleXMLElem->Attribute("y") );
+			cout << "GUIIII: " << moduleName << "   " << x << "  " << y << endl;
+			algoView->LoadGuiModule( moduleName, x, y );
+  		}
+	}
+
+	TRACE("XMLConfigFile::LoadModules()", "Moduly wczytane");
+}
+
 

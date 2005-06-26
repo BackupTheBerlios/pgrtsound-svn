@@ -21,8 +21,6 @@
 
 #include <audiodriver.h>
 
-
-
 typedef std::vector<string> StringVector;
 typedef StringVector::iterator SVIterator;
 

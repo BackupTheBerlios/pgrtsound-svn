@@ -16,6 +16,7 @@ class GainGui : public GuiModule
 		
 	private:
         MyGtkSlider	guiSlider;
+
 };
 
 #endif // GAINGUI_H

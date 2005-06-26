@@ -27,13 +27,6 @@ using namespace std;
  * wejsc, wyjsc oraz parmaetrow modulu.
  */
 class Module {
-	protected:
-	    vector<Input*>		inputs;			/**< Wektor wejsc. */
-	    vector<Output*>		outputs;	    /**< Wektor wyjsc. */
-	    vector<Parameter*>	parameters;		/**< Wektor parametrow. */
-	    string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
-	    string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
-
 	public:
 	    static int		framesPerBlock;
 	    static float	sampleRate;
@@ -58,6 +51,13 @@ class Module {
 	    void		UpdateBlockSize();
 	    virtual void SampleRateChanged();
 	    virtual void BlockSizeChanged();
+
+	protected:
+	    vector<Input*>		inputs;			/**< Wektor wejsc. */
+	    vector<Output*>		outputs;	    /**< Wektor wyjsc. */
+	    vector<Parameter*>	parameters;		/**< Wektor parametrow. */
+	    string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
+	    string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
 };
 
 inline Input* Module::GetInput(int inputID) {

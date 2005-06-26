@@ -2,6 +2,7 @@
 #define ALGORITHMVIEW_H
 
 #include <list>
+#include <string>
 
 #include <gtkmm/layout.h> 
 
@@ -9,60 +10,60 @@
 #include "../algorithm.h"
 #include "guimodulefactory.h"
 #include "guimodules/guimodule.h"
-
-struct GuiConnection {
-	ConnectionId connectionId;
-	int sourceX, sourceY;
-	int destinationX, destinationY;
-	// TODO: Gtk::EventBox strzalka;
-};
+#include "guiconnection.h"
 
 /**
  * Widok graficznych reprezentacji modulow.
  */
 class AlgorithmView : public Gtk::Layout {
 	public:
-		AlgorithmView(Algorithm* algo);
+		AlgorithmView();
 		~AlgorithmView();
 		void AddModule(string type, string name, int x, int y);
+		//void ConnectModules(string from, int fomNumoutput, string to,
+		//	int toNuminput);
 		void ConnectModules(GuiModule* from, int fomNumoutput, GuiModule* to,
 			int toNuminput);
 		void SelectGuiModule(GuiModule* guiMod);
-		void DrawAlgorithm();
+		void CreateConnections();
 		void CreateModuleWindow(GuiModule* gui);
 		void Clear();
-		//void DrawConnectionDrag();
+		GuiModule* GetModule(std::string name);
+		void RedrawConnections();
 		bool IsDraggingModule();
 		Algorithm* GetAlgorithm();
+		void LoadGuiModule(string, int x, int y);
+		bool on_expose_event(GdkEventExpose* e);
+		void on_realize();
 		bool on_motion_notify_event(GdkEventMotion* even);
 		bool on_button_press_event(GdkEventButton* event);
 		bool on_button_release_event(GdkEventButton* event);
 
 	private:
+		void InitAudioPorts();
+
 		bool isDraggingModule;
 		bool isDraggingConnection;
 		int width, height;
-		
 		// modul pod kursorem
 		GuiModule* currentGuiModule;
-
 		// moduly miedzy ktorymi chcemy polaczenie
 		GuiModule* connSourceModule, * connDestModule;
-
 		// numer wejscia i wyjscia dla tworzonego polaczenia
 		int connSourceNumber, connDestNumber;
-
 		// gdzie byl kursor nad kliknietym widgecie po kliknieciu
 		int currentGuiModuleX, currentGuiModuleY;
-		
 		// zakresy scrollbarow
 		Gtk::Adjustment* adjh, * adjv;
-		
 		std::list<GuiModule*> guiModules;
-		std::list<GuiConnection> connections;
-
-		Algorithm* algorithm;
+		std::list<GuiConnection*> connections;
+		std::map<string, GuiModule*> moduleName2IdMap;
+		Algorithm algorithm;
 		GuiModuleFactory guiFactory;
+		Glib::RefPtr<Gdk::GC> gc;
+		Gdk::Color fgColor, bgColor;
+		Glib::RefPtr<Gdk::Window> window;
+		GuiConnection connectionDrag;
 };
 
 #endif // ALGORITHMVIEW_H
