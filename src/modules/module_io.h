@@ -29,8 +29,8 @@ class Input	{
 	protected:
 		bool isConnected;
 		Output* outputConnected; /**< Wkaznik do wyjscia, do ktorego wejscie jest podlaczone */
-		int id;     /**< Numer idetyfikujacy wejscie */
-		string name;    /**< Nazwa wejscia */
+		int id; /**< Numer idetyfikujacy wejscie */
+		string name; /**< Nazwa wejscia */
 };
 	
 /**

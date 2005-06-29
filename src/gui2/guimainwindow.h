@@ -1,12 +1,10 @@
 #ifndef GUIMAINWINDOW_H
 #define GUIMAINWINDOW_H
 
-#include <vector>
-
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
-#include <gtkmm/enums.h>
+//#include <gtkmm/enums.h>
 #include <gtkmm/button.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/scrolledwindow.h>
@@ -14,9 +12,6 @@
 #include <gtkmm/main.h>
 #include <gtkmm/filechooserbutton.h>
 
-#include "xmlconfigfile.h"
-#include "../modules/module.h"
-#include "guimodulefactory.h"
 #include "audiosetupform.h"
 #include "algorithmview.h"
 
@@ -40,7 +35,6 @@ class GuiMainWindow : public Gtk::Window {
 	private:
 		AlgorithmView algoView;
 		Algorithm *algo;
-		XMLConfigFile xmlConfig;
 		AudioDriver audio;
 
 		bool fileLoaded;

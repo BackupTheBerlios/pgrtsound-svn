@@ -4,7 +4,7 @@
 ModuleFactory::ModuleFactory() {
 	RegisterModuleType("constant", Constant::Create);
 	RegisterModuleType("sinosc2", SinOsc2::Create);
-	//RegisterModuleType("sumator", Sum::Create);
+	RegisterModuleType("sumator", Sum::Create);
 	RegisterModuleType("slider", Slider::Create);
 	RegisterModuleType("gain", Gain::Create);
 	RegisterModuleType("multiplication", Multiplication::Create);
@@ -62,8 +62,6 @@ void ModuleFactory::RegisterAllPlugins() {
     }
     TRACE("ModuleFactory::RegisterAllPlugins()", "end");
 }
-
-
 
 void ModuleFactory::RegisterPlugin(string filename) {
     typedef string (* GetTypeFunc) ();

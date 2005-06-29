@@ -146,12 +146,7 @@ void GuiMainWindow::OnOpenFile() {
 		    }
 
 			try {
-				algoView.Clear();
-			    xmlConfig.OpenFile( filename.c_str() );
-				xmlConfig.LoadAlgorithm(algo);
-				algo->Init();
-				xmlConfig.LoadGuiModules(&algoView);
-				algoView.GetAlgorithm()->Init();
+				algoView.LoadFromFile( filename );
 				algoView.GetAlgorithm()->CreateQueue();
 		    } catch (RTSError& error) {
 		        cout << "Error: " << error.what() << endl;
@@ -168,21 +163,11 @@ void GuiMainWindow::OnOpenFile() {
 		        exit(1);
 		    }
 		    
-			//ClearModules();
-			
-			algoView.CreateConnections();
-			
-			//Module* mod;
-			//for(mod = algo.GetFirstModule(); mod; mod = algo.GetNextModule()) {
-				//if(mod->GetParameterCount() > 0) AddModule(mod);
-			//	AddModule(mod);
-			//}
-
 			fileLoaded = true;
 			AllowPlay(true);
 
 			set_title( "Real Time GUI - " + algo->GetName() );
-			//modulesBox.show_all_children();
+			
 			break;
 		}
 	}
@@ -243,13 +228,11 @@ void GuiMainWindow::OnAudioSetup() {
 
 	AudioSetupForm asForm(&audio);
     Gtk::Main::run(asForm);
-    //area->on_expose_event(NULL);
     show_all_children();
 	TRACE("GuiMainWindow::OnAudioSetup()", "Konfiguracja zakonczona");
 }
 
 void GuiMainWindow::AllowPlay(bool allow) {
-	//Glib::RefPtr<Gtk::Action>::cast_static( ActionGroup->get_action("Play") )->set_sensitive(allow);
 	ActionGroup->get_action("Play")->set_sensitive(allow);
 }
 

@@ -1,6 +1,7 @@
 #include "guimodule.h"
 #include "../algorithmview.h"
 
+
 // rozmiar kwadracikow gniazdek
 const int GuiModule::socketSize = 7;
 const int GuiModule::socketSizeDoubled = 2 * GuiModule::socketSize;
@@ -10,6 +11,8 @@ GuiModule::GuiModule(Module* moduleToAttach) {
 	x = 0;
 	y = 0;
 	
+	guiWindow = NULL;
+	isGuiWindowCreated = false;
 	inputCount = module->GetInputCount();
 	outputCount = module->GetOutputCount();
 	currentInput = currentOutput = -1;
@@ -36,7 +39,8 @@ GuiModule::GuiModule(Module* moduleToAttach) {
 }
 
 GuiModule::~GuiModule() {
-     TRACE("GuiModule::~GuiModule()", "Destrukcja");
+	delete guiWindow;
+	TRACE("GuiModule::~GuiModule()", "Destrukcja");
 }
 
 void GuiModule::SetParentView(AlgorithmView* algoView) {
@@ -45,14 +49,6 @@ void GuiModule::SetParentView(AlgorithmView* algoView) {
 
 Gtk::Widget* GuiModule::GetGui() {
 	return NULL;
-}
-
-int GuiModule::GetX() {
-    return x;
-}
-
-int GuiModule::GetY() {
-    return y;
 }
 
 void GuiModule::SetXY(int x_, int y_) {
@@ -68,34 +64,67 @@ Module* GuiModule::GetModule() {
 void GuiModule::on_realize() {
 	// We need to call the base on_realize()
 	Gtk::EventBox::on_realize();
-
-	Glib::RefPtr<Gdk::Window> window = get_window();
+	window = get_window();
 	gc = Gdk::GC::create(window);
-	window->set_background(bgColor);
-	window->clear();
+	
+	pixmapBuffer = Gdk::Pixmap::create( window, width, height, -1);
+	gc->set_foreground(bgColor);
+	pixmapBuffer->draw_rectangle(gc, true, 0, 0, width, height);
+
 	gc->set_foreground(fgColor);
-}
 
-bool GuiModule::on_expose_event(GdkEventExpose* e) {
-	Glib::RefPtr<Gdk::Window> window = get_window();
-
-	window->set_background(bgColor);
-	window->clear();
-
-	// glowny prostokat modulu
-	window->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
+	//window->set_background(bgColor);
+	//window->clear();
+	
+		// glowny prostokat modulu
+	pixmapBuffer->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
 
 	// gniazda wejsc
     for (int i = 1; i <= inputCount; i++) {
-        window->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled, socketSize,
-			socketSize);
+        pixmapBuffer->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled,
+			socketSize, socketSize);
     }
 
 	// gniazda wyjsc
     for (int i = 1; i <= outputCount; i++) {
-        window->draw_rectangle(gc, true, width - socketSize, (i - 1)*socketSizeDoubled,
-			socketSize, socketSize);
+        pixmapBuffer->draw_rectangle(gc, true, width - socketSize,
+			(i - 1)*socketSizeDoubled, socketSize, socketSize);
     }
+}
+bool GuiModule::on_expose_event(GdkEventExpose* event) {
+//	Glib::RefPtr<Gdk::Window> window = get_window();
+//
+//	window->set_background(bgColor);
+//	window->clear();
+
+
+//	// glowny prostokat modulu
+//	window->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
+//
+//	// gniazda wejsc
+//    for (int i = 1; i <= inputCount; i++) {
+//        window->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled, socketSize,
+//			socketSize);
+//    }
+//
+//	// gniazda wyjsc
+//    for (int i = 1; i <= outputCount; i++) {
+//        window->draw_rectangle(gc, true, width - socketSize, (i - 1)*socketSizeDoubled,
+//			socketSize, socketSize);
+//    }
+
+ 	get_window()->draw_drawable(
+		gc,
+		pixmapBuffer,
+		// Only copy the area that was exposed:
+		event->area.x, event->area.y,
+		event->area.x, event->area.y,
+		event->area.width, event->area.height);
+
+	int xsize, ysize;
+	pangolayout = create_pango_layout( module->GetType() );
+	pangolayout->get_pixel_size(xsize, ysize);
+	window->draw_layout(gc, (width - xsize)/2 , (height - ysize)/2, pangolayout);
 
     return true;
 }
@@ -233,4 +262,21 @@ void GuiModule::GetOutputPosition(int outNum, int& xx, int& yy) {
 void GuiModule::GetPosition(int& xx, int& yy) {
 	xx = x;
 	yy = y;
+}
+
+void GuiModule::OpenGuiWindow() {
+	if(!isGuiWindowCreated) {
+		guiWindow = new ModuleGuiWindow;
+		Gtk::Widget* gui = GetGui();
+		if(gui != NULL) {
+            guiWindow->add( *manage(gui) );
+            //guiWindow->stick();
+            guiWindow->show_all_children();
+            guiWindow->show();
+		}
+		isGuiWindowCreated = true;
+	} else if(guiWindow != NULL) {
+		guiWindow->show();
+		guiWindow->raise();
+	}
 }

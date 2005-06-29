@@ -3,10 +3,12 @@
 
 #include <string>
 #include <gtkmm/eventbox.h>
+#include <pangomm/layout.h>
 
 //#include "../../algorithm.h"
 #include "../../debug.h"
 #include "../../modules/module.h"
+#include "../moduleguiwindow.h"
 
 // deklaracja potrzebna (naglowek "algorithmview.h" dalby petle plikow naglowkowych)
 // niestety jest zaleznosc GuiModule od AlgorithmView, ale moze uda sie ja usunac
@@ -24,17 +26,16 @@ class GuiModule : public Gtk::EventBox {
 		void SetXY(int x_, int y_);
 		void SetText(std::string newText);
 		virtual Gtk::Widget* GetGui();
-		int GetX();
-		int GetY();
 		Module* GetModule();
 		void PaintInput(int num, bool isSelected);
 		void PaintOutput(int num, bool isSelected);
 		void FindXput(int x, int y);
 		void GetPosition(int& x, int& y);
-		int GetCurrentInputNumber();
-		int GetCurrentOutputNumber();
 		void GetInputPosition(int inNum, int& x, int& y);
 		void GetOutputPosition(int outNum, int& x, int& y);
+		int GetCurrentInputNumber();
+		int GetCurrentOutputNumber();
+		void OpenGuiWindow();
 		bool on_leave_notify_event(GdkEventCrossing* event);
 		bool on_enter_notify_event(GdkEventCrossing* event);
 		bool on_expose_event(GdkEventExpose* e);
@@ -53,9 +54,15 @@ class GuiModule : public Gtk::EventBox {
 		// graphic context i kolory
 		Glib::RefPtr<Gdk::GC> gc;
 		Gdk::Color fgColor, bgColor;
+		Glib::RefPtr<Gdk::Window> window;
+		Glib::RefPtr<Gdk::Pixmap> pixmapBuffer;
 		// wskaznik do GuiModuleView - rodzica
 		AlgorithmView* algorithmView;
 		//std::list<GuiConnection*> connections;
+		ModuleGuiWindow *guiWindow;
+		bool isGuiWindowCreated;
+		Glib::RefPtr<Pango::Layout> pangolayout;
+		
 };
 
 #endif // GUIMODULE_H

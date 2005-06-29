@@ -10,8 +10,8 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
 	isDraggingModule = false;
 	isDraggingConnection = false;
 	currentGuiModule = NULL;
-	width = 1000;
-	height = 1000;
+	width = 1500;
+	height = 1500;
 	set_size(width, height);
 
 	//Ask to receive events the layout doesn't normally subscribe to.
@@ -21,9 +21,9 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
 
 	// kolory
  	Glib::RefPtr<Gdk::Colormap> colormap = get_default_colormap ();
-	bgColor = Gdk::Color("lightblue");
+	//bgColor = Gdk::Color("lightgray");
 	fgColor = Gdk::Color("black");
-	colormap->alloc_color(bgColor);
+	//colormap->alloc_color(bgColor);
 	colormap->alloc_color(fgColor);
 
 	InitAudioPorts();
@@ -45,6 +45,9 @@ AlgorithmView::~AlgorithmView() {
  Przesuwa modul, robi polaczenie itp. zaleznie od ustawionych flag.
 */
 bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
+
+	//window->freeze_updates();
+
 	if(event && event->window) {
        	int x = 0, y = 0;
 		//const Glib::RefPtr<Gdk::Window> refWindow = Glib::wrap((GdkWindowObject*) event->window, true); // true == take_copy
@@ -90,8 +93,6 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 						currentGuiModule->SetXY(newX, newY);
 						move(*currentGuiModule, newX, newY);
 						RedrawConnections();
-						window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
-						// TODO: odswiezanie polaczen do biezacego modulu
 					}
 				}
 			}
@@ -99,13 +100,12 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 			if(isDraggingConnection) {
 				connectionDrag.destinationX = x;
 				connectionDrag.destinationY = y;
-				//window->draw_line(gc, connectionDragg.sourceX, connectionDragg.sourceY,
-				//	connectionDragg.destinationX, connectionDragg.destinationY);
 				window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
-				// TODO: rysowanie drucika podczas ruchu myszka
 			}
 		}
 	}
+
+	//window->thaw_updates();
 
 	return true;
 }
@@ -133,10 +133,8 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 
 		// podwojny klik na module
 		if(event->type == Gdk::DOUBLE_BUTTON_PRESS) {
-			cout << "Double click na module '" << currentGuiModule->GetModule()
-				->GetName() << "'" << endl;
-			// funkcja pusta na razie
-			CreateModuleWindow(currentGuiModule);
+			//cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;
+            currentGuiModule->OpenGuiWindow();
 		}
 
 		// mozna ruszac modulem tylko gdy kursor *nie* jest nad w*jciem
@@ -182,7 +180,6 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 			connDestNumber = connDestModule->GetCurrentInputNumber();
 			if(connDestNumber > -1) {
 				// opuszczono nad wejsciem - mamy polaczenie!
-				// ponizej pusta funckja
     			//ConnectModules(connSourceModule, connSourceNumber, connDestModule, connDestNumber);
 				cout << "Connection: " <<
 					connSourceModule->GetModule()->GetName() <<
@@ -192,6 +189,7 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 			}
 		}
 		connections.remove(&connectionDrag);
+		window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
 		isDraggingConnection = false;
 	}
 	
@@ -209,7 +207,6 @@ void AlgorithmView::AddModule(string type, string name, int x, int y) {
 	GuiModule* guiMod = guiFactory.CreateGuiModule(mod);
 	guiMod->SetParentView(this); // konieczne na razie :(
 	guiModules.push_back(guiMod);
-	moduleName2IdMap.insert( make_pair(name, guiMod) );
     this->put(*guiMod, x, y);
     
     TRACE("AlgorithmView::AddModule()", "Gotowe");
@@ -237,16 +234,6 @@ void AlgorithmView::ConnectModules(GuiModule* sourceGuiModule, int sourceNumOutp
 	int x, y;
 	GuiConnection* guiConn = new GuiConnection;
 
-//	sourceGuiModule->GetPosition(x, y);
-//	sourceGuiModule->GetOutputPosition(sourceNumOutput, guiConn->sourceX, guiConn->sourceY);
-//	guiConn->sourceX += x;
-//	guiConn->sourceY += y;
-//
-//	destGuiModule->GetPosition(x, y);
-//	destGuiModule->GetInputPosition(destNumInput, guiConn->destinationX, guiConn->destinationY);
-//	guiConn->destinationX += x;
-//	guiConn->destinationY += y;
-
 //	guiConn->connectionId = algorithm.ConnectModules(
 //	    sourceGuiModule->GetModule()->GetName(), sourceNumOutput,
 //		destGuiModule->GetModule()->GetName(), destNumInput);
@@ -265,60 +252,46 @@ void AlgorithmView::ConnectModules(GuiModule* sourceGuiModule, int sourceNumOutp
 //		destNumInput);
 //}
 
-void AlgorithmView::CreateConnections() {
-	// TODO: rysowanie calego algorytmu (po wczytaniu z pliku)
-	TRACE("AlgorithmView::CreateConnections()", "Tworze...");
-	ConnectionIdIterator connIt;
-	for(connIt = algorithm.ConnectionIdIteratorBegin();
-	    connIt != algorithm.ConnectionIdIteratorEnd(); connIt++)
-	{
-		ConnectionId connId = *connIt;
-		GuiConnection* guiConn = new GuiConnection;
-		GuiModule* sourceGuiModule, * destGuiModule;
-
-		guiConn->Set(
-			&connId,
-			GetModule( algorithm.GetConnection(*connIt)->sourceModule->GetName() ),
-			algorithm.GetConnection(*connIt)->sourceOutputId,
-			GetModule( algorithm.GetConnection(*connIt)->destinationModule->GetName() ),
-			algorithm.GetConnection(*connIt)->destinationInputId
-		);
-
-  		connections.push_back(guiConn);
-	}
-
-	show_all_children();
-
-	TRACE("AlgorithmView::CreateConnections()", "Utworzone");
-}
-
 void AlgorithmView::RedrawConnections() {
-	std::list<GuiConnection*>::iterator guiConnIt;
-	for(guiConnIt = connections.begin(); guiConnIt != connections.end(); guiConnIt++) {
-		(*guiConnIt)->Update();
+	GuiConnection* guiConn;
+	
+	//cout << connections.size() << endl;
+
+	for(std::list<GuiConnection*>::iterator guiConnIt = connections.begin();
+		guiConnIt != connections.end(); guiConnIt++)
+	{
+  		guiConn = *guiConnIt;
+        //gc->set_foreground(bgColor);
+		window->draw_line(bgGc, guiConn->sourceX, guiConn->sourceY,
+			guiConn->destinationX, guiConn->destinationY);
+
+		guiConn->Update();
+
+		//gc->set_foreground(fgColor);
+		window->draw_line(fgGc, guiConn->sourceX, guiConn->sourceY,
+			guiConn->destinationX, guiConn->destinationY);
   	}
-
-}
-
-void AlgorithmView::CreateModuleWindow(GuiModule* gui) {
-	// TODO: wywolanie okna z interfejsem modulu
 }
 
 void AlgorithmView::Clear() {
 	// pozbywamy sie GuiModulow
-	list<GuiModule*>::iterator modIt;
-	for(modIt = guiModules.begin(); modIt != guiModules.end(); modIt++) {
+	for(list<GuiModule*>::iterator modIt = guiModules.begin();
+		modIt != guiModules.end(); modIt++)
+	{
 		delete *modIt;
 	}
+	
 	guiModules.clear();
 	
-	list<GuiConnection*>::iterator connIt;
-	for(connIt = connections.begin(); connIt != connections.end(); connIt++) {
+	for(list<GuiConnection*>::iterator connIt = connections.begin();
+		connIt != connections.end(); connIt++)
+	{
 		delete *connIt;
 	}
+	
 	connections.clear();
 	
-	moduleName2IdMap.clear();
+	//moduleName2IdMap.clear();
 	algorithm.Clear();
 	window->clear();
 	window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
@@ -329,75 +302,48 @@ Algorithm* AlgorithmView::GetAlgorithm() {
 	return &algorithm;
 }
 
-/**
- * Dostep do modulu. Zwraca wskaznik do modulu o podanej nazwie.
- * @param moduleName Nazwa dociekanego modulu
- */
-GuiModule* AlgorithmView::GetModule(string moduleName) {
-//    if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
-//     	return ( *moduleName2IdMap.find(moduleName) ).second;
-//    } else {
-//        return NULL;
-//    }
-    return ( *moduleName2IdMap.find(moduleName) ).second;
-}
-
 void AlgorithmView::InitAudioPorts() {
   	GuiModule* guiMod;
 	ModuleId moduleId;
 
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortIn") );
-	moduleName2IdMap.insert( make_pair("AudioPortIn", guiMod) );
 	guiMod->SetParentView(this);
 	guiModules.push_back(guiMod);
 	this->put(*guiMod, 0, 0);
 
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortOut") );
-	moduleName2IdMap.insert( make_pair("AudioPortOut", guiMod) );
 	guiMod->SetParentView(this);
 	guiModules.push_back(guiMod);
 	this->put(*guiMod, 200, 0);
 }
 
-void AlgorithmView::LoadGuiModule(string name , int x, int y) {
-//	TRACE3("AlgorithmView::AddModule()", "Dodaje modul typu '", type, "'");
-//    ModuleId modId = algorithm.AddModule(type, name);
-    Module* mod = algorithm.GetModule(name);
-	GuiModule* guiMod = guiFactory.CreateGuiModule(mod);
-	guiMod->SetParentView(this); // konieczne na razie :(
-	guiModules.push_back(guiMod);
-	guiMod->SetXY(x, y);
-	moduleName2IdMap.insert( make_pair(name, guiMod) );
-    this->put(*guiMod, x, y);
-    
-//    TRACE("AlgorithmView::AddModule()", "Gotowe");
-}
-
-
 void AlgorithmView::on_realize() {
 	cout << "realize" << endl;
 	Gtk::Layout::on_realize();
 	window = get_bin_window();
-	gc = Gdk::GC::create(window);
-	gc->set_foreground(fgColor);
+	fgGc = Gdk::GC::create(window);
+	//gc->set_foreground(bgColor);
+	
+	bgGc = get_style()->get_bg_gc( get_state() );
+	
+	//window->set_background(bgColor);
+	window->clear();
+	fgGc->set_foreground(fgColor);
 }
 
 //
-bool AlgorithmView::on_expose_event(GdkEventExpose* e) {
-//	cout << "expose" << endl;
-	//Glib::RefPtr<Gdk::Window> window = get_bin_window();
-	window->clear();
-
-	std::list<GuiConnection*>::iterator guiConnIt;
-	for(guiConnIt = connections.begin(); guiConnIt != connections.end(); guiConnIt++) {
+bool AlgorithmView::on_expose_event(GdkEventExpose* event) {
+	GuiConnection* guiConn;
+	for(std::list<GuiConnection*>::iterator guiConnIt = connections.begin();
+		guiConnIt != connections.end(); guiConnIt++)
+	{
+        guiConn = *guiConnIt;
         // This is where we draw on the window
-		window->draw_line(gc,
-			(*guiConnIt)->sourceX, (*guiConnIt)->sourceY,
-			(*guiConnIt)->destinationX, (*guiConnIt)->destinationY
-		);
+		window->draw_line(fgGc,	guiConn->sourceX, guiConn->sourceY,
+			guiConn->destinationX, guiConn->destinationY);
 	}
 
-	return true;
+	return false;
 }
 
 

@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 
+#include <gtkmm/window.h>
 #include <gtkmm/layout.h> 
 
 #include "../debug.h"
@@ -25,14 +26,12 @@ class AlgorithmView : public Gtk::Layout {
 		void ConnectModules(GuiModule* from, int fomNumoutput, GuiModule* to,
 			int toNuminput);
 		void SelectGuiModule(GuiModule* guiMod);
-		void CreateConnections();
-		void CreateModuleWindow(GuiModule* gui);
 		void Clear();
 		GuiModule* GetModule(std::string name);
 		void RedrawConnections();
 		bool IsDraggingModule();
 		Algorithm* GetAlgorithm();
-		void LoadGuiModule(string, int x, int y);
+		void LoadFromFile(string fileName);
 		bool on_expose_event(GdkEventExpose* e);
 		void on_realize();
 		bool on_motion_notify_event(GdkEventMotion* even);
@@ -57,11 +56,12 @@ class AlgorithmView : public Gtk::Layout {
 		Gtk::Adjustment* adjh, * adjv;
 		std::list<GuiModule*> guiModules;
 		std::list<GuiConnection*> connections;
-		std::map<string, GuiModule*> moduleName2IdMap;
+		//std::map<string, GuiModule*> moduleName2IdMap;
 		Algorithm algorithm;
 		GuiModuleFactory guiFactory;
-		Glib::RefPtr<Gdk::GC> gc;
-		Gdk::Color fgColor, bgColor;
+		Glib::RefPtr<Gdk::GC> fgGc, bgGc;
+		Gdk::Color fgColor;
+		// bgColor;
 		Glib::RefPtr<Gdk::Window> window;
 		GuiConnection connectionDrag;
 };
