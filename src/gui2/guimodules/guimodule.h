@@ -62,7 +62,6 @@ class GuiModule : public Gtk::EventBox {
 		ModuleGuiWindow *guiWindow;
 		bool isGuiWindowCreated;
 		Glib::RefPtr<Pango::Layout> pangolayout;
-		
 };
 
 #endif // GUIMODULE_H

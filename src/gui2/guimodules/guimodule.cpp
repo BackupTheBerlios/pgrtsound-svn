@@ -3,7 +3,7 @@
 
 
 // rozmiar kwadracikow gniazdek
-const int GuiModule::socketSize = 7;
+const int GuiModule::socketSize = 5;
 const int GuiModule::socketSizeDoubled = 2 * GuiModule::socketSize;
 
 GuiModule::GuiModule(Module* moduleToAttach) {
@@ -48,6 +48,7 @@ void GuiModule::SetParentView(AlgorithmView* algoView) {
 }
 
 Gtk::Widget* GuiModule::GetGui() {
+	cout << "GetGui klasy podtawowej" << endl;
 	return NULL;
 }
 
@@ -266,15 +267,16 @@ void GuiModule::GetPosition(int& xx, int& yy) {
 
 void GuiModule::OpenGuiWindow() {
 	if(!isGuiWindowCreated) {
-		guiWindow = new ModuleGuiWindow;
 		Gtk::Widget* gui = GetGui();
 		if(gui != NULL) {
+       		guiWindow = new ModuleGuiWindow;
             guiWindow->add( *manage(gui) );
             //guiWindow->stick();
             guiWindow->show_all_children();
             guiWindow->show();
+            guiWindow->set_title( module->GetName() );
+            isGuiWindowCreated = true;
 		}
-		isGuiWindowCreated = true;
 	} else if(guiWindow != NULL) {
 		guiWindow->show();
 		guiWindow->raise();
