@@ -12,7 +12,7 @@ Sum::~Sum() {
 }
 
 Module* Sum::Create() {
-	return new Sum;
+	return new Sum();
 }
 
 void Sum::Process() {

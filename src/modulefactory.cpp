@@ -72,18 +72,19 @@ void ModuleFactory::RegisterPlugin(string filename) {
     CreateFunc   Create;
     GError       **error;
     
+    filename = ".\\plugins\\"+filename;
+    
     GModule*  gm = g_module_open(filename.c_str(), G_MODULE_BIND_MASK);
     if (gm!=NULL) {
         if (g_module_symbol (gm, "GetType", (gpointer *)&GetType)==TRUE){                
             if (g_module_symbol (gm, "Create", (gpointer *)&Create)==TRUE){
                 RegisterModuleType(GetType(), Create);
             } else {
-                TRACE3("ModuleFactory::RegisterPlugin(string filename)",g_module_error ()," w plku ", filename);
+                TRACE3("ModuleFactory::RegisterPlugin(string filename)","g_module_error ()"," w plku ", filename);
             }
         } else {
-            TRACE3("ModuleFactory::RegisterPlugin(string filename)",g_module_error ()," w plku ", filename);
+            TRACE3("ModuleFactory::RegisterPlugin(string filename)","g_module_error ()"," w plku ", filename);
         }                        
-        TRACE3("ModuleFactory::RegisterPlugin(string filename)",g_module_error ()," w plku ", filename);
     }
 
     
