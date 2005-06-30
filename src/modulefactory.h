@@ -37,10 +37,11 @@ class ModuleFactory {
 		void RegisterModuleType(string type, CreateFuncPtr funcPtr);
 		void RegisterAllPlugins();
         Module* CreateModule(string type);
-        std::vector<string> ListModuleTypes();
+        std::vector<string>& ListModuleTypes();
 
 	private:
 		map<string, CreateFuncPtr> type2CreateFuncMap;
+		std::vector<string> types;
 };
 
 #endif // MODULEFACTORY_H

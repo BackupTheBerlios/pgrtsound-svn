@@ -378,6 +378,6 @@ Connection* Algorithm::GetConnection(ConnectionId connectionId) {
 	return &graph[connectionId];
 }
 
-std::vector<string> Algorithm::ListModuleTypes() {
+std::vector<string>& Algorithm::ListModuleTypes() {
 	return moduleFactory.ListModuleTypes();
 }

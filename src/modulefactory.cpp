@@ -37,9 +37,8 @@ Module* ModuleFactory::CreateModule(string type) {
     throw RTSError("ModuleFactory::CreateModule(): Nie ma modulu '" + type + "'");
 }
 
-std::vector<string> ModuleFactory::ListModuleTypes() {
-	std::vector<string> types;
-	
+std::vector<string>& ModuleFactory::ListModuleTypes() {
+	types.clear();
 	for(map<string, CreateFuncPtr>::iterator it = type2CreateFuncMap.begin();
 	    it != type2CreateFuncMap.end(); ++it) {
 			types.push_back( it->first );
