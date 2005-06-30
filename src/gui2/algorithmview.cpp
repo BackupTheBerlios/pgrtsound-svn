@@ -31,6 +31,10 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
  	TRACE("AlgorithmView::AlgorithmView()", "Done!");
 }
 
+void AlgorithmView::SetParentWindow(Gtk::Window *window) {
+    parent = window;    
+}
+
 AlgorithmView::~AlgorithmView() {
     TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja...");
     currentGuiModule = NULL;
@@ -133,8 +137,8 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 
 		// podwojny klik na module
 		if(event->type == Gdk::DOUBLE_BUTTON_PRESS) {
-			//cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;
-            currentGuiModule->OpenGuiWindow();
+			//cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;			
+            currentGuiModule->OpenGuiWindow(*parent);
 		}
 
 		// mozna ruszac modulem tylko gdy kursor *nie* jest nad w*jciem

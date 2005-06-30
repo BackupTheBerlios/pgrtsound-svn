@@ -32,6 +32,7 @@ class AlgorithmView : public Gtk::Layout {
 		bool IsDraggingModule();
 		Algorithm* GetAlgorithm();
 		void LoadFromFile(string fileName);
+		void SetParentWindow(Gtk::Window *window);
 		bool on_expose_event(GdkEventExpose* e);
 		void on_realize();
 		bool on_motion_notify_event(GdkEventMotion* even);
@@ -64,6 +65,8 @@ class AlgorithmView : public Gtk::Layout {
 		// bgColor;
 		Glib::RefPtr<Gdk::Window> window;
 		GuiConnection connectionDrag;
+		//Rodzic
+		Gtk::Window *parent;
 };
 
 #endif // ALGORITHMVIEW_H

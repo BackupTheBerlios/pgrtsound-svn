@@ -35,7 +35,7 @@ class GuiModule : public Gtk::EventBox {
 		void GetOutputPosition(int outNum, int& x, int& y);
 		int GetCurrentInputNumber();
 		int GetCurrentOutputNumber();
-		void OpenGuiWindow();
+		void OpenGuiWindow(Gtk::Window& parent);
 		bool on_leave_notify_event(GdkEventCrossing* event);
 		bool on_enter_notify_event(GdkEventCrossing* event);
 		bool on_expose_event(GdkEventExpose* e);

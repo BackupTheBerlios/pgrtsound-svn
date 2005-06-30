@@ -265,7 +265,7 @@ void GuiModule::GetPosition(int& xx, int& yy) {
 	yy = y;
 }
 
-void GuiModule::OpenGuiWindow() {
+void GuiModule::OpenGuiWindow(Gtk::Window& parent) {
 	if(!isGuiWindowCreated) {
 		Gtk::Widget* gui = GetGui();
 		if(gui != NULL) {
@@ -273,6 +273,7 @@ void GuiModule::OpenGuiWindow() {
             guiWindow->add( *manage(gui) );
             //guiWindow->stick();
             guiWindow->show_all_children();
+            guiWindow->set_transient_for(parent);
             guiWindow->show();
             guiWindow->set_title( module->GetName() );
             isGuiWindowCreated = true;

@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
 	GuiMainWindow window;
 
 	window.show_all_children();
-
  	Gtk::Main::run(window); //Shows the window and returns when it is closed.
 
 	//system("pause");

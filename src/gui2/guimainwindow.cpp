@@ -5,6 +5,7 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 	TRACE("GuiMainWindow::GuiMainWindow()", "Tworze okno...");
 
 	algo = algoView.GetAlgorithm();
+	algoView.SetParentWindow(this);
 
 	set_title("RTSGUI");
 	set_size_request(600, 400);
@@ -225,8 +226,13 @@ void GuiMainWindow::OnAudioSetup() {
     TRACE("GuiMainWindow::OnAudioSetup()", "Uruchamiam okno konfiguracji urzadzen audio...");
     
 	OnStop();
-
+    
 	AudioSetupForm asForm(&audio);
+    
+    
+    //Stay On Top :)
+    asForm.set_transient_for(*this);
+    	
     Gtk::Main::run(asForm);
     show_all_children();
 	TRACE("GuiMainWindow::OnAudioSetup()", "Konfiguracja zakonczona");
