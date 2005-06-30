@@ -2,6 +2,7 @@
 #define MODULEFACTORY_H
 
 #include <map>
+#include <vector>
 
 #include "modules/module.h"
 #include "modules/sinosc2.h"
@@ -36,8 +37,8 @@ class ModuleFactory {
 		void RegisterModuleType(string type, CreateFuncPtr funcPtr);
 		void RegisterAllPlugins();
         Module* CreateModule(string type);
-		
-		
+        std::vector<string> ListModuleTypes();
+
 	private:
 		map<string, CreateFuncPtr> type2CreateFuncMap;
 };

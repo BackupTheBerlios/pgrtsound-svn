@@ -10,7 +10,9 @@
 void AlgorithmView::LoadFromFile(string fileName) {
 	XMLConfigFile xmlFile;
     std::map<string, GuiModule*> name2GuiModuleMap;
-    
+
+	window->freeze_updates();
+
 	Clear();
 
 	xmlFile.OpenFile( fileName.c_str() );
@@ -84,6 +86,8 @@ void AlgorithmView::LoadFromFile(string fileName) {
 
   		connections.push_back(guiConn);
 	}
+
+	window->thaw_updates();
 
 	show_all_children();
 }

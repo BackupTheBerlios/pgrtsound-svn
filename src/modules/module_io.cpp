@@ -40,7 +40,7 @@ void Input::Disconnect() {
     outputConnected =  nullModule.GetOutput(0);
 }
 
-bool Input::InputIsConnected() {
+bool Input::IsConnected() {
 	return isConnected;
 }
 //------------------------------------------------------------------------------

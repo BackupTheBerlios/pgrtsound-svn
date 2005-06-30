@@ -4,7 +4,7 @@ using namespace std;
 
 // class constructor
 ModuleGuiWindow::ModuleGuiWindow() {
-	// insert your code here
+	resize(200, get_height() );
 }
 
 // class destructor

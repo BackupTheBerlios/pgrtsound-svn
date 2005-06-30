@@ -92,6 +92,7 @@ class Algorithm {
 							string moduleName2, int inputId);
    		// No description
 		void PrintEdges();
+		std::vector<string> ListModuleTypes();
 
 	private:
 		void InitAudioPorts();

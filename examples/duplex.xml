@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<algorithm name="full duplex"> 
-	<connections>
-		<connection name1="AudioPortIn" output="0" name2="AudioPortOut" input="0"/>	
-	</connections>
-</algorithm>

@@ -30,6 +30,7 @@ void MyGtkSlider::SetParameter(ParameterFloat* param) {
 }
 
 void MyGtkSlider::ValueChanged() {
+  	// TODO: zaimplementowac 'step'
     parameter->SetValue(get_value());
 }
 

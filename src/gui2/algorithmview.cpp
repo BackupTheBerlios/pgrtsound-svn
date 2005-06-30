@@ -15,7 +15,7 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
 	set_size(width, height);
 
 	//Ask to receive events the layout doesn't normally subscribe to.
-	set_events(/*Gdk::LEAVE_NOTIFY_MASK | Gdk::BUTTON_PRESS_MASK | */
+	set_events(/*Gdk::LEAVE_NOTIFY_MASK | */ Gdk::BUTTON_PRESS_MASK | 
 		Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK |
 		Gdk::BUTTON_RELEASE_MASK );
 
@@ -25,6 +25,25 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
 	fgColor = Gdk::Color("black");
 	//colormap->alloc_color(bgColor);
 	colormap->alloc_color(fgColor);
+	
+	
+	//Fill popup menu:
+		cout << "Tworze mneu............" << endl;
+	{
+		Gtk::Menu::MenuList& menulist = menuPopup.items();
+		std::vector<std::string> types = algorithm.ListModuleTypes();
+		for(std::vector<std::string>::iterator it = types.begin();
+		    it != types.end(); ++it)
+		{
+			cout << "   dodaje do menu: " << *it << endl;
+			menulist.push_back( Gtk::Menu_Helpers::MenuElem(*it,
+				sigc::bind<std::string>
+					(sigc::mem_fun(*this, &AlgorithmView::onMenuAddModule), *it)
+				) );
+		}
+			
+	}
+//	menuPopup.accelerate(*this);
 
 	InitAudioPorts();
 	
@@ -159,6 +178,13 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 			connections.push_back(&connectionDrag);
 			isDraggingConnection = true;
 		}
+	} else {
+       	lastClick.set_x(x);
+		lastClick.set_y(y);
+       	// Popup menu
+		if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )	{
+			menuPopup.popup(event->button, event->time);
+		}
 	}
 
 	// nie przesylamy tego zdarzenia do dzieci
@@ -183,13 +209,16 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 			// opuszczono nad innym modulem niz poczatkowy
 			connDestNumber = connDestModule->GetCurrentInputNumber();
 			if(connDestNumber > -1) {
-				// opuszczono nad wejsciem - mamy polaczenie!
-    			//ConnectModules(connSourceModule, connSourceNumber, connDestModule, connDestNumber);
-				cout << "Connection: " <<
-					connSourceModule->GetModule()->GetName() <<
-					" [" << connSourceNumber << "]   ->   " <<
-					connDestModule->GetModule()->GetName() <<
-					" [" << connDestNumber << "]" << endl;
+				// opuszczono nad wejsciem
+				if( !connDestModule->GetModule()->GetInput(connDestNumber)->IsConnected() ) {
+					// wejscie jeszcze nie polaczone - mamy polaczenie!
+	    			ConnectModules(connSourceModule, connSourceNumber, connDestModule, connDestNumber);
+//					cout << "Connection: " <<
+//						connSourceModule->GetModule()->GetName() <<
+//						" [" << connSourceNumber << "]   ->   " <<
+//						connDestModule->GetModule()->GetName() <<
+//						" [" << connDestNumber << "]" << endl;
+				}
 			}
 		}
 		connections.remove(&connectionDrag);
@@ -211,7 +240,12 @@ void AlgorithmView::AddModule(string type, string name, int x, int y) {
 	GuiModule* guiMod = guiFactory.CreateGuiModule(mod);
 	guiMod->SetParentView(this); // konieczne na razie :(
 	guiModules.push_back(guiMod);
+	guiMod->SetXY(x, y);
     this->put(*guiMod, x, y);
+    
+	algorithm.PrintInfo();
+    
+    show_all_children();
     
     TRACE("AlgorithmView::AddModule()", "Gotowe");
 }
@@ -235,17 +269,21 @@ bool AlgorithmView::IsDraggingModule() {
 void AlgorithmView::ConnectModules(GuiModule* sourceGuiModule, int sourceNumOutput,
 	GuiModule* destGuiModule, int destNumInput)
 {
-	int x, y;
+	//int x, y;
+	ConnectionId connId = algorithm.ConnectModules(sourceGuiModule->GetModule()
+		->GetName(), sourceNumOutput, destGuiModule->GetModule()->GetName(),
+		destNumInput);
+
 	GuiConnection* guiConn = new GuiConnection;
+	guiConn->Set( &connId, sourceGuiModule, sourceNumOutput, destGuiModule,
+		destNumInput);
 
-//	guiConn->connectionId = algorithm.ConnectModules(
-//	    sourceGuiModule->GetModule()->GetName(), sourceNumOutput,
-//		destGuiModule->GetModule()->GetName(), destNumInput);
+	algorithm.CreateQueue();
 
-	//connections.push_back(guiConn);
-
-	// TODO:
-	// rysowanie druta
+	algorithm.PrintEdges();
+	
+	connections.push_back(guiConn);
+	window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
 }
 
 
@@ -350,4 +388,10 @@ bool AlgorithmView::on_expose_event(GdkEventExpose* event) {
 	return false;
 }
 
-
+void AlgorithmView::onMenuAddModule(std::string type) {
+	int x, y;
+	get_pointer(x, y);
+    char txt[11];
+    g_snprintf(txt, 10, " %d", guiModules.size());
+	AddModule(type, type + txt, lastClick.get_x(), lastClick.get_y());
+}

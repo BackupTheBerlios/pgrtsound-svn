@@ -37,6 +37,16 @@ Module* ModuleFactory::CreateModule(string type) {
     throw RTSError("ModuleFactory::CreateModule(): Nie ma modulu '" + type + "'");
 }
 
+std::vector<string> ModuleFactory::ListModuleTypes() {
+	std::vector<string> types;
+	
+	for(map<string, CreateFuncPtr>::iterator it = type2CreateFuncMap.begin();
+	    it != type2CreateFuncMap.end(); ++it) {
+			types.push_back( it->first );
+		}
+	return types;
+}
+
 /**
  Zarejstroawnie typu modulu.
  Aby modul stal sie dostepny w systemie, konieczne jest zaresjtrowanie jego
@@ -49,13 +59,11 @@ void ModuleFactory::RegisterModuleType(string type, CreateFuncPtr funcPtr) {
 	TRACE3("ModuleFactory::RegisterModuleType()", "Zarejestrowany typ '", type, "'");
 }
 
-
-
 void ModuleFactory::RegisterAllPlugins() {
     TRACE("ModuleFactory::RegisterAllPlugins()", "start");
     DIR* dir;
     struct dirent* entry;
-    dir = opendir(".\\plugins\\");    
+    dir = opendir("./plugins/");
     while ((entry = readdir(dir)) != NULL) {  
         TRACE3("ModuleFactory::RegisterAllPlugins()", "wczytuje: ", entry->d_name ,"");
         RegisterPlugin (entry->d_name);
@@ -70,7 +78,7 @@ void ModuleFactory::RegisterPlugin(string filename) {
     CreateFunc   Create;
     GError       **error;
     
-    filename = ".\\plugins\\"+filename;
+    filename = "./plugins/" + filename;
     
     GModule*  gm = g_module_open(filename.c_str(), G_MODULE_BIND_MASK);
     if (gm!=NULL) {

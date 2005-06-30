@@ -101,8 +101,17 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 	my_slot = sigc::mem_fun(*this, &GuiMainWindow::OnTimeOut);
 	conn = Glib::signal_timeout().connect(my_slot, 1000);
 
+	try {
+		audio.SetCallback( paCallback, (void*)algo );
+		audio.SetSampleRate(44100.0);
+        audio.Open();
+	}	catch (AudioDriverError& error) {
+        cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
+        exit(1);
+    }
+
 	fileLoaded = false;
-	AllowPlay(false);
+	AllowPlay(true);
 	AllowStop(false);
 
 	TRACE("GuiMainWindow::GuiMainWindow()", "Okno aplikacji utworzone");
@@ -156,8 +165,6 @@ void GuiMainWindow::OnOpenFile() {
 
 			try {
 		        //audio.PrintDevices();
-				audio.SetCallback( paCallback, (void*)algo );
-				audio.SetSampleRate(44100.0);
 				audio.Open();
 			}	catch (AudioDriverError& error) {
 		        cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
@@ -175,6 +182,7 @@ void GuiMainWindow::OnOpenFile() {
 }
 
 void GuiMainWindow::OnPlay() {
+   	algo->Init();
 	audio.Start();
 	AllowPlay(false);
 	AllowStop(true);
@@ -183,7 +191,8 @@ void GuiMainWindow::OnPlay() {
 void GuiMainWindow::OnStop() {
     audio.Stop();
    	AllowStop(false);
-  	if(fileLoaded) AllowPlay(true);
+  	//if(fileLoaded) AllowPlay(true);
+  	AllowPlay(true);
 }
 
 void GuiMainWindow::OnMenuFileQuit() {

@@ -18,11 +18,13 @@
         <connection name1="Czestotliwosc" output="0" name2="sin" input="0" />
         <connection name1="Amplituda" output="0" name2="sin" input="1" />
     </connections>
-    <modules_widget>
-        <module_widget name="AudioPortIn" x="483" y="46" />
-        <module_widget name="AudioPortOut" x="446" y="222" />
-        <module_widget name="sin" x="287" y="215" />
-        <module_widget name="Czestotliwosc" x="92" y="102" />
-        <module_widget name="Amplituda" x="129" y="303" />
-    </modules_widget>
+    
+    <gui>
+        <guimodule name="AudioPortIn" x="483" y="46" />
+        <guimodule name="AudioPortOut" x="446" y="222" />
+        <guimodule name="sin" x="287" y="215" />
+        <guimodule name="Czestotliwosc" x="92" y="102" />
+        <guimodule name="Amplituda" x="129" y="303" />
+    </gui>
+    
 </algorithm>

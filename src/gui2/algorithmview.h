@@ -5,7 +5,8 @@
 #include <string>
 
 #include <gtkmm/window.h>
-#include <gtkmm/layout.h> 
+#include <gtkmm/layout.h>
+#include <gtkmm/menu.h>
 
 #include "../debug.h"
 #include "../algorithm.h"
@@ -21,6 +22,7 @@ class AlgorithmView : public Gtk::Layout {
 		AlgorithmView();
 		~AlgorithmView();
 		void AddModule(string type, string name, int x, int y);
+		void onMenuAddModule(string type);
 		//void ConnectModules(string from, int fomNumoutput, string to,
 		//	int toNuminput);
 		void ConnectModules(GuiModule* from, int fomNumoutput, GuiModule* to,
@@ -67,6 +69,8 @@ class AlgorithmView : public Gtk::Layout {
 		GuiConnection connectionDrag;
 		//Rodzic
 		Gtk::Window *parent;
+		Gtk::Menu menuPopup;
+		Gdk::Point lastClick;
 };
 
 #endif // ALGORITHMVIEW_H

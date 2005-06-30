@@ -346,9 +346,10 @@ void Algorithm::SetBlockSize(unsigned long newBlockSize) {
 
 void Algorithm::PrintEdges() {
 	ConnectionIdIterator ei;
+	std::cout << "Lista polaczen:" << endl;
 	for(ei = ConnectionIdIteratorBegin(); ei != ConnectionIdIteratorEnd(); ei++) {
-		std::cout << "(" << GetConnection(*ei)->sourceModule->GetName()
-			<< "," << GetConnection(*ei)->destinationModule->GetName() << ") " << std::endl;
+		std::cout << "    (" << GetConnection(*ei)->sourceModule->GetName()
+			<< ", " << GetConnection(*ei)->destinationModule->GetName() << ") " << std::endl;
 	}
 }
 
@@ -375,4 +376,8 @@ ConnectionIdIterator Algorithm::ConnectionIdIteratorEnd() {
 Connection* Algorithm::GetConnection(ConnectionId connectionId) {
 	// TODO: idiotodpornosc i inline
 	return &graph[connectionId];
+}
+
+std::vector<string> Algorithm::ListModuleTypes() {
+	return moduleFactory.ListModuleTypes();
 }

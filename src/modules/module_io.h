@@ -24,7 +24,7 @@ class Input	{
 		void SetID( int newID );
 		void ConnectTo( Output* output );
 		void Disconnect();
-		bool InputIsConnected();
+		bool IsConnected();
 		
 	protected:
 		bool isConnected;

@@ -347,8 +347,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit3]
+FileName=..\..\src\xmlconfigfile.h
+CompileCpp=1
+Folder=rtsound
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit1]
-FileName=..\..\src\debug.cpp
+FileName=..\..\src\main.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -358,19 +368,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=..\..\src\debug.h
+FileName=..\..\src\xmlconfigfile.cpp
 CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit3]
-FileName=..\..\src\main.cpp
-CompileCpp=1
-Folder=
+Folder=rtsound
 Compile=1
 Link=1
 Priority=1000

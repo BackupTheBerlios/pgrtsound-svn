@@ -48,7 +48,6 @@ void GuiModule::SetParentView(AlgorithmView* algoView) {
 }
 
 Gtk::Widget* GuiModule::GetGui() {
-	cout << "GetGui klasy podtawowej" << endl;
 	return NULL;
 }
 
@@ -91,7 +90,16 @@ void GuiModule::on_realize() {
         pixmapBuffer->draw_rectangle(gc, true, width - socketSize,
 			(i - 1)*socketSizeDoubled, socketSize, socketSize);
     }
+    
+   	int xsize, ysize;
+	pangolayout = create_pango_layout( module->GetName() );
+	pangolayout->set_ellipsize(Pango::ELLIPSIZE_END);
+	pangolayout->set_width(90000);
+	//cout << pangolayout->get_width() << endl;
+	pangolayout->get_pixel_size(xsize, ysize);
+	pixmapBuffer->draw_layout(gc, (width - xsize)/2 , (height - ysize)/2, pangolayout);
 }
+
 bool GuiModule::on_expose_event(GdkEventExpose* event) {
 //	Glib::RefPtr<Gdk::Window> window = get_window();
 //
@@ -121,11 +129,6 @@ bool GuiModule::on_expose_event(GdkEventExpose* event) {
 		event->area.x, event->area.y,
 		event->area.x, event->area.y,
 		event->area.width, event->area.height);
-
-	int xsize, ysize;
-	pangolayout = create_pango_layout( module->GetType() );
-	pangolayout->get_pixel_size(xsize, ysize);
-	window->draw_layout(gc, (width - xsize)/2 , (height - ysize)/2, pangolayout);
 
     return true;
 }
