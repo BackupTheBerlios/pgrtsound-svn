@@ -1,6 +1,6 @@
 #include "sum.h"
 
-Sum::Sum() : Module("sumator", "New sumator"),
+Sum::Sum() : Module("New sumator"),
 	i1("input 1"), i2("input 2"), oSum("sum")
 {
 	AddInput(i1);
@@ -9,6 +9,14 @@ Sum::Sum() : Module("sumator", "New sumator"),
 }
 
 Sum::~Sum() {
+}
+
+string Sum::GetTypeStatic() {
+	return "sumator";
+}
+
+string Sum::GetType() {
+	return "sumator";
 }
 
 Module* Sum::Create() {
@@ -20,7 +28,7 @@ void Sum::Process() {
 	float* in2 = i2.GetSignal();
 	float* sum = oSum.GetSignal();
 	
-	for(int n = 0; n < Module::framesPerBlock; n++)	{
+	for(unsigned long n = 0; n < Module::framesPerBlock; n++)	{
 		*sum++ = (*in1++) + (*in2++);
 	}	
 }

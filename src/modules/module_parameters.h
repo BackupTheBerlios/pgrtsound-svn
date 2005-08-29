@@ -20,7 +20,7 @@ class Parameter {
 
 	public:
 		Parameter(string type_, string name_);
-		~Parameter();
+		virtual ~Parameter();
 		int GetID() const;
 		string GetType() const;
 		string GetName() const;
@@ -35,7 +35,7 @@ class Parameter {
 class ParameterFloat : public Parameter {
 	public:
 		ParameterFloat(string name_);
-		~ParameterFloat() {};
+		virtual ~ParameterFloat() {};
 		void Bound(float min, float max, float step);
 		virtual void SetValue(float newValue);
 		virtual float GetValue() const;
@@ -71,7 +71,7 @@ inline float ParameterFloat::GetValue() const {
 class ParameterString : public Parameter {
 	public:
    		ParameterString(string name_);
-   		~ParameterString();
+   		virtual ~ParameterString();
 		virtual void SetText(string newText);
 		virtual string GetText();
 		

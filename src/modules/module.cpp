@@ -1,7 +1,7 @@
 #include "module.h"
 
 // domyslne
-int	Module::framesPerBlock = 256;
+unsigned long Module::framesPerBlock = 256;
 float Module::sampleRate = 44100;
 
 // gloablny modul wysylajacy zera
@@ -15,8 +15,8 @@ NullModuleSingleton& nullModule = NullModuleSingleton::Instance();
  * @param type_ Rozpoznawany przez system typ modulu
  * @param name_ Oczekiwana nazwa modulu
  */
-Module::Module(string type_, string name_) {
-	type = type_;
+Module::Module(string name_) {
+	//type = type_;
 	name = name_;
 }
 
@@ -91,8 +91,12 @@ string Module::GetName() const {
 /**
  * Zwraca typ modulu.
  */
-string Module::GetType() const {
-	return type;
+string Module::GetTypeStatic() {
+	return "no type defined";
+}
+
+string Module::GetType() {
+	return "no type defined";
 }
 
 /**
@@ -144,7 +148,7 @@ void Module::BlockSizeChanged() {
 */
 void Module::UpdateBlockSize() {
 	//zmiana rozmiaru buforow wyjsc
-	for(int i = 0; i < outputs.size(); i++) {
+	for(unsigned long i = 0; i < outputs.size(); i++) {
         TRACE6("Output::SetBufferSize()", "Wyjscie [", name, "].[", outputs[i]->GetName(),
 			"] zmienia rozmiar bufora na ", Module::framesPerBlock);
 		outputs[i]->SetBufferSize(Module::framesPerBlock);
@@ -152,5 +156,19 @@ void Module::UpdateBlockSize() {
 	
 	// niech modul obsluzy fakt zmiany rozmiaru bloku
 	BlockSizeChanged();
+}
+
+
+void NullModuleSingleton::BlockSizeChanged() {
+    // TRACE2("NullModule::NullModule()", "Alokuje bufor zerowy rozmiaru ",
+	// Module::framesPerBlock);
+    float* buff;
+    buff = oNull.GetSignal();
+
+    buff = new float[Module::framesPerBlock];
+    for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
+        *buff++ = 0.0f;
+    }
+    //TRACE2("module.cpp", "Bufor zerowy zaalokowany ", buff);
 }
 

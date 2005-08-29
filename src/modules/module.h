@@ -28,19 +28,20 @@ using namespace std;
  */
 class Module {
 	public:
-	    static int		framesPerBlock;
+	    static unsigned long framesPerBlock;
 	    static float	sampleRate;
 
-	    Module(string type_, string name_);
-	    ~Module();
+	    Module(string name_);
+	    virtual ~Module();
 	    int		AddInput(Input& input);
 	    int		AddOutput(Output& output);
 	    int		AddParameter(Parameter& param);
 	    virtual void	Process();
 	    virtual void	Init();
+	    virtual string GetType();
+   	    static string GetTypeStatic();
 	    static Module* Create();
 	    void	SetName(string newName);
-	    string	GetType() const;
 	    string	GetName() const;
 	    int		GetOutputCount();
 	    int		GetInputCount();
@@ -57,7 +58,7 @@ class Module {
 	    vector<Output*>		outputs;	    /**< Wektor wyjsc. */
 	    vector<Parameter*>	parameters;		/**< Wektor parametrow. */
 	    string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
-	    string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+	    //string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
 };
 
 inline Input* Module::GetInput(int inputID) {
@@ -81,28 +82,19 @@ class NullModuleSingleton : public Module {
 	private:
 	    Output oNull;
 	    static NullModuleSingleton NullModule;
-
-	NullModuleSingleton() : Module("null", "null"), oNull("null") {
+	// prywatny konstruktor
+	NullModuleSingleton() : Module("null"), oNull("null") {
 	        AddOutput(oNull);
 	        BlockSizeChanged();
 	    }
 
 	public:
+   	    //static const string& GetType() const;
+		void BlockSizeChanged();
 	    static NullModuleSingleton& Instance() {
 	        return NullModule;
 	    }
-
-	    void BlockSizeChanged() {
-	        //TRACE2("NullModule::NullModule()", "Alokuje bufor zerowy rozmiaru ", Module::framesPerBlock);
-	        float* buff;
-	        buff = oNull.GetSignal();
-
-	        buff = new float[Module::framesPerBlock];
-	        for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
-	            *buff++ = 0.0f;
-	        }
-	        //TRACE2("module.cpp", "Bufor zerowy zaalokowany ", buff);
-	    }
 };
+
 
 #endif // MODULE_H

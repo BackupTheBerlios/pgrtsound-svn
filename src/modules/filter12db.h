@@ -27,6 +27,8 @@ class Filter12dB : public Module
 		void Process();
 		void Init();
 		static Module* Create();
+		static string GetTypeStatic();
+		string GetType();
 				
 	private:
 		Input iIn;

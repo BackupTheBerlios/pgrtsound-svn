@@ -177,18 +177,18 @@ void AudioDriver::Close() {
 void AudioDriver::PrintDevices() {
     TRACE("AudioDriver::PrintDevices()", "Lista wykrytych urzadzen dzwieku...");
 
-    for(int h = 0; h < hosts.size(); h++) {
+    for(unsigned int h = 0; h < hosts.size(); h++) {
         cout << "Sterownik: " << hosts[h].name << endl;
 
         cout << "    Urzadzenia wejsciowe:" << endl;
-        for(int d = 0; d < perHostInDevs[h].size(); d++) {
+        for(unsigned int d = 0; d < perHostInDevs[h].size(); d++) {
             cout << "        " << "[" << perHostInDevs[h][d].deviceId << "] "
             << perHostInDevs[h][d].name << " ("
             << hosts[h].name << ")" << endl;
         }
 
         cout << "    Urzadzenia wyjsciowe:" << endl;
-        for(int d = 0; d < perHostOutDevs[h].size(); d++) {
+        for(unsigned int d = 0; d < perHostOutDevs[h].size(); d++) {
             cout << "        " << "[" << perHostOutDevs[h][d].deviceId << "] "
             << perHostOutDevs[h][d].name << " ("
             << hosts[h].name << ")" << endl;
@@ -311,7 +311,7 @@ void AudioDriver::SetSampleRate(double newSampleRate) {
 }
 
 string AudioDriver::GetHostName(PaHostApiIndex num) {
-    assert(num <= hosts.size() - 1);
+    assert( (unsigned int)num <= hosts.size() - 1 );
     return hosts[num].name;
 }
 
@@ -320,7 +320,7 @@ int AudioDriver::GetCurrentHostNum() {
 }
 
 void AudioDriver::SetHost(PaHostApiIndex hNum) {
-    assert(hNum <= hosts.size() - 1);
+    assert( (unsigned int)hNum <= hosts.size() - 1);
     hostNum = hNum;
 }
 

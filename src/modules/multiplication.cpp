@@ -1,6 +1,6 @@
 #include "multiplication.h"
 
-Multiplication::Multiplication() : Module("multiplication", "New multiplication"),
+Multiplication::Multiplication() : Module("New multiplication"),
 	iIn1("input 1"), iIn2("input 2"), oOut("out")
 {
    	AddInput(iIn1);
@@ -9,6 +9,14 @@ Multiplication::Multiplication() : Module("multiplication", "New multiplication"
 }
 
 Multiplication::~Multiplication(){
+}
+
+string Multiplication::GetTypeStatic() {
+	return "multiplication";
+}
+
+string Multiplication::GetType() {
+	return "multiplication";
 }
 
 Module* Multiplication::Create() {
@@ -20,7 +28,7 @@ void Multiplication::Process() {
 	float* in2 = iIn2.GetSignal();
 	float* out = oOut.GetSignal();
 
-	for(int n = 0; n < Module::framesPerBlock; n++)	{
+	for(unsigned long n = 0; n < Module::framesPerBlock; n++)	{
 		*out++ = (*in1++) * (*in2++);
 	}
 }

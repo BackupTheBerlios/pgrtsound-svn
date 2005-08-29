@@ -15,7 +15,7 @@ GuiModuleFactory::~GuiModuleFactory() {
 	@param type Typ modulu dla ktorego GUI chcemy utworzyc
  */
 GuiModule* GuiModuleFactory::CreateGuiModule(Module* module) {
-    //TRACE2("GuiModuleFactory::CreateGuiModule()", "Tworze GUI dla typu ", module->GetType());
+    TRACE2("GuiModuleFactory::CreateGuiModule()", "Tworze GUI dla typu ", module->GetType());
 
 	string type = module->GetType();
 	if (type == "slider") {
@@ -30,7 +30,7 @@ GuiModule* GuiModuleFactory::CreateGuiModule(Module* module) {
 		return new GainGui(module);
 	}
 
-	//TRACE("GuiModuleFactory::CreateGuiModule()", "Dodaje zwykly GuiModule");
+	TRACE("GuiModuleFactory::CreateGuiModule()", "Dodaje zwykly GuiModule");
 
 	// nie ma specjalistycznego GuiModule zwracamy zwykly
 	return new GuiModule(module);

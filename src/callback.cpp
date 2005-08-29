@@ -8,6 +8,10 @@ int paCallback( const void *inputBuffer, void *outputBuffer,
 {
 	unsigned long i;
 
+	/* Prevent unused variable warnings. */
+	(void) timeInfo;
+	(void) statusFlags;
+
 	Algorithm* alg = (Algorithm*)userData;
 
 	float* put = alg->GetInputPort()->GetOutput(0)->GetSignal();	// AudioPortIn

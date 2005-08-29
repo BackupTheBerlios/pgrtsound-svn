@@ -46,8 +46,8 @@ class AudioSetupForm : public Gtk::Window
 		Gtk::ComboBoxText cboxHost, cboxInDevice, cboxOutDevice, cboxSR;
 		Gtk::Table table;
 		Gtk::Alignment butAlign;
+		Gtk::Button buttonOk, buttonApply;
 		Gtk::HBox butBox;
-		Gtk::Button buttonApply, buttonOk;
 		Gtk::Label labelLatencies;
 };
 

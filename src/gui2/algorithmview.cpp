@@ -156,7 +156,7 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 
 		// podwojny klik na module
 		if(event->type == Gdk::DOUBLE_BUTTON_PRESS) {
-			//cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;			
+			cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;
             currentGuiModule->OpenGuiWindow(*parent);
 		}
 
@@ -346,7 +346,7 @@ Algorithm* AlgorithmView::GetAlgorithm() {
 
 void AlgorithmView::InitAudioPorts() {
   	GuiModule* guiMod;
-	ModuleId moduleId;
+	//ModuleId moduleId;
 
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortIn") );
 	guiMod->SetParentView(this);
@@ -373,7 +373,6 @@ void AlgorithmView::on_realize() {
 	fgGc->set_foreground(fgColor);
 }
 
-//
 bool AlgorithmView::on_expose_event(GdkEventExpose* event) {
 	GuiConnection* guiConn;
 	for(std::list<GuiConnection*>::iterator guiConnIt = connections.begin();

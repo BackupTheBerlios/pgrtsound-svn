@@ -2,15 +2,15 @@
 #include <dirent.h>
 
 ModuleFactory::ModuleFactory() {
-	RegisterModuleType("constant", Constant::Create);
-	RegisterModuleType("sinosc2", SinOsc2::Create);
-	RegisterModuleType("sumator", Sum::Create);
-	RegisterModuleType("slider", Slider::Create);
-	RegisterModuleType("gain", Gain::Create);
-	RegisterModuleType("multiplication", Multiplication::Create);
-	RegisterModuleType("filter12db", Filter12dB::Create);
-	RegisterModuleType("noise", Noise::Create);
-	RegisterModuleType("textfileout", TextFileOut::Create);
+	RegisterModuleType( Constant::GetTypeStatic(), Constant::Create );
+	RegisterModuleType( SinOsc2::GetTypeStatic(), SinOsc2::Create );
+	RegisterModuleType( Sum::GetTypeStatic(), Sum::Create );
+	RegisterModuleType( Slider::GetTypeStatic(), Slider::Create );
+	RegisterModuleType( Gain::GetTypeStatic(), Gain::Create );
+	RegisterModuleType( Multiplication::GetTypeStatic(), Multiplication::Create );
+	RegisterModuleType( Filter12dB::GetTypeStatic(), Filter12dB::Create );
+	RegisterModuleType( Noise::GetTypeStatic(), Noise::Create );
+	RegisterModuleType( TextFileOut::GetTypeStatic(), TextFileOut::Create );
 	
 	if (g_module_supported() == TRUE) {
     	RegisterAllPlugins();
@@ -75,7 +75,7 @@ void ModuleFactory::RegisterPlugin(string filename) {
     typedef Module *(* CreateFunc) ();   
     GetTypeFunc  GetType;
     CreateFunc   Create;
-    GError       **error;
+   // GError       **error;
     
     filename = "./plugins/" + filename;
     

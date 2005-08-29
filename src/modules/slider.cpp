@@ -1,7 +1,7 @@
 #include "slider.h"
 
 // class constructor
-Slider::Slider() : Module("slider", "New Slider"),
+Slider::Slider() : Module("New Slider"),
 	oOut("wy"), pMin("min"), pMax("max"), pValue("value")
 {
 	AddOutput(oOut);
@@ -22,6 +22,14 @@ Slider::Slider() : Module("slider", "New Slider"),
 Slider::~Slider() {
 }
 
+string Slider::GetTypeStatic() {
+	return "slider";
+}
+
+string Slider::GetType() {
+	return "slider";
+}
+
 Module* Slider::Create() {
 	return new Slider;
 }
@@ -31,13 +39,12 @@ void Slider::Init() {
 }
 
 void Slider::Process() {
-	int n;
 	float* out = oOut.GetSignal();
 	//float delta = pMax.GetValue() - pMin.GetValue();
 	//float value = pMin.GetValue() + ( delta * pValue.GetValue() );
 	float value = pValue.GetValue();
 
-	for (n = 0; n < Module::framesPerBlock; n++) {
+	for (unsigned long n = 0; n < Module::framesPerBlock; n++) {
 			*out++ = value;
 	}
 }

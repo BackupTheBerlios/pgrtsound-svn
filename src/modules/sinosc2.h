@@ -22,6 +22,9 @@ class SinOsc2 : public Module {
 		~SinOsc2();
 		void Process();
 		static Module* Create();
+		static string GetTypeStatic();
+		string GetType();
+
 	private:
 		Input	iFreq, iAmp;
 		Output	oOut;

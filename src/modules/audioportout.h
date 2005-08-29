@@ -10,6 +10,8 @@ class AudioPortOut : public Module {
 	public:
 		AudioPortOut();
 		~AudioPortOut();
+		static string GetTypeStatic();
+		string GetType();
 		
 	private:
 		Input inLeft;

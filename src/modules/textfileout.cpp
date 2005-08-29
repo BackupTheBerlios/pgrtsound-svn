@@ -2,9 +2,9 @@
 
 using namespace std;
 
-TextFileOut::TextFileOut() : Module("textfileout", "New text file"),
-	iIn("input"), pFileName("filename"), pFreq("freq")
-  {
+TextFileOut::TextFileOut() : Module("New text file"),
+	pFileName("filename"), pFreq("freq"), iIn("input")
+{
 	AddInput(iIn);
 	AddParameter(pFileName);
 	pFileName.SetText("textfileout.txt");
@@ -18,6 +18,15 @@ TextFileOut::TextFileOut() : Module("textfileout", "New text file"),
 TextFileOut::~TextFileOut() {
 
 }
+
+string TextFileOut::GetTypeStatic() {
+	return "textfileout";
+}
+
+string TextFileOut::GetType() {
+	return "textfileout";
+}
+
 
 Module* TextFileOut::Create() {
 	return new TextFileOut;
@@ -33,7 +42,7 @@ void TextFileOut::Process() {
 
 	ofstream out(pFileName.GetText().c_str(), ofstream::out | ofstream::app);
 
-	for (int n = 0; n < Module::framesPerBlock; n++) {
+	for (unsigned long n = 0; n < Module::framesPerBlock; n++) {
 		frames++;
         if (frames % (unsigned long)pFreq1 == 0)
     	   out << (*in++) << endl;

@@ -13,7 +13,10 @@ class Gain : public Module
 		Gain();
 		~Gain();
 		void Process();
-	static Module* Create();
+		static Module* Create();
+		static string GetTypeStatic();
+		string GetType();
+		
 	private:
 		Input iIn;
 		Output oOut;

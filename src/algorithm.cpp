@@ -67,8 +67,6 @@ ModuleId Algorithm::AddModule(string type, string name) {
 void Algorithm::PrintInfo(void) {
 	cout << "Algorithm::PrintInfo(): Informacje o algorytmie... " << endl;
 
-	Module* mod;
-
 	ModuleIdIterator mit;
 	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
 		cout << "    Modul: " << GetModule(*mit)->GetName() <<

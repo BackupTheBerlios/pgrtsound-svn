@@ -1,6 +1,6 @@
 #include "gain.h"
 
-Gain::Gain() : Module("gain", "New gain"),
+Gain::Gain() : Module("New gain"),
 	iIn("inputexxxx"), oOut("output"), pGain("gain")
  {
 	AddInput(iIn);
@@ -16,8 +16,16 @@ Module* Gain::Create(){
 	return new Gain;
 }
 
+string Gain::GetTypeStatic() {
+	return "gain";
+}
+
+string Gain::GetType() {
+	return "gain";
+}
+
 void Gain::Process() {
-	int n;
+	unsigned long n;
 	float* in = iIn.GetSignal();
 	float* out = oOut.GetSignal();
 	float gain = pGain.GetValue();

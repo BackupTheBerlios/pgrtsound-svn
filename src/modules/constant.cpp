@@ -1,6 +1,6 @@
 #include "constant.h"
 
-Constant::Constant() : Module("constant", "New constant"),
+Constant::Constant() : Module("New constant"),
 	oValue("wy"), pValue("value")
 {
 	AddOutput(oValue);
@@ -11,6 +11,14 @@ Constant::Constant() : Module("constant", "New constant"),
 Constant::~Constant() {
 }
 
+string Constant::GetTypeStatic() {
+	return "constant";
+}
+
+string Constant::GetType() {
+	return "constant";
+}
+
 Module* Constant::Create() {
 	return new Constant;
 }
@@ -19,7 +27,7 @@ void Constant::Process() {
 	// jesli w tym bloku zmienila sie wartosc to wypelnij bufor wyjsciowy
 	if (oldValue != pValue.GetValue())
 	{
-		int n;
+		unsigned long n;
 		float value = pValue.GetValue();
 		float *out = oValue.GetSignal();
 			

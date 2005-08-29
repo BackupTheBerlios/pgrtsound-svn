@@ -19,6 +19,8 @@ class TextFileOut : public Module
 		void Process();
 		void Init();
 		static Module* Create();
+		static string GetTypeStatic();
+		string GetType();
 		
 	private:
         unsigned long frames;

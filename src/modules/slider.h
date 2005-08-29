@@ -19,6 +19,9 @@ class Slider : public Module
 		void Process();
 		void Init();
 		static Module* Create();
+		static string GetTypeStatic();
+		string GetType();
+
 
 	protected:
 		Output			oOut;

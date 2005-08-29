@@ -16,5 +16,6 @@ SliderGui::~SliderGui() {
 }
 
 Gtk::Widget* SliderGui::GetGui() {
+	cout << "SliderGui::GetGui()" << endl;
 	return &guiSlider;
 }

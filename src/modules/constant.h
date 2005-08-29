@@ -13,6 +13,9 @@ class Constant : public Module {
 		~Constant();
 		void Process();
 		static Module* Create();
+		static string GetTypeStatic();
+		string GetType();
+		
 	private:
         float oldValue;
         

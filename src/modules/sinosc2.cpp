@@ -1,5 +1,5 @@
 #include "sinosc2.h"
-SinOsc2::SinOsc2() : Module("sinosc2", "New oscillator v2"),
+SinOsc2::SinOsc2() : Module("New oscillator v2"),
     iFreq("frequency"), iAmp("amplitude"), oOut("output")
 {
 	float	*sample, tableSizeInverted;
@@ -29,6 +29,15 @@ SinOsc2::~SinOsc2() {
 	delete sinTable;
 }
 
+string SinOsc2::GetTypeStatic() {
+	return "sinosc2";
+}
+
+string SinOsc2::GetType() {
+	return "sinosc2";
+}
+
+
 Module* SinOsc2::Create() {
 	return new SinOsc2;
 }
@@ -38,7 +47,7 @@ void SinOsc2::Process() {
 	float* amp = iAmp.GetSignal();
 	float* out = oOut.GetSignal();
 
-	for(int i = 0; i < Module::framesPerBlock; i++) {
+	for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
 		phaseFloor = floor(phase);
 		phaseFraction = phase - phaseFloor;
 

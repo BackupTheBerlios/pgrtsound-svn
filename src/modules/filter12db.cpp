@@ -1,6 +1,6 @@
 #include "Filter12dB.h"
 
-Filter12dB::Filter12dB() : Module("filter12db", "Nowy filtr Butterwortha"),
+Filter12dB::Filter12dB() : Module("Nowy filtr Butterwortha"),
 	iIn("input"), oOut("output"), pFreq("frequency")
 {
 	AddInput(iIn);
@@ -16,6 +16,14 @@ Filter12dB::~Filter12dB() {
 
 Module* Filter12dB::Create() {
 	return new Filter12dB;
+}
+
+string Filter12dB::GetTypeStatic() {
+	return "filter12db";
+}
+
+string Filter12dB::GetType() {
+	return "filter12db";
 }
 
 void Filter12dB::Init() {
@@ -50,7 +58,7 @@ void Filter12dB::Process()
 	float* in = iIn.GetSignal();
 	float* out = oOut.GetSignal();
 	
-   	for(int i = 0; i < Module::framesPerBlock; i++) {
+   	for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
 	    xn = *in++;
 	    yn = b0*xn + z1m;
 	    z2n = b2*xn - a2*yn;

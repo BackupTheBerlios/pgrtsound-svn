@@ -48,6 +48,7 @@ void GuiModule::SetParentView(AlgorithmView* algoView) {
 }
 
 Gtk::Widget* GuiModule::GetGui() {
+	cout << "GuiModule::GetGui()" << endl;
 	return NULL;
 }
 
@@ -76,7 +77,7 @@ void GuiModule::on_realize() {
 	//window->set_background(bgColor);
 	//window->clear();
 	
-		// glowny prostokat modulu
+	// glowny prostokat modulu
 	pixmapBuffer->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
 
 	// gniazda wejsc
@@ -161,7 +162,7 @@ bool GuiModule::on_leave_notify_event(GdkEventCrossing* event) {
 	if( currentOutput > -1 ) PaintOutput(currentOutput, false);
 
 	// podczas szybkiego przesuwania modulu kursor moze wyjsc poza modul
-	// co by go zdeaktywowalo, stad ponizszy warunek zanik deaktywacja
+	// co by go zdeaktywowalo, stad ponizszy warunek
 	if( !algorithmView->IsDraggingModule() ) {
 		algorithmView->SelectGuiModule(NULL);
 	}
@@ -271,7 +272,9 @@ void GuiModule::GetPosition(int& xx, int& yy) {
 void GuiModule::OpenGuiWindow(Gtk::Window& parent) {
 	if(!isGuiWindowCreated) {
 		Gtk::Widget* gui = GetGui();
+		cout << "GUI wsk: " << gui << endl;
 		if(gui != NULL) {
+			cout << "Tworze okno GUI\n" << endl;
        		guiWindow = new ModuleGuiWindow;
             guiWindow->add( *manage(gui) );
             //guiWindow->stick();
