@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSound.dev
 Name=rtsound
-UnitCount=3
+UnitCount=1
 Type=1
 Ver=1
 ObjFiles=
@@ -361,16 +361,6 @@ BuildCmd=
 FileName=..\..\src\main.cpp
 CompileCpp=1
 Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit2]
-FileName=..\..\src\xmlconfigfile.cpp
-CompileCpp=1
-Folder=rtsound
 Compile=1
 Link=1
 Priority=1000
