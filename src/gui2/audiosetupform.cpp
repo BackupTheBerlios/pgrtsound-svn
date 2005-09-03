@@ -3,8 +3,11 @@
 using namespace std;
 
 AudioSetupForm::AudioSetupForm(AudioDriver* audioDrv) :
-	table(6, 2, false), buttonOk(Gtk::Stock::OK), buttonApply(Gtk::Stock::APPLY),
-	butAlign(Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER, 0.0, 0.0), butBox(true, 10)
+	table(6, 2, false),
+	butAlign(Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER, 0.0, 0.0),
+	buttonOk(Gtk::Stock::OK),
+	buttonApply(Gtk::Stock::APPLY),
+	butBox(true, 10)
 {   
 	audioDriver = audioDrv;
 	set_title("Ustawienia urzadzen dzwiekowych");

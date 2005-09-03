@@ -29,6 +29,10 @@ GuiModule* GuiModuleFactory::CreateGuiModule(Module* module) {
 	if (type == "gain") {
 		return new GainGui(module);
 	}
+	
+	if (type == "constant") {
+		return new GMConstant(module);
+	}
 
 	TRACE("GuiModuleFactory::CreateGuiModule()", "Dodaje zwykly GuiModule");
 
