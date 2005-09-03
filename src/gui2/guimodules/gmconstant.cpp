@@ -1,10 +1,9 @@
 #include "gmconstant.h" // class's header file
 
 GMConstant::GMConstant( Module* module ) :
-	GuiModule( module ),
-	gui( module )
+	GuiModule( module )
 {
-	cout << module->GetParameter(0) << endl;
+	entry.AttachFloatParameter( (ParameterFloat*)module->GetParameter( 0 ) );
 }
 
 GMConstant::~GMConstant() {
@@ -12,5 +11,5 @@ GMConstant::~GMConstant() {
 }
 
 Gtk::Widget* GMConstant::GetGui() {
-	return &gui;
+	return &entry;
 }
