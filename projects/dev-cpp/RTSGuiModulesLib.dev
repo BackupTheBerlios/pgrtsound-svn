@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSGui2.dev
 Name=RTS GUI
-UnitCount=12
+UnitCount=14
 Type=2
 Ver=1
 ObjFiles=
@@ -20,7 +20,7 @@ ObjectOutput=objs/rtsgui2/
 OverrideOutput=0
 OverrideOutputName=Real Time GUI.exe
 HostApplication=
-Folders=guimodules
+Folders=
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -230,7 +230,7 @@ BuildCmd=
 [Unit2]
 FileName=..\..\src\gui2\guimodules\gaingui.h
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -240,7 +240,7 @@ BuildCmd=
 [Unit7]
 FileName=..\..\src\gui2\guimodules\sinosc2testgui.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -250,7 +250,7 @@ BuildCmd=
 [Unit10]
 FileName=..\..\src\gui2\guimodules\slidergui.h
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -290,7 +290,7 @@ BuildCmd=
 [Unit1]
 FileName=..\..\src\gui2\guimodules\gaingui.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -300,7 +300,7 @@ BuildCmd=
 [Unit3]
 FileName=..\..\src\gui2\guimodules\guimodule.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -310,7 +310,7 @@ BuildCmd=
 [Unit4]
 FileName=..\..\src\gui2\guimodules\guimodule.h
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -320,7 +320,7 @@ BuildCmd=
 [Unit5]
 FileName=..\..\src\gui2\guimodules\mygtkslider.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -330,7 +330,7 @@ BuildCmd=
 [Unit6]
 FileName=..\..\src\gui2\guimodules\mygtkslider.h
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -340,7 +340,7 @@ BuildCmd=
 [Unit8]
 FileName=..\..\src\gui2\guimodules\sinosc2testgui.h
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -350,7 +350,7 @@ BuildCmd=
 [Unit9]
 FileName=..\..\src\gui2\guimodules\slidergui.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -359,6 +359,26 @@ BuildCmd=
 
 [Unit11]
 FileName=..\..\src\gui2\guimodules\gmconstant.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit14]
+FileName=mygtkfloatentry.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit13]
+FileName=..\..\src\gui2\guimodules\mygtkfloatentry.h
 CompileCpp=1
 Folder=
 Compile=1
