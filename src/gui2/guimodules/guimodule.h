@@ -1,19 +1,23 @@
 #ifndef GUIMODULE_H
 #define GUIMODULE_H
 
-#include <string>
+#include "../moduleguiwindow.h"
+//#include "../guiconnection.h"
+
+#include "../../algorithm.h"
+#include "../../debug.h"
+#include "../../modules/module.h"
+
 #include <gtkmm/eventbox.h>
 #include <pangomm/layout.h>
 
-//#include "../../algorithm.h"
-#include "../../debug.h"
-#include "../../modules/module.h"
-#include "../moduleguiwindow.h"
+#include <string>
 
 // deklaracja potrzebna (naglowek "algorithmview.h" dalby petle plikow naglowkowych)
 // niestety jest zaleznosc GuiModule od AlgorithmView, ale moze uda sie ja usunac
 // pozniej
 class AlgorithmView;
+class GuiConnection;
 
 /**
  * Interfejs modulu graficznego.
@@ -35,6 +39,12 @@ class GuiModule : public Gtk::EventBox {
 		void GetOutputPosition(int outNum, int& x, int& y);
 		int GetCurrentInputNumber();
 		int GetCurrentOutputNumber();
+		//void SetInputConnectionId( int inputId, ConnectionId connId );
+		void SetInputGuiConnection( int inputId, GuiConnection* conn );
+		//ConnectionId GetInputConnectionId( int inputId );
+		GuiConnection* GetInputGuiConnection( int inputId );
+		void SetModuleId( ModuleId modId );
+		ModuleId GetModuleId();
 		void OpenGuiWindow(Gtk::Window& parent);
 		bool on_leave_notify_event(GdkEventCrossing* event);
 		bool on_enter_notify_event(GdkEventCrossing* event);
@@ -51,6 +61,9 @@ class GuiModule : public Gtk::EventBox {
 		int inputCount, outputCount;
 		int currentInput, currentOutput;
 		std::string text;
+		//ConnectionId* inputConnectionIds;
+		ModuleId moduleId;
+		GuiConnection** inputGuiConnections;
 		// graphic context i kolory
 		Glib::RefPtr<Gdk::GC> gc;
 		Gdk::Color fgColor, bgColor;

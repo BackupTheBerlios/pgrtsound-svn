@@ -169,7 +169,8 @@ void XMLConfigFile::LoadConnections(Algorithm* algo) {
 		inputId = atoi( connElem->Attribute("input") );
 		outputId = atoi( connElem->Attribute("output") );
 
-		algo->ConnectModules(module1Name, outputId, module2Name, inputId);
+		ConnectionId tempId;
+		algo->ConnectModules(module1Name, outputId, module2Name, inputId, tempId);
 		
 //		#ifndef NDEBUG
 //		cout << "    " <<

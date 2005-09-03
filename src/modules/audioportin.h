@@ -10,8 +10,7 @@ class AudioPortIn : public Module {
 	public:
 		AudioPortIn();
 		~AudioPortIn();
-		static string GetTypeStatic();
-		string GetType();
+		REGISTER_MODULE( "AudioPortIn", AudioPortIn )
 
 	private:
 		Output oLeft;

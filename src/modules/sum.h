@@ -11,9 +11,7 @@ class Sum : public Module {
 		Sum();
 		~Sum();
 		void Process();
-		static Module* Create();
-		static string GetTypeStatic();
-		string GetType();
+		REGISTER_MODULE( "sumator", Sum )
 		
 	private:
 		Input i1, i2;

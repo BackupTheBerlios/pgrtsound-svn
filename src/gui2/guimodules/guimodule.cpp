@@ -17,6 +17,10 @@ GuiModule::GuiModule(Module* moduleToAttach) {
 	outputCount = module->GetOutputCount();
 	currentInput = currentOutput = -1;
 
+	// tablica na identyfikatory polaczen zwiazanych z kazdym wejsciem
+	//inputConnectionIds = new ConnectionId[ inputCount ];
+	inputGuiConnections = new GuiConnection*[ inputCount ];
+	
 	// ustalenie rozmiarow (zaleznie od ilosci wejsc/wyjsc)
     height = (inputCount < outputCount)? outputCount : inputCount;
     height = height * socketSizeDoubled;
@@ -39,7 +43,10 @@ GuiModule::GuiModule(Module* moduleToAttach) {
 }
 
 GuiModule::~GuiModule() {
+
 	delete guiWindow;
+	//delete []inputConnectionIds;
+	delete []inputGuiConnections;
 	TRACE("GuiModule::~GuiModule()", "Destrukcja");
 }
 
@@ -147,6 +154,7 @@ void GuiModule::SetText(string newText) {
  'Aktywujemy' ten modul w AlgorithmView.
 */
 bool GuiModule::on_enter_notify_event(GdkEventCrossing* event) {
+	(void) event;
 	//cout << "Entering " << guiModule->GetModule()->GetName() << endl;
 	algorithmView->SelectGuiModule(this);
 	return true;
@@ -157,6 +165,7 @@ bool GuiModule::on_enter_notify_event(GdkEventCrossing* event) {
  Dajemy znac AlgorithmView, ze nie jet on juz aktywnym modulem.
 */
 bool GuiModule::on_leave_notify_event(GdkEventCrossing* event) {
+	(void) event;
     //cout << "Leaving " << guiModule->GetModule()->GetName() << endl;
     if( currentInput > -1 ) PaintInput(currentInput, false);
 	if( currentOutput > -1 ) PaintOutput(currentOutput, false);
@@ -270,13 +279,14 @@ void GuiModule::GetPosition(int& xx, int& yy) {
 }
 
 void GuiModule::OpenGuiWindow(Gtk::Window& parent) {
-	if(!isGuiWindowCreated) {
+	if( !isGuiWindowCreated ) {
 		Gtk::Widget* gui = GetGui();
-		cout << "GUI wsk: " << gui << endl;
-		if(gui != NULL) {
+		//cout << "GUI wsk: " << gui << endl;
+		if( gui != NULL ) {
 			cout << "Tworze okno GUI\n" << endl;
        		guiWindow = new ModuleGuiWindow;
-            guiWindow->add( *manage(gui) );
+            //guiWindow->add( *manage(gui) );
+            guiWindow->add( *gui );
             //guiWindow->stick();
             guiWindow->show_all_children();
             guiWindow->set_transient_for(parent);
@@ -284,8 +294,33 @@ void GuiModule::OpenGuiWindow(Gtk::Window& parent) {
             guiWindow->set_title( module->GetName() );
             isGuiWindowCreated = true;
 		}
-	} else if(guiWindow != NULL) {
+	} else if( guiWindow != NULL ) {
 		guiWindow->show();
 		guiWindow->raise();
 	}
+}
+
+//void  GuiModule::SetInputConnectionId( int inputId, ConnectionId connId ) {
+//	inputConnectionIds[ inputId ] = connId;
+//}
+//
+//ConnectionId GuiModule::GetInputConnectionId( int inputId ) {
+//	return inputConnectionIds[ inputId ];
+//}
+
+void GuiModule::SetInputGuiConnection( int inputId, GuiConnection* conn ) {
+	inputGuiConnections[ inputId ] = conn;
+}
+		//ConnectionId GetInputConnectionId( int inputId );
+GuiConnection* GuiModule::GetInputGuiConnection( int inputId ) {
+	return inputGuiConnections[ inputId ];
+}
+
+
+void GuiModule::SetModuleId( ModuleId modId ) {
+	moduleId = modId;
+}
+
+ModuleId GuiModule::GetModuleId() {
+	return moduleId;
 }

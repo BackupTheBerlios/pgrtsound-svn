@@ -1,6 +1,6 @@
 #include "guiconnection.h"
 
-void GuiConnection::Set(ConnectionId* connId, GuiModule* srcGuiMod, int srcId,
+void GuiConnection::Set(ConnectionId connId, GuiModule* srcGuiMod, int srcId,
 	GuiModule* destGuiMod, int destId)
 {
     connectionId = connId;
@@ -23,4 +23,8 @@ void GuiConnection::Update() {
 		destinationGuiModule->GetInputPosition(destinationInputId, destinationX, destinationY);
 		//destinationX += x; destinationY += y;
 	}
+}
+
+ConnectionId GuiConnection::GetConnectionId() {
+	return connectionId;
 }

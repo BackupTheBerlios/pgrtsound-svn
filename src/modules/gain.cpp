@@ -12,18 +12,6 @@ Gain::Gain() : Module("New gain"),
 Gain::~Gain() {
 }
 
-Module* Gain::Create(){
-	return new Gain;
-}
-
-string Gain::GetTypeStatic() {
-	return "gain";
-}
-
-string Gain::GetType() {
-	return "gain";
-}
-
 void Gain::Process() {
 	unsigned long n;
 	float* in = iIn.GetSignal();

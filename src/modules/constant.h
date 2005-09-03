@@ -12,9 +12,7 @@ class Constant : public Module {
 		Constant();
 		~Constant();
 		void Process();
-		static Module* Create();
-		static string GetTypeStatic();
-		string GetType();
+		REGISTER_MODULE( "constant", Constant )
 		
 	private:
         float oldValue;

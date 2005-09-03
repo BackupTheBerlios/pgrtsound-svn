@@ -4,7 +4,7 @@ using namespace std;
 
 AudioSetupForm::AudioSetupForm(AudioDriver* audioDrv) :
 	table(6, 2, false), buttonOk(Gtk::Stock::OK), buttonApply(Gtk::Stock::APPLY),
-	butBox(true, 10), butAlign(Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER, 0.0, 0.0)
+	butAlign(Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER, 0.0, 0.0), butBox(true, 10)
 {   
 	audioDriver = audioDrv;
 	set_title("Ustawienia urzadzen dzwiekowych");
@@ -67,7 +67,7 @@ AudioSetupForm::AudioSetupForm(AudioDriver* audioDrv) :
 	cboxInDevice.set_active( audioDriver->GetCurrentInputDeviceNum() );
 	cboxOutDevice.set_active( audioDriver->GetCurrentOutputDeviceNum() );
 	// czest. probkowania hmmm... brzydko
-	char txt[10]; g_snprintf( txt, 10, "%#d", (int)audioDriver->GetSampleRate() );
+	char txt[10]; g_snprintf( txt, 10, "%d", (int)audioDriver->GetSampleRate() );
 	cboxSR.set_active_text(txt);
 
 	// sygnaly przyciskow i comboboxow

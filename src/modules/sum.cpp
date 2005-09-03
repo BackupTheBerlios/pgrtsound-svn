@@ -11,18 +11,6 @@ Sum::Sum() : Module("New sumator"),
 Sum::~Sum() {
 }
 
-string Sum::GetTypeStatic() {
-	return "sumator";
-}
-
-string Sum::GetType() {
-	return "sumator";
-}
-
-Module* Sum::Create() {
-	return new Sum();
-}
-
 void Sum::Process() {
 	float* in1 = i1.GetSignal();
 	float* in2 = i2.GetSignal();

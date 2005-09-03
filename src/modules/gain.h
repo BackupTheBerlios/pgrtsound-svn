@@ -13,9 +13,7 @@ class Gain : public Module
 		Gain();
 		~Gain();
 		void Process();
-		static Module* Create();
-		static string GetTypeStatic();
-		string GetType();
+		REGISTER_MODULE( "gain", Gain )
 		
 	private:
 		Input iIn;

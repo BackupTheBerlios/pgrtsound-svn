@@ -6,13 +6,5 @@ AudioPortOut::AudioPortOut() : Module("AudioPortOut"),
 	AddInput(inLeft);
 }
 
-string AudioPortOut::GetTypeStatic() {
-	return "audioportout";
-}
-
-string AudioPortOut::GetType() {
-	return "audioportout";
-}
-
 AudioPortOut::~AudioPortOut() {
 }

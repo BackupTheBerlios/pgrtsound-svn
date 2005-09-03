@@ -11,18 +11,6 @@ Multiplication::Multiplication() : Module("New multiplication"),
 Multiplication::~Multiplication(){
 }
 
-string Multiplication::GetTypeStatic() {
-	return "multiplication";
-}
-
-string Multiplication::GetType() {
-	return "multiplication";
-}
-
-Module* Multiplication::Create() {
-	return new Multiplication;
-}
-
 void Multiplication::Process() {
 	float* in1 = iIn1.GetSignal();
 	float* in2 = iIn2.GetSignal();

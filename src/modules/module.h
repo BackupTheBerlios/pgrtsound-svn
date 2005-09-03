@@ -20,6 +20,11 @@
 
 using namespace std;
 
+#define REGISTER_MODULE( x, y ) \
+	string GetType() { return x; } \
+	static string GetTypeStatic() { return x; } \
+	static Module* Create() { return new y; }
+
 /**
  * Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
  * Takze autorzy zewnetrznych modulow musza dostosowac sie do tego interfejsu.

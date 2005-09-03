@@ -82,36 +82,47 @@ void Algorithm::PrintInfo(void) {
  * @param moduleId2 Identyfikator modulu docelowego
  * @param inputId Identyfiaktor wejscia modulu docelowego
  */
-ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId,
-	ModuleId moduleId2, int inputId)
+ 
+
+bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
+			ModuleId moduleId2, int inputId, ConnectionId& cId )
 {
-	#ifndef NDEBUG
-		cout << "    Lacze '" <<
-			GetModule(moduleId1)->GetName() << "'." << GetModule(moduleId1)->GetOutput(outputId)->GetName() << " -> '" <<
-			GetModule(moduleId2)->GetName() << "'." << GetModule(moduleId2)->GetInput(inputId)->GetName() << endl;
-	#endif
+	cout << "    Lacze '" <<
+		GetModule(moduleId1)->GetName() << "'." << GetModule(moduleId1)->GetOutput(outputId)->GetName() << " -> '" <<
+		GetModule(moduleId2)->GetName() << "'." << GetModule(moduleId2)->GetInput(inputId)->GetName() << endl;
 
 	// polacz wejscie do wyjscia
 	GetModule(moduleId2)->GetInput(inputId)->ConnectTo(
 		GetModule(moduleId1)->GetOutput(outputId) );
 
 	ConnectionDescription c;
-	ConnectionId cId;
+	//ConnectionId cId;
 	// utworzenie polaczenia w grafie
 	c = add_edge(moduleId1, moduleId2, graph);
 	// identyfikator polaczenia w grafie
 	cId = c.first;
-	graph[cId].sourceModule = GetModule(moduleId1);
-	graph[cId].sourceOutputId = outputId;
-	graph[cId].destinationModule = GetModule(moduleId2);
-	graph[cId].destinationInputId = inputId;
+	
+	if( IsGraphAcyclic() ) {
+		//cout << "JEST ACYKLICZNY :D" << endl;
+		graph[cId].sourceModule = GetModule(moduleId1);
+		graph[cId].sourceOutputId = outputId;
+		graph[cId].destinationModule = GetModule(moduleId2);
+		graph[cId].destinationInputId = inputId;
+		return true;
+	}
+	else {
+        //cout << "JEST CYKLICZNY :(((((" << endl;
+		remove_edge( cId, graph );
+
+		//throw RTSCyclicGraphError( );
+	}
 
 //	graph[cId].sourceId = outputId;
 //	graph[cId].destinationId = inputId;
 //	graph[cId].source = GetModule(moduleId1)->GetOutput(outputId);
 //	graph[cId].destination = GetModule(moduleId2)->GetInput(inputId);
 
-	return cId;
+	return false;
 }
 
 /**
@@ -122,13 +133,13 @@ ConnectionId Algorithm::ConnectModules(ModuleId moduleId1, int outputId,
  * @param moduleName2 Nazwa modulu docelowego
  * @param inputId Identyfiaktor wejscia modulu docelowego
 */
-ConnectionId Algorithm::ConnectModules(string moduleName1, int outputId,
-	string moduleName2, int inputId)
+bool Algorithm::ConnectModules( string moduleName1, int outputId,
+	string moduleName2, int inputId, ConnectionId& connId)
 {
 	ModuleId moduleId1 = ( *moduleName2IdMap.find(moduleName1) ).second;
 	ModuleId moduleId2 = ( *moduleName2IdMap.find(moduleName2) ).second;
 
-	return ConnectModules(moduleId1, outputId, moduleId2, inputId);
+	return ConnectModules( moduleId1, outputId, moduleId2, inputId, connId );
 }
 
 /**
@@ -289,13 +300,46 @@ Module* Algorithm::GetOutputPort() const {
  * Usuwanie modulu z grafu.
  * @param moduleId Identyfikator modulu
 */
-void Algorithm::DeleteModule(ModuleId moduleId) {
+void Algorithm::DeleteModule( ModuleId moduleId ) {
+	cout << "Algorithm::DeleteModule" << endl;
+	cout << "    Usuwam modul '" << GetModule( moduleId )->GetName() << "'" << endl;
+	
+	using namespace boost;
+	
+	property_map<Graph, vertex_index_t>::type index = get(vertex_index, graph);
+	// initialize the vertex_index property values
+	graph_traits<Graph>::vertex_iterator vi, vend, vi_end;
+	graph_traits<Graph>::vertices_size_type cnt = 0;
+	for(tie(vi,vend) = vertices(graph); vi != vend; ++vi)
+	    put(index, *vi, cnt++);
+
+	// odlaczenie wszytkich wejsci do ktorych jest usuwnay modul podlaczony
+	cout << "    Odlaczam wejscia:" << endl;
+
+	boost::graph_traits<Graph>::out_edge_iterator ei, eend;
+	for( tie(ei, eend) = out_edges( moduleId, graph ); ei != eend; ++ei ) {
+		cout << "        '" << graph[*ei].destinationModule->GetName() << "'";
+		cout << ".'" << graph[*ei].destinationModule->GetInput(
+			graph[*ei].destinationInputId )->GetName()  << "'" << endl;
+
+		graph[*ei].destinationModule->GetInput( graph[*ei].destinationInputId )
+			->Disconnect();
+	}
+
     //usuwanie z mapy
-	moduleName2IdMap.erase(GetModule(moduleId)->GetName());
-	//usuwanie z pamieci modulu
-	delete GetModule(moduleId);
+	moduleName2IdMap.erase( GetModule(moduleId)->GetName() );
 	//usuwanie grafu
-	boost::clear_vertex(moduleId, graph);
+	boost::clear_vertex( moduleId, graph );
+	boost::remove_vertex( moduleId, graph );
+
+	//usuwanie z pamieci
+	delete GetModule( moduleId );
+
+	CreateQueue();
+	
+	PrintInfo(); // debug
+	PrintEdges();
+	cout << "Algorithm::DeleteModule done" << endl;
 }
 
 /**
@@ -303,13 +347,19 @@ void Algorithm::DeleteModule(ModuleId moduleId) {
  @param connectionId identyfikator polaczenia do usuniecia
 */
 void Algorithm::DeleteConnection(ConnectionId connectionId) {
+	cout << "Algorithm::DeleteConnection" << endl;
 	//graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
 	//graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
 	//	->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
 	graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
 		->Disconnect(); // rozlaczamy wejscie modulu 2 ???
+	//cout << "Is connected: " << graph[connectionId].destinationModule
+	//	->GetInput( graph[connectionId].destinationInputId )->IsConnected() << endl;
 	boost::remove_edge(connectionId, graph);
+	cout << "Algorithm::DeleteConnection done" << endl;
+	PrintEdges();
 }
+
 
 /**
  Ustawienie nazwy algorytmu.
@@ -371,7 +421,7 @@ ConnectionIdIterator Algorithm::ConnectionIdIteratorEnd() {
 	return connectionIteratorLast;
 }
 
-Connection* Algorithm::GetConnection(ConnectionId connectionId) {
+Connection* Algorithm::GetConnection( ConnectionId connectionId ) {
 	// TODO: idiotodpornosc i inline
 	return &graph[connectionId];
 }
@@ -379,3 +429,33 @@ Connection* Algorithm::GetConnection(ConnectionId connectionId) {
 std::vector<string>& Algorithm::ListModuleTypes() {
 	return moduleFactory.ListModuleTypes();
 }
+
+bool Algorithm::IsGraphAcyclic() {
+	// inicjalizacja indeksow wierzcholkow grafu
+	boost::property_map<Graph, boost::vertex_index_t>::type index =
+		get( boost::vertex_index, graph );
+	boost::graph_traits<Graph>::vertex_iterator vi, vend, vi_end;
+	boost::graph_traits<Graph>::vertices_size_type cnt = 0;
+	for( boost::tie(vi,vend) = vertices(graph); vi != vend; ++vi )
+	    put(index, *vi, cnt++);
+
+	// sprawdznie cyklicznosci
+	bool has_cycle = false;
+	cycle_detector vis( has_cycle );
+	boost::depth_first_search( graph, visitor(vis) );
+	//std::cout << "The graph has a cycle? " << has_cycle << std::endl;
+	
+	return !has_cycle;
+}
+
+//void Algorithm::DeleteConnection( ModuleId moduleId, int inputNum ) {
+//	cout << "Algorithm::DeleteConnection: Modul" << GetModule(moduleId) <<
+//		endl;
+//	boost::graph_traits<Graph>::in_edge_iterator ei, eend;
+//	for( tie(ei, eend) = in_edges( moduleId, graph ); ei != eend; ++ei ) {
+//		if( graph[*ei].destinationInputId == inputNum ) {
+//			cout << "Algorithm::DeleteConnection: Usunalbym polaczenia do wejscia "
+//				<< inputNum <<	" modulu " << GetModule( moduleId )->GetName() << endl;
+//		}
+//	}
+//}

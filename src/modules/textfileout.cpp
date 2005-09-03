@@ -19,19 +19,6 @@ TextFileOut::~TextFileOut() {
 
 }
 
-string TextFileOut::GetTypeStatic() {
-	return "textfileout";
-}
-
-string TextFileOut::GetType() {
-	return "textfileout";
-}
-
-
-Module* TextFileOut::Create() {
-	return new TextFileOut;
-}
-
 void TextFileOut::Init() {
 
 }

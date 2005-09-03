@@ -1,5 +1,7 @@
 #include "algorithmview.h"
 
+#include <gtkmm/messagedialog.h>
+
 #define FRAMES_PER_BUFFER 256
 
 using namespace std;
@@ -138,7 +140,7 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
  Sprawdza czy kliknieto modul -> mozliwe przesuwanie modulu, czy moze kliknieto
  jakies wyjscie -> mozliwe tworzenie polaczenia.
 */
-bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
+bool AlgorithmView::on_button_press_event( GdkEventButton* event ) {
 	int x, y;
 	get_pointer(x, y);
 	adjh = get_hadjustment();
@@ -148,30 +150,52 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 	y += (int)adjv->get_value();
 
 	if( currentGuiModule != NULL) {
-        int posx, posy;
+	    int posx, posy;
 		currentGuiModule->get_window()->get_position(posx, posy);
 		currentGuiModuleX = x - posx;
 		currentGuiModuleY = y - posy;
 		currentGuiModule->get_window()->raise();
 
 		// podwojny klik na module
-		if(event->type == Gdk::DOUBLE_BUTTON_PRESS) {
-			cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;
+		if( event->type == Gdk::DOUBLE_BUTTON_PRESS ) {
+			//cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;
             currentGuiModule->OpenGuiWindow(*parent);
+            return true;
 		}
 
-		// mozna ruszac modulem tylko gdy kursor *nie* jest nad w*jciem
+		// wlaczenie przesuwania modulu
 		if( (currentGuiModule->GetCurrentInputNumber() == -1) &&
 			(currentGuiModule->GetCurrentOutputNumber() == -1) )
 		{
+			// usuwanie modulu
+			if( (event->type == GDK_BUTTON_PRESS) && ( event->state == GDK_CONTROL_MASK ) ) {
+        	    DeleteModule( currentGuiModule );
+	            return true;
+			}
+
+            // mozna ruszac modulem tylko gdy kursor *nie* jest nad w*jciem
 			isDraggingModule = true;
+			return true;
+		}
+
+		// usuwnaie polaczenia
+		if( (event->type == GDK_BUTTON_PRESS) && ( event->state == GDK_CONTROL_MASK )
+			&& (currentGuiModule->GetCurrentInputNumber() > -1) ) {
+			// prawy przycisk nad wejsciem - usuwamy polaczenie
+			if( currentGuiModule->GetModule()->GetInput(
+				currentGuiModule->GetCurrentInputNumber() )->IsConnected() ) {
+					cout << "DELETE CONNECTION" << endl;
+					DeleteConnection( currentGuiModule, currentGuiModule->GetCurrentInputNumber() );
+					return true;
+			}
 		}
 
 		// jesli kliknieto wyjscie - mozliwe tworzenie polaczenia
 		if( (currentGuiModule->GetCurrentOutputNumber() > -1) ) {
+			ConnectionId temp;
             connSourceModule = currentGuiModule;
             connSourceNumber = currentGuiModule->GetCurrentOutputNumber();
-			connectionDrag.Set(NULL, currentGuiModule,
+			connectionDrag.Set( temp, currentGuiModule,
 			    currentGuiModule->GetCurrentOutputNumber(), NULL, -1);
 			connectionDrag.destinationX = x;
 			connectionDrag.destinationY = y;
@@ -179,12 +203,13 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
 			isDraggingConnection = true;
 		}
 	} else {
+        // Popup menu pod prawym klawiszem
        	lastClick.set_x(x);
 		lastClick.set_y(y);
-       	// Popup menu
-		if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )	{
+       	if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )	{
 			menuPopup.popup(event->button, event->time);
 		}
+		return true;
 	}
 
 	// nie przesylamy tego zdarzenia do dzieci
@@ -196,6 +221,8 @@ bool AlgorithmView::on_button_press_event(GdkEventButton* event) {
  Sprawdzamy czy aby nie w trakcie tworzenia polaczenia itp.
 */
 bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
+	(void) event;
+
 	// koniec przesuwnia modulu
 	if(isDraggingModule) {
        	isDraggingModule = false;
@@ -234,15 +261,19 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
 */
 void AlgorithmView::AddModule(string type, string name, int x, int y) {
 	TRACE3("AlgorithmView::AddModule()", "Dodaje modul typu '", type, "'");
-    ModuleId modId = algorithm.AddModule(type, name);
-    Module* mod = algorithm.GetModule(modId);
+    ModuleId modId = algorithm.AddModule( type, name );
+    Module* mod = algorithm.GetModule( modId );
 
 	GuiModule* guiMod = guiFactory.CreateGuiModule(mod);
-	guiMod->SetParentView(this); // konieczne na razie :(
-	guiModules.push_back(guiMod);
+	guiMod->SetParentView( this ); // konieczne na razie :(
+	guiModules.push_back( guiMod );
 	guiMod->SetXY(x, y);
-    this->put(*guiMod, x, y);
-    
+	guiMod->SetModuleId( modId );
+	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
+	
+	// na ekran
+	this->put( *guiMod, x, y );
+
 	algorithm.PrintInfo();
     
     show_all_children();
@@ -269,23 +300,31 @@ bool AlgorithmView::IsDraggingModule() {
 void AlgorithmView::ConnectModules(GuiModule* sourceGuiModule, int sourceNumOutput,
 	GuiModule* destGuiModule, int destNumInput)
 {
-	//int x, y;
-	ConnectionId connId = algorithm.ConnectModules(sourceGuiModule->GetModule()
-		->GetName(), sourceNumOutput, destGuiModule->GetModule()->GetName(),
-		destNumInput);
-
-	GuiConnection* guiConn = new GuiConnection;
-	guiConn->Set( &connId, sourceGuiModule, sourceNumOutput, destGuiModule,
-		destNumInput);
-
-	algorithm.CreateQueue();
-
-	algorithm.PrintEdges();
+	cout << "AlgorithmView::ConnectModules" << endl;
+	ConnectionId connId;
 	
-	connections.push_back(guiConn);
-	window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
+	if( algorithm.ConnectModules(
+			sourceGuiModule->GetModule()->GetName(),
+			sourceNumOutput,
+			destGuiModule->GetModule()->GetName(),
+			destNumInput, connId ) ) {
+       	GuiConnection* guiConn = new GuiConnection;
+		guiConn->Set( connId, sourceGuiModule, sourceNumOutput, destGuiModule,
+			destNumInput);
+		//destGuiModule->SetInputConnectionId( destNumInput, connId );
+		destGuiModule->SetInputGuiConnection( destNumInput, guiConn );
+		algorithm.CreateQueue();
+		algorithm.PrintEdges(); // debug
+		connections.push_back(guiConn);
+		window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
+	}
+	else {
+		cout << "AlgorithmView::ConnectModules - Blad cyklicznosci grafu" << endl;
+		//Gtk::MessageDialog dialog( *parent, "RTSound", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		//dialog.set_secondary_text( Glib::locale_to_utf8("Nie mo¿na utworzyæ po³aczenia cyklicznego!") );
+		//dialog.run();
+	}
 }
-
 
 //void AlgorithmView::ConnectModules(string sourceName, int sourceNumOutput,
 //	string destName, int destNumInput)
@@ -317,8 +356,8 @@ void AlgorithmView::RedrawConnections() {
 
 void AlgorithmView::Clear() {
 	// pozbywamy sie GuiModulow
-	for(list<GuiModule*>::iterator modIt = guiModules.begin();
-		modIt != guiModules.end(); modIt++)
+	for( list<GuiModule*>::iterator modIt = guiModules.begin();
+		modIt != guiModules.end(); modIt++ )
 	{
 		delete *modIt;
 	}
@@ -334,6 +373,7 @@ void AlgorithmView::Clear() {
 	connections.clear();
 	
 	//moduleName2IdMap.clear();
+	name2GuiModuleMap.clear();
 	algorithm.Clear();
 	window->clear();
 	window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
@@ -351,12 +391,16 @@ void AlgorithmView::InitAudioPorts() {
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortIn") );
 	guiMod->SetParentView(this);
 	guiModules.push_back(guiMod);
+	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
 	this->put(*guiMod, 0, 0);
 
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortOut") );
 	guiMod->SetParentView(this);
 	guiModules.push_back(guiMod);
+	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
 	this->put(*guiMod, 200, 0);
+	
+
 }
 
 void AlgorithmView::on_realize() {
@@ -374,6 +418,8 @@ void AlgorithmView::on_realize() {
 }
 
 bool AlgorithmView::on_expose_event(GdkEventExpose* event) {
+	(void) event;
+	
 	GuiConnection* guiConn;
 	for(std::list<GuiConnection*>::iterator guiConnIt = connections.begin();
 		guiConnIt != connections.end(); guiConnIt++)
@@ -393,4 +439,86 @@ void AlgorithmView::onMenuAddModule(std::string type) {
     char txt[11];
     g_snprintf(txt, 10, " %d", guiModules.size());
 	AddModule(type, type + txt, lastClick.get_x(), lastClick.get_y());
+}
+
+void AlgorithmView::DeleteConnection( GuiModule* module, int inputId ) {
+	//cout << "AlgorithmView::DeleteConnection: Modulu '" << module->GetModule()->GetName()
+	//	<< "' input " << inputId << endl;
+
+	algorithm.DeleteConnection( module->GetInputGuiConnection( inputId )->GetConnectionId() );
+	connections.remove( module->GetInputGuiConnection( inputId ) );
+	RedrawConnections();
+	window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
+}
+
+void AlgorithmView::DeleteModule( GuiModule* guiModule ) {
+	cout << "AlgorithmView::DeleteModule" << endl;
+
+	if( guiModule != NULL && guiModule->GetModule()->GetName() != "AudioPortIn"
+	    && guiModule->GetModule()->GetName() != "AudioPortOut" ) {
+		cout << "Chce usunac modul '" << guiModule->GetModule()->GetName() << endl;
+
+		algorithm.DeleteModule(	guiModule->GetModuleId() );
+		name2GuiModuleMap.erase( guiModule->GetModule()->GetName() );
+		this->remove( *guiModule );
+		guiModules.remove( guiModule );
+		delete guiModule;
+		currentGuiModule = NULL;
+
+		UpdateConnections();
+		RedrawConnections();
+		window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
+	}
+
+	cout << "AlgorithmView::DeleteModule done" << endl;
+}
+
+void AlgorithmView::UpdateConnections() {
+	cout << "AlgorithmView::UpdateConnections" << endl;
+
+	for( list<GuiConnection*>::iterator connIt = connections.begin();
+		connIt != connections.end(); connIt++ )
+	{
+		delete *connIt;
+	}
+	connections.clear();
+
+	cout << "    w mapie sa: " << endl;
+	for( std::map<string, GuiModule*>::iterator it = name2GuiModuleMap.begin();
+		it != name2GuiModuleMap.end(); it++ )
+	{
+		cout << "        " << (*it).first << " " << (*it).second << endl;
+	}
+
+	// utworzenie GUI-polaczen na podstawie polaczen w obiekcie Algorithm
+	for( ConnectionIdIterator connIt = algorithm.ConnectionIdIteratorBegin();
+	    connIt != algorithm.ConnectionIdIteratorEnd(); connIt++ )
+	{
+		ConnectionId connId = *connIt;
+		GuiConnection* guiConn = new GuiConnection;
+		Connection* conn =  algorithm.GetConnection( connId );
+		
+		GuiModule *guiSrc, *guiDest;
+		guiSrc = (*name2GuiModuleMap.find( conn->sourceModule->GetName() )).second;
+		guiDest = (*name2GuiModuleMap.find( conn->destinationModule->GetName() )).second;
+
+		cout << "    " << guiSrc->GetModule()->GetName() << " to " <<
+			guiDest->GetModule()->GetName() << endl;
+
+		cout << "    guiConn->Set ...";
+		guiConn->Set( connId, guiSrc, conn->sourceOutputId, guiDest, conn->destinationInputId );
+		cout << "done" << endl;
+
+		cout << "    SetInputGuiConnection ...";
+		guiDest->SetInputGuiConnection( conn->destinationInputId, guiConn );
+		cout << "done" << endl;
+		
+		cout << "    connections.push_back( guiConn ); ...";
+  		connections.push_back( guiConn );
+  		cout << "done" << endl;
+
+	}
+	
+	cout << "AlgorithmView::UpdateConnections done" << endl;
+	algorithm.PrintEdges();
 }

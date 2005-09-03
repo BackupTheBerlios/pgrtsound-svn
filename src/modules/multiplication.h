@@ -12,9 +12,7 @@ class Multiplication : public Module
 		Multiplication();
 		~Multiplication();
 		void Process();
-		static Module* Create();
-		static string GetTypeStatic();
-		string GetType();
+		REGISTER_MODULE( "multiplication", Multiplication )
 		
 	protected:
 		Input   iIn1, iIn2;

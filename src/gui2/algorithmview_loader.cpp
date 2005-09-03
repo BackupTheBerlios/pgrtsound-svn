@@ -9,7 +9,6 @@
 
 void AlgorithmView::LoadFromFile(string fileName) {
 	XMLConfigFile xmlFile;
-    std::map<string, GuiModule*> name2GuiModuleMap;
 
 	window->freeze_updates();
 
@@ -19,16 +18,18 @@ void AlgorithmView::LoadFromFile(string fileName) {
 	xmlFile.LoadAlgorithm(&algorithm);
 	algorithm.Init();
 
+	// utworzenie modulow
 	Module* mod;
 	GuiModule* guiMod;
-	for(ModuleIdIterator it = algorithm.ModuleIdIteratorBegin();
-		it != algorithm.ModuleIdIteratorEnd(); it++)
+	for( ModuleIdIterator it = algorithm.ModuleIdIteratorBegin();
+		it != algorithm.ModuleIdIteratorEnd(); it++ )
 	{
-		mod = algorithm.GetModule(*it);
-		guiMod = guiFactory.CreateGuiModule(mod);
+		mod = algorithm.GetModule( *it );
+		guiMod = guiFactory.CreateGuiModule( mod );
 		guiMod->SetParentView(this); // konieczne na razie :(
+		guiMod->SetModuleId( algorithm.GetModuleId( mod->GetName() ) );
 		name2GuiModuleMap.insert( make_pair(mod->GetName(), guiMod) );
-		guiModules.push_back(guiMod);
+		guiModules.push_back( guiMod );
 	}
 	
 	TRACE("AlgorithmView::LoadFromFile()", "Wczytywanie polozenia modulow...");
@@ -37,7 +38,7 @@ void AlgorithmView::LoadFromFile(string fileName) {
 	TiXmlNode* moduleXMLNode, * parent;
 	std::string moduleName;
 	int x, y;
-	ModuleId moduleId;
+	//ModuleId moduleId;
 
 	TiXmlDocument document;
 	document.LoadFile( fileName.c_str() );
@@ -54,7 +55,7 @@ void AlgorithmView::LoadFromFile(string fileName) {
 			moduleName = moduleXMLElem->Attribute("name");
 			x = atoi( moduleXMLElem->Attribute("x") );
 			y = atoi( moduleXMLElem->Attribute("y") );
-			cout << "GUIIII: " << moduleName << "   " << x << "  " << y << endl;
+			cout << "GUI: " << moduleName << "   " << x << "  " << y << endl;
 			guiMod = ( *name2GuiModuleMap.find(moduleName) ).second;
 			guiMod->SetXY(x, y);
   		}
@@ -69,6 +70,7 @@ void AlgorithmView::LoadFromFile(string fileName) {
 		this->put(*guiMod, x, y);
 	}
 	
+	// utworzenie GUI-polaczen na podstawie polaczen w obiekcie Algorithm
 	for(ConnectionIdIterator connIt = algorithm.ConnectionIdIteratorBegin();
 	    connIt != algorithm.ConnectionIdIteratorEnd(); connIt++)
 	{
@@ -77,13 +79,16 @@ void AlgorithmView::LoadFromFile(string fileName) {
 		Connection* conn =  algorithm.GetConnection(connId);
 
 		guiConn->Set(
-			&connId,
+			connId,
 			(*name2GuiModuleMap.find( conn->sourceModule->GetName() )).second,
 			conn->sourceOutputId,
 			(*name2GuiModuleMap.find( conn->destinationModule->GetName() )).second,
 			conn->destinationInputId
 		);
-
+		
+		(*name2GuiModuleMap.find( conn->destinationModule->GetName() )).second
+			->SetInputGuiConnection( conn->destinationInputId, guiConn );
+			
   		connections.push_back(guiConn);
 	}
 

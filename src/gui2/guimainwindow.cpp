@@ -184,6 +184,7 @@ void GuiMainWindow::OnOpenFile() {
 void GuiMainWindow::OnPlay() {
    	algo->Init();
 	audio.Start();
+	//algoView.set_sensitive( false );
 	AllowPlay(false);
 	AllowStop(true);
 }
@@ -193,6 +194,7 @@ void GuiMainWindow::OnStop() {
    	AllowStop(false);
   	//if(fileLoaded) AllowPlay(true);
   	AllowPlay(true);
+	//algoView.set_sensitive( true );
 }
 
 void GuiMainWindow::OnMenuFileQuit() {

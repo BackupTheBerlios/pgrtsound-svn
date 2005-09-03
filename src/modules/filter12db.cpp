@@ -14,17 +14,17 @@ Filter12dB::Filter12dB() : Module("Nowy filtr Butterwortha"),
 Filter12dB::~Filter12dB() {
 }
 
-Module* Filter12dB::Create() {
-	return new Filter12dB;
-}
-
-string Filter12dB::GetTypeStatic() {
-	return "filter12db";
-}
-
-string Filter12dB::GetType() {
-	return "filter12db";
-}
+//Module* Filter12dB::Create() {
+//	return new Filter12dB;
+//}
+//
+//string Filter12dB::GetTypeStatic() {
+//	return "filter12db";
+//}
+//
+//string Filter12dB::GetType() {
+//	return "filter12db";
+//}
 
 void Filter12dB::Init() {
 	frequency = pFreq.GetValue();

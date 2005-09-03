@@ -29,19 +29,6 @@ SinOsc2::~SinOsc2() {
 	delete sinTable;
 }
 
-string SinOsc2::GetTypeStatic() {
-	return "sinosc2";
-}
-
-string SinOsc2::GetType() {
-	return "sinosc2";
-}
-
-
-Module* SinOsc2::Create() {
-	return new SinOsc2;
-}
-
 void SinOsc2::Process() {
 	float* freq = iFreq.GetSignal();
 	float* amp = iAmp.GetSignal();

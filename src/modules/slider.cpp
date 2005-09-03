@@ -22,18 +22,6 @@ Slider::Slider() : Module("New Slider"),
 Slider::~Slider() {
 }
 
-string Slider::GetTypeStatic() {
-	return "slider";
-}
-
-string Slider::GetType() {
-	return "slider";
-}
-
-Module* Slider::Create() {
-	return new Slider;
-}
-
 void Slider::Init() {
    	pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1f);
 }

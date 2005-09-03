@@ -26,9 +26,10 @@ class Filter12dB : public Module
 		~Filter12dB();
 		void Process();
 		void Init();
-		static Module* Create();
-		static string GetTypeStatic();
-		string GetType();
+		//static Module* Create();
+		//static string GetTypeStatic();
+		//string GetType();
+		REGISTER_MODULE( "filter12db", Filter12dB )
 				
 	private:
 		Input iIn;

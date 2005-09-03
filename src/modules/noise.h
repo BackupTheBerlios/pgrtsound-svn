@@ -15,9 +15,7 @@ class Noise : public Module
 		Noise();
 		~Noise();
 		void Process();
-		static Module* Create();
-		static string GetTypeStatic();
-		string GetType();
+		REGISTER_MODULE( "noise", Noise );
 		
 	private:
 		Output oOut;
