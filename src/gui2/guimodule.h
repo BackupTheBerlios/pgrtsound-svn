@@ -24,9 +24,12 @@ class GuiConnection;
  */
 class GuiModule : public Gtk::EventBox {
 	public:
+   		static const int socketSize;
+		static const int socketSizeDoubled;
+
 		GuiModule(Module* moduleToAttach);
 		~GuiModule();
-		void SetParentView(AlgorithmView* algoView);
+		void SetParentView( AlgorithmView* algoView );
 		void SetXY(int x_, int y_);
 		void SetText(std::string newText);
 		virtual Gtk::Widget* GetGui();
@@ -44,14 +47,14 @@ class GuiModule : public Gtk::EventBox {
 		void SetModuleId( ModuleId modId );
 		ModuleId GetModuleId();
 		void SetGui( Gui* gui );
-		void OpenGuiWindow(Gtk::Window& parent);
+		void OpenGuiWindow();
+		void ChangeName();
 		bool on_leave_notify_event(GdkEventCrossing* event);
 		bool on_enter_notify_event(GdkEventCrossing* event);
 		bool on_expose_event(GdkEventExpose* e);
 		void on_realize();
+		void Repaint();
 
-		static const int socketSize;
-		static const int socketSizeDoubled;
 
 	protected:
 		Module* module;
@@ -60,7 +63,6 @@ class GuiModule : public Gtk::EventBox {
 		int width, height;
 		int inputCount, outputCount;
 		int currentInput, currentOutput;
-		std::string text;
 		ModuleId moduleId;
 		GuiConnection** inputGuiConnections;
 		Glib::RefPtr<Gdk::GC> gc;
@@ -71,6 +73,8 @@ class GuiModule : public Gtk::EventBox {
 		ModuleGuiWindow *guiWindow;
 		bool isGuiWindowCreated;
 		Glib::RefPtr<Pango::Layout> pangolayout;
+
+
 };
 
 #endif // GUIMODULE_H

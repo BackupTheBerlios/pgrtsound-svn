@@ -91,10 +91,6 @@ bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
 		GetModule(moduleId1)->GetName() << "'." << GetModule(moduleId1)->GetOutput(outputId)->GetName() << " -> '" <<
 		GetModule(moduleId2)->GetName() << "'." << GetModule(moduleId2)->GetInput(inputId)->GetName() << endl;
 
-	// polacz wejscie do wyjscia
-	GetModule(moduleId2)->GetInput(inputId)->ConnectTo(
-		GetModule(moduleId1)->GetOutput(outputId) );
-
 	ConnectionDescription c;
 	//ConnectionId cId;
 	// utworzenie polaczenia w grafie
@@ -103,7 +99,10 @@ bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
 	cId = c.first;
 	
 	if( IsGraphAcyclic() ) {
-		//cout << "JEST ACYKLICZNY :D" << endl;
+   		//cout << "JEST ACYKLICZNY :D" << endl;
+		// polacz wejscie do wyjscia
+		GetModule(moduleId2)->GetInput(inputId)->ConnectTo(
+		GetModule(moduleId1)->GetOutput(outputId) );
 		graph[cId].sourceModule = GetModule(moduleId1);
 		graph[cId].sourceOutputId = outputId;
 		graph[cId].destinationModule = GetModule(moduleId2);
@@ -215,6 +214,7 @@ void  Algorithm::Clear() {
 	modulesQueue.clear();
 	graph.clear();
 	moduleName2IdMap.clear();
+	
 	InitAudioPorts();
 	
 	TRACE("Algorithm::Clear()", "Algorytm wyczyszczony");
@@ -459,3 +459,16 @@ bool Algorithm::IsGraphAcyclic() {
 //		}
 //	}
 //}
+
+bool Algorithm::ChangeModuleName( ModuleId moduleId, string newName ) {
+	/* TODO (#1#): Implement Algorithm::ChangeModuleName() */
+	if( moduleName2IdMap.count( newName ) > 0 ) {
+		return false;
+	}
+
+	Module* mod = GetModule( moduleId );
+	moduleName2IdMap.erase( mod->GetName() );
+	mod->SetName( newName );
+	moduleName2IdMap.insert( make_pair( newName, moduleId ) );
+	return true;
+}

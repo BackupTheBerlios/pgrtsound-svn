@@ -4,7 +4,6 @@
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
-//#include <gtkmm/enums.h>
 #include <gtkmm/button.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/scrolledwindow.h>
@@ -31,6 +30,12 @@ class GuiMainWindow : public Gtk::Window {
    		void OnMenuFileQuit();
 		bool OnTimeOut();
 		void OnAudioSetup();
+		// No description
+		void SetStatus( Glib::ustring str );
+		void OnMySignal( Glib::ustring str );
+		// No description
+		void OnNewFile();
+
 
 	private:
 		AlgorithmView algoView;
@@ -40,9 +45,10 @@ class GuiMainWindow : public Gtk::Window {
 		bool fileLoaded;
 		std::vector<GuiModule*> guiModules;
 		std::vector<Gtk::Frame*> guis;
+		Gtk::HBox statusBar;
         Gtk::ScrolledWindow scrollWindow;
         Gtk::VBox mainBox;
-        Gtk::Label cpuUsageLabel;
+        Gtk::Label cpuUsageLabel, statusLabel;
 		sigc::slot<bool> my_slot; // sygnal aktualziacji obciazenia CPU
 		sigc::connection conn;
 		Glib::RefPtr<Gtk::UIManager> UIManager;

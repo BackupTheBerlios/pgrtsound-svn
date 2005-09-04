@@ -52,9 +52,9 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
  	TRACE("AlgorithmView::AlgorithmView()", "Done!");
 }
 
-void AlgorithmView::SetParentWindow(Gtk::Window *window) {
-    parent = window;    
-}
+//void AlgorithmView::SetParentWindow( Gtk::Window *window ) {
+//    parent = window;
+//}
 
 AlgorithmView::~AlgorithmView() {
     TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja...");
@@ -73,14 +73,14 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 
 	//window->freeze_updates();
 
-	if(event && event->window) {
+	if( event && event->window ) {
        	int x = 0, y = 0;
 		//const Glib::RefPtr<Gdk::Window> refWindow = Glib::wrap((GdkWindowObject*) event->window, true); // true == take_copy
 		// okno Layout
 		const Glib::RefPtr<Gdk::Window> refWindow = this->get_window();
 		Gdk::ModifierType state = Gdk::ModifierType(0);
 
-		if(refWindow) {
+		if( refWindow ) {
 			refWindow->get_pointer(x, y, state);
 			
 			// uwzgledniamy ustawienia scrollbarow
@@ -96,7 +96,22 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 				int xpos, ypos;
 				currentGuiModule->get_window()->get_position(xpos, ypos);
 				// zapalmy w*jscie jesli kusor nad jakims
-				currentGuiModule->FindXput(x - xpos, y - ypos);
+				currentGuiModule->FindXput( x - xpos, y - ypos );
+
+				int inputId = currentGuiModule->GetCurrentInputNumber();
+				int outputId = currentGuiModule->GetCurrentOutputNumber();
+
+				Glib::ustring str;
+				if( inputId > -1 ) {
+					m_signal_notify_xput.emit( currentGuiModule->GetModule()
+						->GetInput( inputId )->GetName() );
+				}
+
+				if( outputId > -1 ) {
+					Glib::ustring str = currentGuiModule->GetModule()
+						->GetOutput( outputId )->GetName();
+					m_signal_notify_xput.emit( str );
+				}
 			}
 
 			// przesuwamy modul
@@ -159,7 +174,7 @@ bool AlgorithmView::on_button_press_event( GdkEventButton* event ) {
 		// podwojny klik na module
 		if( event->type == Gdk::DOUBLE_BUTTON_PRESS ) {
 			//cout << "Double click na module '" << currentGuiModule->GetModule()->GetName() << "'" << endl;
-            currentGuiModule->OpenGuiWindow(*parent);
+            currentGuiModule->OpenGuiWindow();
             return true;
 		}
 
@@ -326,13 +341,6 @@ void AlgorithmView::ConnectModules(GuiModule* sourceGuiModule, int sourceNumOutp
 	}
 }
 
-//void AlgorithmView::ConnectModules(string sourceName, int sourceNumOutput,
-//	string destName, int destNumInput)
-//{
-//	ConnectModules(GetModule(sourceName), sourceNumOutput, GetModule(destName),
-//		destNumInput);
-//}
-
 void AlgorithmView::RedrawConnections() {
 	GuiConnection* guiConn;
 	
@@ -371,13 +379,12 @@ void AlgorithmView::Clear() {
 	}
 	
 	connections.clear();
-	
-	//moduleName2IdMap.clear();
 	name2GuiModuleMap.clear();
 	algorithm.Clear();
+
 	window->clear();
 	window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
-	//InitAudioPorts();
+
 }
 
 Algorithm* AlgorithmView::GetAlgorithm() {
@@ -385,20 +392,26 @@ Algorithm* AlgorithmView::GetAlgorithm() {
 }
 
 void AlgorithmView::InitAudioPorts() {
+	cout << "AlgorithmView::InitAudioPorts" << endl;
+
   	GuiModule* guiMod;
 	//ModuleId moduleId;
 
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortIn") );
 	guiMod->SetParentView(this);
+	guiMod->SetModuleId( algorithm.GetModuleId("AudioPortIn") );
 	guiModules.push_back(guiMod);
 	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
 	this->put(*guiMod, 0, 0);
 
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortOut") );
 	guiMod->SetParentView(this);
+	guiMod->SetModuleId( algorithm.GetModuleId("AudioPortOut") );
 	guiModules.push_back(guiMod);
 	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
 	this->put(*guiMod, 200, 0);
+	
+    show_all_children();
 }
 
 void AlgorithmView::on_realize() {
@@ -418,6 +431,7 @@ void AlgorithmView::on_realize() {
 bool AlgorithmView::on_expose_event(GdkEventExpose* event) {
 	(void) event;
 	
+	// rysjemy polaczenia
 	GuiConnection* guiConn;
 	for(std::list<GuiConnection*>::iterator guiConnIt = connections.begin();
 		guiConnIt != connections.end(); guiConnIt++)
@@ -454,7 +468,7 @@ void AlgorithmView::DeleteModule( GuiModule* guiModule ) {
 
 	if( guiModule != NULL && guiModule->GetModule()->GetName() != "AudioPortIn"
 	    && guiModule->GetModule()->GetName() != "AudioPortOut" ) {
-		cout << "Chce usunac modul '" << guiModule->GetModule()->GetName() << endl;
+		//cout << "Chce usunac modul '" << guiModule->GetModule()->GetName() << endl;
 
 		algorithm.DeleteModule(	guiModule->GetModuleId() );
 		name2GuiModuleMap.erase( guiModule->GetModule()->GetName() );
@@ -481,12 +495,12 @@ void AlgorithmView::UpdateConnections() {
 	}
 	connections.clear();
 
-	cout << "    w mapie sa: " << endl;
-	for( std::map<string, GuiModule*>::iterator it = name2GuiModuleMap.begin();
-		it != name2GuiModuleMap.end(); it++ )
-	{
-		cout << "        " << (*it).first << " " << (*it).second << endl;
-	}
+//	cout << "    w mapie sa: " << endl;
+//	for( std::map<string, GuiModule*>::iterator it = name2GuiModuleMap.begin();
+//		it != name2GuiModuleMap.end(); it++ )
+//	{
+//		cout << "        " << (*it).first << " " << (*it).second << endl;
+//	}
 
 	// utworzenie GUI-polaczen na podstawie polaczen w obiekcie Algorithm
 	for( ConnectionIdIterator connIt = algorithm.ConnectionIdIteratorBegin();
@@ -503,21 +517,36 @@ void AlgorithmView::UpdateConnections() {
 		cout << "    " << guiSrc->GetModule()->GetName() << " to " <<
 			guiDest->GetModule()->GetName() << endl;
 
-		cout << "    guiConn->Set ...";
 		guiConn->Set( connId, guiSrc, conn->sourceOutputId, guiDest, conn->destinationInputId );
-		cout << "done" << endl;
-
-		cout << "    SetInputGuiConnection ...";
 		guiDest->SetInputGuiConnection( conn->destinationInputId, guiConn );
-		cout << "done" << endl;
-		
-		cout << "    connections.push_back( guiConn ); ...";
   		connections.push_back( guiConn );
-  		cout << "done" << endl;
-
 	}
 	
 	cout << "AlgorithmView::UpdateConnections done" << endl;
 	algorithm.PrintEdges();
 }
 
+bool AlgorithmView::ChangeModuleName( ModuleId modId, string str ) {
+//	if( str == "AudioPortIn" || str == "AudioPortOut" ) {
+//        Gtk::MessageDialog dialog( *parent, "RTSound", false,
+//			Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+//		dialog.set_secondary_text( "Nie mozna zmieic nazwy tego modulu!" );
+//		dialog.run();
+//		return false;
+//	}
+	
+   	if( !algorithm.ChangeModuleName( modId, str.c_str() ) ) {
+        Gtk::MessageDialog dialog( *( (Gtk::Window*)get_toplevel() ),
+			"RTSound", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		dialog.set_secondary_text( "Modul o tej nazwie juz istnieje!" );
+		dialog.run();
+		return false;
+	}
+	
+	return true;
+}
+
+// signal accesor
+AlgorithmView::type_signal_notify_xput AlgorithmView::signal_notify_xput() {
+	return m_signal_notify_xput;
+}

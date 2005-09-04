@@ -92,10 +92,9 @@ class Algorithm {
 		Module*				GetOutputPort() const;
 		ModuleIdIterator	ModuleIdIteratorBegin();
 		ModuleIdIterator	ModuleIdIteratorEnd();
-		void         		DeleteModule(ModuleId moduleId);
-//		void				DeleteConnection( ModuleId moduleId, int inputId );
-		void				DeleteConnection(ConnectionId connectionId);
-		ModuleId      		AddModule(string type, string name);
+		void         		DeleteModule( ModuleId moduleId );
+		void				DeleteConnection( ConnectionId connectionId );
+		ModuleId      		AddModule( string type, string name );
 		bool ConnectModules( ModuleId moduleId1, int outputId,
 			ModuleId moduleId2, int inputId, ConnectionId& connId );
 		bool ConnectModules( string moduleName1, int outputId,
@@ -103,9 +102,8 @@ class Algorithm {
 		ConnectionIdIterator ConnectionIdIteratorBegin();
 		ConnectionIdIterator ConnectionIdIteratorEnd();
 		void PrintEdges();
-
-
-		std::vector<string>&	ListModuleTypes();
+		bool ChangeModuleName( ModuleId moduleId, string newName );
+		std::vector<string>& ListModuleTypes();
 
 	private:
 		string                  name;

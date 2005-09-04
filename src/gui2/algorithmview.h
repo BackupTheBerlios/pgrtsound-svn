@@ -13,6 +13,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/layout.h>
 #include <gtkmm/menu.h>
+#include <gtkmm/messagedialog.h>
 
 #include <list>
 #include <string>
@@ -30,23 +31,28 @@ class AlgorithmView : public Gtk::Layout {
 		void DeleteConnection( GuiModule* module, int inpuitId );
 		void ConnectModules(GuiModule* from, int fomNumoutput, GuiModule* to,
 			int toNuminput);
-		void SelectGuiModule(GuiModule* guiMod);
+		void SelectGuiModule( GuiModule* guiMod );
 		void Clear();
-		GuiModule* GetModule(std::string name);
+		GuiModule* GetModule( std::string name );
 		void RedrawConnections();
 		bool IsDraggingModule();
 		Algorithm* GetAlgorithm();
 		void LoadFromFile(string fileName);
-		void SetParentWindow(Gtk::Window *window);
+		//void SetParentWindow( Gtk::Window *window );
 		void DeleteModule( GuiModule* guiModule );
 		bool on_expose_event(GdkEventExpose* e);
 		void on_realize();
 		bool on_motion_notify_event(GdkEventMotion* even);
 		bool on_button_press_event(GdkEventButton* event);
 		bool on_button_release_event(GdkEventButton* event);
-		void UpdateConnections();
+		bool ChangeModuleName( ModuleId moduleId, string str );
+		// nowy sygnal
+   		typedef sigc::signal<void, Glib::ustring> type_signal_notify_xput;
+		type_signal_notify_xput signal_notify_xput();
+		void InitAudioPorts();
 
 	private:
+		type_signal_notify_xput m_signal_notify_xput;
 		bool isDraggingModule;
 		bool isDraggingConnection;
 		int width, height;
@@ -64,11 +70,10 @@ class AlgorithmView : public Gtk::Layout {
 		Gdk::Color fgColor;
 		Glib::RefPtr<Gdk::Window> window;
 		GuiConnection connectionDrag;
-		Gtk::Window *parent;
 		Gtk::Menu menuPopup;
 		Gdk::Point lastClick;
 
-		void InitAudioPorts();
+		void UpdateConnections();
 };
 
 #endif // ALGORITHMVIEW_H

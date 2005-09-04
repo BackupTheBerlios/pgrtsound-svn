@@ -15,7 +15,8 @@ void AlgorithmView::LoadFromFile(string fileName) {
 	Clear();
 
 	xmlFile.OpenFile( fileName.c_str() );
-	xmlFile.LoadAlgorithm(&algorithm);
+	xmlFile.LoadAlgorithm( &algorithm );
+
 	algorithm.Init();
 
 	// utworzenie modulow
@@ -25,6 +26,12 @@ void AlgorithmView::LoadFromFile(string fileName) {
 		it != algorithm.ModuleIdIteratorEnd(); it++ )
 	{
 		mod = algorithm.GetModule( *it );
+
+		//if( mod->GetName() == "AudioPortIn" || mod->GetName() == "AudioPortOut" ) {
+		//	cout << "    pomijam " << mod->GetName() << endl;
+		// continue;
+		//}
+		
 		guiMod = guiFactory.CreateGuiModule( mod );
 		guiMod->SetParentView(this); // konieczne na razie :(
 		guiMod->SetModuleId( algorithm.GetModuleId( mod->GetName() ) );
@@ -85,14 +92,16 @@ void AlgorithmView::LoadFromFile(string fileName) {
 			(*name2GuiModuleMap.find( conn->destinationModule->GetName() )).second,
 			conn->destinationInputId
 		);
-		
+
 		(*name2GuiModuleMap.find( conn->destinationModule->GetName() )).second
 			->SetInputGuiConnection( conn->destinationInputId, guiConn );
-			
+
   		connections.push_back(guiConn);
 	}
 
 	window->thaw_updates();
 
 	show_all_children();
+	
+	TRACE("AlgorithmView::LoadFromFile()", "Polaczenia modulow wczytane");
 }

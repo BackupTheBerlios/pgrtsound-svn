@@ -5,7 +5,7 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 	TRACE("GuiMainWindow::GuiMainWindow()", "Tworze okno...");
 
 	algo = algoView.GetAlgorithm();
-	algoView.SetParentWindow(this);
+	//algoView.SetParentWindow( this );
 
 	set_title("RTSGUI");
 	set_size_request(600, 400);
@@ -16,6 +16,8 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 
 	//File menu:
 	ActionGroup->add( Gtk::Action::create("FileMenu", "File") );
+	ActionGroup->add( Gtk::Action::create("NewFile", Gtk::Stock::NEW),
+		sigc::mem_fun(*this, &GuiMainWindow::OnNewFile) );
 	ActionGroup->add( Gtk::Action::create("OpenFile", Gtk::Stock::OPEN),
 		sigc::mem_fun(*this, &GuiMainWindow::OnOpenFile) );
 	ActionGroup->add( Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
@@ -45,6 +47,7 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 		    "<ui>"
 		    "  <menubar name='MenuBar'>"
 		    "    <menu action='FileMenu'>"
+			"      <menuitem action='NewFile'/>"
 		    "      <menuitem action='OpenFile'/>"
 		    "      <separator/>"
 		    "      <menuitem action='FileQuit'/>"
@@ -81,13 +84,26 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 		mainBox.pack_start(*pToolbar, Gtk::PACK_SHRINK);
 
 	//cpuUsageLabel.set_justify(Gtk::JUSTIFY_LEFT);
+
     cpuUsageLabel.set_label("CPU usage");
-	cpuUsageLabel.set_alignment(0, 0.5);
-	cpuUsageLabel.set_width_chars(100);
-	
+	cpuUsageLabel.set_alignment(1, 0.5);
+ 	cpuUsageLabel.set_width_chars(50);
+	cpuUsageLabel.set_justify( Gtk::JUSTIFY_RIGHT );
+
+	statusLabel.set_alignment(0, 0.5);
+	statusLabel.set_width_chars(50);
+
+	//statusBar.pack_start( statusLabel, Gtk::PACK_SHRINK, Gtk::FILL, 0 );
+	//statusBar.pack_end( cpuUsageLabel, Gtk::PACK_SHRINK, Gtk::FILL, 0 );
+
+	statusBar.set_border_width( 3 );
+	statusBar.add( statusLabel );
+	statusBar.add( cpuUsageLabel );
+
 	mainBox.set_homogeneous(false);
-    mainBox.pack_start(scrollWindow);
-    mainBox.pack_start(cpuUsageLabel,  Gtk::PACK_SHRINK, Gtk::FILL, 0);
+    mainBox.pack_start( scrollWindow );
+    
+    mainBox.pack_start( statusBar, Gtk::PACK_SHRINK, Gtk::FILL, 0 );
 
 	scrollWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
@@ -114,6 +130,9 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 	AllowPlay(true);
 	AllowStop(false);
 
+	// oblsuga syngalu zmiany w*jscia
+	algoView.signal_notify_xput().connect( sigc::mem_fun( this, &GuiMainWindow::OnMySignal) );
+
 	TRACE("GuiMainWindow::GuiMainWindow()", "Okno aplikacji utworzone");
 }
 
@@ -126,18 +145,16 @@ GuiMainWindow::~GuiMainWindow() {
 void GuiMainWindow::OnOpenFile() {
 	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_OPEN);
 	dialog.set_transient_for(*this);
-	dialog.set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
+	dialog.set_position( Gtk::WIN_POS_CENTER_ON_PARENT );
 	//Add response buttons the the dialog:
 	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dialog.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_OK);
-
 	//Add filters, so that only certain file types can be selected:
 	Gtk::FileFilter filter_text;
 	filter_text.set_name("Algortihm XML files");
 	//filter_text.add_mime_type("text/xml");
 	filter_text.add_pattern("*.xml");
 	dialog.add_filter(filter_text);
-
 	//Show the dialog and wait for a user response:
 	int result = dialog.run();
 
@@ -226,8 +243,9 @@ void GuiMainWindow::ClearModules() {
 
 bool GuiMainWindow::OnTimeOut() {
 	char txt[60];
-    g_snprintf(txt, 60, "CPU usage: %#.2f %%  in: %#.1f ms  out: %#.1f ms", audio.GetCPUUsage()*100,
-		audio.GetInputLatency()*1000, audio.GetOutputLatency()*1000 );
+//    g_snprintf(txt, 60, "CPU usage: %#.2f %%  in: %#.1f ms  out: %#.1f ms", audio.GetCPUUsage()*100,
+//		audio.GetInputLatency()*1000, audio.GetOutputLatency()*1000 );
+	g_snprintf(txt, 60, "CPU usage: %#.2f %%", audio.GetCPUUsage()*100 );
 	cpuUsageLabel.set_label(txt);
 	
 	return true;
@@ -255,4 +273,36 @@ void GuiMainWindow::AllowPlay(bool allow) {
 
 void GuiMainWindow::AllowStop(bool allow) {
 	ActionGroup->get_action("Stop")->set_sensitive(allow);
+}
+
+void GuiMainWindow::SetStatus(Glib::ustring str) {
+	statusLabel.set_text( str );
+}
+
+void GuiMainWindow::OnMySignal( Glib::ustring str ) {
+	statusLabel.set_text( str );
+}
+
+void GuiMainWindow::OnNewFile() {
+	cout << "new file" << endl;
+	try {
+		audio.Stop();
+		audio.Close();
+	}
+	catch (AudioDriverError& error) {
+	        cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
+	        exit(1);
+	}
+
+	algoView.Clear();
+	algoView.InitAudioPorts();
+
+	try {
+        //audio.PrintDevices();
+		audio.Open();
+	}
+	catch (AudioDriverError& error) {
+        cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
+        exit(1);
+    }
 }

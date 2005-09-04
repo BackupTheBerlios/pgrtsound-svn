@@ -41,7 +41,6 @@ GuiModule::GuiModule(Module* moduleToAttach) :
 	// potrzebne wykrywanie ponizszych zdarzen
 	set_events(Gdk::LEAVE_NOTIFY_MASK | Gdk::ENTER_NOTIFY_MASK /*| Gdk::BUTTON_PRESS_MASK |
 		Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK */);
-	
 }
 
 GuiModule::~GuiModule() {
@@ -72,42 +71,52 @@ Module* GuiModule::GetModule() {
 
 
 void GuiModule::on_realize() {
-	// We need to call the base on_realize()
+//	cout << "GuiModule::on_realize" << endl;
+
 	Gtk::EventBox::on_realize();
 	window = get_window();
 	gc = Gdk::GC::create(window);
-	
+
 	pixmapBuffer = Gdk::Pixmap::create( window, width, height, -1);
-	gc->set_foreground(bgColor);
-	pixmapBuffer->draw_rectangle(gc, true, 0, 0, width, height);
-
-	gc->set_foreground(fgColor);
-
-	//window->set_background(bgColor);
-	//window->clear();
 	
-	// glowny prostokat modulu
-	pixmapBuffer->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
+	Repaint();
 
-	// gniazda wejsc
-    for (int i = 1; i <= inputCount; i++) {
-        pixmapBuffer->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled,
-			socketSize, socketSize);
-    }
-
-	// gniazda wyjsc
-    for (int i = 1; i <= outputCount; i++) {
-        pixmapBuffer->draw_rectangle(gc, true, width - socketSize,
-			(i - 1)*socketSizeDoubled, socketSize, socketSize);
-    }
-    
-   	int xsize, ysize;
-	pangolayout = create_pango_layout( module->GetName() );
-	pangolayout->set_ellipsize(Pango::ELLIPSIZE_END);
-	pangolayout->set_width(90000);
-	//cout << pangolayout->get_width() << endl;
-	pangolayout->get_pixel_size(xsize, ysize);
-	pixmapBuffer->draw_layout(gc, (width - xsize)/2 , (height - ysize)/2, pangolayout);
+//	// We need to call the base on_realize()
+//	Gtk::EventBox::on_realize();
+//	window = get_window();
+//	gc = Gdk::GC::create(window);
+//
+//	pixmapBuffer = Gdk::Pixmap::create( window, width, height, -1);
+//	gc->set_foreground(bgColor);
+//	pixmapBuffer->draw_rectangle(gc, true, 0, 0, width, height);
+//
+//	gc->set_foreground(fgColor);
+//
+//	//window->set_background(bgColor);
+//	//window->clear();
+//
+//	// glowny prostokat modulu
+//	pixmapBuffer->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
+//
+//	// gniazda wejsc
+//    for (int i = 1; i <= inputCount; i++) {
+//        pixmapBuffer->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled,
+//			socketSize, socketSize);
+//    }
+//
+//	// gniazda wyjsc
+//    for (int i = 1; i <= outputCount; i++) {
+//        pixmapBuffer->draw_rectangle(gc, true, width - socketSize,
+//			(i - 1)*socketSizeDoubled, socketSize, socketSize);
+//    }
+//
+//   	int xsize, ysize;
+//	pangolayout = create_pango_layout( module->GetName() );
+//	pangolayout->set_ellipsize(Pango::ELLIPSIZE_END);
+//	pangolayout->set_width(90000); // TODO: wtf?
+//	//cout << pangolayout->get_width() << endl;
+//	pangolayout->get_pixel_size(xsize, ysize);
+//	pixmapBuffer->draw_layout(gc, (width - xsize)/2 , (height - ysize)/2, pangolayout);
 }
 
 bool GuiModule::on_expose_event(GdkEventExpose* event) {
@@ -141,14 +150,6 @@ bool GuiModule::on_expose_event(GdkEventExpose* event) {
 		event->area.width, event->area.height);
 
     return true;
-}
-
-/*
- Docelowo modul mia miec tekst na srodku z jego nazwa.
- Ponizsza funckja bedzie pozwalala zmieniac ten tekst.
-*/
-void GuiModule::SetText(string newText) {
-	text = newText;
 }
 
 /*
@@ -280,23 +281,27 @@ void GuiModule::GetPosition(int& xx, int& yy) {
 	yy = y;
 }
 
-void GuiModule::OpenGuiWindow(Gtk::Window& parent) {
+void GuiModule::OpenGuiWindow() {
 	if( !isGuiWindowCreated ) {
+   		guiWindow = new ModuleGuiWindow( this );
+   		
 		Gtk::Widget* gui = GetGui();
-		//cout << "GUI wsk: " << gui << endl;
+		cout << "GUI wsk: " << gui << endl;
 		if( gui != NULL ) {
+
 			cout << "Tworze okno GUI\n" << endl;
-       		guiWindow = new ModuleGuiWindow;
             //guiWindow->add( *manage(gui) );
-            guiWindow->add( *gui );
-            //guiWindow->stick();
-            guiWindow->show_all_children();
-            guiWindow->set_transient_for(parent);
-            guiWindow->show();
-            guiWindow->set_title( module->GetName() );
-            isGuiWindowCreated = true;
+            guiWindow->AddGui( gui );
 		}
-	} else if( guiWindow != NULL ) {
+
+        guiWindow->SetName( module->GetName() );
+		guiWindow->set_transient_for( *( (Gtk::Window*)get_toplevel() ) );
+		guiWindow->set_title( module->GetName() );
+		guiWindow->show_all_children();
+        guiWindow->show();
+        isGuiWindowCreated = true;
+	}
+	else if( guiWindow != NULL ) {
 		guiWindow->show();
 		guiWindow->raise();
 	}
@@ -329,4 +334,54 @@ ModuleId GuiModule::GetModuleId() {
 
 void GuiModule::SetGui( Gui* newGui ) {
 	gui = newGui;
+}
+
+void GuiModule::ChangeName() {
+	Glib::ustring newName = guiWindow->GetName();
+	cout << "change name: " << newName << endl;
+	if( algorithmView->ChangeModuleName( moduleId, newName ) ) {
+		guiWindow->set_title( newName );
+		Repaint();
+	}
+}
+
+
+void GuiModule::Repaint() {
+
+	window = get_window();
+	gc = Gdk::GC::create( window );
+
+	gc->set_foreground(bgColor);
+	pixmapBuffer->draw_rectangle(gc, true, 0, 0, width, height);
+
+	gc->set_foreground(fgColor);
+
+	//window->set_background(bgColor);
+	//window->clear();
+
+	// glowny prostokat modulu
+	pixmapBuffer->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
+
+	// gniazda wejsc
+    for (int i = 1; i <= inputCount; i++) {
+        pixmapBuffer->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled,
+			socketSize, socketSize);
+    }
+
+	// gniazda wyjsc
+    for (int i = 1; i <= outputCount; i++) {
+        pixmapBuffer->draw_rectangle(gc, true, width - socketSize,
+			(i - 1)*socketSizeDoubled, socketSize, socketSize);
+    }
+
+   	int xsize, ysize;
+	pangolayout = create_pango_layout( module->GetName() );
+	pangolayout->set_ellipsize(Pango::ELLIPSIZE_END);
+	pangolayout->set_width(90000); // TODO: wtf?
+	//cout << pangolayout->get_width() << endl;
+	pangolayout->get_pixel_size(xsize, ysize);
+	pixmapBuffer->draw_layout(gc, (width - xsize)/2 , (height - ysize)/2, pangolayout);
+	
+	queue_draw();
+
 }
