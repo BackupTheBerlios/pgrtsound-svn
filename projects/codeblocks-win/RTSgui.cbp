@@ -3,256 +3,100 @@
 <Code::Blocks_project_file>
 	<FileVersion major="1" minor="1"/>
 	<Project>
-		<Option title="RTSgui"/>
+		<Option title="RTSGui"/>
 		<Option makefile="Makefile"/>
 		<Option makefile_is_custom="0"/>
 		<Option compiler="0"/>
 		<Build>
 			<Target title="default">
-				<Option output="rtsgui.exe"/>
-				<Option working_dir="."/>
+				<Option output="RTSGui.exe"/>
+				<Option working_dir=""/>
 				<Option object_output=".objs"/>
 				<Option deps_output=".deps"/>
 				<Option external_deps=""/>
 				<Option type="1"/>
 				<Option compiler="0"/>
 				<Option projectResourceIncludeDirsRelation="1"/>
-				<Linker>
-					<Add option="-lportaudio"/>
-					<Add option="-lwinmm"/>
-				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-IC:\Dev-Cpp\include\gtk-2.0 -IC:\Dev-Cpp\lib\gtk-2.0\include -IC:\Dev-Cpp\include\atk-1.0 -IC:\Dev-Cpp\include\pango-1.0 -IC:\Dev-Cpp\include\glib-2.0 -IC:\Dev-Cpp\lib\glib-2.0\include"/>
-			<Add option="-IC:\Dev-Cpp\include\gtkmm-2.4 -IC:\Dev-Cpp\lib\gtkmm-2.4\include -IC:\Dev-Cpp\include\glibmm-2.4 -IC:\Dev-Cpp\lib\glibmm-2.4\include -IC:\Dev-Cpp\include\gdkmm-2.4 -IC:\Dev-Cpp\lib\gdkmm-2.4\include -IC:\Dev-Cpp\include\pangomm-1.4 -IC:\Dev-Cpp\include\atkmm-1.6 -IC:\Dev-Cpp\include\gtk-2.0 -IC:\Dev-Cpp\include\sigc++-2.0 -IC:\Dev-Cpp\lib\sigc++-2.0\include -IC:\Dev-Cpp\include\glib-2.0 -IC:\Dev-Cpp\lib\glib-2.0\include -IC:\Dev-Cpp\lib\gtk-2.0\include -IC:\Dev-Cpp\include\pango-1.0 -IC:\Dev-Cpp\include\atk-1.0"/>
-			<Add option="-DTIXML_USE_STL"/>
-			<Add directory="..\..\lib\portaudio\pa_common"/>
-			<Add directory="..\..\lib\tinyxml"/>
+			<Add option="-IC:/MinGW/include/gtkmm-2.4 -IC:/MinGW/lib/gtkmm-2.4/include -IC:/MinGW/include/glibmm-2.4 -IC:/MinGW/lib/glibmm-2.4/include -IC:/MinGW/include/gdkmm-2.4 -IC:/MinGW/lib/gdkmm-2.4/include -IC:/MinGW/include/pangomm-1.4 -IC:/MinGW/include/atkmm-1.6 -IC:/MinGW/include/gtk-2.0 -IC:/MinGW/include/sigc++-2.0 -IC:/MinGW/lib/sigc++-2.0/include -IC:/MinGW/include/glib-2.0 -IC:/MinGW/lib/glib-2.0/include -IC:/MinGW/lib/gtk-2.0/include -IC:/MinGW/include/pango-1.0 -IC:/MinGW/include/atk-1.0"/>
 			<Add directory="..\..\lib\boost_1_32_0"/>
+			<Add directory="..\..\lib\tinyxml"/>
+			<Add directory="..\..\lib\portaudio\pa_common"/>
 		</Compiler>
 		<Linker>
+			<Add option="C:\RTSound\projects\codeblocks-win\libRTSSound.a"/>
+			<Add option="C:\RTSound\projects\codeblocks-win\libRTSGuiModules.a"/>
+			<Add option="-LC:/MinGW/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv"/>
 			<Add option="-lportaudio"/>
 			<Add option="-lwinmm"/>
-			<Add option="-LC:/Dev-Cpp/lib -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv"/>
-			<Add option="-LC:/Dev-Cpp/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv"/>
+			<Add option="-lole32"/>
 			<Add directory="..\..\lib\portaudio\lib"/>
 		</Linker>
-		<Unit filename="..\..\lib\tinyxml\tinystr.cpp">
+		<Unit filename="..\..\src\gui2\algorithmview.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\lib\tinyxml\tinyxml.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\lib\tinyxml\tinyxmlerror.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\lib\tinyxml\tinyxmlparser.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\algorithm.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\algorithm.h">
+		<Unit filename="..\..\src\gui2\algorithmview.h">
 			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\audiodriver.cpp">
+		<Unit filename="..\..\src\gui2\algorithmview_loader.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\audiodriver.h">
+		<Unit filename="..\..\src\gui2\audiosetupform.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\src\gui2\audiosetupform.h">
 			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\callback.cpp">
+		<Unit filename="..\..\src\gui2\guiconnection.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\callback.h">
+		<Unit filename="..\..\src\gui2\guiconnection.h">
 			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\debug.cpp">
+		<Unit filename="..\..\src\gui2\guimain.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\debug.h">
+		<Unit filename="..\..\src\gui2\guimainwindow.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\src\gui2\guimainwindow.h">
 			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\modulefactory.cpp">
+		<Unit filename="..\..\src\gui2\guimodulefactory.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\modulefactory.h">
+		<Unit filename="..\..\src\gui2\guimodulefactory.h">
 			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\modules\audioportin.cpp">
+		<Unit filename="..\..\src\gui2\moduleguiwindow.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
 		</Unit>
-		<Unit filename="..\..\src\modules\audioportin.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\audioportout.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\audioportout.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\constant.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\constant.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\gain.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\gain.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\module.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\module.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\module_parameters.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\module_parameters.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\multiplication.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\multiplication.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\sinosc2.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\sinosc2.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\slider.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\slider.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\sum.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\sum.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\textfileout.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\modules\textfileout.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\rtsgui\guimodule.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\rtsgui\guimodule.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\rtsgui\guiparameterslider.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\rtsgui\guiparameterslider.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\rtsgui\rtmainwindow.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\rtsgui\rtmainwindow.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\rtsgui\rtsguimain.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\xmlconfigfile.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="..\..\src\xmlconfigfile.h">
+		<Unit filename="..\..\src\gui2\moduleguiwindow.h">
 			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>

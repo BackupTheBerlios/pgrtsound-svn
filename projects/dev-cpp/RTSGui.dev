@@ -1,5 +1,5 @@
 [Project]
-FileName=RTSGui2.dev
+FileName=RTSGui.dev
 Name=RTS GUI
 UnitCount=18
 Type=1
@@ -20,7 +20,7 @@ ObjectOutput=objs/rtsgui2/
 OverrideOutput=0
 OverrideOutputName=Real Time GUI.exe
 HostApplication=
-Folders=guimodules
+Folders=
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -50,7 +50,7 @@ AutoIncBuildNr=0
 [Unit5]
 FileName=..\..\src\gui2\guimain.cpp
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -220,7 +220,7 @@ BuildCmd=
 [Unit3]
 FileName=..\..\src\gui2\guimainwindow.cpp
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -228,7 +228,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit12]
-FileName=..\..\src\gui2\guiconnection.cpp
+FileName=..\..\src\gui2\algorithmview_loader.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -240,7 +240,7 @@ BuildCmd=
 [Unit1]
 FileName=..\..\src\gui2\guimodulefactory.cpp
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -250,7 +250,7 @@ BuildCmd=
 [Unit2]
 FileName=..\..\src\gui2\guimodulefactory.h
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -260,7 +260,7 @@ BuildCmd=
 [Unit4]
 FileName=..\..\src\gui2\guimainwindow.h
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -270,7 +270,7 @@ BuildCmd=
 [Unit6]
 FileName=..\..\src\gui2\audiosetupform.cpp
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -280,7 +280,7 @@ BuildCmd=
 [Unit7]
 FileName=..\..\src\gui2\audiosetupform.h
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -327,18 +327,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit10]
-FileName=..\..\src\gui2\guimodules\guimodule.cpp
-CompileCpp=1
-Folder=guimodules
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit11]
-FileName=..\..\src\gui2\guiconnection.h
+FileName=..\..\src\gui2\guiconnection.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -348,7 +338,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit13]
-FileName=..\..\src\gui2\algorithmview_loader.cpp
+FileName=..\..\src\xmlconfigfile.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -358,9 +348,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit14]
-FileName=..\..\src\xmlconfigfile.cpp
+FileName=..\..\src\xmlconfigfile.h
 CompileCpp=1
-Folder=RTS GUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -368,16 +358,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit15]
-FileName=..\..\src\xmlconfigfile.h
-CompileCpp=1
-Folder=RTS GUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit16]
 FileName=..\..\src\gui2\moduleguiwindow.h
 CompileCpp=1
 Folder=
@@ -387,7 +367,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit17]
+[Unit16]
 FileName=..\..\src\gui2\moduleguiwindow.cpp
 CompileCpp=1
 Folder=
@@ -398,9 +378,29 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit18]
-FileName=..\..\src\gui2\guimodules\guimodule.h
+FileName=..\..\src\gui2\guimodule.cpp
 CompileCpp=1
-Folder=guimodules
+Folder=RTS GUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit10]
+FileName=..\..\src\gui2\guiconnection.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit17]
+FileName=..\..\src\gui2\guimodule.h
+CompileCpp=1
+Folder=RTS GUI
 Compile=1
 Link=1
 Priority=1000

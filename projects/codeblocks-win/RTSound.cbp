@@ -22,15 +22,25 @@
 					<Add directory="..\..\lib\tinyxml"/>
 				</Compiler>
 				<Linker>
-					<Add option="-lportaudio"/>
-					<Add option="-lwinmm"/>
 					<Add directory="..\..\lib\portaudio\lib"/>
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wall"/>
+			<Add option="-IC:/MinGW/include/glib-2.0 -IC:/MinGW/lib/glib-2.0/include"/>
 			<Add directory="..\..\lib\boost_1_32_0"/>
 		</Compiler>
+		<Linker>
+			<Add option="-LC:/MinGW/lib"/>
+			<Add option="-lgmodule-2.0"/>
+			<Add option="-lglib-2.0"/>
+			<Add option="-lintl"/>
+			<Add option="-liconv"/>
+			<Add option="-lportaudio"/>
+			<Add option="-lwinmm"/>
+			<Add option="-lole32"/>
+		</Linker>
 		<Unit filename="..\..\lib\tinyxml\tinystr.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
@@ -131,6 +141,16 @@
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
+		<Unit filename="..\..\src\modules\filter12db.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\src\modules\filter12db.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
 		<Unit filename="..\..\src\modules\gain.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
@@ -151,6 +171,16 @@
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
+		<Unit filename="..\..\src\modules\module_io.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\src\modules\module_io.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
 		<Unit filename="..\..\src\modules\module_parameters.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
@@ -166,6 +196,16 @@
 			<Option target="default"/>
 		</Unit>
 		<Unit filename="..\..\src\modules\multiplication.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\src\modules\noise.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="..\..\src\modules\noise.h">
 			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
