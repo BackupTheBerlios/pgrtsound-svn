@@ -1,9 +1,6 @@
 #ifndef MODULEFACTORY_H
 #define MODULEFACTORY_H
 
-#include <map>
-#include <vector>
-
 #include "modules/module.h"
 #include "modules/sinosc2.h"
 #include "modules/constant.h"
@@ -18,6 +15,9 @@
 #include "modules/filter12db.h"
 
 #include <gmodule.h>
+
+#include <map>
+#include <vector>
 
 using namespace std;
 
@@ -34,7 +34,7 @@ class ModuleFactory {
 		ModuleFactory();
 		~ModuleFactory();
 		void RegisterPlugin(string filename);
-		void RegisterModuleType(string type, CreateFuncPtr funcPtr);
+		void RegisterModuleType( string type, CreateFuncPtr funcPtr );
 		void RegisterAllPlugins();
         Module* CreateModule(string type);
         std::vector<string>& ListModuleTypes();

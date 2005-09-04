@@ -19,7 +19,7 @@
 #include <glibmm/ustring.h>
 #include <glib.h>
 
-#include <audiodriver.h>
+#include "./../audiodriver.h"
 
 typedef std::vector<string> StringVector;
 typedef StringVector::iterator SVIterator;

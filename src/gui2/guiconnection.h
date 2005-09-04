@@ -1,7 +1,7 @@
 #ifndef GUICONNECTION_H
 #define GUICONNECTION_H
 
-#include "guimodules/guimodule.h"
+#include "guimodule.h"
 #include "../algorithm.h"
 
 struct GuiConnection {

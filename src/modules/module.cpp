@@ -15,7 +15,7 @@ NullModuleSingleton& nullModule = NullModuleSingleton::Instance();
  * @param type_ Rozpoznawany przez system typ modulu
  * @param name_ Oczekiwana nazwa modulu
  */
-Module::Module(string name_) {
+Module::Module( string name_ ) {
 	//type = type_;
 	name = name_;
 }

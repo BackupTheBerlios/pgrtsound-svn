@@ -1,6 +1,8 @@
 #include "guimodulefactory.h"
 
 GuiModuleFactory::GuiModuleFactory() {
+	RegisterGui( GConstant::GetTypeStatic(), GConstant::Create );
+	RegisterGui( GSlider::GetTypeStatic(), GSlider::Create );
 }
 
 GuiModuleFactory::~GuiModuleFactory() {
@@ -14,28 +16,27 @@ GuiModuleFactory::~GuiModuleFactory() {
 
 	@param type Typ modulu dla ktorego GUI chcemy utworzyc
  */
-GuiModule* GuiModuleFactory::CreateGuiModule(Module* module) {
-    TRACE2("GuiModuleFactory::CreateGuiModule()", "Tworze GUI dla typu ", module->GetType());
+GuiModule* GuiModuleFactory::CreateGuiModule( Module* module ) {
+    TRACE2("GuiModuleFactory::CreateGuiModule", "Tworze GUI dla typu ", module->GetType());
 
-	string type = module->GetType();
-	if (type == "slider") {
-		return new SliderGui(module);
+	GuiModule* guiMod = new GuiModule( module );
+	CreateGuiFuncPtr funcPtr = NULL;
+
+	if( type2GuiMap.count( module->GetType() ) == 1 ) {
+		// tworzymu Gui
+		funcPtr = ( *type2GuiMap.find( module->GetType() ) ).second;
+		//cout << "    !!!!!!!!!!!GUI znalezione ...." << endl;
+		//cout << "    funcprt = " << funcPtr << endl;
+		Gui* gui = (*funcPtr)( module );
+		guiMod->SetGui( gui );
+		//cout << "    !!!!!!!!!!! guiMod->SetGui( gui ) done " << gui->GetType() << endl;
 	}
 
-	if (type == "sinosc2") {
-		return new SinOsc2TestGui(module);
-	}
+	return guiMod;
+}
 
-	if (type == "gain") {
-		return new GainGui(module);
-	}
-	
-	if (type == "constant") {
-		return new GMConstant(module);
-	}
-
-	TRACE("GuiModuleFactory::CreateGuiModule()", "Dodaje zwykly GuiModule");
-
-	// nie ma specjalistycznego GuiModule zwracamy zwykly
-	return new GuiModule(module);
+void GuiModuleFactory::RegisterGui( string type, CreateGuiFuncPtr funcPtr ) {
+	cout << "CreateGuiFuncPtr = " << funcPtr << endl;
+	type2GuiMap.insert( make_pair(type, funcPtr) );
+	TRACE3("GuiModuleFactory::RegisterGui", "Zarejestrowany GUI dla typu '", type, "'");
 }

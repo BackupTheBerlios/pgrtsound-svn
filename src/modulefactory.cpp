@@ -12,7 +12,7 @@ ModuleFactory::ModuleFactory() {
 	RegisterModuleType( Noise::GetTypeStatic(), Noise::Create );
 	RegisterModuleType( TextFileOut::GetTypeStatic(), TextFileOut::Create );
 	
-	if (g_module_supported() == TRUE) {
+	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();
     }
 }
@@ -27,8 +27,10 @@ ModuleFactory::~ModuleFactory() {
  @param type Typ modulu.
 */
 Module* ModuleFactory::CreateModule(string type) {
+
 	CreateFuncPtr funcPtr = NULL;
 	funcPtr = ( *type2CreateFuncMap.find(type) ).second;
+
 	if( funcPtr != NULL) {
 		// tworzymu modul danego typu
 		return (*funcPtr)();

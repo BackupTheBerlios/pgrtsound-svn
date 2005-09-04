@@ -399,8 +399,6 @@ void AlgorithmView::InitAudioPorts() {
 	guiModules.push_back(guiMod);
 	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
 	this->put(*guiMod, 200, 0);
-	
-
 }
 
 void AlgorithmView::on_realize() {
@@ -522,3 +520,4 @@ void AlgorithmView::UpdateConnections() {
 	cout << "AlgorithmView::UpdateConnections done" << endl;
 	algorithm.PrintEdges();
 }
+

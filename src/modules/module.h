@@ -20,10 +20,10 @@
 
 using namespace std;
 
-#define REGISTER_MODULE( x, y ) \
+#define REGISTER_MODULE( x, class_name ) \
 	string GetType() { return x; } \
 	static string GetTypeStatic() { return x; } \
-	static Module* Create() { return new y; }
+	static Module* Create() { return new class_name; }
 
 /**
  * Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
@@ -36,7 +36,7 @@ class Module {
 	    static unsigned long framesPerBlock;
 	    static float	sampleRate;
 
-	    Module(string name_);
+	    Module( string name_ );
 	    virtual ~Module();
 	    int		AddInput(Input& input);
 	    int		AddOutput(Output& output);

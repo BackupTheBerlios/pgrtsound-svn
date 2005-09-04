@@ -1,11 +1,11 @@
-#include <string>
-#include <map>
-#include <list>
+#include "algorithmview.h"
+#include "./../xmlconfigfile.h"
 
 #include <tinyxml.h>
 
-#include "algorithmview.h"
-#include "xmlconfigfile.h"
+#include <string>
+#include <map>
+#include <list>
 
 void AlgorithmView::LoadFromFile(string fileName) {
 	XMLConfigFile xmlFile;
