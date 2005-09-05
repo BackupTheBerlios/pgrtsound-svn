@@ -1,7 +1,7 @@
 #include "audiodriver.h"
 
 AudioDriver::AudioDriver() {
-    TRACE("AudioDriver::AudioDriver()", "Inicjalizacja...");
+    TRACE( "AudioDriver::AudioDriver - Inicjalizacja...\n" );
 
     stream = NULL;
     sampleRate = 44100.0;
@@ -23,12 +23,12 @@ AudioDriver::AudioDriver() {
 
     error = Pa_Initialize();
     if(error != paNoError)
-        throw AudioDriverError( "AudioDriver::AudioDriver(): " + string(Pa_GetErrorText(error)) );
+        throw AudioDriverError( "AudioDriver::AudioDriver - " + string(Pa_GetErrorText(error)) );
 
     PaDeviceIndex devCount = Pa_GetDeviceCount();
 
     if(devCount <= 0) {
-        TRACE("AudioDriver::AudioDriver()",  "Nie wykryto urzadzenia audio");
+        TRACE( "AudioDriver::AudioDriver - Nie wykryto urzadzenia audio\n" );
     } else {
         // domyslny host i urzadzenia
         hostId = Pa_GetDefaultHostApi();
@@ -104,7 +104,7 @@ AudioDriver::AudioDriver() {
         }
 
 
-        TRACE("AudioDriver::AudioDriver()", "Zainicjowany");
+        TRACE( "AudioDriver::AudioDriver - Zainicjowany\n" );
     }
 
     //	PR(hostId);
@@ -118,7 +118,7 @@ AudioDriver::AudioDriver() {
 }
 
 AudioDriver::~AudioDriver() {
-    TRACE("AudioDriver::~AudioDriver()", "Koncze...");
+    TRACE("AudioDriver::~AudioDriver - Koncze...\n");
 
     Stop();
     Close();
@@ -126,9 +126,9 @@ AudioDriver::~AudioDriver() {
     error = Pa_Terminate();
     if(error != paNoError)
         // desktruktor nie powinien rzucac wyjatkow!
-        TRACE( "AudioDriver::~AudioDriver()", Pa_GetErrorText(error) );
+        TRACE( "AudioDriver::~AudioDriver - %s\n", Pa_GetErrorText(error) );
     else
-        TRACE("AudioDriver::~AudioDriver()", "Zakonczony");
+        TRACE( "AudioDriver::~AudioDriver - Zakonczony\n" );
 }
 
 void  AudioDriver::SetCallback(PortAudioCallback* cbFunc, void* cbData) {
@@ -142,9 +142,9 @@ void AudioDriver::Start() {
             error = Pa_StartStream(stream);
 
             if(error != paNoError)
-                throw AudioDriverError( "AudioDriver::Start(): " + string(Pa_GetErrorText(error)) );
+                throw AudioDriverError( "AudioDriver::Start - " + string(Pa_GetErrorText(error)) );
             else
-                TRACE("AudioDriver::Start()", "Strumien odtwarzany");
+                TRACE("AudioDriver::Start - Strumien odtwarzany\n");
         }
     }
 }
@@ -154,9 +154,9 @@ void AudioDriver::Stop() {
         if(Pa_IsStreamActive(stream)) {
             error = Pa_StopStream(stream);
             if(error != paNoError)
-                throw AudioDriverError( "AudioDriver::Stop(): " + string(Pa_GetErrorText(error)) );
+                throw AudioDriverError( "AudioDriver::Stop - " + string(Pa_GetErrorText(error)) );
             else
-                TRACE("AudioDriver::Stop()", "Strumien zatrzymany");
+                TRACE("AudioDriver::Stop - Strumien zatrzymany\n");
         }
     }
 }
@@ -166,38 +166,36 @@ void AudioDriver::Close() {
         error = Pa_CloseStream(stream);
         if(error != paNoError)
             //TRACE("AudioDriver::Close()",  Pa_GetErrorText(error));
-            throw AudioDriverError( "AudioDriver::Close(): " + string(Pa_GetErrorText(error)) );
+            throw AudioDriverError( "AudioDriver::Close - " + string(Pa_GetErrorText(error)) );
         else {
             stream = NULL;
-            TRACE("AudioDriver::Close()", "Strumien zakmniety");
+            TRACE("AudioDriver::Close - Strumien zakmniety\n");
         }
     }
 }
 
 void AudioDriver::PrintDevices() {
-    TRACE("AudioDriver::PrintDevices()", "Lista wykrytych urzadzen dzwieku...");
+    TRACE("AudioDriver::PrintDevices - Lista wykrytych urzadzen dzwieku...\n");
 
     for(unsigned int h = 0; h < hosts.size(); h++) {
-        cout << "Sterownik: " << hosts[h].name << endl;
+        TRACE( "Sterownik: %s\n", hosts[h].name );
 
-        cout << "    Urzadzenia wejsciowe:" << endl;
+        TRACE( "    Urzadzenia wejsciowe:\n" );
         for(unsigned int d = 0; d < perHostInDevs[h].size(); d++) {
-            cout << "        " << "[" << perHostInDevs[h][d].deviceId << "] "
-            << perHostInDevs[h][d].name << " ("
-            << hosts[h].name << ")" << endl;
+            TRACE( "        [%i] %s (%s)\n", perHostInDevs[h][d].deviceId,
+				perHostInDevs[h][d].name.c_str(), hosts[h].name );
         }
 
-        cout << "    Urzadzenia wyjsciowe:" << endl;
+       TRACE("    Urzadzenia wyjsciowe:\n" );
         for(unsigned int d = 0; d < perHostOutDevs[h].size(); d++) {
-            cout << "        " << "[" << perHostOutDevs[h][d].deviceId << "] "
-            << perHostOutDevs[h][d].name << " ("
-            << hosts[h].name << ")" << endl;
+            TRACE( "        [%i] %s (%s)\n", perHostOutDevs[h][d].deviceId,
+				perHostOutDevs[h][d].name.c_str(), hosts[h].name );
         }
     }
 }
 
 void  AudioDriver::PrintConfiguration() {
-    TRACE("AudioDriver::PrintConfiguration()", "Biezaca konfiguracja sterownikia...");
+    cout << "AudioDriver::PrintConfiguration - Biezaca konfiguracja sterownikia...\n" << endl;
     cout << "    Urzadzenie wejsciowe: " << inputParameters.device << endl;
     cout << "                 kanalow: " << inputParameters.channelCount << endl;
     cout << "              opoznienie: " << inputParameters.suggestedLatency << endl;
@@ -209,7 +207,7 @@ void  AudioDriver::PrintConfiguration() {
 }
 
 void AudioDriver::Open() {
-    TRACE("AudioDriver::Open()",  "Otwieram strumien...");
+    TRACE("AudioDriver::Open - Otwieram strumien...\n");
     Stop();
     Close();
 
@@ -227,9 +225,10 @@ void AudioDriver::Open() {
                 callbackData);
 
     if(error != paNoError)
-        throw AudioDriverError( "AudioDriver::Open(): " + string(Pa_GetErrorText(error)) );
+        throw AudioDriverError( "AudioDriver::Open - " + string(Pa_GetErrorText(error)) );
     else
-        TRACE5("AudioDriver::Open()", "Otwarty strumien ", sampleRate, " Hz, ", framesPerBuffer, " ramek/bufor");
+        TRACE( "AudioDriver::Open - Otwarty strumien %.2f Hz, %d ramek/bufor\n",
+			sampleRate, framesPerBuffer );
 }
 
 float AudioDriver::GetCPUUsage() const {

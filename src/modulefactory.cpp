@@ -36,7 +36,7 @@ Module* ModuleFactory::CreateModule(string type) {
 		return (*funcPtr)();
 	}
 
-    throw RTSError("ModuleFactory::CreateModule(): Nie ma modulu '" + type + "'");
+    throw RTSError( "ModuleFactory::CreateModule - Nie ma modulu '" + type + "'" );
 }
 
 std::vector<string>& ModuleFactory::ListModuleTypes() {
@@ -57,19 +57,19 @@ std::vector<string>& ModuleFactory::ListModuleTypes() {
 */
 void ModuleFactory::RegisterModuleType(string type, CreateFuncPtr funcPtr) {
 	type2CreateFuncMap.insert( make_pair(type, funcPtr) );
-	TRACE3("ModuleFactory::RegisterModuleType()", "Zarejestrowany typ '", type, "'");
+	TRACE( "ModuleFactory::RegisterModuleType - Zarejestrowany typ '%s'\n", type.c_str() );
 }
 
 void ModuleFactory::RegisterAllPlugins() {
-    TRACE("ModuleFactory::RegisterAllPlugins()", "start");
+    TRACE("ModuleFactory::RegisterAllPlugins - Start\n");
     DIR* dir;
     struct dirent* entry;
     dir = opendir("./plugins/");
     while ((entry = readdir(dir)) != NULL) {  
-        TRACE3("ModuleFactory::RegisterAllPlugins()", "wczytuje: ", entry->d_name ,"");
+        TRACE( "ModuleFactory::RegisterAllPlugins - Wczytuje: %s\n", entry->d_name );
         RegisterPlugin (entry->d_name);
     }
-    TRACE("ModuleFactory::RegisterAllPlugins()", "end");
+    TRACE("ModuleFactory::RegisterAllPlugins - Koniec\n" );
 }
 
 void ModuleFactory::RegisterPlugin(string filename) {
@@ -87,14 +87,14 @@ void ModuleFactory::RegisterPlugin(string filename) {
             if (g_module_symbol (gm, "Create", (gpointer *)&Create)==TRUE){
                 RegisterModuleType(GetType(), Create);
             } else {
-                TRACE3("ModuleFactory::RegisterPlugin(string filename)","g_module_error ()"," w plku ", filename);
+                TRACE( "ModuleFactory::RegisterPlugin - g_module_error () w pliku %s\n",
+					filename.c_str() );
             }
         } else {
-            TRACE3("ModuleFactory::RegisterPlugin(string filename)","g_module_error ()"," w plku ", filename);
+            TRACE( "ModuleFactory::RegisterPlugin - g_module_error() w pliku %s\n",
+				filename.c_str() );
         }                        
     }
-
-    
 }
 
 

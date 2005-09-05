@@ -60,15 +60,11 @@ struct cycle_detector : public boost::dfs_visitor<>
 		bool& _has_cycle;
 };
 
-//
-//class RTSCyclicGraphError : public RTSError {
-//};
-
 /**
- * Klasa bedaca najwyzsza struktura w systemie.
- * Przechowuje zastosowane moduly oraz zna sposob ich polaczenia.
- * Tym samym dopowiada skonstruowanemu algorytmowi.
- */
+ Klasa bedaca najwyzsza struktura w systemie.
+ Przechowuje zastosowane moduly oraz zna sposob ich polaczenia.
+ Tym samym dopowiada skonstruowanemu algorytmowi.
+*/
 class Algorithm {
 	public:
   		Algorithm(unsigned long framesPerBlock);
@@ -123,10 +119,10 @@ class Algorithm {
 };
 
 /**
- * Funckja przetwarzania algorytmu.
- * Funkcja powoduje wywolanie funkcji przetwarzania wszystkich
- * wykorzystanych w algorytmie modulow.
- */
+ Funckja przetwarzania algorytmu.
+ Funkcja powoduje wywolanie funkcji przetwarzania wszystkich
+ wykorzystanych w algorytmie modulow.
+*/
 inline void Algorithm::Process() {
 	for(unsigned int i = 0; i < modulesQueue.size(); i++) {
 		modulesQueue[i]->Process();

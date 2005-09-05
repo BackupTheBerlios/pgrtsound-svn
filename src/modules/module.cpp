@@ -8,37 +8,34 @@ float Module::sampleRate = 44100;
 NullModuleSingleton NullModuleSingleton::NullModule;
 NullModuleSingleton& nullModule = NullModuleSingleton::Instance();
 
-//------------------------------------------------------------------------------
-/**
- * Konstruktor.
- * Poprawne utworzenie obiektu modulu wymaga podania jego typu oraz nazwy.
- * @param type_ Rozpoznawany przez system typ modulu
- * @param name_ Oczekiwana nazwa modulu
- */
-Module::Module( string name_ ) {
-	//type = type_;
-	name = name_;
+/*
+ Konstruktor.
+ Poprawne utworzenie obiektu modulu wymaga podania jego nazwy.
+ @param moduleName Unikalna nazwa modulu
+*/
+Module::Module( string moduleName ) {
+	name = moduleName;
 }
 
 Module::~Module() {
 }
 
-/**
- * Dodanie parametru do modulu.
- * Po dodaniu parametru, zwraca numer identyfikujacy je w module.
- * @param param Wskaznik do obiektu parametru, ktory chcemy dodac
- */
+/*
+ Dodanie parametru do modulu.
+ Po dodaniu parametru, zwraca numer identyfikujacy je w module.
+ @param param Wskaznik do obiektu parametru, ktory chcemy dodac
+*/
 int Module::AddParameter(Parameter& param) {
 	param.SetID( parameters.size() );
 	parameters.push_back(&param);
 	return param.GetID();
 }
 
-/**
- * Dodanie wejscia do modulu.
- * Funkcja po dodaniu wejscia, zwraca numer idnetyfikujacy to wejscie w module.
- * @param input Wskaznik do obiektu wejscia, ktory chcemy dodac
- */
+/*
+ Dodanie wejscia do modulu.
+ Funkcja po dodaniu wejscia, zwraca numer idnetyfikujacy to wejscie w module.
+ @param input Wskaznik do obiektu wejscia, ktory chcemy dodac
+*/
 int Module::AddInput(Input& input) {
 	input.SetID( inputs.size() );
 	inputs.push_back(&input);
@@ -46,10 +43,10 @@ int Module::AddInput(Input& input) {
 }
 
 /**
- * Dodanie wyjscia do modulu.
- * Po dodania wyjscia zwraca numer identyfikujacy je w module.
- * @param output Wskaznik do obiektu wyjscia, ktory chcemy dodac
- */
+ Dodanie wyjscia do modulu.
+ Po dodania wyjscia zwraca numer identyfikujacy je w module.
+ @param output Wskaznik do obiektu wyjscia, ktory chcemy dodac
+*/
 int Module::AddOutput(Output& output) {
 	output.SetID( outputs.size() );
 	outputs.push_back(&output);
@@ -149,8 +146,8 @@ void Module::BlockSizeChanged() {
 void Module::UpdateBlockSize() {
 	//zmiana rozmiaru buforow wyjsc
 	for(unsigned long i = 0; i < outputs.size(); i++) {
-        TRACE6("Output::SetBufferSize()", "Wyjscie [", name, "].[", outputs[i]->GetName(),
-			"] zmienia rozmiar bufora na ", Module::framesPerBlock);
+        TRACE( "Output::SetBufferSize - Wyjscie [%s][%i] zmienia rozmiar bufora na",
+			name.c_str(), outputs[i]->GetName().c_str(), Module::framesPerBlock );
 		outputs[i]->SetBufferSize(Module::framesPerBlock);
 	}
 	
@@ -160,8 +157,6 @@ void Module::UpdateBlockSize() {
 
 
 void NullModuleSingleton::BlockSizeChanged() {
-    // TRACE2("NullModule::NullModule()", "Alokuje bufor zerowy rozmiaru ",
-	// Module::framesPerBlock);
     float* buff;
     buff = oNull.GetSignal();
 
@@ -169,6 +164,5 @@ void NullModuleSingleton::BlockSizeChanged() {
     for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
         *buff++ = 0.0f;
     }
-    //TRACE2("module.cpp", "Bufor zerowy zaalokowany ", buff);
 }
 

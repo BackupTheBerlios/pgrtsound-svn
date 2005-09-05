@@ -15,14 +15,14 @@ Algorithm::Algorithm(unsigned long fpb) {
 }
 
 Algorithm::~Algorithm() {
-	TRACE3("Algorithm", "Sprzatanie algorytmu (", GetModuleCount(), " modulow)...");
+	TRACE( "Algorithm::~Algorithm - Sprzatam %i modulow\n", GetModuleCount() );
 
 	ModuleIdIterator mit;
 	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
 		delete GetModule(*mit);
 	}
 
-	TRACE("Algorithm", "Bye!");
+	TRACE( "Algorithm::~Algorithm - Bye!\n" );
 }
 
 void Algorithm::InitAudioPorts() {
@@ -43,7 +43,7 @@ void Algorithm::InitAudioPorts() {
 	moduleName2IdMap.insert( make_pair("AudioPortOut", moduleId) );
 	outputPort = module;
 
-	TRACE("Algorithm::InitAudioPorts()", "Dodano moduly AudioPortIn i AudioPortOut");
+	TRACE( "Algorithm::InitAudioPorts - Dodano moduly AudioPortIn i AudioPortOut\n" );
 }
 
 /** Dodanie modulu.
@@ -60,7 +60,8 @@ ModuleId Algorithm::AddModule(string type, string name) {
 	//put(boost::vertex_name, graph, moduleId, mod);
 
 	moduleName2IdMap.insert( make_pair(name, moduleId) );
-	TRACE4("Algorithm", "Dodano modul '", mod->GetName(), "' typu ", mod->GetType());
+	TRACE( "Algorithm::AddModule - Dodano modul '%s' typu '%s'\n",
+		mod->GetName().c_str(), mod->GetType().c_str() );
 	return moduleId;
 }
 
@@ -75,24 +76,23 @@ void Algorithm::PrintInfo(void) {
 }
 
 /**
- * Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
- * wyjsciem i wejsciem dwoch roznych modulow.
- * @param moduleId1 Identyfikator modulu zrodlowego
- * @param outputId Identyfiaktor wyjscia modulu zrodlowego
- * @param moduleId2 Identyfikator modulu docelowego
- * @param inputId Identyfiaktor wejscia modulu docelowego
- */
- 
-
+ Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
+ wyjsciem i wejsciem dwoch roznych modulow.
+ @param moduleId1 Identyfikator modulu zrodlowego
+ @param outputId Identyfiaktor wyjscia modulu zrodlowego
+ @param moduleId2 Identyfikator modulu docelowego
+ @param inputId Identyfiaktor wejscia modulu docelowego
+*/
 bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
 			ModuleId moduleId2, int inputId, ConnectionId& cId )
 {
-	cout << "    Lacze '" <<
-		GetModule(moduleId1)->GetName() << "'." << GetModule(moduleId1)->GetOutput(outputId)->GetName() << " -> '" <<
-		GetModule(moduleId2)->GetName() << "'." << GetModule(moduleId2)->GetInput(inputId)->GetName() << endl;
+	TRACE( "Algorithm::ConnectModules - Lacze [%s].[%s] -> [%s].[%s]\n",
+		GetModule(moduleId1)->GetName().c_str(),
+		GetModule(moduleId1)->GetOutput(outputId)->GetName().c_str(),
+		GetModule(moduleId2)->GetName().c_str(),
+		GetModule(moduleId2)->GetInput(inputId)->GetName().c_str() );
 
 	ConnectionDescription c;
-	//ConnectionId cId;
 	// utworzenie polaczenia w grafie
 	c = add_edge(moduleId1, moduleId2, graph);
 	// identyfikator polaczenia w grafie
@@ -110,27 +110,19 @@ bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
 		return true;
 	}
 	else {
-        //cout << "JEST CYKLICZNY :(((((" << endl;
 		remove_edge( cId, graph );
-
-		//throw RTSCyclicGraphError( );
 	}
-
-//	graph[cId].sourceId = outputId;
-//	graph[cId].destinationId = inputId;
-//	graph[cId].source = GetModule(moduleId1)->GetOutput(outputId);
-//	graph[cId].destination = GetModule(moduleId2)->GetInput(inputId);
 
 	return false;
 }
 
 /**
- * Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
- * wyjsciem i wejsciem dwoch roznych modulow o podanych nazwach.
- * @param moduleName1 Nazwa modulu zrodlowego
- * @param outputId Identyfiaktor wyjscia modulu zrodlowego
- * @param moduleName2 Nazwa modulu docelowego
- * @param inputId Identyfiaktor wejscia modulu docelowego
+ Utworzenie polaczenia miedzy modulami. Tworzy polaczenie miedzy wybranym
+ wyjsciem i wejsciem dwoch roznych modulow o podanych nazwach.
+ @param moduleName1 Nazwa modulu zrodlowego
+ @param outputId Identyfiaktor wyjscia modulu zrodlowego
+ @param moduleName2 Nazwa modulu docelowego
+ @param inputId Identyfiaktor wejscia modulu docelowego
 */
 bool Algorithm::ConnectModules( string moduleName1, int outputId,
 	string moduleName2, int inputId, ConnectionId& connId)
@@ -148,7 +140,7 @@ void Algorithm::SetSampleRate(float sRate) {
 	sampleRate = sRate;
 	Module::sampleRate = sRate; // wartos widoczna we wszystkich modulach
 
-	TRACE2("Algorithm", "Module::sampleRate = ", Module::sampleRate);
+	TRACE( "Algorithm::SetSampleRate - Module::sampleRate = %i\n", Module::sampleRate );
 }
 
 /**
@@ -158,14 +150,13 @@ void Algorithm::SetSampleRate(float sRate) {
  * wejscie/wyjscie medzy modulami w grafie.
  */
 void Algorithm::CreateQueue() {
-	TRACE("Algorithm", "Tworzenie kolejki modulow...");
+	TRACE( "Algorithm::CreateQueue - Tworzenie kolejki modulow...\n" );
 
 	using namespace boost;
 
 	typedef vector< ModuleId > container;
 	container c;
 	property_map<Graph, vertex_index_t>::type index = get(vertex_index, graph);
-//	property_map<Graph, vertex_name_t>::type name = get(vertex_name, graph);
 	property_map<Graph, Module* GraphModule::*>::type mods = get(&GraphModule::module, graph);
 
 	// initialize the vertex_index property values
@@ -177,18 +168,15 @@ void Algorithm::CreateQueue() {
 	modulesQueue.clear();
 	topological_sort(graph, std::back_inserter(c));
 
-	std::cout << "A topological ordering: ";
 	for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii) {
-//        cout << "'" << name[*ii]->GetName() << "' ";
-        cout << "'" << mods[*ii]->GetName() << "' ";
+        TRACE( "    %s\n", mods[*ii]->GetName().c_str() );
         modulesQueue.push_back(mods[*ii]);
 	}
-    cout << endl;
 }
 
 /**
- * Zwraca ilosc modulow w grafie algorytmu.
- */
+ Zwraca ilosc modulow w grafie algorytmu.
+*/
 int Algorithm::GetModuleCount() const {
 	return num_vertices(graph);
 }
@@ -198,12 +186,12 @@ int Algorithm::GetConnectionCount() {
 }
 
 /**
- * Czysczenie algorytmu. Powoduje wyczyszczenie wszystkich elementow
- * przechowujacych strukture algorytmu. Po wycyzsczeniu algorytm nie spelnia
- * zadnej funckji przetwarznia, ale gotowy jest do konfiguracji.
- */
+ Czysczenie algorytmu. Powoduje wyczyszczenie wszystkich elementow
+ przechowujacych strukture algorytmu. Po wycyzsczeniu algorytm nie spelnia
+ zadnej funckji przetwarznia, ale gotowy jest do konfiguracji.
+*/
 void  Algorithm::Clear() {
-	TRACE("Algorithm::Clear()", "Czyszcze algorytm...");
+	TRACE( "Algorithm::Clear - Czyszczenie algorytm...\n" );
 
 	// usuniecie modulow
 	ModuleIdIterator mit;
@@ -217,7 +205,7 @@ void  Algorithm::Clear() {
 	
 	InitAudioPorts();
 	
-	TRACE("Algorithm::Clear()", "Algorytm wyczyszczony");
+	TRACE( "Algorithm::Clear - Algorytm wyczyszczony\n" );
 }
 
 /**
@@ -225,53 +213,47 @@ void  Algorithm::Clear() {
  * w grafie.
  */
 void Algorithm::Init() {
-    TRACE("Algorithm::Init()", "Inicjalizacja modulow...");
+    TRACE( "Algorithm::Init - Inicjalizacja modulow...\n" );
     
 	ModuleIdIterator mit;
 	for(mit = ModuleIdIteratorBegin(); mit != ModuleIdIteratorEnd(); mit++) {
 		GetModule(*mit)->Init();
 	}
 
-    TRACE("Algorithm::Init()", "Inicjalizacja modulow zakonczona");
+    TRACE( "Algorithm::Init - Inicjalizacja modulow zakonczona\n" );
 }
 
 /**
- * Dostep do modulu. Zwraca wskaznik do modulu o podanej nazwie.
- * @param moduleName Nazwa dociekanego modulu
- */
+ Dostep do modulu. Zwraca wskaznik do modulu o podanej nazwie.
+ @param moduleName Nazwa dociekanego modulu
+*/
 Module* Algorithm::GetModule(string moduleName) const {
     if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
-        //TRACE("Algorithm::GetModule(string moduleName)", "Znaleziono");
-    	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
+        ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
 		return GetModule(moduleId);
     } else {
-        //TRACE("Algorithm::GetModule(string moduleName)", "Nie znaleziono");
-        return NULL;   
+		return NULL;
     }
 }
 
 /**
- * Zwraca identyfikator modulu o podanej nazwie.
- * @param moduleName Nazwa dociekanego modulu
- */
-ModuleId Algorithm::GetModuleId(string moduleName) const {
-    //poprawiono b³¹d gdy modu³u nie by³o :)
+ Zwraca identyfikator modulu o podanej nazwie.
+ @param moduleName Nazwa dociekanego modulu
+*/
+ModuleId Algorithm::GetModuleId( string moduleName ) const {
     if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
-        //TRACE("Algorithm::GetModuleId(string moduleName)", "Znaleziono");
     	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
 		return moduleId;
     } else {
-        //TRACE("Algorithm::GetModuleId(string moduleName)", "Nie znaleziono");
-        return NULL;   
+        return NULL;
     }    
 }
 
 /**
- * Dostep do modulu. Zwraca wskaznik do modulu o zadanym identyfikatorze.
- * @param moduleId Identyfikator modulu
- */
+ Dostep do modulu. Zwraca wskaznik do modulu o zadanym identyfikatorze.
+ @param moduleId Identyfikator modulu
+*/
 Module* Algorithm::GetModule(ModuleId moduleId) const {
-//	return boost::get(boost::vertex_name, graph, moduleId);
     return graph[moduleId].module;
 }
 
@@ -283,26 +265,13 @@ Module* Algorithm::GetOutputPort() const {
 	return outputPort;
 }
 
-//ConnectionId  Algorithm::GetFirstConnectionId() {
-//	boost::tie(connectionIterator, connectionIteratorLat) = boost::edges(graph);
-//    return *connectionIterator;
-//}
-//
-//ConnectionId  Algorithm::GetNextConnectionId() {
-//	if(++moduleIterator != moduleIteratorLast)
-//		//return boost::get(boost::vertex_name, graph, *moduleIterator);
-//	    return graph[*moduleIterator].module;
-//	else
-//		return --moduleIterator;
-//}
-
 /**
- * Usuwanie modulu z grafu.
- * @param moduleId Identyfikator modulu
+ Usuwanie modulu z grafu.
+ @param moduleId Identyfikator modulu
 */
 void Algorithm::DeleteModule( ModuleId moduleId ) {
-	cout << "Algorithm::DeleteModule" << endl;
-	cout << "    Usuwam modul '" << GetModule( moduleId )->GetName() << "'" << endl;
+	TRACE( "Algorithm::DeleteModule - Usuwam modul '%s'\n",
+		GetModule( moduleId )->GetName().c_str() );
 	
 	using namespace boost;
 	
@@ -314,13 +283,14 @@ void Algorithm::DeleteModule( ModuleId moduleId ) {
 	    put(index, *vi, cnt++);
 
 	// odlaczenie wszytkich wejsci do ktorych jest usuwnay modul podlaczony
-	cout << "    Odlaczam wejscia:" << endl;
+	TRACE( "    Rozlaczam wejscia:\n" );
 
 	boost::graph_traits<Graph>::out_edge_iterator ei, eend;
 	for( tie(ei, eend) = out_edges( moduleId, graph ); ei != eend; ++ei ) {
-		cout << "        '" << graph[*ei].destinationModule->GetName() << "'";
-		cout << ".'" << graph[*ei].destinationModule->GetInput(
-			graph[*ei].destinationInputId )->GetName()  << "'" << endl;
+		TRACE( "        [%s].[%s]\n",
+			graph[*ei].destinationModule->GetName().c_str(),
+			graph[*ei].destinationModule->GetInput( graph[*ei].destinationInputId )
+				->GetName().c_str() );
 
 		graph[*ei].destinationModule->GetInput( graph[*ei].destinationInputId )
 			->Disconnect();
@@ -339,7 +309,8 @@ void Algorithm::DeleteModule( ModuleId moduleId ) {
 	
 	PrintInfo(); // debug
 	PrintEdges();
-	cout << "Algorithm::DeleteModule done" << endl;
+	
+	TRACE( "Algorithm::DeleteModule - Modul usuniety\n" );
 }
 
 /**
@@ -347,7 +318,7 @@ void Algorithm::DeleteModule( ModuleId moduleId ) {
  @param connectionId identyfikator polaczenia do usuniecia
 */
 void Algorithm::DeleteConnection(ConnectionId connectionId) {
-	cout << "Algorithm::DeleteConnection" << endl;
+	TRACE( "Algorithm::DeleteConnection\n" );
 	//graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
 	//graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
 	//	->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
@@ -356,7 +327,7 @@ void Algorithm::DeleteConnection(ConnectionId connectionId) {
 	//cout << "Is connected: " << graph[connectionId].destinationModule
 	//	->GetInput( graph[connectionId].destinationInputId )->IsConnected() << endl;
 	boost::remove_edge(connectionId, graph);
-	cout << "Algorithm::DeleteConnection done" << endl;
+	TRACE( "Algorithm::DeleteConnection - Polaczenie usuniete\n" );
 	PrintEdges();
 }
 
@@ -381,7 +352,7 @@ string Algorithm::GetName() {
  @param newBlockSize Nowy rozmiar bloku wyrazony w ilosci probek.
 */
 void Algorithm::SetBlockSize(unsigned long newBlockSize) {
-	TRACE("Algorithm::SetBlockSize()", "Zmieniam rozmiar bloku...");
+	TRACE( "Algorithm::SetBlockSize - Zmieniam rozmiar bloku...\n" );
 	Module::framesPerBlock = newBlockSize;
 	nullModule.UpdateBlockSize();
 	ModuleIdIterator mit;
@@ -389,7 +360,7 @@ void Algorithm::SetBlockSize(unsigned long newBlockSize) {
 		GetModule(*mit)->UpdateBlockSize();
 	}
 	
-	TRACE("Algorithm::SetBlockSize()", "Rozmiar bloku zmieniony");
+	TRACE( "Algorithm::SetBlockSize - Rozmiar bloku zmieniony\n" );
 }
 
 void Algorithm::PrintEdges() {
@@ -430,6 +401,11 @@ std::vector<string>& Algorithm::ListModuleTypes() {
 	return moduleFactory.ListModuleTypes();
 }
 
+/*
+ Detekcja polaczen cyklicznych w grafie. Wartosc zwrtona funckji mowi o tym czy
+ w obecnej strukturze grafu algorytmu wyktyro polaczenia cykliczne (petle
+ zwrotne).
+*/
 bool Algorithm::IsGraphAcyclic() {
 	// inicjalizacja indeksow wierzcholkow grafu
 	boost::property_map<Graph, boost::vertex_index_t>::type index =
@@ -443,23 +419,17 @@ bool Algorithm::IsGraphAcyclic() {
 	bool has_cycle = false;
 	cycle_detector vis( has_cycle );
 	boost::depth_first_search( graph, visitor(vis) );
-	//std::cout << "The graph has a cycle? " << has_cycle << std::endl;
 	
 	return !has_cycle;
 }
 
-//void Algorithm::DeleteConnection( ModuleId moduleId, int inputNum ) {
-//	cout << "Algorithm::DeleteConnection: Modul" << GetModule(moduleId) <<
-//		endl;
-//	boost::graph_traits<Graph>::in_edge_iterator ei, eend;
-//	for( tie(ei, eend) = in_edges( moduleId, graph ); ei != eend; ++ei ) {
-//		if( graph[*ei].destinationInputId == inputNum ) {
-//			cout << "Algorithm::DeleteConnection: Usunalbym polaczenia do wejscia "
-//				<< inputNum <<	" modulu " << GetModule( moduleId )->GetName() << endl;
-//		}
-//	}
-//}
-
+/*
+ Zmiana nazwy modulu. Nastapi zmiana nazwy modulu o podanym identyfikatorze o
+ ile podana nazwa nie je juz uzywana przez inny modul. Wartosc zwracana prze
+ funckje informuje o powodzeniu operacji.
+ @param moduleId Identyfikator modulu, ktorgo nazwe zmieniamy
+ @param newName Nowa nazwa modulu
+*/
 bool Algorithm::ChangeModuleName( ModuleId moduleId, string newName ) {
 	/* TODO (#1#): Implement Algorithm::ChangeModuleName() */
 	if( moduleName2IdMap.count( newName ) > 0 ) {

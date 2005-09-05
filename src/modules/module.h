@@ -20,17 +20,21 @@
 
 using namespace std;
 
-#define REGISTER_MODULE( x, class_name ) \
-	string GetType() { return x; } \
-	static string GetTypeStatic() { return x; } \
+/*
+ Ponizsze makro wykorzystane w publicznej czesci definicji klasy modulu, zalatwi
+ koniecznosc definiowania kilku niezbedych funckji potrzbenych wewnatrz systemu.
+*/
+#define REGISTER_MODULE( mod_type, class_name ) \
+	string GetType() { return mod_type; } \
+	static string GetTypeStatic() { return mod_type; } \
 	static Module* Create() { return new class_name; }
 
 /**
- * Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
- * Takze autorzy zewnetrznych modulow musza dostosowac sie do tego interfejsu.
- * W klasie tej zaimplementowana jest podstawowa funckjoncalnosc dotyczaca dodawania
- * wejsc, wyjsc oraz parmaetrow modulu.
- */
+ Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
+ Takze autorzy zewnetrznych modulow musza dostosowac sie do tego interfejsu.
+ W klasie tej zaimplementowana jest podstawowa funckjoncalnosc dotyczaca dodawania
+ wejsc, wyjsc oraz parmaetrow modulu.
+*/
 class Module {
 	public:
 	    static unsigned long framesPerBlock;
@@ -38,32 +42,31 @@ class Module {
 
 	    Module( string name_ );
 	    virtual ~Module();
-	    int		AddInput(Input& input);
-	    int		AddOutput(Output& output);
-	    int		AddParameter(Parameter& param);
-	    virtual void	Process();
-	    virtual void	Init();
+	    int AddInput(Input& input);
+	    int AddOutput(Output& output);
+	    int AddParameter(Parameter& param);
+	    virtual void Process();
+	    virtual void Init();
 	    virtual string GetType();
    	    static string GetTypeStatic();
 	    static Module* Create();
-	    void	SetName(string newName);
-	    string	GetName() const;
-	    int		GetOutputCount();
-	    int		GetInputCount();
-	    int		GetParameterCount() const;
-	    Input*		GetInput(int inputID);
-	    Output*		GetOutput(int outputID);
-	    Parameter*	GetParameter(int pID);
-	    void		UpdateBlockSize();
+	    void SetName(string newName);
+	    string GetName() const;
+	    int GetOutputCount();
+	    int GetInputCount();
+	    int GetParameterCount() const;
+	    Input* GetInput(int inputID);
+	    Output* GetOutput(int outputID);
+	    Parameter* GetParameter(int pID);
+	    void UpdateBlockSize();
 	    virtual void SampleRateChanged();
 	    virtual void BlockSizeChanged();
 
 	protected:
-	    vector<Input*>		inputs;			/**< Wektor wejsc. */
-	    vector<Output*>		outputs;	    /**< Wektor wyjsc. */
-	    vector<Parameter*>	parameters;		/**< Wektor parametrow. */
-	    string		name;	/**< Dowolna nazwa modulu, mozliwa zmianaprzez uzytkownika */
-	    //string		type;	/**< Typ modulu. Musi byc wyjatkowy w systemie, ustalany przez programiste. */
+	    vector<Input*> inputs; // wektor wejsc
+	    vector<Output*> outputs; // wektor wyjsc
+	    vector<Parameter*> parameters; // wektor parametrow
+	    string name; // nazwa modulu
 };
 
 inline Input* Module::GetInput(int inputID) {
@@ -87,15 +90,16 @@ class NullModuleSingleton : public Module {
 	private:
 	    Output oNull;
 	    static NullModuleSingleton NullModule;
-	// prywatny konstruktor
-	NullModuleSingleton() : Module("null"), oNull("null") {
+
+		// prywatny konstruktor - singleton
+		NullModuleSingleton() : Module("null"), oNull("null") {
 	        AddOutput(oNull);
 	        BlockSizeChanged();
 	    }
 
 	public:
-   	    //static const string& GetType() const;
 		void BlockSizeChanged();
+
 	    static NullModuleSingleton& Instance() {
 	        return NullModule;
 	    }

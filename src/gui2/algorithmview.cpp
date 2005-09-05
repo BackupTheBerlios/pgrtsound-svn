@@ -7,7 +7,7 @@
 using namespace std;
 
 AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
-	TRACE("AlgorithmView::AlgorithmView()", "Konstrukcja...");
+	TRACE("AlgorithmView::AlgorithmView - Konstrukcja...\n");
 	//algorithm = algo;
 	isDraggingModule = false;
 	isDraggingConnection = false;
@@ -30,26 +30,24 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
 	
 	
 	//Fill popup menu:
-		cout << "Tworze mneu............" << endl;
+	TRACE( "    Tworze menu...\n" );
 	{
 		Gtk::Menu::MenuList& menulist = menuPopup.items();
 		std::vector<std::string> types = algorithm.ListModuleTypes();
 		for(std::vector<std::string>::iterator it = types.begin();
 		    it != types.end(); ++it)
 		{
-			cout << "   dodaje do menu: " << *it << endl;
+			TRACE( "          %s\n", (*it).c_str() );
 			menulist.push_back( Gtk::Menu_Helpers::MenuElem(*it,
 				sigc::bind<std::string>
 					(sigc::mem_fun(*this, &AlgorithmView::onMenuAddModule), *it)
 				) );
 		}
-			
+
 	}
 //	menuPopup.accelerate(*this);
 
 	InitAudioPorts();
-	
- 	TRACE("AlgorithmView::AlgorithmView()", "Done!");
 }
 
 //void AlgorithmView::SetParentWindow( Gtk::Window *window ) {
@@ -57,12 +55,10 @@ AlgorithmView::AlgorithmView() : algorithm(FRAMES_PER_BUFFER) {
 //}
 
 AlgorithmView::~AlgorithmView() {
-    TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja...");
+    TRACE("AlgorithmView:~AlgorithmView - Destrukcja...");
     currentGuiModule = NULL;
 
 	Clear();
-
-    TRACE("AlgorithmView:~AlgorithmView()", "Destrukcja pomyslna");
 }
 
 /*
@@ -204,7 +200,6 @@ bool AlgorithmView::on_button_press_event( GdkEventButton* event ) {
 			// prawy przycisk nad wejsciem - usuwamy polaczenie
 			if( currentGuiModule->GetModule()->GetInput(
 				currentGuiModule->GetCurrentInputNumber() )->IsConnected() ) {
-					cout << "DELETE CONNECTION" << endl;
 					DeleteConnection( currentGuiModule, currentGuiModule->GetCurrentInputNumber() );
 					return true;
 			}
@@ -280,7 +275,8 @@ bool AlgorithmView::on_button_release_event(GdkEventButton* event) {
  Dodawanie do widoku modulu.
 */
 void AlgorithmView::AddModule(string type, string name, int x, int y) {
-	TRACE3("AlgorithmView::AddModule()", "Dodaje modul typu '", type, "'");
+	TRACE( "AlgorithmView::AddModule - Dodaje modul typu '%s'\n",
+		type.c_str() );
     ModuleId modId = algorithm.AddModule( type, name );
     Module* mod = algorithm.GetModule( modId );
 
@@ -297,8 +293,6 @@ void AlgorithmView::AddModule(string type, string name, int x, int y) {
 	algorithm.PrintInfo();
     
     show_all_children();
-    
-    TRACE("AlgorithmView::AddModule()", "Gotowe");
 }
 
 /*
@@ -320,7 +314,6 @@ bool AlgorithmView::IsDraggingModule() {
 void AlgorithmView::ConnectModules(GuiModule* sourceGuiModule, int sourceNumOutput,
 	GuiModule* destGuiModule, int destNumInput)
 {
-	cout << "AlgorithmView::ConnectModules" << endl;
 	ConnectionId connId;
 	
 	if( algorithm.ConnectModules(
@@ -339,7 +332,7 @@ void AlgorithmView::ConnectModules(GuiModule* sourceGuiModule, int sourceNumOutp
 		window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
 	}
 	else {
-		cout << "AlgorithmView::ConnectModules - Blad cyklicznosci grafu" << endl;
+		TRACE( "AlgorithmView::ConnectModules - Blad cyklicznosci grafu\n" );
 		//Gtk::MessageDialog dialog( *parent, "RTSound", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		//dialog.set_secondary_text( Glib::locale_to_utf8("Nie mo¿na utworzyæ po³aczenia cyklicznego!") );
 		//dialog.run();
@@ -397,7 +390,7 @@ Algorithm* AlgorithmView::GetAlgorithm() {
 }
 
 void AlgorithmView::InitAudioPorts() {
-	cout << "AlgorithmView::InitAudioPorts" << endl;
+	TRACE( "AlgorithmView::InitAudioPorts\n" );
 
   	GuiModule* guiMod;
 	//ModuleId moduleId;
@@ -422,7 +415,6 @@ void AlgorithmView::InitAudioPorts() {
 }
 
 void AlgorithmView::on_realize() {
-	cout << "realize" << endl;
 	Gtk::Layout::on_realize();
 	window = get_bin_window();
 	fgGc = Gdk::GC::create(window);
@@ -471,8 +463,6 @@ void AlgorithmView::DeleteConnection( GuiModule* module, int inputId ) {
 }
 
 void AlgorithmView::DeleteModule( GuiModule* guiModule ) {
-	cout << "AlgorithmView::DeleteModule" << endl;
-
 	if( guiModule != NULL && guiModule->GetModule()->GetName() != "AudioPortIn"
 	    && guiModule->GetModule()->GetName() != "AudioPortOut" ) {
 		//cout << "Chce usunac modul '" << guiModule->GetModule()->GetName() << endl;
@@ -488,13 +478,9 @@ void AlgorithmView::DeleteModule( GuiModule* guiModule ) {
 		RedrawConnections();
 		window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
 	}
-
-	cout << "AlgorithmView::DeleteModule done" << endl;
 }
 
 void AlgorithmView::UpdateConnections() {
-	cout << "AlgorithmView::UpdateConnections" << endl;
-
 	for( list<GuiConnection*>::iterator connIt = connections.begin();
 		connIt != connections.end(); connIt++ )
 	{
@@ -529,19 +515,10 @@ void AlgorithmView::UpdateConnections() {
   		connections.push_back( guiConn );
 	}
 	
-	cout << "AlgorithmView::UpdateConnections done" << endl;
 	algorithm.PrintEdges();
 }
 
 bool AlgorithmView::ChangeModuleName( ModuleId modId, string str ) {
-//	if( str == "AudioPortIn" || str == "AudioPortOut" ) {
-//        Gtk::MessageDialog dialog( *parent, "RTSound", false,
-//			Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
-//		dialog.set_secondary_text( "Nie mozna zmieic nazwy tego modulu!" );
-//		dialog.run();
-//		return false;
-//	}
-	
    	if( !algorithm.ChangeModuleName( modId, str.c_str() ) ) {
         Gtk::MessageDialog dialog( *( (Gtk::Window*)get_toplevel() ),
 			"RTSound", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);

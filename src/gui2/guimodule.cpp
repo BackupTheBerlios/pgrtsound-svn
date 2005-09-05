@@ -69,10 +69,7 @@ Module* GuiModule::GetModule() {
     return module;
 }
 
-
 void GuiModule::on_realize() {
-//	cout << "GuiModule::on_realize" << endl;
-
 	Gtk::EventBox::on_realize();
 	window = get_window();
 	gc = Gdk::GC::create(window);
@@ -80,67 +77,9 @@ void GuiModule::on_realize() {
 	pixmapBuffer = Gdk::Pixmap::create( window, width, height, -1);
 	
 	Repaint();
-
-//	// We need to call the base on_realize()
-//	Gtk::EventBox::on_realize();
-//	window = get_window();
-//	gc = Gdk::GC::create(window);
-//
-//	pixmapBuffer = Gdk::Pixmap::create( window, width, height, -1);
-//	gc->set_foreground(bgColor);
-//	pixmapBuffer->draw_rectangle(gc, true, 0, 0, width, height);
-//
-//	gc->set_foreground(fgColor);
-//
-//	//window->set_background(bgColor);
-//	//window->clear();
-//
-//	// glowny prostokat modulu
-//	pixmapBuffer->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
-//
-//	// gniazda wejsc
-//    for (int i = 1; i <= inputCount; i++) {
-//        pixmapBuffer->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled,
-//			socketSize, socketSize);
-//    }
-//
-//	// gniazda wyjsc
-//    for (int i = 1; i <= outputCount; i++) {
-//        pixmapBuffer->draw_rectangle(gc, true, width - socketSize,
-//			(i - 1)*socketSizeDoubled, socketSize, socketSize);
-//    }
-//
-//   	int xsize, ysize;
-//	pangolayout = create_pango_layout( module->GetName() );
-//	pangolayout->set_ellipsize(Pango::ELLIPSIZE_END);
-//	pangolayout->set_width(90000); // TODO: wtf?
-//	//cout << pangolayout->get_width() << endl;
-//	pangolayout->get_pixel_size(xsize, ysize);
-//	pixmapBuffer->draw_layout(gc, (width - xsize)/2 , (height - ysize)/2, pangolayout);
 }
 
 bool GuiModule::on_expose_event(GdkEventExpose* event) {
-//	Glib::RefPtr<Gdk::Window> window = get_window();
-//
-//	window->set_background(bgColor);
-//	window->clear();
-
-
-//	// glowny prostokat modulu
-//	window->draw_rectangle(gc, false, 0, 0, width - 1, height - 1);
-//
-//	// gniazda wejsc
-//    for (int i = 1; i <= inputCount; i++) {
-//        window->draw_rectangle(gc, true, 0, (i - 1)*socketSizeDoubled, socketSize,
-//			socketSize);
-//    }
-//
-//	// gniazda wyjsc
-//    for (int i = 1; i <= outputCount; i++) {
-//        window->draw_rectangle(gc, true, width - socketSize, (i - 1)*socketSizeDoubled,
-//			socketSize, socketSize);
-//    }
-
  	get_window()->draw_drawable(
 		gc,
 		pixmapBuffer,
@@ -289,10 +228,7 @@ void GuiModule::OpenGuiWindow() {
    		guiWindow = new ModuleGuiWindow( this );
    		
 		Gtk::Widget* gui = GetGui();
-		cout << "GUI wsk: " << gui << endl;
 		if( gui != NULL ) {
-
-			cout << "Tworze okno GUI\n" << endl;
             //guiWindow->add( *manage(gui) );
             guiWindow->AddGui( gui );
 		}
@@ -309,14 +245,6 @@ void GuiModule::OpenGuiWindow() {
 		guiWindow->raise();
 	}
 }
-
-//void  GuiModule::SetInputConnectionId( int inputId, ConnectionId connId ) {
-//	inputConnectionIds[ inputId ] = connId;
-//}
-//
-//ConnectionId GuiModule::GetInputConnectionId( int inputId ) {
-//	return inputConnectionIds[ inputId ];
-//}
 
 void GuiModule::SetInputGuiConnection( int inputId, GuiConnection* conn ) {
 	inputGuiConnections[ inputId ] = conn;
@@ -341,7 +269,7 @@ void GuiModule::SetGui( Gui* newGui ) {
 
 void GuiModule::ChangeName() {
 	Glib::ustring newName = guiWindow->GetName();
-	cout << "change name: " << newName << endl;
+	TRACE( "GuiModule::ChangeName - Change name: '%s'\n", newName.c_str() );
 	if( algorithmView->ChangeModuleName( moduleId, newName ) ) {
 		guiWindow->set_title( newName );
 		Repaint();

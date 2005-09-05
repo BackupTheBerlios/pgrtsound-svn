@@ -11,7 +11,7 @@ Slider::Slider() : Module("New Slider"),
 	pValue.SetValue(0.0);
 
 	// TODO: zaimplementowac 'step'
-	pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1f);
+	//pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1f);
 
 	AddParameter(pMin);
 	AddParameter(pMax);
@@ -23,7 +23,7 @@ Slider::~Slider() {
 }
 
 void Slider::Init() {
-   	pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1f);
+   	//pValue.Bound(pMin.GetValue(), pMax.GetValue(), 0.1f);
 }
 
 void Slider::Process() {

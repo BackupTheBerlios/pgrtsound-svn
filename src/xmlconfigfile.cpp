@@ -4,8 +4,7 @@ XMLConfigFile::XMLConfigFile() {
 }
 
 XMLConfigFile::~XMLConfigFile() {
-	TRACE("XMLConfigFile::~XMLConfigFile()", "Destrukcja...");
-	TRACE("XMLConfigFile::~XMLConfigFile()", "Destrukcja pomyslna");
+	TRACE( "XMLConfigFile::~XMLConfigFile - Destrukcja\n" );
 }
 
 void XMLConfigFile::OpenFile(const char * filename) {
@@ -25,7 +24,7 @@ void XMLConfigFile::OpenFile(const char * filename) {
  @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadAlgorithmSettings(Algorithm* algo) {
-    TRACE("XMLConfigFile::LoadAlgorithmSettings()", "Wczytywanie ustawien algorytmu...");
+    TRACE( "XMLConfigFile::LoadAlgorithmSettings - Wczytywanie ustawien algorytmu...\n" );
 	TiXmlElement* algoXmlElem;
 	TiXmlNode* algoXmlNode;
 	string algoName;
@@ -44,12 +43,12 @@ void XMLConfigFile::LoadAlgorithmSettings(Algorithm* algo) {
  @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadAlgorithm(Algorithm* algo) {
-	TRACE("XMLConfigFile::LoadModules()", "Wczytywanie calego algorytmu...");
+	TRACE("XMLConfigFile::LoadModules - Wczytywanie calego algorytmu...\n" );
 	LoadAlgorithmSettings(algo);
 	LoadModules(algo);
 	LoadParameters(algo);
 	LoadConnections(algo);
-	TRACE("XMLConfigFile::LoadModules()", "Algorytm wczytany");
+	TRACE( "XMLConfigFile::LoadModules - Algorytm wczytany\n" );
 }
 
 /**
@@ -57,7 +56,7 @@ void XMLConfigFile::LoadAlgorithm(Algorithm* algo) {
   * @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadModules(Algorithm* algo) {
-    TRACE("XMLConfigFile::LoadModules()", "Wczytywanie modulow...");
+    TRACE( "XMLConfigFile::LoadModules - Wczytywanie modulow...\n" );
 
 	TiXmlElement* moduleXMLElem;
 	TiXmlNode* moduleXMLNode, * parent;
@@ -77,7 +76,7 @@ void XMLConfigFile::LoadModules(Algorithm* algo) {
   		}
 	}
 
-	TRACE("XMLConfigFile::LoadModules()", "Moduly wczytane");
+	TRACE( "XMLConfigFile::LoadModules - Moduly wczytane\n" );
 }
 
 /**
@@ -85,7 +84,7 @@ void XMLConfigFile::LoadModules(Algorithm* algo) {
  * @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadParameters(Algorithm* algo) {
-	TRACE("XMLConfigFile::LoadParameters()", "Wczytywanie parametrow...");
+	TRACE("XMLConfigFile::LoadParameters - Wczytywanie parametrow...\n" );
 
 	string paramValue, paramType, moduleName;
   	int paramId;
@@ -142,7 +141,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 		}
 	}
 	
-	TRACE("XMLConfigFile::LoadParameters()", "Parametry wczytane");
+	TRACE( "XMLConfigFile::LoadParameters - Parametry wczytane\n" );
 }
 
 /**
@@ -150,7 +149,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
  * @param algo Wskaznik do konfigurowanego algorytmu
 */
 void XMLConfigFile::LoadConnections(Algorithm* algo) {
-    TRACE("XMLConfigFile::LoadConnections()", "Wczytywanie polaczen...");
+    TRACE( "XMLConfigFile::LoadConnections - Wczytywanie polaczen...\n" );
 
 	string module1Name, module2Name;
   	int inputId = -1, outputId = -1;
@@ -171,21 +170,9 @@ void XMLConfigFile::LoadConnections(Algorithm* algo) {
 
 		ConnectionId tempId;
 		algo->ConnectModules(module1Name, outputId, module2Name, inputId, tempId);
-		
-//		#ifndef NDEBUG
-//		cout << "    " <<
-//		    module1Name << "(" << "module1Id" << ")." <<
-//			algo->GetModule(module1Name)->GetOutput(outputId)->GetName() <<
-//			"(" <<	outputId << ")" <<
-//			" -> " <<
-//   		    module2Name << "(" << "module2Id" << ")." <<
-//			algo->GetModule(module2Name)->GetInput(inputId)->GetName() <<
-//   		    "(" << inputId << ")" << endl;
-//		#endif
-
 	}
 
-    TRACE("XMLConfigFile::LoadConnections()", "Moduly polaczone");
+    TRACE( "XMLConfigFile::LoadConnections - Moduly polaczone\n");
 }
 
 
