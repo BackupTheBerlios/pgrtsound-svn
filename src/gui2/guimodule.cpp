@@ -159,7 +159,8 @@ bool GuiModule::on_expose_event(GdkEventExpose* event) {
 bool GuiModule::on_enter_notify_event(GdkEventCrossing* event) {
 	(void) event;
 	//cout << "Entering " << guiModule->GetModule()->GetName() << endl;
-	algorithmView->SelectGuiModule(this);
+	//algorithmView->SelectGuiModule(this);
+
 	return true;
 }
 
@@ -175,9 +176,11 @@ bool GuiModule::on_leave_notify_event(GdkEventCrossing* event) {
 
 	// podczas szybkiego przesuwania modulu kursor moze wyjsc poza modul
 	// co by go zdeaktywowalo, stad ponizszy warunek
-	if( !algorithmView->IsDraggingModule() ) {
-		algorithmView->SelectGuiModule(NULL);
-	}
+	//if( !algorithmView->IsDraggingModule() ) {
+	//	algorithmView->SelectGuiModule(NULL);
+	//}
+
+
 
 	return true;
 }
@@ -293,10 +296,10 @@ void GuiModule::OpenGuiWindow() {
             //guiWindow->add( *manage(gui) );
             guiWindow->AddGui( gui );
 		}
-
         guiWindow->SetName( module->GetName() );
 		guiWindow->set_transient_for( *( (Gtk::Window*)get_toplevel() ) );
 		guiWindow->set_title( module->GetName() );
+		guiWindow->set_position( Gtk::WIN_POS_CENTER );
 		guiWindow->show_all_children();
         guiWindow->show();
         isGuiWindowCreated = true;
@@ -345,9 +348,7 @@ void GuiModule::ChangeName() {
 	}
 }
 
-
 void GuiModule::Repaint() {
-
 	window = get_window();
 	gc = Gdk::GC::create( window );
 

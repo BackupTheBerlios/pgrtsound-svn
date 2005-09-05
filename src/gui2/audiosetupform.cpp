@@ -11,7 +11,7 @@ AudioSetupForm::AudioSetupForm(AudioDriver* audioDrv) :
 {   
 	audioDriver = audioDrv;
 	set_title("Ustawienia urzadzen dzwiekowych");
-	set_position(Gtk::WIN_POS_CENTER);
+	set_position( Gtk::WIN_POS_CENTER );
 	
 	labelHost.set_text("Typ sterownika");
 	labelHost.set_alignment(1, 0.5);

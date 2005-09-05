@@ -1,7 +1,10 @@
 #include "guimainwindow.h"
 #include "../callback.h"
 
-GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
+GuiMainWindow::GuiMainWindow() :
+   	fileName( "" ),
+	mainBox( false, 0)
+{
 	TRACE("GuiMainWindow::GuiMainWindow()", "Tworze okno...");
 
 	algo = algoView.GetAlgorithm();
@@ -20,6 +23,10 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 		sigc::mem_fun(*this, &GuiMainWindow::OnNewFile) );
 	ActionGroup->add( Gtk::Action::create("OpenFile", Gtk::Stock::OPEN),
 		sigc::mem_fun(*this, &GuiMainWindow::OnOpenFile) );
+	ActionGroup->add( Gtk::Action::create("SaveFile", Gtk::Stock::SAVE),
+		sigc::mem_fun(*this, &GuiMainWindow::OnSaveFile) );
+	ActionGroup->add( Gtk::Action::create("SaveFileAs", Gtk::Stock::SAVE_AS),
+		sigc::mem_fun(*this, &GuiMainWindow::OnSaveFileAs) );
 	ActionGroup->add( Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
 		sigc::mem_fun(*this, &GuiMainWindow::OnMenuFileQuit) );
 
@@ -49,6 +56,8 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
 		    "    <menu action='FileMenu'>"
 			"      <menuitem action='NewFile'/>"
 		    "      <menuitem action='OpenFile'/>"
+   			"      <menuitem action='SaveFile'/>"
+  			"      <menuitem action='SaveFileAs'/>"
 		    "      <separator/>"
 		    "      <menuitem action='FileQuit'/>"
 		    "    </menu>"
@@ -126,7 +135,7 @@ GuiMainWindow::GuiMainWindow() : mainBox(false, 0) {
         exit(1);
     }
 
-	fileLoaded = false;
+	//fileLoaded = false;
 	AllowPlay(true);
 	AllowStop(false);
 
@@ -160,9 +169,9 @@ void GuiMainWindow::OnOpenFile() {
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			std::cout << "Open clicked." << std::endl;
-			std::string filename = dialog.get_filename(); //Notice that it is a std::string, not a Glib::ustring.
-			std::cout << "File selected: " <<  filename << std::endl;
+			//std::cout << "Open clicked." << std::endl;
+			fileName = dialog.get_filename(); //Notice that it is a std::string, not a Glib::ustring.
+			//std::cout << "File selected: " <<  filename << std::endl;
 
 			try {
 		        audio.Stop();
@@ -173,7 +182,7 @@ void GuiMainWindow::OnOpenFile() {
 		    }
 
 			try {
-				algoView.LoadFromFile( filename );
+				algoView.LoadFromFile( fileName );
 				algoView.GetAlgorithm()->CreateQueue();
 		    } catch (RTSError& error) {
 		        cout << "Error: " << error.what() << endl;
@@ -188,7 +197,7 @@ void GuiMainWindow::OnOpenFile() {
 		        exit(1);
 		    }
 		    
-			fileLoaded = true;
+			//fileLoaded = true;
 			AllowPlay(true);
 
 			set_title( "Real Time GUI - " + algo->GetName() );
@@ -258,10 +267,9 @@ void GuiMainWindow::OnAudioSetup() {
     
 	AudioSetupForm asForm(&audio);
     
-    
-    //Stay On Top :)
-    asForm.set_transient_for(*this);
-    	
+        //Stay On Top :)
+    asForm.set_transient_for( *this );
+
     Gtk::Main::run(asForm);
     show_all_children();
 	TRACE("GuiMainWindow::OnAudioSetup()", "Konfiguracja zakonczona");
@@ -284,7 +292,8 @@ void GuiMainWindow::OnMySignal( Glib::ustring str ) {
 }
 
 void GuiMainWindow::OnNewFile() {
-	cout << "new file" << endl;
+    fileName = "";
+	//cout << "new file" << endl;
 	try {
 		audio.Stop();
 		audio.Close();
@@ -305,4 +314,39 @@ void GuiMainWindow::OnNewFile() {
         cout << "!!" << endl << "!! Error: " << error.what() << endl << "!!" << endl;
         exit(1);
     }
+}
+
+void GuiMainWindow::OnSaveFile() {
+	if( fileName == "" )
+	    OnSaveFileAs();
+	else
+		algoView.SaveToFile( fileName );
+}
+
+void GuiMainWindow::OnSaveFileAs() {
+	Gtk::FileChooserDialog dialog( "Save file as", Gtk::FILE_CHOOSER_ACTION_SAVE );
+	dialog.set_transient_for( *this );
+	dialog.set_position( Gtk::WIN_POS_CENTER_ON_PARENT );
+	//Add response buttons the the dialog:
+	dialog.add_button( Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL );
+	dialog.add_button( Gtk::Stock::SAVE, Gtk::RESPONSE_OK );
+	//Add filters, so that only certain file types can be selected:
+	Gtk::FileFilter filter_text;
+	filter_text.set_name("Algortihm XML files");
+	//filter_text.add_mime_type("text/xml");
+	filter_text.add_pattern("*.xml");
+	dialog.add_filter( filter_text );
+	//Show the dialog and wait for a user response:
+	int result = dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+            fileName = dialog.get_filename(); //Notice that it is a std::string, not a Glib::ustring.
+
+			if( fileName.rfind( ".xml" ) !=  fileName.size() - 4 )
+				fileName += ".xml";
+
+			algoView.SaveToFile( fileName );
+   		}
+	}
 }

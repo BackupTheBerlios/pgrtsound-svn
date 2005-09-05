@@ -105,3 +105,81 @@ void AlgorithmView::LoadFromFile(string fileName) {
 	
 	TRACE("AlgorithmView::LoadFromFile()", "Polaczenia modulow wczytane");
 }
+
+void AlgorithmView::SaveToFile( string fileName ) {
+	cout << "save " << fileName << endl;
+
+    ofstream file;
+    file.open( fileName.c_str(), ios::out );
+    
+    file << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+	file <<	"<algorithm>\n";
+	file << "\t<modules>\n";
+	
+	for( list<GuiModule*>::iterator modIt = guiModules.begin();
+		modIt != guiModules.end(); modIt++ )
+	{
+		Module* mod = (*modIt)->GetModule();
+		
+		if( mod->GetName() == "AudioPortIn" || mod->GetName() == "AudioPortOut")
+		    continue;
+		
+		file << "\t\t<module type=\"" << mod->GetType()
+			<< "\" name=\"" << mod->GetName() << "\">\n";
+
+		for( int i = 0; i < mod->GetParameterCount(); i++ ) {
+//           	file << "\t\t\t<parameter name=\"" << mod->GetParameter( i )->GetName()
+//			   << "\" number=\"" << i << "\">";
+
+           	file << "\t\t\t<parameter number=\"" << i << "\">";
+
+
+			if( mod->GetParameter( i )->GetType() == "float" ) {
+			    ParameterFloat* param = (ParameterFloat*)mod->GetParameter( i );
+			    file << param->GetValue();
+			}
+			    
+   			if( mod->GetParameter( i )->GetType() == "string" ) {
+			    ParameterString* param = (ParameterString*)mod->GetParameter( i );
+			    file << param->GetText();
+			}
+			
+		   file << "</parameter>\n";
+		}
+		file << "\t\t</module>\n";
+	}
+
+	file << "\t</modules>\n";
+
+	file << "\t<connections>\n";
+	
+	for(list<GuiConnection*>::iterator connIt = connections.begin();
+		connIt != connections.end(); connIt++)
+	{
+		Connection* conn = algorithm.GetConnection( (*connIt)->GetConnectionId() );
+
+		file << "\t\t<connection name1=\""
+			<< conn->sourceModule->GetName() << "\" output=\""
+			<< conn->sourceOutputId << "\" "
+			<< "name2=\""
+			<< conn->destinationModule->GetName() << "\" input=\""
+			<< conn->destinationInputId << "\" />\n";
+	}
+
+	file <<	"\t</connections>\n";
+	file <<	"\t<gui>\n";
+
+	int x, y;
+	for( list<GuiModule*>::iterator modIt = guiModules.begin();
+		modIt != guiModules.end(); modIt++ )
+	{
+		(*modIt)->GetPosition( x, y );
+		file << "\t\t<guimodule name=\"" << (*modIt)->GetModule()->GetName()
+			<< "\" x=\"" << x << "\" y=\"" << y << "\" />\n";
+	}
+
+	file << "\t</gui>\n";
+	file <<	"</algorithm>\n";
+
+	file.close();
+}

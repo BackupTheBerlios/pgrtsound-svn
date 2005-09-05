@@ -33,8 +33,9 @@ class GuiMainWindow : public Gtk::Window {
 		// No description
 		void SetStatus( Glib::ustring str );
 		void OnMySignal( Glib::ustring str );
-		// No description
 		void OnNewFile();
+		void OnSaveFile();
+		void OnSaveFileAs();
 
 
 	private:
@@ -42,9 +43,10 @@ class GuiMainWindow : public Gtk::Window {
 		Algorithm *algo;
 		AudioDriver audio;
 
-		bool fileLoaded;
+		//bool fileLoaded;
 		std::vector<GuiModule*> guiModules;
 		std::vector<Gtk::Frame*> guis;
+		std::string fileName;
 		Gtk::HBox statusBar;
         Gtk::ScrolledWindow scrollWindow;
         Gtk::VBox mainBox;

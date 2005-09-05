@@ -38,6 +38,7 @@ class AlgorithmView : public Gtk::Layout {
 		bool IsDraggingModule();
 		Algorithm* GetAlgorithm();
 		void LoadFromFile(string fileName);
+		void SaveToFile(string fileName);
 		//void SetParentWindow( Gtk::Window *window );
 		void DeleteModule( GuiModule* guiModule );
 		bool on_expose_event(GdkEventExpose* e);
@@ -50,6 +51,7 @@ class AlgorithmView : public Gtk::Layout {
    		typedef sigc::signal<void, Glib::ustring> type_signal_notify_xput;
 		type_signal_notify_xput signal_notify_xput();
 		void InitAudioPorts();
+		void FindCurrentModule( int x, int y );
 
 	private:
 		type_signal_notify_xput m_signal_notify_xput;

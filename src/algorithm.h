@@ -60,9 +60,9 @@ struct cycle_detector : public boost::dfs_visitor<>
 		bool& _has_cycle;
 };
 
-class RTSCyclicGraphError : public RTSError {
-
-};
+//
+//class RTSCyclicGraphError : public RTSError {
+//};
 
 /**
  * Klasa bedaca najwyzsza struktura w systemie.

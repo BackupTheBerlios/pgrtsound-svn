@@ -70,8 +70,7 @@ AlgorithmView::~AlgorithmView() {
  Przesuwa modul, robi polaczenie itp. zaleznie od ustawionych flag.
 */
 bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
-
-	//window->freeze_updates();
+	window->freeze_updates(); // ???
 
 	if( event && event->window ) {
        	int x = 0, y = 0;
@@ -91,8 +90,42 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 			x += (int)adjh->get_value();
 			y += (int)adjv->get_value();
 
+			// przesuwamy modul
+			if( isDraggingModule ) {
+				int newX, newY;
+				if( (state & Gdk::BUTTON1_MASK) != 0 ) {
+					if(currentGuiModule != NULL) {
+						newX = x - currentGuiModuleX;
+						newY = y - currentGuiModuleY;
+
+						// modul nie moze wyjsc poza layout
+						if( newX < 0 ) newX = 0;
+						if( ( newX + currentGuiModule->get_width() ) > width )
+							newX = width - currentGuiModule->get_width();
+						if( newY < 0 ) newY = 0;
+						if( ( newY + currentGuiModule->get_height() ) > height )
+							newY = height - currentGuiModule->get_height();
+
+						currentGuiModule->SetXY(newX, newY);
+						move(*currentGuiModule, newX, newY);
+						RedrawConnections();
+					}
+				}
+				window->thaw_updates();
+				return true;
+			}
+			
+			FindCurrentModule( x, y );
+
+			if(isDraggingConnection) {
+                connectionDrag.destinationX = x;
+				connectionDrag.destinationY = y;
+				window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
+				//return true;
+			}
+
 			// kursor nad modulem
-			if(currentGuiModule != NULL) {
+			if( currentGuiModule != NULL ) {
 				int xpos, ypos;
 				currentGuiModule->get_window()->get_position(xpos, ypos);
 				// zapalmy w*jscie jesli kusor nad jakims
@@ -114,39 +147,9 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 				}
 			}
 
-			// przesuwamy modul
-			if(isDraggingModule) {
-				int newX, newY;
-				if( (state & Gdk::BUTTON1_MASK) != 0 ) {
-					if(currentGuiModule != NULL) {
-						newX = x - currentGuiModuleX;
-						newY = y - currentGuiModuleY;
-
-						// modul nie moze wyjsc poza layout
-						if( newX < 0 ) newX = 0;
-						if( ( newX + currentGuiModule->get_width() ) > width )
-							newX = width - currentGuiModule->get_width();
-						if( newY < 0 ) newY = 0;
-						if( ( newY + currentGuiModule->get_height() ) > height )
-							newY = height - currentGuiModule->get_height();
-
-						currentGuiModule->SetXY(newX, newY);
-						move(*currentGuiModule, newX, newY);
-						RedrawConnections();
-					}
-				}
-			}
-			
-			if(isDraggingConnection) {
-				connectionDrag.destinationX = x;
-				connectionDrag.destinationY = y;
-				window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
-			}
 		}
 	}
-
-	//window->thaw_updates();
-
+	window->thaw_updates();
 	return true;
 }
 
@@ -164,9 +167,11 @@ bool AlgorithmView::on_button_press_event( GdkEventButton* event ) {
 	x += (int)adjh->get_value();
 	y += (int)adjv->get_value();
 
+	FindCurrentModule( x, y );
+
 	if( currentGuiModule != NULL) {
 	    int posx, posy;
-		currentGuiModule->get_window()->get_position(posx, posy);
+		currentGuiModule->get_window()->get_position( posx, posy );
 		currentGuiModuleX = x - posx;
 		currentGuiModuleY = y - posy;
 		currentGuiModule->get_window()->raise();
@@ -219,8 +224,8 @@ bool AlgorithmView::on_button_press_event( GdkEventButton* event ) {
 		}
 	} else {
         // Popup menu pod prawym klawiszem
-       	lastClick.set_x(x);
-		lastClick.set_y(y);
+       	lastClick.set_x( x );
+		lastClick.set_y( y );
        	if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )	{
 			menuPopup.popup(event->button, event->time);
 		}
@@ -402,6 +407,7 @@ void AlgorithmView::InitAudioPorts() {
 	guiMod->SetModuleId( algorithm.GetModuleId("AudioPortIn") );
 	guiModules.push_back(guiMod);
 	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
+	guiMod->SetXY( 0, 0 );
 	this->put(*guiMod, 0, 0);
 
 	guiMod = new GuiModule( algorithm.GetModule("AudioPortOut") );
@@ -409,6 +415,7 @@ void AlgorithmView::InitAudioPorts() {
 	guiMod->SetModuleId( algorithm.GetModuleId("AudioPortOut") );
 	guiModules.push_back(guiMod);
 	name2GuiModuleMap.insert( make_pair( guiMod->GetModule()->GetName(), guiMod) );
+	guiMod->SetXY( 200, 0 );
 	this->put(*guiMod, 200, 0);
 	
     show_all_children();
@@ -549,4 +556,24 @@ bool AlgorithmView::ChangeModuleName( ModuleId modId, string str ) {
 // signal accesor
 AlgorithmView::type_signal_notify_xput AlgorithmView::signal_notify_xput() {
 	return m_signal_notify_xput;
+}
+
+void AlgorithmView::FindCurrentModule( int x, int y ) {
+	if( !isDraggingModule ) {
+		currentGuiModule = NULL;
+		int mx, my;
+
+		for( list<GuiModule*>::iterator modIt = guiModules.begin();
+			modIt != guiModules.end(); modIt++ )
+		{
+			(*modIt)->GetPosition( mx, my );
+			//cout << "mx = " << mx << "  my = " << my << endl;
+			if( ( mx < x && x < mx + 100 ) && ( my < y && y < my + 30 ) ) {
+				//cout << "    modulu : " << (*modIt)->GetModule()->GetName() << endl;
+				currentGuiModule = *modIt;
+				break;
+			}
+		}
+	}
+
 }
