@@ -3,6 +3,8 @@
 GuiModuleFactory::GuiModuleFactory() {
 	RegisterGui( GConstant::GetTypeStatic(), GConstant::Create );
 	RegisterGui( GSlider::GetTypeStatic(), GSlider::Create );
+	RegisterGui( GGate::GetTypeStatic(), GGate::Create );
+	RegisterGui( GMonitor::GetTypeStatic(), GMonitor::Create );
 }
 
 GuiModuleFactory::~GuiModuleFactory() {

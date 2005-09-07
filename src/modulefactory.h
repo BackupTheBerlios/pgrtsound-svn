@@ -13,6 +13,8 @@
 #include "modules/multiplication.h"
 #include "modules/noise.h"
 #include "modules/filter12db.h"
+#include "modules/mgate.h"
+#include "modules/mmonitor.h"
 
 #include <gmodule.h>
 

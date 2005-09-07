@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSoundLib.dev
 Name=rtsound
-UnitCount=44
+UnitCount=48
 Type=2
 Ver=1
 ObjFiles=
@@ -20,7 +20,7 @@ ObjectOutput=objs\
 OverrideOutput=0
 OverrideOutputName=RTSound.exe
 HostApplication=
-Folders=modules,modules/audio,modules/filters,modules/interface,modules/math,modules/special,modules/synthesis,modules/tools,tinyxml
+Folders=modules,modules/audio,modules/filters,"modules/gui only",modules/math,modules/special,modules/synthesis,modules/tools,tinyxml
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -330,7 +330,7 @@ BuildCmd=
 [Unit37]
 FileName=..\..\src\modules\slider.cpp
 CompileCpp=1
-Folder=modules/interface
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
@@ -340,7 +340,7 @@ BuildCmd=
 [Unit38]
 FileName=..\..\src\modules\slider.h
 CompileCpp=1
-Folder=modules/interface
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
@@ -348,9 +348,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit45]
-FileName=..\..\src\modules\filters\filter12db.cpp
+FileName=..\..\src\modules\mgate.h
 CompileCpp=1
-Folder=modules/filters
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
@@ -491,6 +491,36 @@ BuildCmd=
 FileName=..\..\src\modules\gain.cpp
 CompileCpp=1
 Folder=modules/audio
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit46]
+FileName=..\..\src\modules\mgate.cpp
+CompileCpp=1
+Folder=modules/gui only
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit48]
+FileName=..\..\src\modules\mmonitor.cpp
+CompileCpp=1
+Folder=modules/gui only
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit47]
+FileName=..\..\src\modules\mmonitor.h
+CompileCpp=1
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000

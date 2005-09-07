@@ -39,7 +39,7 @@ void AlgorithmView::LoadFromFile(string fileName) {
 		guiModules.push_back( guiMod );
 	}
 	
-	TRACE("AlgorithmView::LoadFromFile()", "Wczytywanie polozenia modulow...");
+	TRACE("AlgorithmView::LoadFromFile - Wczytywanie polozenia modulow...\n");
 
 	TiXmlElement* moduleXMLElem;
 	TiXmlNode* moduleXMLNode, * parent;
@@ -68,7 +68,7 @@ void AlgorithmView::LoadFromFile(string fileName) {
   		}
 	}
 
-	TRACE("AlgorithmView::LoadFromFile()", "Polozenia modulow wczytane");
+	TRACE("AlgorithmView::LoadFromFile - Polozenia modulow wczytane\n");
 
 	for(std::list<GuiModule*>::iterator it = guiModules.begin();
 		it != guiModules.end(); it++) {
@@ -103,7 +103,7 @@ void AlgorithmView::LoadFromFile(string fileName) {
 
 	show_all_children();
 	
-	TRACE("AlgorithmView::LoadFromFile()", "Polaczenia modulow wczytane");
+	TRACE("AlgorithmView::LoadFromFile - Polaczenia modulow wczytane\n");
 }
 
 void AlgorithmView::SaveToFile( string fileName ) {
@@ -132,7 +132,6 @@ void AlgorithmView::SaveToFile( string fileName ) {
 //			   << "\" number=\"" << i << "\">";
 
            	file << "\t\t\t<parameter number=\"" << i << "\">";
-
 
 			if( mod->GetParameter( i )->GetType() == "float" ) {
 			    ParameterFloat* param = (ParameterFloat*)mod->GetParameter( i );

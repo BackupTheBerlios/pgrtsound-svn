@@ -11,6 +11,8 @@ ModuleFactory::ModuleFactory() {
 	RegisterModuleType( Filter12dB::GetTypeStatic(), Filter12dB::Create );
 	RegisterModuleType( Noise::GetTypeStatic(), Noise::Create );
 	RegisterModuleType( TextFileOut::GetTypeStatic(), TextFileOut::Create );
+	RegisterModuleType( MGate::GetTypeStatic(), MGate::Create );
+	RegisterModuleType( MMonitor::GetTypeStatic(), MMonitor::Create );
 	
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();

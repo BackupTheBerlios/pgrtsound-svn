@@ -1,15 +1,16 @@
 #ifndef AUDIODRIVER_H
 #define AUDIODRIVER_H
 
+#include "debug.h"
+
+#include <portaudio.h>
+
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <map>
 #include <cassert>
-
-#include "debug.h"
-#include "portaudio.h"
 
 using namespace std;
 

@@ -122,7 +122,7 @@ void XMLConfigFile::LoadParameters(Algorithm* algo) {
 					float value;
 					ParameterFloat* param =
 						(ParameterFloat*)algo->GetModule(moduleName)->GetParameter(paramId);
-					value = atof( paramValue.c_str() );
+					value = (float)atof( paramValue.c_str() );
 					param->SetValue(value);
 					#ifndef NDEBUG
 						cout << param->GetValue() << endl;

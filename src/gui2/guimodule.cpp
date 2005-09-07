@@ -1,7 +1,6 @@
 #include "guimodule.h"
 #include "algorithmview.h"
 
-
 // rozmiar kwadracikow gniazdek
 const int GuiModule::socketSize = 5;
 const int GuiModule::socketSizeDoubled = 2 * GuiModule::socketSize;
@@ -47,7 +46,7 @@ GuiModule::~GuiModule() {
 	delete guiWindow;
 	delete []inputGuiConnections;
 	delete gui;
-	TRACE("GuiModule::~GuiModule()", "Destrukcja");
+	TRACE("GuiModule::~GuiModule - Zakonczony\n");
 }
 
 void GuiModule::SetParentView(AlgorithmView* algoView) {
@@ -313,4 +312,12 @@ void GuiModule::Repaint() {
 	
 	queue_draw();
 
+}
+
+int GuiModule::GetWidth() const {
+	return width;
+}
+
+int GuiModule::GetHeight() const {
+	return height;
 }

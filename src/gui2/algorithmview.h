@@ -1,10 +1,7 @@
 #ifndef ALGORITHMVIEW_H
 #define ALGORITHMVIEW_H
 
-//#include "guis/gui.h"
-
 #include "guimodulefactory.h"
-#include "guimodule.h"
 #include "guiconnection.h"
 
 #include "../debug.h"
@@ -52,6 +49,8 @@ class AlgorithmView : public Gtk::Layout {
 		type_signal_notify_xput signal_notify_xput();
 		void InitAudioPorts();
 		void FindCurrentModule( int x, int y );
+		// No description
+		GuiModule* GetGuiModule(string name);
 
 	private:
 		type_signal_notify_xput m_signal_notify_xput;

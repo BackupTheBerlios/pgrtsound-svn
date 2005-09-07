@@ -38,6 +38,8 @@ class GuiModule : public Gtk::EventBox {
 		void PaintOutput(int num, bool isSelected);
 		void FindXput(int x, int y);
 		void GetPosition(int& x, int& y);
+		int GetWidth() const;
+		int GetHeight() const;
 		void GetInputPosition(int inNum, int& x, int& y);
 		void GetOutputPosition(int outNum, int& x, int& y);
 		int GetCurrentInputNumber();
@@ -54,7 +56,6 @@ class GuiModule : public Gtk::EventBox {
 		bool on_expose_event(GdkEventExpose* e);
 		void on_realize();
 		void Repaint();
-
 
 	protected:
 		Module* module;
@@ -73,8 +74,7 @@ class GuiModule : public Gtk::EventBox {
 		ModuleGuiWindow *guiWindow;
 		bool isGuiWindowCreated;
 		Glib::RefPtr<Pango::Layout> pangolayout;
-
-
 };
+
 
 #endif // GUIMODULE_H

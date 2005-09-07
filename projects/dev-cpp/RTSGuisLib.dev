@@ -1,7 +1,7 @@
 [Project]
-FileName=RTSGuiModulesLib.dev
+FileName=RTSGuisLib.dev
 Name=RTSGuisLib
-UnitCount=9
+UnitCount=13
 Type=2
 Ver=1
 ObjFiles=
@@ -218,7 +218,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit12]
-FileName=..\..\src\gui2\guimodules\gmconstant.cpp
+FileName=..\..\src\gui2\guis\gmonitor.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -228,7 +228,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=..\..\src\gui2\guimodules\slidergui.h
+FileName=..\..\src\gui2\guis\ggate.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -288,7 +288,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit11]
-FileName=..\..\src\gui2\guimodules\gmconstant.h
+FileName=..\..\src\gui2\guis\ggate.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -308,7 +308,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit13]
-FileName=..\..\src\gui2\guimodules\mygtkfloatentry.h
+FileName=..\..\src\gui2\guis\gmonitor.cpp
 CompileCpp=1
 Folder=
 Compile=1

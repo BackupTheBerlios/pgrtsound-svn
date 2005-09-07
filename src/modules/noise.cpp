@@ -12,7 +12,7 @@ Noise::Noise() : Module("New noise generator"), oOut("out") {
 	noise = 0.f;
 
 	/* Generate a new random seed from system time - do this once in your constructor */
-	srand(time(0));
+	srand( time(0) );
 }
 
 Noise::~Noise() {

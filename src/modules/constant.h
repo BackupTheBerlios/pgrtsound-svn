@@ -11,13 +11,12 @@ class Constant : public Module {
 	public:
 		Constant();
 		~Constant();
-		void Process();
+		virtual void Process();
 		REGISTER_MODULE( "constant", Constant )
 		
 	private:
         float oldValue;
-        
-		Output oValue;
+ 		Output oValue;
 		ParameterFloat pValue;
 };
 

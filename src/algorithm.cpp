@@ -73,6 +73,8 @@ void Algorithm::PrintInfo(void) {
 		cout << "    Modul: " << GetModule(*mit)->GetName() <<
 			"(" << GetModule(*mit)->GetType() << ")" << endl;
 	}
+	
+	PrintEdges();
 }
 
 /**
@@ -86,7 +88,7 @@ void Algorithm::PrintInfo(void) {
 bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
 			ModuleId moduleId2, int inputId, ConnectionId& cId )
 {
-	TRACE( "Algorithm::ConnectModules - Lacze [%s].[%s] -> [%s].[%s]\n",
+	TRACE( "Algorithm::ConnectModules\n    '%s'.'%s' -> '%s'.'%s'\n",
 		GetModule(moduleId1)->GetName().c_str(),
 		GetModule(moduleId1)->GetOutput(outputId)->GetName().c_str(),
 		GetModule(moduleId2)->GetName().c_str(),
@@ -241,7 +243,7 @@ Module* Algorithm::GetModule(string moduleName) const {
  @param moduleName Nazwa dociekanego modulu
 */
 ModuleId Algorithm::GetModuleId( string moduleName ) const {
-    if (moduleName2IdMap.find(moduleName) != moduleName2IdMap.end()) {
+    if ( moduleName2IdMap.find(moduleName) != moduleName2IdMap.end() ) {
     	ModuleId moduleId = ( *moduleName2IdMap.find(moduleName) ).second;
 		return moduleId;
     } else {
@@ -254,7 +256,17 @@ ModuleId Algorithm::GetModuleId( string moduleName ) const {
  @param moduleId Identyfikator modulu
 */
 Module* Algorithm::GetModule(ModuleId moduleId) const {
-    return graph[moduleId].module;
+    Module* mod;
+    
+	try {
+		mod = graph[moduleId].module;
+	}
+	catch ( boost::bad_graph ) {
+		TRACE( "!!!! Algorithm::GetModule - bad_graph przechwycony\n" );
+		return NULL;
+	}
+	
+    return mod;
 }
 
 Module* Algorithm::GetInputPort() const {
@@ -269,9 +281,15 @@ Module* Algorithm::GetOutputPort() const {
  Usuwanie modulu z grafu.
  @param moduleId Identyfikator modulu
 */
-void Algorithm::DeleteModule( ModuleId moduleId ) {
+bool Algorithm::DeleteModule( ModuleId moduleId ) {
 	TRACE( "Algorithm::DeleteModule - Usuwam modul '%s'\n",
 		GetModule( moduleId )->GetName().c_str() );
+	
+	if( moduleName2IdMap.count( GetModule( moduleId )->GetName() ) == 0 ) {
+		TRACE( "!!!! Algorithm::DeleteModule - Nie ma modulu o nazwie '%s'\n",
+			GetModule( moduleId )->GetName().c_str() );
+		return false;
+	}
 	
 	using namespace boost;
 	
@@ -299,8 +317,8 @@ void Algorithm::DeleteModule( ModuleId moduleId ) {
     //usuwanie z mapy
 	moduleName2IdMap.erase( GetModule(moduleId)->GetName() );
 	//usuwanie grafu
-	boost::clear_vertex( moduleId, graph );
-	boost::remove_vertex( moduleId, graph );
+	boost::clear_vertex( moduleId, graph ); // usuniecie polaczen z tym wezlem zwiazanych
+	boost::remove_vertex( moduleId, graph ); // usuniecia wezla
 
 	//usuwanie z pamieci
 	delete GetModule( moduleId );
@@ -308,27 +326,40 @@ void Algorithm::DeleteModule( ModuleId moduleId ) {
 	CreateQueue();
 	
 	PrintInfo(); // debug
-	PrintEdges();
-	
+
 	TRACE( "Algorithm::DeleteModule - Modul usuniety\n" );
+	
+	return true;
 }
 
 /**
  Usuwanie polaczenia miedzy modulami.
  @param connectionId identyfikator polaczenia do usuniecia
 */
-void Algorithm::DeleteConnection(ConnectionId connectionId) {
+bool Algorithm::DeleteConnection(ConnectionId connectionId) {
 	TRACE( "Algorithm::DeleteConnection\n" );
-	//graph[connectionId].sink->SetSignal(nullBuffer); // rozlaczamy wejscie modulu 2 ???
-	//graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
-	//	->ConnectTo( nullModule.GetOutput(0) ); // rozlaczamy wejscie modulu 2 ???
-	graph[connectionId].destinationModule->GetInput( graph[connectionId].destinationInputId )
-		->Disconnect(); // rozlaczamy wejscie modulu 2 ???
+	
+	Input* input;
+	
+	try {
+		input = graph[connectionId].destinationModule
+			->GetInput( graph[connectionId].destinationInputId );
+		boost::remove_edge( connectionId, graph );
+	}
+	catch ( boost::bad_graph ) {
+		TRACE( "!!!! Algorithm::DeleteConnection - bad_graph przechwycony\n" );
+		return false;
+	}
+	
+	input->Disconnect();
+	
+	// rozlaczamy wejscie modulu 2 ???
 	//cout << "Is connected: " << graph[connectionId].destinationModule
 	//	->GetInput( graph[connectionId].destinationInputId )->IsConnected() << endl;
-	boost::remove_edge(connectionId, graph);
 	TRACE( "Algorithm::DeleteConnection - Polaczenie usuniete\n" );
-	PrintEdges();
+	PrintInfo();
+	
+	return true;
 }
 
 
@@ -440,5 +471,11 @@ bool Algorithm::ChangeModuleName( ModuleId moduleId, string newName ) {
 	moduleName2IdMap.erase( mod->GetName() );
 	mod->SetName( newName );
 	moduleName2IdMap.insert( make_pair( newName, moduleId ) );
+	
+	TRACE( "Algorithm::ChangeModuleName - Zmieniono znawe na '%s'\n",
+		GetModule( moduleId )->GetName().c_str() );
+		
+	PrintInfo();
+	
 	return true;
 }

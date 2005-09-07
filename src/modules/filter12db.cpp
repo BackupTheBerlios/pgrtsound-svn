@@ -28,7 +28,7 @@ Filter12dB::~Filter12dB() {
 
 void Filter12dB::Init() {
 	frequency = pFreq.GetValue();
-	omega = 2.0*M_PI*frequency / Module::sampleRate;
+	omega = 2.0f*M_PI*frequency / Module::sampleRate;
 
 	// prewarping czestotliwosci
 	K = tan(omega/2);
@@ -65,6 +65,6 @@ void Filter12dB::Process()
 	    z1n = z2m + b1*xn - a1*yn;
 	    z1m = z1n;
 	    z2m = z2n;
-	    *out++ = 0.5*yn;
+	    *out++ = 0.5f*yn;
 	}
 }

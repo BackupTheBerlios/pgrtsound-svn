@@ -1,5 +1,7 @@
 #include "algorithmview.h"
 
+
+
 #include <gtkmm/messagedialog.h>
 
 #define FRAMES_PER_BUFFER 256
@@ -456,31 +458,36 @@ void AlgorithmView::DeleteConnection( GuiModule* module, int inputId ) {
 	//cout << "AlgorithmView::DeleteConnection: Modulu '" << module->GetModule()->GetName()
 	//	<< "' input " << inputId << endl;
 
-	algorithm.DeleteConnection( module->GetInputGuiConnection( inputId )->GetConnectionId() );
-	connections.remove( module->GetInputGuiConnection( inputId ) );
-	RedrawConnections();
-	window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
-}
-
-void AlgorithmView::DeleteModule( GuiModule* guiModule ) {
-	if( guiModule != NULL && guiModule->GetModule()->GetName() != "AudioPortIn"
-	    && guiModule->GetModule()->GetName() != "AudioPortOut" ) {
-		//cout << "Chce usunac modul '" << guiModule->GetModule()->GetName() << endl;
-
-		algorithm.DeleteModule(	guiModule->GetModuleId() );
-		name2GuiModuleMap.erase( guiModule->GetModule()->GetName() );
-		this->remove( *guiModule );
-		guiModules.remove( guiModule );
-		delete guiModule;
-		currentGuiModule = NULL;
-
-		UpdateConnections();
+	if( algorithm.DeleteConnection( module->GetInputGuiConnection( inputId )
+		->GetConnectionId() ) )
+	{
+		connections.remove( module->GetInputGuiConnection( inputId ) );
 		RedrawConnections();
 		window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
 	}
 }
 
+void AlgorithmView::DeleteModule( GuiModule* guiModule ) {
+	if( guiModule != NULL && guiModule->GetModule()->GetName() != "AudioPortIn"
+	    && guiModule->GetModule()->GetName() != "AudioPortOut" )
+	{
+		//cout << "Chce usunac modul '" << guiModule->GetModule()->GetName() << endl;
+		if( algorithm.DeleteModule(guiModule->GetModuleId()) ) {
+			name2GuiModuleMap.erase( guiModule->GetModule()->GetName() );
+			this->remove( *guiModule );
+			guiModules.remove( guiModule );
+			delete guiModule;
+			currentGuiModule = NULL;
+
+			UpdateConnections();
+			RedrawConnections();
+			window->invalidate_rect( Gdk::Rectangle(0, 0, width, height), false );
+		}
+	}
+}
+
 void AlgorithmView::UpdateConnections() {
+	TRACE( "AlgorithmView::UpdateConnections...\n" );
 	for( list<GuiConnection*>::iterator connIt = connections.begin();
 		connIt != connections.end(); connIt++ )
 	{
@@ -519,6 +526,9 @@ void AlgorithmView::UpdateConnections() {
 }
 
 bool AlgorithmView::ChangeModuleName( ModuleId modId, string str ) {
+	string oldName = algorithm.GetModule( modId )->GetName();
+	GuiModule* guiMod = GetGuiModule( oldName );
+
    	if( !algorithm.ChangeModuleName( modId, str.c_str() ) ) {
         Gtk::MessageDialog dialog( *( (Gtk::Window*)get_toplevel() ),
 			"RTSound", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
@@ -527,6 +537,9 @@ bool AlgorithmView::ChangeModuleName( ModuleId modId, string str ) {
 		return false;
 	}
 	
+	name2GuiModuleMap.erase( oldName );
+	name2GuiModuleMap.insert( make_pair( str, guiMod ) );
+
 	return true;
 }
 
@@ -545,12 +558,24 @@ void AlgorithmView::FindCurrentModule( int x, int y ) {
 		{
 			(*modIt)->GetPosition( mx, my );
 			//cout << "mx = " << mx << "  my = " << my << endl;
-			if( ( mx < x && x < mx + 100 ) && ( my < y && y < my + 30 ) ) {
+			if( ( mx < x && x < mx + (*modIt)->GetWidth() )
+				&& ( my < y && y < my + (*modIt)->GetHeight() ) )
+			{
 				//cout << "    modulu : " << (*modIt)->GetModule()->GetName() << endl;
 				currentGuiModule = *modIt;
 				break;
 			}
 		}
 	}
+}
 
+GuiModule* AlgorithmView::GetGuiModule( string name ) {
+    if ( name2GuiModuleMap.count( name ) > 0 ) {
+    	return ( *name2GuiModuleMap.find( name ) ).second;
+    }
+	else {
+		TRACE( "!!!! AlgorithmView::GetGuiModule - Nie ma GUI modulu o nazwie '%s'\n",
+		    name.c_str() );
+		 return NULL;
+	}
 }

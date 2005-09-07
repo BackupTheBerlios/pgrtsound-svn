@@ -1,11 +1,11 @@
 #ifndef XMLCONFIGFILE_H
 #define XMLCONFIGFILE_H
 
-#include <map>
-
 #include "tinyxml.h"
 #include "algorithm.h"
 #include "audiodriver.h"
+
+#include <map>
 
 /**
  * Obiekt pliku konfiguracyjnego XML.

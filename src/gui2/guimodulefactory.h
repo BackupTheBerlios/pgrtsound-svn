@@ -9,6 +9,8 @@
 //#include "guimodules/gaingui.h"
 #include "guis/gconstant.h"
 #include "guis/gslider.h"
+#include "guis/ggate.h"
+#include "guis/gmonitor.h"
 
 #include <map>
 

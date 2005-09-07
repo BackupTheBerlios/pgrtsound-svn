@@ -88,8 +88,8 @@ class Algorithm {
 		Module*				GetOutputPort() const;
 		ModuleIdIterator	ModuleIdIteratorBegin();
 		ModuleIdIterator	ModuleIdIteratorEnd();
-		void         		DeleteModule( ModuleId moduleId );
-		void				DeleteConnection( ConnectionId connectionId );
+		bool         		DeleteModule( ModuleId moduleId );
+		bool				DeleteConnection( ConnectionId connectionId );
 		ModuleId      		AddModule( string type, string name );
 		bool ConnectModules( ModuleId moduleId1, int outputId,
 			ModuleId moduleId2, int inputId, ConnectionId& connId );

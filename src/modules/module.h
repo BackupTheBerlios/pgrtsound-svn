@@ -47,6 +47,8 @@ class Module {
 	    int AddParameter(Parameter& param);
 	    virtual void Process();
 	    virtual void Init();
+   	    virtual void SampleRateChanged();
+	    virtual void BlockSizeChanged();
 	    virtual string GetType();
    	    static string GetTypeStatic();
 	    static Module* Create();
@@ -59,8 +61,6 @@ class Module {
 	    Output* GetOutput(int outputID);
 	    Parameter* GetParameter(int pID);
 	    void UpdateBlockSize();
-	    virtual void SampleRateChanged();
-	    virtual void BlockSizeChanged();
 
 	protected:
 	    vector<Input*> inputs; // wektor wejsc
