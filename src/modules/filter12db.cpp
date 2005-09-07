@@ -1,70 +1,88 @@
 #include "Filter12dB.h"
 
-Filter12dB::Filter12dB() : Module("Nowy filtr Butterwortha"),
-	iIn("input"), oOut("output"), pFreq("frequency")
+Filter12dB::Filter12dB() :
+	Module("Nowy filtr"),
+	iIn("input"),
+	oOut("output"),
+	pFreq("frequency"),
+	pFilterType("filter type")
 {
 	AddInput(iIn);
-	AddOutput(oOut);
-	AddParameter(pFreq);
 	
-	pFreq.Bound(100, 15000, 10);
-	pFreq.SetValue(1000);
+	AddOutput(oOut);
+	
+	AddParameter( pFreq );
+	AddParameter( pFilterType );
+	
+	// wartosci domyslne
+	pFilterType.SetText( "lp" );
+	pFreq.Bound( 50, 0.75 * Module::sampleRate, 1 );
+	pFreq.SetValue( 1000 );
+	
+	xn = yn = xn_1 = xn_2 = yn_1 = yn_2 = 0;
+	Q = 1;
 }
 
 Filter12dB::~Filter12dB() {
 }
 
-//Module* Filter12dB::Create() {
-//	return new Filter12dB;
-//}
-//
-//string Filter12dB::GetTypeStatic() {
-//	return "filter12db";
-//}
-//
-//string Filter12dB::GetType() {
-//	return "filter12db";
-//}
-
 void Filter12dB::Init() {
-	frequency = pFreq.GetValue();
-	omega = 2.0f*M_PI*frequency / Module::sampleRate;
-
-	// prewarping czestotliwosci
-	K = tan(omega/2);
-	Q = 1;
-	V = 1;
-	// wspolczynniki licznika transformaty H(z)
-	b0 = K*K;
-	b1 = 2*b0;
-	b2 = b0;
-	// wspolczynniki mianownika transformaty H(z)
-	a0 = 1 + K/Q + b0;
-	a1 = 2*(b0 - 1);
-	a2 = 1 - K/Q + b0;
-	
-	// normalizacja wspolczynnikow wzgledem a0
-	a0inv = 1/a0;
-	b0 = b0*a0inv; b1 = b1*a0inv; b2 = b2*a0inv;
-	a1 = a1*a0inv; a2 = a2*a0inv; a0 = 1;
-	
-	// bufory
-	z1m = 0;
-	z2m = 0;
+	UpdateCoefficients();
 }
 
-void Filter12dB::Process()
-{
+void Filter12dB::UpdateCoefficients() {
+	w0 = 2 * M_PI * pFreq.GetValue() / Module::sampleRate;
+    cos_w0 = cos(w0);
+	sin_w0 = sin(w0);
+	alpha = sin_w0 / ( 2 * Q );
+
+	if( pFilterType.GetText() == "lp" ) {
+		TRACE( "Filter12dB::UpdateCoefficients - Low pass %.2f Hz\n", pFreq.GetValue() );
+		
+		b0 = ( 1 - cos_w0 ) / 2;
+        b1 = 1 - cos_w0;
+        b2 = (1 - cos_w0) / 2;
+        a0 = 1 + alpha;
+        a1 = -2 * cos_w0;
+        a2 = 1 - alpha;
+
+		B0 = b0/a0; B1 = b1/a0; B2 = b2/a0;
+		A1 = a1/a0; A2 = a2/a0;
+
+		return;
+	}
+
+	if( pFilterType.GetText() == "hp" ) {
+		TRACE( "Filter12dB::UpdateCoefficients - High pass %.2f Hz\n", pFreq.GetValue() );
+
+		b0 =  ( 1 + cos_w0 ) / 2;
+        b1 = -( 1 + cos_w0 );
+        b2 =  ( 1 + cos_w0 ) / 2;
+		a0 = 1 + alpha;
+		a1 =  -2 * cos_w0;
+		a2 = 1 - alpha;
+		
+		B0 = b0/a0; B1 = b1/a0; B2 = b2/a0;
+		A1 = a1/a0; A2 = a2/a0;
+
+  		return;
+	}
+}
+
+void Filter12dB::Process() {
 	float* in = iIn.GetSignal();
 	float* out = oOut.GetSignal();
 	
-   	for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
+   	for( unsigned long i = 0; i < Module::framesPerBlock; i++ ) {
 	    xn = *in++;
-	    yn = b0*xn + z1m;
-	    z2n = b2*xn - a2*yn;
-	    z1n = z2m + b1*xn - a1*yn;
-	    z1m = z1n;
-	    z2m = z2n;
-	    *out++ = 0.5f*yn;
+
+    	yn = B0*xn + B1*xn_1 + B2*xn_2 - A1*yn_1 - A2*yn_2;
+
+	    xn_2 = xn_1;
+	    xn_1 = xn;
+	    yn_2 = yn_1;
+	    yn_1 = yn;
+
+	    *out++ = yn;
 	}
 }

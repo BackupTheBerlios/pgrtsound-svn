@@ -1,24 +1,15 @@
 #ifndef FILTER12DB_H
 #define FILTER12DB_H
 
-#include <cmath>
-
 #include "module.h"
 
-//class ParameterFilterType : public ParameterString {
-//	void SetText(string newFilteType);
-//}
-//
-//
-//void ParameterFilterType::SetText(string newFilteType) {
-//
-//}
+#include <cmath>
 
 /**
- * Filtr dolnoprzepustowy.
- Moduly reazliuje filtracje DP z wykorzystaniem cyfroewj imlpementacji
- filtru Butterwotha??? (filtr otrzymnae prez transformacje bulbiowa).
- */
+ Filtr dolno- i gornoperzepustowy.
+ Moduly reazliuje filtracje z wykorzystaniem cyfroewj imlpementacji
+ filtru Butterwotha??? (filtr otrzymnae prez transformacje biliniowa).
+*/
 class Filter12dB : public Module
 {
 	public:
@@ -26,19 +17,18 @@ class Filter12dB : public Module
 		~Filter12dB();
 		void Process();
 		void Init();
-		//static Module* Create();
-		//static string GetTypeStatic();
-		//string GetType();
 		REGISTER_MODULE( "filter12db", Filter12dB )
+		void UpdateCoefficients();
 				
-	private:
+	protected:
 		Input iIn;
 		Output oOut;
 		ParameterFloat pFreq;
-		//ParameterString pFreq;
-		float a0, a1, a2, b0, b1, b2, a0inv;
-		float omega, frequency, K, Q, V;
-		float xn, yn, z1n, z1m, z2n, z2m;
+		ParameterString pFilterType;
+		float a0, a1, a2, b0, b1, b2, A1, A2, B0, B1, B2;
+		float w0, Q;
+	    float cos_w0, sin_w0, alpha;
+		float xn, yn, xn_1, xn_2, yn_1, yn_2;
 };
 
 #endif // FILTER12dB_H

@@ -14,7 +14,7 @@ class AudioPortOut : public Module {
 		
 	private:
 		Input inLeft;
-		//input inRight;
+		Input inRight;
 };
 
 #endif // AUDIOPORTOUT_H

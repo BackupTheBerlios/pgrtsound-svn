@@ -13,7 +13,8 @@
  */
 class MyGtkSlider : public Gtk::HScale {
 	public:
-		MyGtkSlider(double min, double max, double step);
+		//MyGtkSlider(double min, double max, double step);
+		MyGtkSlider();
 		~MyGtkSlider();
 		
 		void SetParameter(ParameterFloat* param, double min, double max, double step );
@@ -22,7 +23,7 @@ class MyGtkSlider : public Gtk::HScale {
 
 	private:
         ParameterFloat*	parameter;
-		Gtk::Adjustment	adj;
+		//Gtk::Adjustment	adj;
 };
 
 #endif // MYGTKSLIDER_H

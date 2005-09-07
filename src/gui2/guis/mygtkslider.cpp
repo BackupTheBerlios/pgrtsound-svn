@@ -5,10 +5,10 @@
  @param max Wartosc njawieksza przedzialu wartosci suwaka
  @param step Najminejszy przyrost wartosci wskazywanej przez suwak
 */
-MyGtkSlider::MyGtkSlider(double min, double max, double step) :
-	Gtk::HScale(min, max, step), adj(0, min, max, step, step, 0)
-{
-	set_adjustment( adj );
+//MyGtkSlider::MyGtkSlider(double min, double max, double step) :
+//	Gtk::HScale(min, max, step), adj(0, min, max, step, step, 0)
+MyGtkSlider::MyGtkSlider() {
+	//set_adjustment( adj );
 	set_update_policy(Gtk::UPDATE_CONTINUOUS);
 	set_digits(2);
 	signal_value_changed().connect( sigc::mem_fun(this, &MyGtkSlider::ValueChanged ));

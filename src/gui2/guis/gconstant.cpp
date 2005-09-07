@@ -1,8 +1,14 @@
 #include "gconstant.h"
 
 GConstant::GConstant( Module* mod ) : Gui( mod ) {
-	cout << "GConstant::GConstant" << endl;
 	entry.AttachFloatParameter( (ParameterFloat*)module->GetParameter( 0 ) );
+	
+	buttonApply.set_label( Glib::locale_to_utf8("Zmieñ wartoœæ") );
+	buttonApply.signal_clicked().connect( sigc::mem_fun( this, &GConstant::OnApply ) );
+	
+	box.set_spacing( 2 );
+	box.add( entry );
+	box.add( buttonApply );
 }
 
 GConstant::~GConstant() {
@@ -10,6 +16,9 @@ GConstant::~GConstant() {
 }
 
 Gtk::Widget* GConstant::GetGui() {
-	cout << "GConstant::GetGui" << endl;
-	return &entry;
+	return &box;
+}
+
+void GConstant::OnApply() {
+	entry.Update();
 }

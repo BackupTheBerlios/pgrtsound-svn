@@ -6,11 +6,12 @@
 #include "guimodule.h"
 //#include "guimodules/slidergui.h"
 //#include "guimodules/sinosc2testgui.h"
-//#include "guimodules/gaingui.h"
+#include "guis/ggain.h"
 #include "guis/gconstant.h"
 #include "guis/gslider.h"
 #include "guis/ggate.h"
 #include "guis/gmonitor.h"
+#include "guis/gfilter.h"
 
 #include <map>
 

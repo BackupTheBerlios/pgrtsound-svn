@@ -14,19 +14,24 @@ int paCallback( const void *inputBuffer, void *outputBuffer,
 
 	Algorithm* alg = (Algorithm*)userData;
 
-	float* put = alg->GetInputPort()->GetOutput(0)->GetSignal();	// AudioPortIn
-	float* gen = alg->GetOutputPort()->GetInput(0)->GetSignal();	// AudioPortOut
+	float* recL = alg->GetInputPort()->GetOutput(0)->GetSignal(); // AudioPortIn
+	float* recR = alg->GetInputPort()->GetOutput(1)->GetSignal();
+	
+	float* playL = alg->GetOutputPort()->GetInput(0)->GetSignal(); // AudioPortOut
+	float* playR = alg->GetOutputPort()->GetInput(1)->GetSignal();
+
 	float* in = (float*)inputBuffer;
 	float* out = (float*)outputBuffer;
 
 	// algorytm oblicza blok probek
 	alg->Process();
 
-	for(i = 0; i < framesPerBuffer; i++) {
-		/* TODO (#1#): Zaimplementowac kanal lewy i prawy */
-		*put++ = ( (*in++) + (*in++) )*0.5f; // na razie miksowanie do mono
-		*out++ = *gen;
-		*out++ = *gen++;
+	for( i = 0; i < framesPerBuffer; i++ ) {
+		*recL++ = *in++;
+		*recR++ = *in++;
+		
+		*out++ = *playL++;
+		*out++ = *playR++;
 	}
 
 	return 0;

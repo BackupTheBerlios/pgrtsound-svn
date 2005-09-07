@@ -5,6 +5,9 @@
 #include "mygtkfloatentry.h"
 #include "../../modules/constant.h"
 
+#include <gtkmm/button.h>
+#include <gtkmm/box.h>
+
 /*
  * No description
  */
@@ -15,9 +18,12 @@ class GConstant : public Gui
 		~GConstant();
 		Gtk::Widget* GetGui();
 		REGISTER_GUI( Constant::GetTypeStatic(), GConstant )
+		void OnApply();
 
 	protected:
-		MyGtkFloatEntry entry;
+        MyGtkFloatEntry entry;
+        Gtk::HBox box;
+		Gtk::Button buttonApply;
 };
 
 #endif // GMCONSTANT_H

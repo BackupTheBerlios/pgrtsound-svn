@@ -2,7 +2,7 @@
 
 GSlider::GSlider( Module* mod ) :
 	Gui( mod ),
-	guiSlider(0, 1, 0.1),
+/*	guiSlider(0, 1, 0.1), */
     table( 4, 2, false )
 {
 	TRACE( "GSlider::GSlider\n" );

@@ -1,10 +1,11 @@
 #include "audioportin.h"
 
 AudioPortIn::AudioPortIn() : Module("AudioPortIn"),
-	oLeft("left"), oRight("right")
+	oLeft("audio input left"),
+	oRight("audio input right")
 {
-	AddOutput(oLeft);
-//	AddOutput(oRight);
+	AddOutput( oLeft );
+	AddOutput( oRight );
 }
 
 AudioPortIn::~AudioPortIn() {
