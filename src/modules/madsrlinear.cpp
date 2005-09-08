@@ -44,10 +44,10 @@ void MADSRLinear::Update() {
 	releaseTime = (unsigned int) ( pReleaseTime.GetValue() * Module::sampleRate * 0.001f );
 	sustainLevel = pSustainLevel.GetValue();
 
-	cout << "attackTime = " << attackTime << endl;
-	cout << "decayTime = " << decayTime << endl;
-	cout << "releaseTime = " << releaseTime << endl;
-	cout << "sustainLevel = " << sustainLevel << endl;
+	//cout << "attackTime = " << attackTime << endl;
+	//cout << "decayTime = " << decayTime << endl;
+	//cout << "releaseTime = " << releaseTime << endl;
+	//cout << "sustainLevel = " << sustainLevel << endl;
 
    	attackCoeff = ( 1.0f - currentLevel ) / attackTime;
    	decayCoeff = ( sustainLevel - 1.0f ) / decayTime;

@@ -231,9 +231,11 @@ void GuiModule::OpenGuiWindow() {
             //guiWindow->add( *manage(gui) );
             guiWindow->AddGui( gui );
 		}
+		
         guiWindow->SetName( module->GetName() );
+		Glib::ustring title =  module->GetName() + " - " + module->GetType();
+		guiWindow->set_title( title );
 		guiWindow->set_transient_for( *( (Gtk::Window*)get_toplevel() ) );
-		guiWindow->set_title( module->GetName() );
 		guiWindow->set_position( Gtk::WIN_POS_CENTER );
 		guiWindow->show_all_children();
         guiWindow->show();
@@ -270,7 +272,8 @@ void GuiModule::ChangeName() {
 	Glib::ustring newName = guiWindow->GetName();
 	TRACE( "GuiModule::ChangeName - Change name: '%s'\n", newName.c_str() );
 	if( algorithmView->ChangeModuleName( moduleId, newName ) ) {
-		guiWindow->set_title( newName );
+        Glib::ustring title = module->GetName() + " - " + module->GetType();
+		guiWindow->set_title( title );
 		Repaint();
 	}
 }
