@@ -1,4 +1,19 @@
 #include "modulefactory.h"
+
+#include "modules/sinosc2.h"
+#include "modules/constant.h"
+#include "modules/sum.h"
+#include "modules/gain.h"
+
+#include "modules/textfileout.h"
+#include "modules/slider.h"
+#include "modules/multiplication.h"
+#include "modules/noise.h"
+#include "modules/filter12db.h"
+#include "modules/mgate.h"
+#include "modules/mmonitor.h"
+#include "modules/madsrlinear.h"
+
 #include <dirent.h>
 
 ModuleFactory::ModuleFactory() {
@@ -13,7 +28,8 @@ ModuleFactory::ModuleFactory() {
 	RegisterModuleType( TextFileOut::GetTypeStatic(), TextFileOut::Create );
 	RegisterModuleType( MGate::GetTypeStatic(), MGate::Create );
 	RegisterModuleType( MMonitor::GetTypeStatic(), MMonitor::Create );
-	
+	RegisterModuleType( MADSRLinear::GetTypeStatic(), MADSRLinear::Create );
+
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();
     }

@@ -7,6 +7,7 @@ GuiModuleFactory::GuiModuleFactory() {
 	RegisterGui( GMonitor::GetTypeStatic(), GMonitor::Create );
 	RegisterGui( GFilter::GetTypeStatic(), GFilter::Create );
 	RegisterGui( GGain::GetTypeStatic(), GGain::Create );
+	RegisterGui( GADSR::GetTypeStatic(), GADSR::Create );
 }
 
 GuiModuleFactory::~GuiModuleFactory() {

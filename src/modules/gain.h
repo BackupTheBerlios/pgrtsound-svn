@@ -13,7 +13,7 @@ class Gain : public Module
 		Gain();
 		~Gain();
 		void Process();
-		REGISTER_MODULE( "gain", Gain )
+		REGISTER_MODULE( "Gain", Gain )
 		
 	private:
 		Input iIn;

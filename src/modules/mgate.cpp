@@ -17,7 +17,6 @@ MGate::~MGate() {
 
 void MGate::Init() {
 	// wypelnienie buforu wyjsciowego zerami
-	//memset( oOut.GetSignal(), 0, Module::framesPerBlock * sizeof( float ) );
 	float* out = oOut.GetSignal();
 	for( unsigned int i = 0; i < Module::framesPerBlock; ++i )
 		*out++ = 0.0f;
@@ -29,14 +28,14 @@ void MGate::Switch() {
 	enabled = !enabled;
     float* out = oOut.GetSignal();
 	if( enabled ) {
-        TRACE( "MGate::Switch - Bramka wlaczona\n" );
+        //TRACE( "MGate::Switch - Bramka wlaczona\n" );
  		for( unsigned int i = 0; i < Module::framesPerBlock; ++i )
 			*out++ = 1.0f;
 	}
 	else {
         for( unsigned int i = 0; i < Module::framesPerBlock; ++i )
 			*out++ = 0.0f;
-		TRACE( "MGate::Switch - Bramka wylaczona\n" );
+		//TRACE( "MGate::Switch - Bramka wylaczona\n" );
 	}
 }
 

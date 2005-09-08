@@ -1,6 +1,9 @@
 #include "sinosc2.h"
-SinOsc2::SinOsc2() : Module("New oscillator v2"),
-    iFreq("frequency"), iAmp("amplitude"), oOut("output")
+SinOsc2::SinOsc2() :
+	Module("New oscillator v2"),
+    iFreq("frequency"),
+	iAmp("amplitude"),
+	oOut("output")
 {
 	float	*sample, tableSizeInverted;
 	tableSize = 16384;

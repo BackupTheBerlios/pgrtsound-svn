@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <fstream>
 
 void AlgorithmView::LoadFromFile(string fileName) {
 	XMLConfigFile xmlFile;
@@ -17,9 +18,7 @@ void AlgorithmView::LoadFromFile(string fileName) {
 	xmlFile.OpenFile( fileName.c_str() );
 	xmlFile.LoadAlgorithm( &algorithm );
 
-	algorithm.Init();
-
-	// utworzenie modulow
+	// utworzenie GUI modulow
 	Module* mod;
 	GuiModule* guiMod;
 	for( ModuleIdIterator it = algorithm.ModuleIdIteratorBegin();
@@ -33,8 +32,9 @@ void AlgorithmView::LoadFromFile(string fileName) {
 		//}
 		
 		guiMod = guiFactory.CreateGuiModule( mod );
-		guiMod->SetParentView(this); // konieczne na razie :(
-		guiMod->SetModuleId( algorithm.GetModuleId( mod->GetName() ) );
+		guiMod->SetParentView( this ); // konieczne na razie :(
+		//guiMod->SetModuleId( algorithm.GetModuleId( mod->GetName() ) );
+		guiMod->SetModuleId( *it );
 		name2GuiModuleMap.insert( make_pair(mod->GetName(), guiMod) );
 		guiModules.push_back( guiMod );
 	}
@@ -106,10 +106,13 @@ void AlgorithmView::LoadFromFile(string fileName) {
 	TRACE("AlgorithmView::LoadFromFile - Polaczenia modulow wczytane\n");
 }
 
+/*
+ Zapis do pliku.
+*/
 void AlgorithmView::SaveToFile( string fileName ) {
 	cout << "save " << fileName << endl;
 
-    ofstream file;
+    std::ofstream file;
     file.open( fileName.c_str(), ios::out );
     
     file << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";

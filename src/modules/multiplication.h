@@ -12,7 +12,7 @@ class Multiplication : public Module
 		Multiplication();
 		~Multiplication();
 		void Process();
-		REGISTER_MODULE( "multiplication", Multiplication )
+		REGISTER_MODULE( "Multiplication", Multiplication )
 		
 	protected:
 		Input   iIn1, iIn2;

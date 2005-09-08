@@ -15,7 +15,7 @@ class Noise : public Module
 		Noise();
 		~Noise();
 		void Process();
-		REGISTER_MODULE( "noise", Noise );
+		REGISTER_MODULE( "White Noise Generator", Noise );
 		
 	private:
 		Output oOut;

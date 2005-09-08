@@ -29,33 +29,34 @@ class GuiModule : public Gtk::EventBox {
 
 		GuiModule(Module* moduleToAttach);
 		~GuiModule();
+	    virtual void Init() {};
+   	    virtual void SampleRateChanged() {};
+	    virtual void BlockSizeChanged() {};
+		void ChangeName(); // TODO: zamienic na SetName()
 		void SetParentView( AlgorithmView* algoView );
-		void SetXY(int x_, int y_);
-		void SetText(std::string newText);
+		void SetXY( int x_, int y_ ); // TODO: zamienic na SetPosition()
+		//void SetText(std::string newText);
+		void SetInputGuiConnection( int inputId, GuiConnection* conn );
+		void SetModuleId( ModuleId modId );
 		virtual Gtk::Widget* GetGui();
 		Module* GetModule();
-		void PaintInput(int num, bool isSelected);
-		void PaintOutput(int num, bool isSelected);
-		void FindXput(int x, int y);
 		void GetPosition(int& x, int& y);
 		int GetWidth() const;
 		int GetHeight() const;
-		void GetInputPosition(int inNum, int& x, int& y);
-		void GetOutputPosition(int outNum, int& x, int& y);
 		int GetCurrentInputNumber();
 		int GetCurrentOutputNumber();
-		void SetInputGuiConnection( int inputId, GuiConnection* conn );
+		void GetInputPosition( int inNum, int& x, int& y );
+		void GetOutputPosition( int outNum, int& x, int& y );
 		GuiConnection* GetInputGuiConnection( int inputId );
-		void SetModuleId( ModuleId modId );
+		
+		void FindXput(int x, int y);
 		ModuleId GetModuleId();
 		void SetGui( Gui* gui );
 		void OpenGuiWindow();
-		void ChangeName();
 		bool on_leave_notify_event(GdkEventCrossing* event);
 		bool on_enter_notify_event(GdkEventCrossing* event);
 		bool on_expose_event(GdkEventExpose* e);
 		void on_realize();
-		void Repaint();
 
 	protected:
 		Module* module;
@@ -64,6 +65,7 @@ class GuiModule : public Gtk::EventBox {
 		int width, height;
 		int inputCount, outputCount;
 		int currentInput, currentOutput;
+		bool isGuiWindowCreated;
 		ModuleId moduleId;
 		GuiConnection** inputGuiConnections;
 		Glib::RefPtr<Gdk::GC> gc;
@@ -72,8 +74,11 @@ class GuiModule : public Gtk::EventBox {
 		Glib::RefPtr<Gdk::Pixmap> pixmapBuffer;
 		AlgorithmView* algorithmView;
 		ModuleGuiWindow *guiWindow;
-		bool isGuiWindowCreated;
 		Glib::RefPtr<Pango::Layout> pangolayout;
+
+		void Repaint();
+		void PaintInput(int num, bool isSelected);
+		void PaintOutput(int num, bool isSelected);
 };
 
 

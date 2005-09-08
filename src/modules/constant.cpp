@@ -3,7 +3,7 @@
 Constant::Constant() :
 	Module("New constant"),
 	oValue("wy"),
-	pValue("value")
+	pValue("Wartoœæ")
 {
 	AddOutput( oValue );
 	AddParameter( pValue );

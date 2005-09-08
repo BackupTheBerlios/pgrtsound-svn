@@ -11,7 +11,7 @@ class Sum : public Module {
 		Sum();
 		~Sum();
 		void Process();
-		REGISTER_MODULE( "sumator", Sum )
+		REGISTER_MODULE( "Sumator", Sum )
 		
 	private:
 		Input i1, i2;

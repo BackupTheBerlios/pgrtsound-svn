@@ -18,7 +18,7 @@ class Slider : public Module
 		~Slider();
 		void Process();
 		void Init();
-		REGISTER_MODULE( "slider", Slider )
+		REGISTER_MODULE( "Slider", Slider )
 
 	protected:
 		Output			oOut;

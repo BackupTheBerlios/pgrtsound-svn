@@ -21,7 +21,7 @@ class SinOsc2 : public Module {
 		SinOsc2();
 		~SinOsc2();
 		void Process();
-		REGISTER_MODULE( "sinosc2", SinOsc2 )
+		REGISTER_MODULE( "Sin Oscillator 2", SinOsc2 )
 
 	private:
 		Input	iFreq, iAmp;

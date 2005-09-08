@@ -6,9 +6,8 @@ using namespace std;
 ModuleGuiWindow::ModuleGuiWindow( GuiModule* guiModule ) :
 	parentGuiModule( guiModule )
 {
-	nameLabel.set_text( "Nazwa: " );
-	
-	nameButton.set_label( "Zmien nazwe" );
+	nameLabel.set_text( Glib::locale_to_utf8("Nazwa: ") );
+	nameButton.set_label( Glib::locale_to_utf8("Zmieñ nazwê") );
 
 	nameBox.set_border_width( 2 );
 	nameBox.set_spacing( 5 );

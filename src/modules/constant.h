@@ -12,7 +12,7 @@ class Constant : public Module {
 		Constant();
 		~Constant();
 		virtual void Process();
-		REGISTER_MODULE( "constant", Constant )
+		REGISTER_MODULE( "Constant", Constant )
 		
 	private:
         float oldValue;

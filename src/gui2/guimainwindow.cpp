@@ -208,8 +208,7 @@ void GuiMainWindow::OnOpenFile() {
 }
 
 void GuiMainWindow::OnPlay() {
-   	algo->Init();
-	audio.Start();
+   	audio.Start();
 	//algoView.set_sensitive( false );
 	AllowPlay(false);
 	AllowStop(true);

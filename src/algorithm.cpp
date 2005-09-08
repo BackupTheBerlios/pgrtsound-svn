@@ -53,6 +53,7 @@ void Algorithm::InitAudioPorts() {
 ModuleId Algorithm::AddModule(string type, string name) {
 	Module* mod = moduleFactory.CreateModule(type);
 	mod->SetName(name);
+	mod->Init();
 	ModuleId moduleId;
 	moduleId = add_vertex(graph);
 	//graph[*gm] = *(moduleFactory.CreateModule(type));

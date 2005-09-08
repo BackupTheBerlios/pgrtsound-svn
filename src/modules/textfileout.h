@@ -18,7 +18,7 @@ class TextFileOut : public Module
 		~TextFileOut();
 		void Process();
 		void Init();
-		REGISTER_MODULE( "textfileout", TextFileOut )
+		REGISTER_MODULE( "Textfile Recorder", TextFileOut )
 		
 	private:
         unsigned long frames;

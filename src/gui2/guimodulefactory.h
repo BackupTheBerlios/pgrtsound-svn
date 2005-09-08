@@ -12,6 +12,7 @@
 #include "guis/ggate.h"
 #include "guis/gmonitor.h"
 #include "guis/gfilter.h"
+#include "guis/gadsr.h"
 
 #include <map>
 

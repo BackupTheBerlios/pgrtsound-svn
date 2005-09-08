@@ -48,6 +48,7 @@ void XMLConfigFile::LoadAlgorithm(Algorithm* algo) {
 	LoadModules(algo);
 	LoadParameters(algo);
 	LoadConnections(algo);
+	algo->Init();
 	TRACE( "XMLConfigFile::LoadModules - Algorytm wczytany\n" );
 }
 

@@ -10,7 +10,7 @@ class MGate : public Module {
 	public:
 		MGate();
 		~MGate();
-		REGISTER_MODULE( "gate", MGate )
+		REGISTER_MODULE( "Gate", MGate )
 		//virtual void Process();
 		virtual void Init();
 		void Switch();

@@ -8,16 +8,16 @@
 /**
  Filtr dolno- i gornoperzepustowy.
  Moduly reazliuje filtracje z wykorzystaniem cyfroewj imlpementacji
- filtru Butterwotha??? (filtr otrzymnae prez transformacje biliniowa).
+ filtrow otrzymnye przez transformacje biliniowa analogowyhc prototypow
+ dwubiegunowych.
 */
-class Filter12dB : public Module
-{
+class Filter12dB : public Module {
 	public:
 		Filter12dB();
 		~Filter12dB();
-		void Process();
-		void Init();
-		REGISTER_MODULE( "filter12db", Filter12dB )
+		virtual void Process();
+		virtual void Init();
+		REGISTER_MODULE( "Filter LP/HP", Filter12dB )
 		void UpdateCoefficients();
 				
 	protected:

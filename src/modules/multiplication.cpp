@@ -1,7 +1,7 @@
 #include "multiplication.h"
 
 Multiplication::Multiplication() : Module("New multiplication"),
-	iIn1("input 1"), iIn2("input 2"), oOut("out")
+	iIn1("input 1"), iIn2("input 2"), oOut("output")
 {
    	AddInput(iIn1);
 	AddInput(iIn2);

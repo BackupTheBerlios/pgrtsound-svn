@@ -1,7 +1,10 @@
 #include "gain.h"
 
-Gain::Gain() : Module("New gain"),
-	iIn("inputexxxx"), oOut("output"), pGain("gain")
+Gain::Gain() :
+	Module("New gain"),
+	iIn("input"),
+	oOut("output"),
+	pGain("Wzmocnienie")
  {
 	AddInput(iIn);
 	AddOutput(oOut);

@@ -13,7 +13,7 @@ class MMonitor : public Module
 	public:
 		MMonitor();
 		~MMonitor();
-		REGISTER_MODULE( "monitor", MMonitor )
+		REGISTER_MODULE( "Monitor", MMonitor )
 	protected:
 		Input iIn;
 };
