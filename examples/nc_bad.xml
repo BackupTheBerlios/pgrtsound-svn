@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<algorithm> 
-
-	<modules>
-		<module type="gain" name="Gain"/>
-	</modules>
-
-</algorithm> 
