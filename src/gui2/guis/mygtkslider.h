@@ -23,8 +23,12 @@ class MyGtkSlider : public Gtk::HBox {
 		void SetParameter(ParameterFloat* param, double min, double max, double step );
 		void ValueChanged();
 		void ChangeRange( double min, double max, double step );
+		// nowy sygnal
+		typedef sigc::signal<void> type_signal_slider_moved;
+		type_signal_slider_moved signal_slider_moved();
 
 	private:
+        type_signal_slider_moved m_signal_slider_moved;
         ParameterFloat*	parameter;
         Gtk::HScale slider;
         Gtk::Label label;

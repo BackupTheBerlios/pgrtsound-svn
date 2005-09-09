@@ -14,8 +14,6 @@ class MADSRLinear : public Module {
 		virtual void Init();
 		REGISTER_MODULE( "ADSR Envelope", MADSRLinear )
 		void Update();
-		//void UpdateAttack();
-		//void UpdateDecay();
 		void TriggerEnvelope();
 		void ReleaseEnvelope();
 

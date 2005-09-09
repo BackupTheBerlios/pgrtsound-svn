@@ -44,6 +44,7 @@ void MyGtkSlider::SetParameter( ParameterFloat* param, double min, double max,
 void MyGtkSlider::ValueChanged() {
   	// TODO: zaimplementowac 'step'
     parameter->SetValue( slider.get_value() );
+	m_signal_slider_moved.emit();
 }
 
 /**
@@ -62,4 +63,9 @@ void MyGtkSlider::ChangeRange( double min, double max, double step ) {
 	val = ( val < min )? min : val;
 	val = ( val > max )? max : val;
 	slider.set_value( val );
+}
+
+// akcesor sygnalu
+MyGtkSlider::type_signal_slider_moved MyGtkSlider::signal_slider_moved() {
+	return m_signal_slider_moved;
 }

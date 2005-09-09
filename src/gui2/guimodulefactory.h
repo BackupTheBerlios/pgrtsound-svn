@@ -13,6 +13,7 @@
 #include "guis/gmonitor.h"
 #include "guis/gfilter.h"
 #include "guis/gadsr.h"
+#include "guis/gsinlfo.h"
 
 #include <map>
 

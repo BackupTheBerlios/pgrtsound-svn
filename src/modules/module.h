@@ -25,7 +25,7 @@ using namespace std;
  koniecznosc definiowania kilku niezbedych funckji potrzbenych wewnatrz systemu.
 */
 #define REGISTER_MODULE( mod_type, class_name ) \
-	string GetType() { return mod_type; } \
+	virtual string GetType() { return mod_type; } \
 	static string GetTypeStatic() { return mod_type; } \
 	static Module* Create() { return new class_name; }
 
@@ -47,6 +47,7 @@ class Module {
 	    int AddParameter(Parameter& param);
 	    virtual void Process();
 	    virtual void Init();
+	    virtual void OnProces() {}; // TODO: zaimplemtnowac w systemie wywolywanie OnProcess
    	    virtual void SampleRateChanged();
 	    virtual void BlockSizeChanged();
 	    virtual string GetType();

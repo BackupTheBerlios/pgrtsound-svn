@@ -58,10 +58,13 @@ void MADSRLinear::TriggerEnvelope() {
 	currentTime = 0;
 	Update();
 	state = ATTACK;
+	gateOn = true;
 	//cout << "ADSR - trig" << endl;
 }
 
 void MADSRLinear::ReleaseEnvelope() {
+	gateOn = false;
+
 	if( state == SUSTAIN ) {
 		state = RELEASE;
 		currentTime = 0;
@@ -74,18 +77,14 @@ void MADSRLinear::Process() {
 	float* in = iGateIn.GetSignal();
 	float* out = oEnvelope.GetSignal();
 
-	// TODO: z czest bloku tylko ???
+	// TODO: z czest. bloku tylko ???
 	if( !gateOn ) {
-		if( *in > 0.5 ) {
+		if( *in > 0.5 )
 			TriggerEnvelope();
-			gateOn = true;
-   		}
 	}
 	else {
-		if( *in < 0.5 ) {
+		if( *in < 0.5 )
 			ReleaseEnvelope();
-			gateOn = false;
-   		}
 	}
 
 	for( unsigned long i = 0; i < Module::framesPerBlock; i++ ) {

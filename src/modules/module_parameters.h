@@ -52,6 +52,8 @@ class ParameterFloat : public Parameter {
 };
 
 inline void ParameterFloat::SetValue(float newValue) {
+	// TODO: zaimplementowac ograniczanie wartosci
+	// ponizsze chyba okej
 //	if(bounded) {
 //		value = floorf(vewValue / step) * step;
 //		value = (value > max)? max : value;

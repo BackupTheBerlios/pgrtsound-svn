@@ -13,6 +13,7 @@
 #include "modules/mgate.h"
 #include "modules/mmonitor.h"
 #include "modules/madsrlinear.h"
+#include "modules/msinlfo.h"
 
 #include <dirent.h>
 
@@ -29,6 +30,7 @@ ModuleFactory::ModuleFactory() {
 	RegisterModuleType( MGate::GetTypeStatic(), MGate::Create );
 	RegisterModuleType( MMonitor::GetTypeStatic(), MMonitor::Create );
 	RegisterModuleType( MADSRLinear::GetTypeStatic(), MADSRLinear::Create );
+	RegisterModuleType( MSinLFO::GetTypeStatic(), MSinLFO::Create );
 
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();
