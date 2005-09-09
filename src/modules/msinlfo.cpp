@@ -24,7 +24,7 @@ void MSinLFO::Init() {
 void MSinLFO::Update() {
 	freq = M_2PI * pFreq.GetValue() / Module::sampleRate;
 	
-	TRACE( "MSinLFO::Update - Czestotliwosc %f\n", freq );
+	//TRACE( "MSinLFO::Update - Czestotliwosc %f\n", freq );
 
 }
 
