@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSGuisLib.dev
 Name=RTSGuisLib
-UnitCount=19
+UnitCount=21
 Type=2
 Ver=1
 ObjFiles=
@@ -58,7 +58,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit21]
-FileName=..\..\src\gui2\guiconnection.cpp
+FileName=..\..\src\gui2\guis\gsinlfo.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -399,6 +399,16 @@ BuildCmd=
 
 [Unit16]
 FileName=..\..\src\gui2\guis\ggain.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit20]
+FileName=..\..\src\gui2\guis\gsinlfo.h
 CompileCpp=1
 Folder=
 Compile=1
