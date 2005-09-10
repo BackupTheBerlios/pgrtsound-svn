@@ -261,7 +261,7 @@ long WavFile::Read( float* dest, long numFrames ) {
 			sf_seek(sf, 0, SEEK_SET); // na poczatek WAV'a
 			framesLeft = frames;
 
-			cout << "Warping file..." << endl;
+			cout << "Zapetlenie pliku..." << endl;
 		}
 		else {
 			//currentFrame += toRead;
