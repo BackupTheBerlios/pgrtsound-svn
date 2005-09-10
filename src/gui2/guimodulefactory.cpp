@@ -11,6 +11,7 @@ GuiModuleFactory::GuiModuleFactory() {
 	RegisterGui( GGain::GetTypeStatic(), GGain::Create );
 	RegisterGui( GADSR::GetTypeStatic(), GADSR::Create );
 	RegisterGui( GSinLFO::GetTypeStatic(), GSinLFO::Create );
+	RegisterGui( GMonitorGraph::GetTypeStatic(), GMonitorGraph::Create );
 	
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllGuiPlugins();

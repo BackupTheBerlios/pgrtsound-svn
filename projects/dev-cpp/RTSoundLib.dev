@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSoundLib.dev
 Name=rtsound
-UnitCount=52
+UnitCount=54
 Type=2
 Ver=1
 ObjFiles=
@@ -561,6 +561,26 @@ BuildCmd=
 FileName=..\..\src\modules\msinlfo.h
 CompileCpp=1
 Folder=modules/synthesis
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit53]
+FileName=..\..\src\modules\mmonitorgraph.cpp
+CompileCpp=1
+Folder=modules/gui only
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit54]
+FileName=..\..\src\modules\mmonitorgraph.h
+CompileCpp=1
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000

@@ -13,7 +13,7 @@
  * formatu.
  */
 class XMLConfigFile
-{
+{ 
 	public:
 		XMLConfigFile();
 		~XMLConfigFile();

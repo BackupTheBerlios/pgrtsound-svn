@@ -4,6 +4,7 @@
 #include "modules/module.h"
 #include "modules/audioportout.h"
 #include "modules/audioportin.h"
+#include "modules/delay.h"
 
 #include <gmodule.h>
 

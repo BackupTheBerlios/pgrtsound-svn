@@ -14,6 +14,7 @@
 #include "modules/mmonitor.h"
 #include "modules/madsrlinear.h"
 #include "modules/msinlfo.h"
+#include "modules/mmonitorgraph.h"
 
 #include <dirent.h>
 
@@ -31,7 +32,8 @@ ModuleFactory::ModuleFactory() {
 	RegisterModuleType( MMonitor::GetTypeStatic(), MMonitor::Create );
 	RegisterModuleType( MADSRLinear::GetTypeStatic(), MADSRLinear::Create );
 	RegisterModuleType( MSinLFO::GetTypeStatic(), MSinLFO::Create );
-
+    RegisterModuleType( MMonitorGraph::GetTypeStatic(), MMonitorGraph::Create );
+    
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();
     }

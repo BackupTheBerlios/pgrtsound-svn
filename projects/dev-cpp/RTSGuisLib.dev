@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSGuisLib.dev
 Name=RTSGuisLib
-UnitCount=21
+UnitCount=23
 Type=2
 Ver=1
 ObjFiles=
@@ -68,9 +68,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit22]
-FileName=..\..\src\gui2\algorithmview_loader.cpp
+FileName=..\..\src\gui2\guis\gmonitorgraph.h
 CompileCpp=1
-Folder=
+Folder=RTSGuisLib
 Compile=1
 Link=1
 Priority=1000
@@ -78,9 +78,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit23]
-FileName=..\..\src\xmlconfigfile.cpp
+FileName=..\..\src\gui2\guis\gmonitorgraph.cpp
 CompileCpp=1
-Folder=RTS GUI
+Folder=RTSGuisLib
 Compile=1
 Link=1
 Priority=1000
