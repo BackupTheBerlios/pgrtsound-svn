@@ -49,7 +49,7 @@ Output::Output(string name_) {
 	signal = NULL;
 
 	/* TODO (#1#): zrobic try block */
-	SetBufferSize(Module::framesPerBlock);
+	SetBufferSize( Module::framesPerBlock );
 }
 
 Output::~Output() {
@@ -76,7 +76,7 @@ float* Output::GetSignal() const {
 	return signal;
 }
 
-void Output::SetBufferSize(unsigned long newBufferSize) {
+void Output::SetBufferSize( unsigned long newBufferSize ) {
 	float* outBuff;
 
 	// kasowanie bufora poprzedniego o ile isnieje
@@ -91,6 +91,9 @@ void Output::SetBufferSize(unsigned long newBufferSize) {
         throw RTSError("Output::SetBufferSize(): Nie mozna zaalokowac pamieci na bufor wyjsciowy");
 	}
 	else {
+		for( unsigned long i = 0; i <newBufferSize; i++ )
+			outBuff[i] = 0.0f;
+
 		signal = outBuff;
 	}
 }

@@ -182,7 +182,7 @@ void GuiMainWindow::OnOpenFile() {
 		    }
 
 			try {
-				algoView.LoadFromFile( fileName );
+				algoView.LoadFromFile( Glib::locale_from_utf8( fileName ) );
 				algoView.GetAlgorithm()->CreateQueue();
 		    } catch (RTSError& error) {
 		        cout << "Error: " << error.what() << endl;
@@ -319,7 +319,7 @@ void GuiMainWindow::OnSaveFile() {
 	if( fileName == "" )
 	    OnSaveFileAs();
 	else
-		algoView.SaveToFile( fileName );
+		algoView.SaveToFile( Glib::locale_from_utf8( fileName ) );
 }
 
 void GuiMainWindow::OnSaveFileAs() {
@@ -345,7 +345,7 @@ void GuiMainWindow::OnSaveFileAs() {
 			if( fileName.rfind( ".xml" ) !=  fileName.size() - 4 )
 				fileName += ".xml";
 
-			algoView.SaveToFile( fileName );
+			algoView.SaveToFile( Glib::locale_from_utf8( fileName ) );
    		}
 	}
 }

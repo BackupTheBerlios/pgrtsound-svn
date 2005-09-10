@@ -89,7 +89,8 @@ void Algorithm::PrintInfo(void) {
 bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
 			ModuleId moduleId2, int inputId, ConnectionId& cId )
 {
-	TRACE( "Algorithm::ConnectModules\n    '%s'.'%s' -> '%s'.'%s'\n",
+	//Algorithm::ConnectModules\n
+	TRACE( "    '%s'.'%s' -> '%s'.'%s'\n",
 		GetModule(moduleId1)->GetName().c_str(),
 		GetModule(moduleId1)->GetOutput(outputId)->GetName().c_str(),
 		GetModule(moduleId2)->GetName().c_str(),

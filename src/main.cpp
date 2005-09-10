@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 
 #include "audiodriver.h"
 #include "algorithm.h"
@@ -7,34 +8,34 @@
 #include "callback.h"
 
 #define FRAMES_PER_BLOCK (256)
-#define SAMPLE_RATE (44100)
+#define SAMPLE_RATE (44100.0)
 
 using namespace std;
 
 // logowanie do pliku
-ofstream logfile("RTSoundlog.txt");
-streambuf* out = cout.rdbuf(logfile.rdbuf());
+//ofstream logfile("RTSoundlog.txt");
+//streambuf* out = cout.rdbuf(logfile.rdbuf());
 
 //------------------------------------------------------------------------------
 int main(int argc, char *argv[]) {
-    Algorithm algo(FRAMES_PER_BLOCK);
+    Algorithm algo( FRAMES_PER_BLOCK );
 	AudioDriver audio;
 	XMLConfigFile xmlConfig;
 
 	char c = ' ';
     bool running = false;
 
-    algo.SetSampleRate(SAMPLE_RATE);
+   	algo.SetSampleRate( SAMPLE_RATE );
 
     audio.PrintDevices();
-    
+
  	try {
-		xmlConfig.OpenFile("../../examples/noise_filtering.xml");
+		//xmlConfig.OpenFile("../../examples/ADSR test.xml");
+		xmlConfig.OpenFile("../../examples/wav.xml");
 		//xmlConfig.OpenFile("../../examples/gate.xml");
 
         algo.Clear(); // test
 		xmlConfig.LoadAlgorithm(&algo);
-		algo.Init();
 		algo.CreateQueue();
 
     } catch (RTSError& error) {
@@ -89,7 +90,6 @@ int main(int argc, char *argv[]) {
 //		}
 //	}
 
-	Gain g;
-	
+	//system( "PAUSE" );
 	return EXIT_SUCCESS;
 }

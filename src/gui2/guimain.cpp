@@ -1,19 +1,21 @@
 #include <cstdlib>
-#include <iostream>
+//#include <iostream>
+#include <fstream>
 
 #include <gtkmm/main.h>
 
 #include "guimainwindow.h"
 
 // logowanie do pliku
-//ofstream logfile("RTSGui2log.txt");
-//streambuf* out = cout.rdbuf(logfile.rdbuf());
+ofstream logfile("RTSGuiLog.txt");
+streambuf* out = cout.rdbuf(logfile.rdbuf());
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
 	Gtk::Main kit(argc, argv, false); // 'false' aby nie zmieniac locale!!!!
+	//Gtk::Main kit(argc, argv, true);
 
 	GuiMainWindow window;
 

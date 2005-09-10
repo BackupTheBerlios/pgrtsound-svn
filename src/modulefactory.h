@@ -24,11 +24,11 @@ class ModuleFactory {
 	public:
 		ModuleFactory();
 		~ModuleFactory();
-		void RegisterPlugin(string filename);
 		void RegisterModuleType( string type, CreateFuncPtr funcPtr );
-		void RegisterAllPlugins();
         Module* CreateModule(string type);
         std::vector<string>& ListModuleTypes();
+		void RegisterPlugin(string filename);
+		void RegisterAllPlugins();
 
 	private:
 		map<string, CreateFuncPtr> type2CreateFuncMap;

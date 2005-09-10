@@ -30,6 +30,8 @@ class GuiModuleFactory {
 		~GuiModuleFactory();
 		GuiModule* CreateGuiModule( Module* module );
 		void RegisterGui( string type, CreateGuiFuncPtr funcPtr );
+		void RegisterGuiPlugin( string filename );
+		void RegisterAllGuiPlugins();
 
 	protected:
 		map<string, CreateGuiFuncPtr> type2GuiMap;

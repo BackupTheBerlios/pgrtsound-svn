@@ -20,7 +20,7 @@
 ModuleFactory::ModuleFactory() {
 	RegisterModuleType( Constant::GetTypeStatic(), Constant::Create );
 	RegisterModuleType( SinOsc2::GetTypeStatic(), SinOsc2::Create );
-	RegisterModuleType( Sum::GetTypeStatic(), Sum::Create );
+	//RegisterModuleType( Sum::GetTypeStatic(), Sum::Create );
 	RegisterModuleType( Slider::GetTypeStatic(), Slider::Create );
 	RegisterModuleType( Gain::GetTypeStatic(), Gain::Create );
 	RegisterModuleType( Multiplication::GetTypeStatic(), Multiplication::Create );
@@ -101,13 +101,13 @@ void ModuleFactory::RegisterPlugin(string filename) {
     
     filename = "./plugins/" + filename;
     
-    GModule*  gm = g_module_open(filename.c_str(), G_MODULE_BIND_MASK);
+    GModule*  gm = g_module_open( filename.c_str(), G_MODULE_BIND_MASK );
     if (gm!=NULL) {
-        if (g_module_symbol (gm, "GetType", (gpointer *)&GetType)==TRUE){                
-            if (g_module_symbol (gm, "Create", (gpointer *)&Create)==TRUE){
-                RegisterModuleType(GetType(), Create);
+		if( g_module_symbol( gm, "GetModuleType", (gpointer *)&GetType ) == TRUE) {
+            if( g_module_symbol( gm, "CreateModule", (gpointer *)&Create ) == TRUE ) {
+                RegisterModuleType( GetType(), Create );
             } else {
-                TRACE( "ModuleFactory::RegisterPlugin - g_module_error () w pliku %s\n",
+                TRACE( "ModuleFactory::RegisterPlugin - g_module_error() w pliku %s\n",
 					filename.c_str() );
             }
         } else {
