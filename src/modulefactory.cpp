@@ -20,7 +20,7 @@
 ModuleFactory::ModuleFactory() {
 	RegisterModuleType( Constant::GetTypeStatic(), Constant::Create );
 	RegisterModuleType( SinOsc2::GetTypeStatic(), SinOsc2::Create );
-	//RegisterModuleType( Sum::GetTypeStatic(), Sum::Create );
+	RegisterModuleType( Sum::GetTypeStatic(), Sum::Create );
 	RegisterModuleType( Slider::GetTypeStatic(), Slider::Create );
 	RegisterModuleType( Gain::GetTypeStatic(), Gain::Create );
 	RegisterModuleType( Multiplication::GetTypeStatic(), Multiplication::Create );
