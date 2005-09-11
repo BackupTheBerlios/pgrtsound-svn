@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSoundLib.dev
 Name=rtsound
-UnitCount=54
+UnitCount=56
 Type=2
 Ver=1
 ObjFiles=
@@ -581,6 +581,26 @@ BuildCmd=
 FileName=..\..\src\modules\mmonitorgraph.h
 CompileCpp=1
 Folder=modules/gui only
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit55]
+FileName=..\..\src\modules\delay.cpp
+CompileCpp=1
+Folder=modules/audio
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit56]
+FileName=..\..\src\modules\delay.h
+CompileCpp=1
+Folder=modules/audio
 Compile=1
 Link=1
 Priority=1000

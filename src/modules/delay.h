@@ -2,6 +2,7 @@
 #define DELAY_H
 
 #include "module.h"
+#include <deque>
 
 /**
  Modul opóŸnienia.
@@ -21,8 +22,9 @@ class Delay : public Module
 		Input           iIn;
 		Output          oOut;
 		ParameterFloat  pDelay;
-		float           *buffor;
-		int             n1, n2;
+		deque<float>    buffor;
+		
+		int             n;
 		int             maxDelay;
 };
 

@@ -15,6 +15,7 @@
 #include "modules/madsrlinear.h"
 #include "modules/msinlfo.h"
 #include "modules/mmonitorgraph.h"
+#include "modules/delay.h"
 
 #include <dirent.h>
 
@@ -33,6 +34,7 @@ ModuleFactory::ModuleFactory() {
 	RegisterModuleType( MADSRLinear::GetTypeStatic(), MADSRLinear::Create );
 	RegisterModuleType( MSinLFO::GetTypeStatic(), MSinLFO::Create );
     RegisterModuleType( MMonitorGraph::GetTypeStatic(), MMonitorGraph::Create );
+    RegisterModuleType( Delay::GetTypeStatic(), Delay::Create );
     
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();
