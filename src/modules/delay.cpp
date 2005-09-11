@@ -4,10 +4,9 @@ Delay::Delay() : Module("New delay"),
 	iIn("inpute"), oOut("output"), pDelay("delay")
  {
     //maksymalne opóŸnienie w próbkach
-    maxDelay = 400000;
 	AddInput(iIn);
 	AddOutput(oOut);
-	pDelay.Bound(0, maxDelay, 1);    // ograczniczenie wartosci
+	pDelay.Bound(1, 400000, 1);    // ograczniczenie wartosci
 	AddParameter(pDelay);
 	
 }
@@ -34,15 +33,19 @@ void Delay::Process() {
 	float* in = iIn.GetSignal();
 	float* out = oOut.GetSignal();
 
-    
+
    	for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
-		    if (n == buffor.size()) {
-    	        *out++    = buffor.at(0);
-                buffor.pop_front();
-    	        buffor.push_back(*in++); 
+            if (n<1) {
+                *out++ = *in++;   
             } else {
-                *out++  = 0;
-    	        buffor.push_back(*in++);
+		       if (n <= buffor.size()) {
+    	           *out++    = buffor.at(0);
+                   buffor.pop_front();
+    	           buffor.push_back(*in++); 
+                } else {
+                    *out++  = 0;
+    	           buffor.push_back(*in++);
+                }
             }
 	}
 }

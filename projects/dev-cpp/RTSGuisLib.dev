@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSGuisLib.dev
 Name=RTSGuisLib
-UnitCount=23
+UnitCount=25
 Type=2
 Ver=1
 ObjFiles=
@@ -88,9 +88,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit24]
-FileName=..\..\src\xmlconfigfile.h
+FileName=..\..\src\gui2\guis\gdelay.h
 CompileCpp=1
-Folder=RTS GUI
+Folder=RTSGuisLib
 Compile=1
 Link=1
 Priority=1000
@@ -258,9 +258,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit25]
-FileName=..\..\src\gui2\moduleguiwindow.h
+FileName=..\..\src\gui2\guis\gdelay.cpp
 CompileCpp=1
-Folder=
+Folder=RTSGuisLib
 Compile=1
 Link=1
 Priority=1000

@@ -15,6 +15,7 @@
 #include "guis/gadsr.h"
 #include "guis/gsinlfo.h"
 #include "guis/gmonitorgraph.h"
+#include "guis/gdelay.h"
 #include <map>
 
 /**
