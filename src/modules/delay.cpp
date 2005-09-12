@@ -3,16 +3,20 @@
 Delay::Delay() : Module("New delay"),
 	iIn("inpute"), oOut("output"), pDelay("delay")
  {
-    //maksymalne opóŸnienie w próbkach
+    //maksymalne opó?nienie w próbkach
+    maxDelay = 400000;
 	AddInput(iIn);
 	AddOutput(oOut);
-	pDelay.Bound(1, 400000, 1);    // ograczniczenie wartosci
+	pDelay.Bound(0, maxDelay, 1);    // ograczniczenie wartosci
 	AddParameter(pDelay);
 	
+	buffor = new float[maxDelay];
+	n1    = 0;
+	n2    = n1 - (int)pDelay.GetValue();
 }
 
 Delay::~Delay() {
-
+ delete buffor;
 }
 
 Module* Delay::Create(){
@@ -28,24 +32,21 @@ string Delay::GetType() {
 }
 
 void Delay::Process() {
-	n    = (int)pDelay.GetValue();
+	n2    = n1 - (int)pDelay.GetValue();
 	
 	float* in = iIn.GetSignal();
 	float* out = oOut.GetSignal();
 
-
-   	for(unsigned long i = 0; i < Module::framesPerBlock; i++) {
-            if (n<1) {
-                *out++ = *in++;   
-            } else {
-		       if (n <= buffor.size()) {
-    	           *out++    = buffor.at(0);
-                   buffor.pop_front();
-    	           buffor.push_back(*in++); 
-                } else {
-                    *out++  = 0;
-    	           buffor.push_back(*in++);
-                }
-            }
+    //cout << n2 <<"-" <<n1<<"=" << n2-n1 << " powinno byc " << pDelay.GetValue()<<endl;    
+   	for(unsigned long n = 0; n < Module::framesPerBlock; n++) {
+			buffor[n1] = (*in++);
+			if (n2<0)
+		      n2 = maxDelay + n2;
+		    
+	        *out++    = buffor[n2];
+			if (n1>maxDelay) n1=0;
+			if (n2>maxDelay) n2=0;
+			n1++;
+			n2++;
 	}
 }

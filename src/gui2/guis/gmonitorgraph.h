@@ -24,6 +24,10 @@ class GMonitorGraph : public Gui
 		sigc::slot<bool> my_slot;
 		sigc::connection conn;
 		char txtBuffer[50];
+		float *buffor;
+		unsigned int  n;
+		unsigned int  t;
+		float         a;
 };
 
 #endif // GMONITORGRAPH_H
