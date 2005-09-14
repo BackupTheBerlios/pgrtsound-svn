@@ -6,6 +6,7 @@
 
 #include <gtkmm/label.h>
 #include <gtkmm/curve.h>
+#include <gtkmm/scale.h>
 
 /**
  * No description
@@ -18,16 +19,20 @@ class GMonitorGraph : public Gui
 		virtual Gtk::Widget* GetGui();
 		REGISTER_GUI( MMonitorGraph::GetTypeStatic(), GMonitorGraph )
 		bool OnUpdateTimer();
-		
+
 	protected:
-        Gtk::Curve curve;
-		sigc::slot<bool> my_slot;
-		sigc::connection conn;
-		char txtBuffer[50];
-		float *buffor;
-		unsigned int  n;
-		unsigned int  t;
-		float         a;
+		Gtk::VBox         box;
+        Gtk::HBox         hbox;
+		Gtk::HScale       slTime;
+        Gtk::VScale       slScale;
+        Gtk::Curve        curve;
+		sigc::slot<bool>  my_slot;
+		sigc::connection  conn;
+		char              txtBuffer[50];
+		float             buffor[5000];
+		unsigned int      n;
+		unsigned int      t;
+		int               a;  
 };
 
 #endif // GMONITORGRAPH_H
