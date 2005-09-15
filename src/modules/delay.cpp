@@ -1,7 +1,7 @@
 #include "delay.h"
 
 Delay::Delay() : Module("New delay"),
-	iIn("inpute"), oOut("output"), pDelay("delay")
+	iIn("inpute"), oOut("output"), pDelay("Delay")
  {
     //maksymalne opó?nienie w próbkach
     maxDelay = 400000;
@@ -19,17 +19,6 @@ Delay::~Delay() {
  delete buffor;
 }
 
-Module* Delay::Create(){
-	return new Delay;
-}
-
-string Delay::GetTypeStatic() {
-	return "delay";
-}
-
-string Delay::GetType() {
-	return "delay";
-}
 
 void Delay::Process() {
 	n2    = n1 - (int)pDelay.GetValue();

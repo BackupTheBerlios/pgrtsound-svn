@@ -5,7 +5,6 @@ GMonitorGraph::GMonitorGraph( Module* mod ) :
     slScale(1,101,1), 
     slTime(1,101,1)
 {
-    TRACE( "GMonitorGraph::GMonitorGraph( Module* mod )\n" );
   	// timer
 	my_slot = sigc::mem_fun( this, &GMonitorGraph::OnUpdateTimer );
 	conn = Glib::signal_timeout().connect( my_slot, 200 );
@@ -27,8 +26,6 @@ GMonitorGraph::GMonitorGraph( Module* mod ) :
     
 	box.add ( hbox );
 	box.add ( slTime );
-	
-	TRACE( "END GMonitorGraph::GMonitorGraph( Module* mod )\n" );
     
 }
 
@@ -39,13 +36,10 @@ GMonitorGraph::~GMonitorGraph(){
 }
 
 Gtk::Widget* GMonitorGraph::GetGui() {
-    TRACE( "Gtk::Widget* GMonitorGraph::GetGui()\n" );
 	return &box;
 }
 
 bool GMonitorGraph::OnUpdateTimer() {
-	TRACE( "GMonitorGraph::OnUpdateTimer\n" );
-
     if (module->GetInput( 0 ) != NULL) {
         float *in=module->GetInput( 0 )->GetSignal();
         for (unsigned int i=0; i<Module::framesPerBlock; i+=t) {       
@@ -65,13 +59,12 @@ bool GMonitorGraph::OnUpdateTimer() {
                 }   
                 Glib::ArrayHandle<float> arrayHandle(pointsList);
 	            curve.set_vector(arrayHandle);  
-                cout << "a="<<a << "  t="<<  t << endl ;      
+                //cout << "a="<<a << "  t="<<  t << endl ;      
             }
             buffor[n] = in[i]; 
             n++; 
         }
     }
-    TRACE( "END GMonitorGraph::OnUpdateTimer\n" );
 	return true;
 }
 

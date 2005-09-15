@@ -2,7 +2,7 @@
 #define GDELAY_H
 
 #include "gui.h"
-#include "mygtkfloatentry.h"
+#include "mygtkslider.h"
 #include "../../modules/delay.h"
 
 #include <gtkmm/button.h>
@@ -18,12 +18,10 @@ class GDelay : public Gui
 		~GDelay();
 		Gtk::Widget* GetGui();
 		REGISTER_GUI( Delay::GetTypeStatic(), GDelay )
-		void OnApply();
+	//	void OnApply();
 
 	protected:
-        MyGtkFloatEntry entry;
-        Gtk::HBox box;
-		Gtk::Button buttonApply;
+        MyGtkSlider slider;
 };
 
 #endif // GDELAY_H

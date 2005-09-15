@@ -13,9 +13,7 @@ class Delay : public Module
 		Delay();
 		~Delay();
 		void Process();
-		static Module* Create();
-		static string GetTypeStatic();
-		string GetType();
+		REGISTER_MODULE( "Delay", Delay )
 		
 	private:
 		Input           iIn;
