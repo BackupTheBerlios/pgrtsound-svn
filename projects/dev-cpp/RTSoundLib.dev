@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSoundLib.dev
 Name=rtsound
-UnitCount=58
+UnitCount=60
 Type=2
 Ver=1
 ObjFiles=
@@ -248,9 +248,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=..\..\src\modules\sinosc2.cpp
+FileName=..\..\src\modules\slider.cpp
 CompileCpp=1
-Folder=modules/synthesis
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
@@ -288,9 +288,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit36]
-FileName=..\..\src\modules\sinosc2.h
+FileName=..\..\src\modules\slider.h
 CompileCpp=1
-Folder=modules/synthesis
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
@@ -308,9 +308,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit39]
-FileName=..\..\src\modules\sum.cpp
+FileName=..\..\src\modules\textfileout.cpp
 CompileCpp=1
-Folder=modules/math
+Folder=modules/tools
 Compile=1
 Link=1
 Priority=1000
@@ -328,9 +328,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit37]
-FileName=..\..\src\modules\slider.cpp
+FileName=..\..\src\modules\sum.cpp
 CompileCpp=1
-Folder=modules/gui only
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -338,9 +338,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit38]
-FileName=..\..\src\modules\slider.h
+FileName=..\..\src\modules\sum.h
 CompileCpp=1
-Folder=modules/gui only
+Folder=modules/math
 Compile=1
 Link=1
 Priority=1000
@@ -348,7 +348,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit45]
-FileName=..\..\src\modules\mgate.h
+FileName=..\..\src\modules\mmonitor.h
 CompileCpp=1
 Folder=modules/gui only
 Compile=1
@@ -358,9 +358,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit41]
-FileName=..\..\src\modules\textfileout.cpp
+FileName=..\..\src\xmlconfigfile.cpp
 CompileCpp=1
-Folder=modules/tools
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -368,9 +368,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit42]
-FileName=..\..\src\modules\textfileout.h
+FileName=..\..\src\xmlconfigfile.h
 CompileCpp=1
-Folder=modules/tools
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -378,9 +378,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit40]
-FileName=..\..\src\modules\sum.h
+FileName=..\..\src\modules\textfileout.h
 CompileCpp=1
-Folder=modules/math
+Folder=modules/tools
 Compile=1
 Link=1
 Priority=1000
@@ -468,9 +468,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit43]
-FileName=..\..\src\xmlconfigfile.cpp
+FileName=..\..\src\modules\mgate.h
 CompileCpp=1
-Folder=
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
@@ -478,9 +478,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit44]
-FileName=..\..\src\xmlconfigfile.h
+FileName=..\..\src\modules\mgate.cpp
 CompileCpp=1
-Folder=
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
@@ -498,16 +498,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit46]
-FileName=..\..\src\modules\mgate.cpp
-CompileCpp=1
-Folder=modules/gui only
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit48]
 FileName=..\..\src\modules\mmonitor.cpp
 CompileCpp=1
 Folder=modules/gui only
@@ -517,17 +507,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit47]
-FileName=..\..\src\modules\mmonitor.h
-CompileCpp=1
-Folder=modules/gui only
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit50]
+[Unit48]
 FileName=..\..\src\modules\madsrlinear.cpp
 CompileCpp=1
 Folder=modules/synthesis
@@ -537,7 +517,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit49]
+[Unit47]
 FileName=..\..\src\modules\madsrlinear.h
 CompileCpp=1
 Folder=modules/synthesis
@@ -547,37 +527,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit52]
-FileName=..\..\src\modules\msinlfo.cpp
-CompileCpp=1
-Folder=modules/synthesis
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit51]
-FileName=..\..\src\modules\msinlfo.h
-CompileCpp=1
-Folder=modules/synthesis
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit53]
-FileName=..\..\src\modules\mmonitorgraph.cpp
-CompileCpp=1
-Folder=modules/gui only
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit54]
+[Unit50]
 FileName=..\..\src\modules\mmonitorgraph.h
 CompileCpp=1
 Folder=modules/gui only
@@ -587,17 +537,17 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit55]
-FileName=..\..\src\modules\delay.cpp
+[Unit49]
+FileName=..\..\src\modules\mmonitorgraph.cpp
 CompileCpp=1
-Folder=modules/audio
+Folder=modules/gui only
 Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit56]
+[Unit52]
 FileName=..\..\src\modules\delay.h
 CompileCpp=1
 Folder=modules/audio
@@ -607,10 +557,41 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit57]
-FileName=..\..\src\modules\fft.h
+[Unit51]
+FileName=..\..\src\modules\delay.cpp
 CompileCpp=1
-Folder=
+Folder=modules/audio
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit54]
+FileName=..\..\src\modules\mvariabledelay.h
+CompileCpp=1
+Folder=modules/audio
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit56]
+FileName=..\..\src\modules\mwavetableosc.h
+CompileCpp=1
+Folder=modules/synthesis
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+<<<<<<< .mine
+
+[Unit57]
+FileName=..\..\src\modules\mfeedbackdelay.cpp
+CompileCpp=1
+Folder=modules/audio
 Compile=1
 Link=1
 Priority=1000
@@ -618,9 +599,50 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit58]
-FileName=..\..\src\modules\fft.cpp
+FileName=..\..\src\modules\mfeedbackdelay.h
 CompileCpp=1
-Folder=
+Folder=modules/audio
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+=======
+
+[Unit53]
+FileName=..\..\src\modules\mvariabledelay.cpp
+CompileCpp=1
+Folder=modules/audio
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit55]
+FileName=..\..\src\modules\mwavetableosc.cpp
+CompileCpp=1
+Folder=modules/synthesis
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit59]
+FileName=..\..\src\modules\msinosc.cpp
+CompileCpp=1
+Folder=modules/synthesis
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit60]
+FileName=..\..\src\modules\msinosc.h
+CompileCpp=1
+Folder=modules/synthesis
 Compile=1
 Link=1
 Priority=1000
