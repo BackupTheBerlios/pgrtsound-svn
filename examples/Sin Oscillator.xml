@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<algorithm>
+	<modules>
+		<module type="Sin Oscillator" name="Sin Oscillator">
+		</module>
+		<module type="Slider" name="Częstotliwość">
+			<parameter number="0">220</parameter>
+			<parameter number="1">440</parameter>
+			<parameter number="2">220</parameter>
+		</module>
+		<module type="Constant" name="Amplituda">
+			<parameter number="0">0.25</parameter>
+		</module>
+	</modules>
+	<connections>
+		<connection name1="Sin Oscillator" output="0" name2="AudioPortOut" input="0" />
+		<connection name1="Sin Oscillator" output="0" name2="AudioPortOut" input="1" />
+		<connection name1="Amplituda" output="0" name2="Sin Oscillator" input="1" />
+		<connection name1="Częstotliwość" output="0" name2="Sin Oscillator" input="0" />
+	</connections>
+	<gui>
+		<guimodule name="AudioPortIn" x="0" y="0" />
+		<guimodule name="AudioPortOut" x="388" y="98" />
+		<guimodule name="Sin Oscillator" x="216" y="97" />
+		<guimodule name="Częstotliwość" x="47" y="81" />
+		<guimodule name="Amplituda" x="50" y="128" />
+	</gui>
+</algorithm>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<algorithm>
+	<modules>
+		<module type="Variable Delay" name="Variable Delay">
+			<parameter number="0">2</parameter>
+			<parameter number="1">0.25</parameter>
+		</module>
+		<module type="Filter LP/HP" name="Filter LP/HP 3">
+			<parameter number="0">1395</parameter>
+			<parameter number="1">lp</parameter>
+		</module>
+		<module type="White Noise Generator" name="Noise">
+		</module>
+		<module type="Sin Oscillator" name="LFO">
+		</module>
+		<module type="Slider" name="Częstotliwość">
+			<parameter number="0">0.1</parameter>
+			<parameter number="1">20</parameter>
+			<parameter number="2">0.6</parameter>
+		</module>
+		<module type="Constant" name="0.25">
+			<parameter number="0">0.25</parameter>
+		</module>
+		<module type="Constant" name="0.75">
+			<parameter number="0">0.75</parameter>
+		</module>
+		<module type="Sumator" name="+">
+		</module>
+		<module type="Gain" name="Wzmocnienie">
+			<parameter number="0">0.26</parameter>
+		</module>
+		<module type="Sumator" name="Mix">
+		</module>
+	</modules>
+	<connections>
+		<connection name1="Noise" output="0" name2="Filter LP/HP 3" input="0" />
+		<connection name1="Częstotliwość" output="0" name2="LFO" input="0" />
+		<connection name1="0.25" output="0" name2="LFO" input="1" />
+		<connection name1="0.75" output="0" name2="+" input="1" />
+		<connection name1="LFO" output="0" name2="+" input="0" />
+		<connection name1="+" output="0" name2="Variable Delay" input="1" />
+		<connection name1="Filter LP/HP 3" output="0" name2="Variable Delay" input="0" />
+		<connection name1="Wzmocnienie" output="0" name2="AudioPortOut" input="0" />
+		<connection name1="Wzmocnienie" output="0" name2="AudioPortOut" input="1" />
+		<connection name1="Filter LP/HP 3" output="0" name2="Mix" input="0" />
+		<connection name1="Variable Delay" output="0" name2="Mix" input="1" />
+		<connection name1="Mix" output="0" name2="Wzmocnienie" input="0" />
+	</connections>
+	<gui>
+		<guimodule name="AudioPortIn" x="756" y="337" />
+		<guimodule name="AudioPortOut" x="715" y="64" />
+		<guimodule name="Variable Delay" x="369" y="116" />
+		<guimodule name="Filter LP/HP 3" x="237" y="64" />
+		<guimodule name="Noise" x="122" y="64" />
+		<guimodule name="LFO" x="128" y="173" />
+		<guimodule name="Częstotliwość" x="8" y="173" />
+		<guimodule name="0.25" x="8" y="212" />
+		<guimodule name="0.75" x="129" y="214" />
+		<guimodule name="+" x="246" y="173" />
+		<guimodule name="Wzmocnienie" x="599" y="64" />
+		<guimodule name="Mix" x="487" y="64" />
+	</gui>
+</algorithm>
