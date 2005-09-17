@@ -1,10 +1,8 @@
 #include "modulefactory.h"
 
-#include "modules/sinosc2.h"
 #include "modules/constant.h"
 #include "modules/sum.h"
 #include "modules/gain.h"
-
 #include "modules/textfileout.h"
 #include "modules/slider.h"
 #include "modules/multiplication.h"
@@ -13,15 +11,18 @@
 #include "modules/mgate.h"
 #include "modules/mmonitor.h"
 #include "modules/madsrlinear.h"
-#include "modules/msinlfo.h"
+#include "modules/msinosc.h"
 #include "modules/mmonitorgraph.h"
 #include "modules/delay.h"
+#include "modules/mfeedbackdelay.h"
+#include "modules/mvariabledelay.h"
+#include "modules/mwavetableosc.h"
 
 #include <dirent.h>
 
 ModuleFactory::ModuleFactory() {
 	RegisterModuleType( Constant::GetTypeStatic(), Constant::Create );
-	RegisterModuleType( SinOsc2::GetTypeStatic(), SinOsc2::Create );
+	RegisterModuleType( MWavetableOsc::GetTypeStatic(), MWavetableOsc::Create );
 	RegisterModuleType( Sum::GetTypeStatic(), Sum::Create );
 	RegisterModuleType( Slider::GetTypeStatic(), Slider::Create );
 	RegisterModuleType( Gain::GetTypeStatic(), Gain::Create );
@@ -32,9 +33,11 @@ ModuleFactory::ModuleFactory() {
 	RegisterModuleType( MGate::GetTypeStatic(), MGate::Create );
 	RegisterModuleType( MMonitor::GetTypeStatic(), MMonitor::Create );
 	RegisterModuleType( MADSRLinear::GetTypeStatic(), MADSRLinear::Create );
-	RegisterModuleType( MSinLFO::GetTypeStatic(), MSinLFO::Create );
+	RegisterModuleType( MSinOsc::GetTypeStatic(), MSinOsc::Create );
     RegisterModuleType( MMonitorGraph::GetTypeStatic(), MMonitorGraph::Create );
     RegisterModuleType( Delay::GetTypeStatic(), Delay::Create );
+    RegisterModuleType( MFeedbackDelay::GetTypeStatic(), MFeedbackDelay::Create );
+    RegisterModuleType( MVariableDelay::GetTypeStatic(), MVariableDelay::Create );
     
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();

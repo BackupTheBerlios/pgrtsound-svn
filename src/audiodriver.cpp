@@ -220,7 +220,7 @@ void AudioDriver::Open() {
                 &outputParameters,
                 sampleRate,
                 framesPerBuffer,
-                paClipOff,			/* we won't output out of range samples so don't bother clipping them */
+                paNoFlag, /* we won't output out of range samples so don't bother clipping them */
                 callbackFunction,
                 callbackData);
 

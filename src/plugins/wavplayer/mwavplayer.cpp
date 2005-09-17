@@ -78,6 +78,8 @@ bool MWavPlayer::Open() {
 		return false;
 	}
 
+	// TODO: czyszczenie buforow wyjsciowych (lewy, prawy) w razie niepowodzenia z plikiem
+
 	if( !wav.Open( pFileName.GetText().c_str() ) )
 	    return false;
 	    

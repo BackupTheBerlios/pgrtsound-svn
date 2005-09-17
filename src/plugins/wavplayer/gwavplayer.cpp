@@ -14,9 +14,7 @@ GWavPlayer::GWavPlayer( Module* mod ) :
 	) );
 	
 	fileLabel.set_ellipsize( Pango::ELLIPSIZE_END );
-	//fileLabel.set_size_request( -1, 50 );
-	//fileLabel.set_justify( Gtk::JUSTIFY_LEFT  );
-	
+
 	box.set_spacing( 2 );
 	box.add( openFileButton );
 	box.add( fileLabel );

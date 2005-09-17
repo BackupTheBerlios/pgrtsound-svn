@@ -50,7 +50,7 @@ void Algorithm::InitAudioPorts() {
  * @param type Rozpoznawany prez system typ modulu.
  * @param name Oczekwiana nazwa modulu.
  */
-ModuleId Algorithm::AddModule(string type, string name) {
+ModuleId Algorithm::AddModule( string type, string name ) {
 	Module* mod = moduleFactory.CreateModule(type);
 	mod->SetName(name);
 	mod->Init();
