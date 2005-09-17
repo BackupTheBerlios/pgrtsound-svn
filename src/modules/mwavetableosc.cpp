@@ -1,11 +1,12 @@
-#include "sinosc2.h"
-SinOsc2::SinOsc2() :
-	Module("New oscillator v2"),
-    iFreq("frequency"),
-	iAmp("amplitude"),
-	oOut("output")
+#include "mwavetableosc.h"
+
+MWavetableOsc::MWavetableOsc() :
+	Module("Nowy oscylator tablicowy"),
+    iFreq("Czêstotliwoœæ"),
+	iAmp("Amplituda"),
+	oOut("Wyjœcie audio")
 {
-	float	*sample, tableSizeInverted;
+	float *sample, tableSizeInverted;
 	tableSize = 16384;
 
 	AddInput(iFreq);
@@ -28,11 +29,11 @@ SinOsc2::SinOsc2() :
 	tablePosition = 0;
 }
 
-SinOsc2::~SinOsc2() {
+MWavetableOsc::~MWavetableOsc() {
 	delete sinTable;
 }
 
-void SinOsc2::Process() {
+void MWavetableOsc::Process() {
 	float* freq = iFreq.GetSignal();
 	float* amp = iAmp.GetSignal();
 	float* out = oOut.GetSignal();

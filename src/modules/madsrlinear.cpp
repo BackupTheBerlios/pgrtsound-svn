@@ -2,12 +2,12 @@
 
 MADSRLinear::MADSRLinear() :
 	Module( "New ADSR" ),
-	iGateIn( "gate input" ),
-	oEnvelope( "envelope output" ),
-	pAttackTime( "Attack time" ),
-	pDecayTime( "Decay time" ),
+	iGateIn( "Gate input" ),
+	oEnvelope( "Envelope output" ),
+	pAttackTime( "Attack [ms]" ),
+	pDecayTime( "Decay [ms]" ),
 	pSustainLevel( "Sustain level" ),
-	pReleaseTime( "Release time" )
+	pReleaseTime( "Release [ms]" )
 {
 	AddInput( iGateIn );
 	AddOutput( oEnvelope );
@@ -17,10 +17,10 @@ MADSRLinear::MADSRLinear() :
 	AddParameter( pSustainLevel );
 	AddParameter( pReleaseTime );
 	
-	//pAttackTime.Bound( 0, 5000, 1 ); // milisekund
-	//pDecayTime.Bound( 0, 5000, 1 );
-	//pSustainLevel.Bound( 0, 1, 0.01 );
-	//pReleaseTime.Bound( 0, 5000, 1 );
+	pAttackTime.Bound( 0, 5000, 1 ); // milisekund
+	pDecayTime.Bound( 0, 5000, 1 );
+	pSustainLevel.Bound( 0, 1, 0.01 );
+	pReleaseTime.Bound( 0, 5000, 1 );
 	
 	pAttackTime.SetValue( 100 );
 	pDecayTime.SetValue( 100 );

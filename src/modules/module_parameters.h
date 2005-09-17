@@ -2,8 +2,8 @@
 #define MODULE_PARAMETERS_H
 
 #include <string>
-#include <cstdlib>
-//#include <math.h>
+//#include <cstdlib>
+#include <math.h>
 
 using namespace std;
 
@@ -52,16 +52,13 @@ class ParameterFloat : public Parameter {
 };
 
 inline void ParameterFloat::SetValue(float newValue) {
-	// TODO: zaimplementowac ograniczanie wartosci
-	// ponizsze chyba okej
-//	if(bounded) {
-//		value = floorf(vewValue / step) * step;
-//		value = (value > max)? max : value;
-//      value = (value < min)? min : value;
-//	}
-//	else {
-//		value = newValue;
-//	};
+	if( bounded ) {
+		value = floorf(newValue / step) * step;
+		value = (newValue > maxValue)? maxValue : value;
+		value = (newValue < minValue)? minValue : value;
+		return;
+	}
+
 	value = newValue;
 }
 

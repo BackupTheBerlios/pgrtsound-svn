@@ -26,7 +26,8 @@ void Noise::Process() {
 
 	for (unsigned long i = 0; i < Module::framesPerBlock; i++) {
 		random = ((float)rand() / (float)(RAND_MAX + 1));
-		noise = (2.f * ((random * c2) + (random * c2) + (random * c2)) - 3.f * (c2 - 1.f)) * c3;
+		noise = (2.f * ((random * c2) + (random * c2) + (random * c2))
+			- 3.f * (c2 - 1.f)) * c3;
 		*out++ = random;
 	}
 }

@@ -1,27 +1,27 @@
-#ifndef SINOSC2_H
-#define SINOSC2_H
+#ifndef WAVETABLEOSC_H
+#define WAVETABLEOSC_H
 
 #include <math.h>
 
 #include "module.h"
 
 /**
- Oscylator sisnusoidalny.
- Prosty tablicoyw oscylator o sinusoidalnym ksztlacie fali. Zakres i skos
+ Oscylator tablicowy.
+ Prosty tablicoyw oscylator o sinusoidalnym ksztlacie fali. Zakres
  czestoltiowsc oscylatora jest ograniczony wymiarami tablicy.
 
 - Wejscia
 	- [0] \e freq Zadaje czestotliowsc [Hz] oscylatora
 	- [1] \e ampl Decyduje o amplitudzie przebiegu wyjsciowego
 - Wyjscia
-	- [0] \e out Przebieg sinusoidalny o wartosciach z przedzialu [-1; 1]
+	- [0] \e out Przebieg audio o wartosciach z przedzialu [-1; 1]
 */
-class SinOsc2 : public Module {
+class MWavetableOsc : public Module {
 	public:
-		SinOsc2();
-		~SinOsc2();
+		MWavetableOsc();
+		~MWavetableOsc();
 		void Process();
-		REGISTER_MODULE( "Sin Oscillator 2", SinOsc2 )
+		REGISTER_MODULE( "Wavetable Oscillator", MWavetableOsc )
 
 	private:
 		Input	iFreq, iAmp;
@@ -35,4 +35,4 @@ class SinOsc2 : public Module {
 		float	scale;
 };
 
-#endif // SINOSC2_H
+#endif // WAVETABLEOSC_H
