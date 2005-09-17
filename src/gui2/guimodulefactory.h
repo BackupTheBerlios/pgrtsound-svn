@@ -13,7 +13,6 @@
 #include "guis/gmonitor.h"
 #include "guis/gfilter.h"
 #include "guis/gadsr.h"
-#include "guis/gsinosc.h"
 #include "guis/gmonitorgraph.h"
 #include "guis/gdelay.h"
 #include "guis/gfeedbackdelay.h"
@@ -22,7 +21,7 @@
 
 
 /**
-	Dodawanie interfjesow graficznych dla modulow.
+ Dodawanie interfjesow graficznych dla modulow.
 */
 typedef Gui* (*CreateGuiFuncPtr)( Module* module );
 
