@@ -2,6 +2,7 @@
 #define GFILTER_H
 
 #include "gui.h"
+#include "mygtkslider.h"
 #include "mygtkfloatentry.h"
 #include "../../modules/filter12db.h"
 
@@ -25,6 +26,7 @@ class GFilter : public Gui
 	protected:
         ParameterString* pFilerType;
 		MyGtkFloatEntry freqEntry;
+		MyGtkSlider slFreq;
 		Gtk::VBox mainBox;
 		Gtk::HBox freqBox;
 		Gtk::Label labelFreq;

@@ -10,6 +10,10 @@ GFilter::GFilter( Module* mod ) :
 	
 	freqEntry.AttachFloatParameter( (ParameterFloat*)module->GetParameter( 0 ) );
 	
+	slFreq.SetParameter( (ParameterFloat*)module->GetParameter( 0 ), 50, 12000, 1 );
+	slFreq.signal_slider_moved().connect(
+		sigc::mem_fun( (Filter12dB*)module, &Filter12dB::UpdateCoefficients ) );
+	
 	// stan poczatkowy
 	pFilerType = (ParameterString*)module->GetParameter( 1 );
 	if( pFilerType->GetText() == "LP" )
@@ -18,8 +22,9 @@ GFilter::GFilter( Module* mod ) :
 	    rbHP->set_active( true );
 	    
     labelFreq.set_label( Glib::locale_to_utf8("Czêstotliwoœæ") );
-    freqBox.add( labelFreq );
-	freqBox.add( freqEntry );
+    //freqBox.add( labelFreq );
+	//freqBox.add( freqEntry );
+	freqBox.add( slFreq );
 	
 	mainBox.set_spacing( 2 );
 	

@@ -13,10 +13,13 @@
 #include "guis/gmonitor.h"
 #include "guis/gfilter.h"
 #include "guis/gadsr.h"
-#include "guis/gsinlfo.h"
+#include "guis/gsinosc.h"
 #include "guis/gmonitorgraph.h"
 #include "guis/gdelay.h"
+#include "guis/gfeedbackdelay.h"
+#include "guis/gvariabledelay.h"
 #include <map>
+
 
 /**
 	Dodawanie interfjesow graficznych dla modulow.

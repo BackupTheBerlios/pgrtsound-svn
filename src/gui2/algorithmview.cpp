@@ -1,7 +1,5 @@
 #include "algorithmview.h"
 
-
-
 #include <gtkmm/messagedialog.h>
 
 #define FRAMES_PER_BUFFER 256
@@ -132,19 +130,18 @@ bool AlgorithmView::on_motion_notify_event(GdkEventMotion* event) {
 				int inputId = currentGuiModule->GetCurrentInputNumber();
 				int outputId = currentGuiModule->GetCurrentOutputNumber();
 
-				Glib::ustring str;
 				if( inputId > -1 ) {
-					m_signal_notify_xput.emit( currentGuiModule->GetModule()
-						->GetInput( inputId )->GetName() );
+					m_signal_notify_xput.emit( Glib::locale_to_utf8(
+						currentGuiModule->GetModule()->GetInput( inputId )->GetName()
+						) );
 				}
 
 				if( outputId > -1 ) {
-					Glib::ustring str = currentGuiModule->GetModule()
-						->GetOutput( outputId )->GetName();
-					m_signal_notify_xput.emit( str );
+					m_signal_notify_xput.emit( Glib::locale_to_utf8(
+						currentGuiModule->GetModule()->GetOutput( outputId )->GetName()
+						) );
 				}
 			}
-
 		}
 	}
 	window->thaw_updates();
@@ -450,8 +447,18 @@ void AlgorithmView::onMenuAddModule(std::string type) {
 	int x, y;
 	get_pointer(x, y);
     char txt[11];
+    
     g_snprintf(txt, 10, " %d", guiModules.size());
-	AddModule(type, type + txt, lastClick.get_x(), lastClick.get_y());
+    
+    std::string str;
+    str = type + txt;
+    
+    // jesli modul o nazwie str juz istnieje...
+    if( name2GuiModuleMap.count( str ) > 0 ) {
+		str = str + " 1";
+	}
+    
+	AddModule(type, str, lastClick.get_x(), lastClick.get_y());
 }
 
 void AlgorithmView::DeleteConnection( GuiModule* module, int inputId ) {
@@ -468,12 +475,17 @@ void AlgorithmView::DeleteConnection( GuiModule* module, int inputId ) {
 }
 
 void AlgorithmView::DeleteModule( GuiModule* guiModule ) {
-	if( guiModule != NULL && guiModule->GetModule()->GetName() != "AudioPortIn"
-	    && guiModule->GetModule()->GetName() != "AudioPortOut" )
+    TRACE( "AlgorithmView::DeleteModule\n" );
+    
+    std::string name = guiModule->GetModule()->GetName();
+
+   	if( guiModule != NULL && name != "AudioPortIn" && name != "AudioPortOut" )
 	{
-		//cout << "Chce usunac modul '" << guiModule->GetModule()->GetName() << endl;
-		if( algorithm.DeleteModule(guiModule->GetModuleId()) ) {
-			name2GuiModuleMap.erase( guiModule->GetModule()->GetName() );
+		TRACE( "AlgorithmView::DeleteModule - Usuwam modul '%s'\n",
+			name.c_str() );
+			
+		if( algorithm.DeleteModule( guiModule->GetModuleId() ) ) {
+			name2GuiModuleMap.erase( name );
 			this->remove( *guiModule );
 			guiModules.remove( guiModule );
 			delete guiModule;
@@ -539,6 +551,8 @@ bool AlgorithmView::ChangeModuleName( ModuleId modId, string str ) {
 	
 	name2GuiModuleMap.erase( oldName );
 	name2GuiModuleMap.insert( make_pair( str, guiMod ) );
+
+	UpdateConnections();
 
 	return true;
 }

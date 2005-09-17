@@ -12,7 +12,7 @@ MyGtkSlider::MyGtkSlider() {
 	
 	parameter = NULL;
 
-	label.set_size_request( 75, -1 );
+	//label.set_size_request( 85, -1 );
 
 	set_spacing( 2 );
 	pack_start( label, Gtk::PACK_SHRINK , 0 );

@@ -23,8 +23,8 @@ class GMonitorGraph : public Gui
 	protected:
 		Gtk::VBox         box;
         Gtk::HBox         hbox;
-		Gtk::HScale       slTime;
         Gtk::VScale       slScale;
+  		Gtk::HScale       slTime;
         Gtk::Curve        curve;
 		sigc::slot<bool>  my_slot;
 		sigc::connection  conn;
