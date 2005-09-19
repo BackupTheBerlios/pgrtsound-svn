@@ -22,6 +22,8 @@ class GDelay : public Gui
 
 	protected:
         MyGtkSlider slider;
+        Gtk::Label delayLabel;
+        Gtk::HBox delayBox;
 };
 
 #endif // GDELAY_H

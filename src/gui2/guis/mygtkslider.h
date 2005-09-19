@@ -8,6 +8,7 @@
 //#include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
+#include <string>
 
 
 /**
@@ -20,9 +21,10 @@ class MyGtkSlider : public Gtk::HBox {
 		MyGtkSlider();
 		~MyGtkSlider();
 		
-		void SetParameter(ParameterFloat* param, double min, double max, double step );
+		void SetParameter(ParameterFloat* param, double min, double max, double step_ );
 		void ValueChanged();
 		void ChangeRange( double min, double max, double step );
+		void SetCaption(string value);
 		// nowy sygnal
 		typedef sigc::signal<void> type_signal_slider_moved;
 		type_signal_slider_moved signal_slider_moved();
@@ -32,6 +34,7 @@ class MyGtkSlider : public Gtk::HBox {
         ParameterFloat*	parameter;
         Gtk::HScale slider;
         Gtk::Label label;
+        double  step;
 		//Gtk::Adjustment	adj;
 };
 
