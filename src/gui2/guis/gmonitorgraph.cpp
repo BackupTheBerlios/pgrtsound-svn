@@ -2,31 +2,41 @@
 
 GMonitorGraph::GMonitorGraph( Module* mod ) :
 	Gui( mod ),
-    slScale(1,101,1), 
-    slTime(1,101,1)
+    slScale(0,5,1), 
+    slTime(-3,5,1)
 {
   	// timer
 	my_slot = sigc::mem_fun( this, &GMonitorGraph::OnUpdateTimer );
 	conn = Glib::signal_timeout().connect( my_slot, 200 );
 	
-	//buffor = new float[Module::framesPerBlock];
-    
-    for (unsigned int i = 0; i <  Module::framesPerBlock; i++)
+	size   = Module::framesPerBlock;
+	
+    slScale.signal_value_changed().connect( sigc::mem_fun(this, &GMonitorGraph::ScaleValueChanged ));
+	slScale.set_draw_value(false);
+    slTime.signal_value_changed().connect( sigc::mem_fun(this, &GMonitorGraph::TimeValueChanged ));
+    slTime.set_draw_value(false);
+        
+    for (unsigned int i = 0; i < size ; i++)
         buffor[i] = 0;
      
-    n = 0;
-    t = slTime.get_value();
-    a = slScale.get_value();
+    n          = 0;
+    timeValue  = 1;
+    scaleValue = 1;
+    slTime.set_value(timeValue);
+    slScale.set_value(scaleValue);
     
-    curve.set_range(0,Module::framesPerBlock,-1, 1);
-    //curve.reset();
-    
+    curve.set_range(0,size,-100, 100);
+
+    labelScale.set_text("1");
+    labelTime.set_text("1");
+    scaleBox.add( labelScale );
+    scaleBox.add( slScale );
     hbox.add( curve );
-	hbox.add( slScale );
-    
+	hbox.add( scaleBox );
+    timeBox.add( labelTime );
+    timeBox.add( slTime );
 	box.add ( hbox );
-	box.add ( slTime );
-    
+	box.add ( timeBox );
 }
 
 
@@ -40,111 +50,49 @@ Gtk::Widget* GMonitorGraph::GetGui() {
 }
 
 bool GMonitorGraph::OnUpdateTimer() {
+    t = timeValue;
     if (module->GetInput( 0 ) != NULL) {
         float *in=module->GetInput( 0 )->GetSignal();
-        for (unsigned int i=0; i<Module::framesPerBlock; i+=t) {       
-            if (n>=Module::framesPerBlock) {
+        for (float i=0; i<size; i+=t) {       
+            if (n>=size) {
                 n=0;
-                t = slTime.get_value();
-                if (a != slScale.get_value()) {
-                    a = slScale.get_value();
-                    curve.reset();
-                    curve.set_range(0,Module::framesPerBlock,-a, a);
-
-                }
                 list<float> pointsList;
-                for (unsigned int j=0; j<Module::framesPerBlock;j++) {
+                for (unsigned int j=0; j<size;j++) {
                     float value = (buffor[j]);
-                    pointsList.push_back(value);
+                    pointsList.push_back(value*scaleValue);
                 }   
                 Glib::ArrayHandle<float> arrayHandle(pointsList);
 	            curve.set_vector(arrayHandle);  
-                //cout << "a="<<a << "  t="<<  t << endl ;      
+    
             }
-            buffor[n] = in[i]; 
+            buffor[n] = in[(int)i]; 
             n++; 
         }
     }
 	return true;
 }
 
-
-
-
-
-
-
-
-
-/*
-#include "gmonitorgraph.h"
-
-
-
-GMonitorGraph::GMonitorGraph( Module* mod ) :
-	Gui( mod )
-{
-    TRACE( "GMonitorGraph::GMonitorGraph( Module* mod )...\n" );
+void GMonitorGraph::ScaleValueChanged() {
+  	int value = 1;
+    for (int i = 0; i < (int)slScale.get_value(); i++)
+        value *=10;
   	
-      // timer
-	my_slot = sigc::mem_fun( this, &GMonitorGraph::OnUpdateTimer );
-	conn = Glib::signal_timeout().connect( my_slot, 200 );
-	
-	
-	buffor = new float(Module::framesPerBlock);
-    t = 2;
-    a = 10;
-    for (unsigned int i = 0; i <  Module::framesPerBlock; i++)
-        buffor[i] = 0;
-    n = 0;
-    //curve.set_range(0,Module::framesPerBlock,-1 * a, 1 * a);
-    
-    
-    TRACE( "end GMonitorGraph::GMonitorGraph( Module* mod )...\n" );
-    
+  	scaleValue = value * 100;
+    g_snprintf( txtBuffer, 50, "%i", value );    
+    labelScale.set_text( txtBuffer );	
 }
 
+void GMonitorGraph::TimeValueChanged() {
+  	float value = 1;
+  	if ((int)slTime.get_value()>0)
+        for (int i = 0; i < (int)slTime.get_value(); i++)
+            value *=2;
+  	if ((int)slTime.get_value()<0)
+        for (int i = 0; i < (-(int)slTime.get_value()); i++)
+            value /=2;
 
-GMonitorGraph::~GMonitorGraph(){
-    delete buffor;
-    conn.disconnect();
+  	
+  	timeValue = value;
+    g_snprintf( txtBuffer, 50, "%f", value );    
+    labelTime.set_text( txtBuffer );	
 }
-
-Gtk::Widget* GMonitorGraph::GetGui() {
-    TRACE( "GMonitorGraph::GetGui()...\n" );
-	return &curve;
-}
-
-bool GMonitorGraph::OnUpdateTimer() {
-	TRACE( "GMonitorGraph::OnUpdateTimer...\n" );
-
-    list<float> pointsList;
-    
-    if (module->GetInput( 0 ) != NULL) {
-        float *in=module->GetInput( 0 )->GetSignal();
-        
-        for (unsigned int i=0; i<Module::framesPerBlock;i+=t) {
-            buffor[i] = *in++; 
-            n++;           
-        }
-        if (n>=Module::framesPerBlock) 
-            n = 0; 
-        
-        if (n==0)
-            for (unsigned int i=0; i<Module::framesPerBlock;i++) {
-                float value = (buffor[i]) * a;
-                pointsList.push_back(value);
-            }   
-    }
-    
-    curve.reset();
-	Glib::ArrayHandle<float> arrayHandle(pointsList);
-	curve.set_vector(arrayHandle);    
-    
-	curve.set_range(0,Module::framesPerBlock,-1 * a, 1 * a);
-
-	
-	TRACE( "end GMonitorGraph::OnUpdateTimer...\n" );
-	return true;
-}
-*/

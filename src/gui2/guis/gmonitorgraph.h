@@ -21,18 +21,22 @@ class GMonitorGraph : public Gui
 		bool OnUpdateTimer();
 
 	protected:
-		Gtk::VBox         box;
-        Gtk::HBox         hbox;
+        void ScaleValueChanged();
+        void TimeValueChanged();
+		Gtk::VBox         box, scaleBox;
+        Gtk::HBox         hbox, timeBox;
         Gtk::VScale       slScale;
   		Gtk::HScale       slTime;
         Gtk::Curve        curve;
+        Gtk::Label        labelScale, labelTime;
 		sigc::slot<bool>  my_slot;
 		sigc::connection  conn;
 		char              txtBuffer[50];
 		float             buffor[5000];
-		unsigned int      n;
-		unsigned int      t;
-		int               a;  
+		float             size;
+		unsigned int      n, scaleValue,a;
+		float             t, timeValue;
+                            
 };
 
 #endif // GMONITORGRAPH_H
