@@ -3,17 +3,16 @@
 
 #include "gui.h"
 #include "mygtkslider.h"
-#include "mygtkfloatentry.h"
 #include "../../modules/filter12db.h"
 
-#include <gtkmm/radiobutton.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/button.h>
+#include <gtkmm/radiobutton.h>
 
 /**
- * No description
- */
+ No description
+*/
 class GFilter : public Gui
 {
 	public:
@@ -25,7 +24,6 @@ class GFilter : public Gui
 		
 	protected:
         ParameterString* pFilerType;
-		MyGtkFloatEntry freqEntry;
 		MyGtkSlider slFreq;
 		Gtk::VBox mainBox;
 		Gtk::HBox freqBox;
@@ -33,7 +31,6 @@ class GFilter : public Gui
 		Gtk::Button buttonApply;
         Gtk::RadioButton::Group group;
         Gtk::RadioButton *rbLP, *rbHP;
-        
 };
 
 #endif // GFILTER_H

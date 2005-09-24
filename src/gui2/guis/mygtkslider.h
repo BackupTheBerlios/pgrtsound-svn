@@ -26,6 +26,7 @@ class MyGtkSlider : public Gtk::HBox {
 		void ChangeRange( double min, double max, double step );
 		void SetCaption(string value);
 		// nowy sygnal
+		float GetValue();
 		typedef sigc::signal<void> type_signal_slider_moved;
 		type_signal_slider_moved signal_slider_moved();
 

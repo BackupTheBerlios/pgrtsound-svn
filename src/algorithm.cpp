@@ -87,7 +87,7 @@ void Algorithm::PrintInfo(void) {
  @param inputId Identyfiaktor wejscia modulu docelowego
 */
 bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
-			ModuleId moduleId2, int inputId, ConnectionId& cId )
+			ModuleId moduleId2, int inputId, ConnectionId& connId )
 {
 	//Algorithm::ConnectModules\n
 	TRACE( "    '%s'.'%s' -> '%s'.'%s'\n",
@@ -97,24 +97,21 @@ bool Algorithm::ConnectModules( ModuleId moduleId1, int outputId,
 		GetModule(moduleId2)->GetInput(inputId)->GetName().c_str() );
 
 	ConnectionDescription c;
-	// utworzenie polaczenia w grafie
-	c = add_edge(moduleId1, moduleId2, graph);
-	// identyfikator polaczenia w grafie
-	cId = c.first;
+	c = boost::add_edge(moduleId1, moduleId2, graph); // utworzenie krawedzi w grafie
+	connId = c.first; // zwracany identyfikator polaczenia w grafie
 	
 	if( IsGraphAcyclic() ) {
-   		//cout << "JEST ACYKLICZNY :D" << endl;
-		// polacz wejscie do wyjscia
-		GetModule(moduleId2)->GetInput(inputId)->ConnectTo(
-		GetModule(moduleId1)->GetOutput(outputId) );
-		graph[cId].sourceModule = GetModule(moduleId1);
-		graph[cId].sourceOutputId = outputId;
-		graph[cId].destinationModule = GetModule(moduleId2);
-		graph[cId].destinationInputId = inputId;
+ 		// graf jest acykliczny - polacz wejscie do wyjscia
+		GetModule( moduleId2 )->GetInput( inputId )->ConnectTo(
+			GetModule( moduleId1 )->GetOutput( outputId ) );
+		graph[connId].sourceModule = GetModule( moduleId1 );
+		graph[connId].sourceOutputId = outputId;
+		graph[connId].destinationModule = GetModule( moduleId2 );
+        graph[connId].destinationInputId = inputId;
 		return true;
 	}
 	else {
-		remove_edge( cId, graph );
+		boost::remove_edge( connId, graph );
 	}
 
 	return false;
@@ -158,19 +155,19 @@ void Algorithm::CreateQueue() {
 
 	using namespace boost;
 
-	typedef vector< ModuleId > container;
+	typedef vector<ModuleId> container;
 	container c;
 	property_map<Graph, vertex_index_t>::type index = get(vertex_index, graph);
 	property_map<Graph, Module* GraphModule::*>::type mods = get(&GraphModule::module, graph);
 
-	// initialize the vertex_index property values
+	// numerownaie wszystkich wezlow (inicjalizacja wlasciwosci vertex_index)
 	graph_traits<Graph>::vertex_iterator vi, vend;
 	graph_traits<Graph>::vertices_size_type cnt = 0;
-	for(tie(vi,vend) = vertices(graph); vi != vend; ++vi)
-	    put(index, *vi, cnt++);
+	for( tie(vi,vend) = vertices(graph); vi != vend; ++vi )
+	    boost::put( index, *vi, cnt++ );
 
 	modulesQueue.clear();
-	topological_sort(graph, std::back_inserter(c));
+	boost::topological_sort(graph, std::back_inserter(c));
 
 	for (container::reverse_iterator ii = c.rbegin(); ii != c.rend(); ++ii) {
         TRACE( "    %s\n", mods[*ii]->GetName().c_str() );

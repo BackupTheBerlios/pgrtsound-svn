@@ -43,12 +43,13 @@ void MyGtkSlider::SetParameter( ParameterFloat* param, double min, double max,
 }
 
 void MyGtkSlider::ValueChanged() {
-  	double value = 0;
-  	if (step != 0)
-      	value = ((int)(slider.get_value() / step) * step);
-    else
-        value = (int)(slider.get_value() / step);
-      	
+    double value = slider.get_value();
+
+    if (step != 0.0f)
+        value = floorf(value / step) * step;
+//    else
+//       value = slider.get_value();
+
   	slider.set_value( value );
     parameter->SetValue( slider.get_value() );
 	m_signal_slider_moved.emit();
@@ -80,4 +81,8 @@ MyGtkSlider::type_signal_slider_moved MyGtkSlider::signal_slider_moved() {
 //Ustawianie nazwy parametru
 void MyGtkSlider::SetCaption(string value) {
     label.set_text( Glib::locale_to_utf8( value ) );    
+}
+
+float MyGtkSlider::GetValue() {
+    return slider.get_value();
 }

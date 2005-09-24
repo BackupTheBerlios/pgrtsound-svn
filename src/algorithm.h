@@ -22,6 +22,8 @@
 #include <string>
 #include <iostream>
 
+//TODO czy na pewno nie mozna usunac AUdiPOrtIn AudiPOrtOut??
+
 typedef std::pair<std::size_t, std::size_t> Pair;
 
 // struktua zwiazana z krawedzia grafu
@@ -45,6 +47,7 @@ typedef Graph::edge_descriptor ConnectionId;
 typedef std::pair<ConnectionId, bool> ConnectionDescription;
 typedef boost::graph_traits<Graph>::vertex_iterator ModuleIdIterator;
 typedef boost::graph_traits<Graph>::edge_iterator ConnectionIdIterator;
+
 
 // wizytator dla algorytmu DFS potrzebny do testowania petli w grafie
 struct cycle_detector : public boost::dfs_visitor<>
@@ -91,10 +94,8 @@ class Algorithm {
 		bool         		DeleteModule( ModuleId moduleId );
 		bool				DeleteConnection( ConnectionId connectionId );
 		ModuleId      		AddModule( string type, string name );
-		bool ConnectModules( ModuleId moduleId1, int outputId,
-			ModuleId moduleId2, int inputId, ConnectionId& connId );
-		bool ConnectModules( string moduleName1, int outputId,
-			string moduleName2, int inputId, ConnectionId& connId );
+		bool ConnectModules( ModuleId, int, ModuleId, int, ConnectionId& );
+		bool ConnectModules( string, int, string, int, ConnectionId& );
 		ConnectionIdIterator ConnectionIdIteratorBegin();
 		ConnectionIdIterator ConnectionIdIteratorEnd();
 		void PrintEdges();
