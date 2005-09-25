@@ -1,18 +1,18 @@
 [Project]
 FileName=RTSGuisLib.dev
 Name=RTSGuisLib
-UnitCount=27
+UnitCount=29
 Type=2
 Ver=1
 ObjFiles=
-Includes=C:\RTSound\lib\tinyxml;C:\RTSound\lib\portaudio\pa_common;C:\RTSound\src;C:\RTSound\lib\boost_1_32_0;C:\mingw\include\glib-2.0
+Includes=C:\RTSound\lib\tinyxml;C:\RTSound\lib\portaudio\pa_common;C:\RTSound\src;C:\RTSound\lib\boost_1_32_0;C:\mingw\include\glib-2.0;C:\Dev-Cpp\include\fftw++;C:\Dev-Cpp\include\fftw
 Libs=C:\RTSound\lib\portaudio\lib
 PrivateResource=
 ResourceIncludes=
 MakeIncludes=
 Compiler=
 CppCompiler=-W -Wall -Wunused_@@__@@_-IC:/Dev-Cpp/include/gtkmm-2.4 -IC:/Dev-Cpp/lib/gtkmm-2.4/include -IC:/Dev-Cpp/include/glibmm-2.4 -IC:/Dev-Cpp/lib/glibmm-2.4/include -IC:/Dev-Cpp/include/gdkmm-2.4 -IC:/Dev-Cpp/lib/gdkmm-2.4/include -IC:/Dev-Cpp/include/pangomm-1.4 -IC:/Dev-Cpp/include/atkmm-1.6 -IC:/Dev-Cpp/include/gtk-2.0 -IC:/Dev-Cpp/include/sigc++-2.0 -IC:/Dev-Cpp/lib/sigc++-2.0/include -IC:/Dev-Cpp/include/glib-2.0 -IC:/Dev-Cpp/lib/glib-2.0/include -IC:/Dev-Cpp/lib/gtk-2.0/include -IC:/Dev-Cpp/include/pango-1.0 -IC:/Dev-Cpp/include/atk-1.0_@@__@@_-IC:/MinGW/include/gtkmm-2.4 -IC:/MinGW/lib/gtkmm-2.4/include -IC:/MinGW/include/glibmm-2.4 -IC:/MinGW/lib/glibmm-2.4/include -IC:/MinGW/include/gdkmm-2.4 -IC:/MinGW/lib/gdkmm-2.4/include -IC:/MinGW/include/pangomm-1.4 -IC:/MinGW/include/atkmm-1.6 -IC:/MinGW/include/gtk-2.0 -IC:/MinGW/include/sigc++-2.0 -IC:/MinGW/lib/sigc++-2.0/include -IC:/MinGW/include/glib-2.0 -IC:/MinGW/lib/glib-2.0/include -IC:/MinGW/lib/gtk-2.0/include -IC:/MinGW/include/pango-1.0 -IC:/MinGW/include/atk-1.0 _@@_
-Linker=RTSoundLib.a_@@__@@_-LC:/Dev-Cpp/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv_@@__@@_-LC:/MinGW/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv _@@__@@_-lMingw32_@@_-lportaudio_@@_-lwinmm_@@_-lole32_@@__@@_
+Linker=RTSoundLib.a_@@__@@_-LC:/Dev-Cpp/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv_@@__@@_-LC:/MinGW/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv _@@__@@_-lMingw32_@@_-lportaudio_@@_-lwinmm_@@_-lole32_@@__@@_../../../Dev-Cpp/lib/fftw3.lib_@@_
 IsCpp=1
 Icon=
 ExeOutput=
@@ -108,7 +108,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit28]
-FileName=..\..\src\gui2\guis\gvariabledelay.cpp
+FileName=..\..\src\gui2\guis\gfft.cpp
 CompileCpp=1
 Folder=RTSGuisLib
 Compile=1
@@ -118,7 +118,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit29]
-FileName=..\..\src\gui2\guis\gvariabledelay.h
+FileName=..\..\src\gui2\guis\gfft.h
 CompileCpp=1
 Folder=RTSGuisLib
 Compile=1

@@ -17,6 +17,8 @@
 #include "modules/mfeedbackdelay.h"
 #include "modules/mvariabledelay.h"
 #include "modules/mwavetableosc.h"
+#include "modules/fft.h"
+#include "modules/mmodule.h"
 
 #include <dirent.h>
 
@@ -38,6 +40,8 @@ ModuleFactory::ModuleFactory() {
     RegisterModuleType( Delay::GetTypeStatic(), Delay::Create );
     RegisterModuleType( MFeedbackDelay::GetTypeStatic(), MFeedbackDelay::Create );
     RegisterModuleType( MVariableDelay::GetTypeStatic(), MVariableDelay::Create );
+    RegisterModuleType( FFT::GetTypeStatic(), FFT::Create );
+    RegisterModuleType( MModule::GetTypeStatic(), MModule::Create );
     
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();

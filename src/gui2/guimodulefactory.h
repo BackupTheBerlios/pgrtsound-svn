@@ -17,6 +17,7 @@
 #include "guis/gdelay.h"
 #include "guis/gfeedbackdelay.h"
 #include "guis/gvariabledelay.h"
+#include "guis/gfft.h"
 #include <map>
 
 
