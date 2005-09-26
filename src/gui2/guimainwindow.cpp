@@ -15,8 +15,8 @@ GuiMainWindow::GuiMainWindow() :
 	set_position(Gtk::WIN_POS_CENTER);
 	
 	// menu i akcje
-	ActionGroup = Gtk::ActionGroup::create();
-
+    ActionGroup = Gtk::ActionGroup::create();
+    
 	//File menu:
 	ActionGroup->add( Gtk::Action::create("FileMenu", "File") );
 	ActionGroup->add( Gtk::Action::create("NewFile", Gtk::Stock::NEW),

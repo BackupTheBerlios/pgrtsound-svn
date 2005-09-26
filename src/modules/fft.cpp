@@ -19,9 +19,11 @@ FFT::~FFT() {
 }
 
 void FFT::Process() {
-  float* in   = iIn.GetSignal();
+/*  float* in   = iIn.GetSignal();
   float* outR = oReal.GetSignal();
   float* outI = oImag.GetSignal();	
+
+  
 
   for (unsigned int poz = 0; poz < Module::framesPerBlock; poz++) {
     buffor[i] = *in++;    
@@ -29,12 +31,15 @@ void FFT::Process() {
 
     TRACE("n= ",n);
       unsigned int np=n/2+1;
-      double  *f = FFTWdouble(n);
-      Complex *g = FFTWComplex(np);
-  
+      double  *f; //= FFTWdouble(n);
+      Complex *g;// = FFTWComplex(np);
+      
+      f = new double[n];
+      g = new Complex[np];
+             
       rcfft1d Forward(n,f,g);
   
-      for(unsigned int j=0; j < i; j++) f[j]=buffor[j];
+      for(unsigned int j=0; j < n; j++) f[j]=buffor[j];
 	
       Forward.fft(f,g);
   
