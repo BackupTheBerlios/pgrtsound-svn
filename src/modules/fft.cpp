@@ -1,4 +1,7 @@
+#include "Array.h"
 #include "fft.h"
+
+using Array::array1;
 
 FFT::FFT() : Module("New delay"),
 	iIn("inpute"), oReal("real"),oImag("imag"), pSize("delay")
@@ -7,11 +10,12 @@ FFT::FFT() : Module("New delay"),
 	AddInput(iIn);
 	AddOutput(oReal);
 	AddOutput(oImag);	
-	pSize.Bound(1, 4096, 1);    // ograczniczenie wartosci
+	pSize.Bound(1, 2*(Module::framesPerBlock - 1), 1);    // ograczniczenie wartosci
 	AddParameter(pSize);
 	buffor = new float[4095];
-	n      = 256;
+	n      = 16;
 	i      = 0;
+	
 }
 
 FFT::~FFT() {
@@ -19,7 +23,7 @@ FFT::~FFT() {
 }
 
 void FFT::Process() {
-/*  float* in   = iIn.GetSignal();
+  float* in   = iIn.GetSignal();
   float* outR = oReal.GetSignal();
   float* outI = oImag.GetSignal();	
 
@@ -31,13 +35,17 @@ void FFT::Process() {
 
     TRACE("n= ",n);
       unsigned int np=n/2+1;
-      double  *f; //= FFTWdouble(n);
-      Complex *g;// = FFTWComplex(np);
+    //  double  *f; //= FFTWdouble(n);
+    //  Complex *g;// = FFTWComplex(np);
       
-      f = new double[n];
-      g = new Complex[np];
-             
-      rcfft1d Forward(n,f,g);
+    //  f = new double[n];
+    //  g = new Complex[np];
+    //         
+      size_t align=sizeof(Complex);
+  
+  array1<double> f(n,align);
+  array1<Complex> g(np,align);
+  rcfft1d Forward(f,g);
   
       for(unsigned int j=0; j < n; j++) f[j]=buffor[j];
 	
@@ -45,11 +53,11 @@ void FFT::Process() {
   
       for(unsigned int k=0; k < np; k++) {
         *outR++ = g[k].real();
-        *outI++ = g[k].imag();        
+       *outI++ = g[k].imag();        
       }
     
-      FFTWdelete(g);
-      FFTWdelete(f);
+//     FFTWdelete(g);
+//      FFTWdelete(f);
      
       i     = 0;
       n     = (int)pSize.GetValue(); //zmiana d³ugoœci
