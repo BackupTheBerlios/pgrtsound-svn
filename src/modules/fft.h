@@ -22,10 +22,13 @@ class FFT : public Module
 		Output          oReal;
 		Output          oImag;
 		ParameterFloat  pSize;
-		float           *buffor;
+		float           *bufforIn;
+		float           *bufforOut1;
+		float           *bufforOut2;    		
 		
 		unsigned int    n;
 		unsigned int    i;
+		unsigned int    o;
 };
 
 #endif // FFT_H

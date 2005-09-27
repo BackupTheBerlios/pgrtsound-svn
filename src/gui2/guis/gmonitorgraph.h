@@ -36,6 +36,7 @@ class GMonitorGraph : public Gui
 		float             size;
 		unsigned int      n, scaleValue,a;
 		float             t, timeValue;
+		float x;
                             
 };
 

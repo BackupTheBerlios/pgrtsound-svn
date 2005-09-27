@@ -21,11 +21,13 @@ GMonitorGraph::GMonitorGraph( Module* mod ) :
      
     n          = 0;
     timeValue  = 1;
+    t          = 1;
     scaleValue = 1;
+    x          = 0;
     slTime.set_value(timeValue);
     slScale.set_value(scaleValue);
     
-    curve.set_range(0,size,-100, 100);
+    curve.set_range(1,size,-100, 100);
 
     labelScale.set_text("1");
     labelTime.set_text("1");
@@ -50,12 +52,14 @@ Gtk::Widget* GMonitorGraph::GetGui() {
 }
 
 bool GMonitorGraph::OnUpdateTimer() {
-    t = timeValue;
+
     if (module->GetInput( 0 ) != NULL) {
         float *in=module->GetInput( 0 )->GetSignal();
-        for (float i=0; i<size; i+=t) {       
+        float i;
+        for (i=0; i<size; i+=t) {       
             if (n>=size) {
                 n=0;
+                t = timeValue;
                 list<float> pointsList;
                 for (unsigned int j=0; j<size;j++) {
                     float value = (buffor[j]);
@@ -65,10 +69,14 @@ bool GMonitorGraph::OnUpdateTimer() {
 	            curve.set_vector(arrayHandle);  
     
             }
-            buffor[n] = in[(int)i]; 
+           buffor[n] = in[(int)floor(i)]; 
+           buffor[n] = in[0];
             n++; 
+            
         }
+        
     }
+
 	return true;
 }
 
