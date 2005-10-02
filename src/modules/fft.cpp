@@ -1,9 +1,9 @@
-#include "Array.h"
+//#include "Array.h"
 #include "fft.h"
 
-using Array::array1;
+//using Array::array1;
 
-FFT::FFT() : Module("New delay"),
+FFT::FFT() :
 	iIn("inpute"), oReal("real"),oImag("imag"), pSize("delay")
  {
     //maksymalne opóŸnienie w próbkach

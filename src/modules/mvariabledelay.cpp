@@ -1,7 +1,6 @@
 #include "mvariabledelay.h"
 
 MVariableDelay::MVariableDelay() :
-	Module( "Feedback Delay" ),
 	iIn("Wejœcie audio"),
 	iDelayFraction( "U³amek opóŸnienia [0 - 1]" ),
 	oOut("Wyjœcie audio"),

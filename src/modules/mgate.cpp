@@ -5,7 +5,6 @@
  w GUI.
 */
 MGate::MGate() :
-	Module("New Gate"),
 	oOut("gate signal")
 {
 	AddOutput( oOut );

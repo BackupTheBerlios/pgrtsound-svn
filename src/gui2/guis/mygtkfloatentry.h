@@ -1,7 +1,7 @@
 #ifndef MYGTKFLOATENTRY_H
 #define MYGTKFLOATENTRY_H
 
-#include "../../modules/module_parameters.h"
+#include "../../modules/module.h"
 #include <gtkmm/entry.h>
 
 class MyGtkFloatEntry : public Gtk::Entry

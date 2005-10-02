@@ -1,14 +1,13 @@
 #ifndef MODULE_H
 #define MODULE_H
 
+#include "../debug.h"
+
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include "module_parameters.h"
-#include "module_io.h"
-#include "../debug.h"
+#include <math.h>
 
 #ifndef M_PI
 #define M_PI  (3.14159265f)
@@ -29,6 +28,131 @@ using namespace std;
 	static string GetTypeStatic() { return mod_type; } \
 	static Module* Create() { return new class_name; }
 
+class Output;
+
+/**
+ Wejscie modulu.
+ Klasa reprezentujaca wyjscia modulow. Najisotniejsza jej metoda jest
+ ConnectTo() pozwalajaca podlaczyc aktualne wejscie do zadanego wyjscia.
+*/
+class Input	{
+	public:
+		Input( string name_ );
+		~Input();
+		int GetID() const;
+		string GetName() const;
+		inline float* GetSignal();
+		void SetID( int newID );
+		void ConnectTo( Output* output );
+		void Disconnect();
+		bool IsConnected();
+
+	protected:
+		bool isConnected;
+		Output* outputConnected; /**< Wkaznik do wyjscia, do ktorego wejscie jest podlaczone */
+		int id; /**< Numer idetyfikujacy wejscie */
+		string name; /**< Nazwa wejscia */
+};
+
+/**
+ * Wyjscie modulu.
+ * Klasa obietkow zwiazanych z kazdym wyjsciem modulu. Obiekty
+ * te przechowuja miedzy innymi nazwe i identyfikator wjescia a takze
+ * buforem wyjsciowym.
+ */
+class Output {
+	public:
+		Output( string name_ );
+		~Output();
+		int GetID() const;
+		string GetName() const;
+		float* GetSignal() const;
+		void SetID( int newID );
+		void SetSignal( float* sig );
+		void SetBufferSize( unsigned long newBufferSize );
+
+	protected:
+		int id;  // numer idetyfikujacy wejscie
+		string name; // nazwa wejscia
+		float* signal; // wskaznik na bufor wyjsciowy
+};
+
+//------------------------------------------------------------------------------
+float* Input::GetSignal() {
+	return outputConnected->GetSignal();
+}
+
+//------------------------------------------------------------------------------
+class Parameter {
+   	protected:
+   		int		id;
+		string	description;	/**< Legedna dla parametru np. "Hz" dla czestotliwosci */
+        string	label;			/**< Opis parametru - najczesciej wartosc jaka parametr przyjmuje */
+
+	private:
+   		string	type;
+   		string	name;
+
+	public:
+		Parameter(string type_, string name_);
+		virtual ~Parameter();
+		int GetID() const;
+		string GetType() const;
+		string GetName() const;
+		string GetLabel() const;
+		string GetDescription() const;
+		void SetID(int newID);
+		void SetLabel(string newLabel);
+		void SetDescription(string newDesc);
+};
+
+//------------------------------------------------------------------------------
+class ParameterFloat : public Parameter {
+	public:
+		ParameterFloat(string name_);
+		virtual ~ParameterFloat() {};
+		void Bound(float min, float max, float step);
+		virtual void SetValue(float newValue);
+		virtual float GetValue() const;
+		virtual float GetMin() const;
+		virtual float GetMax() const;
+		virtual float GetStep() const;
+
+	protected:
+   		float   value;
+		float	minValue;
+		float	maxValue;
+		float   step;       /**< Minimlany przyrost wartosci parzmetru (tylko gdy bounded == true) */
+		bool    bounded;    /**< Prawda jesli parametr przyjmuje wartosci z przedzialu */
+};
+
+inline void ParameterFloat::SetValue(float newValue) {
+	if( bounded ) {
+		value = floorf(newValue / step) * step;
+		value = (newValue > maxValue)? maxValue : value;
+		value = (newValue < minValue)? minValue : value;
+		return;
+	}
+
+	value = newValue;
+}
+
+inline float ParameterFloat::GetValue() const {
+	return value;
+}
+
+//------------------------------------------------------------------------------
+class ParameterString : public Parameter {
+	public:
+   		ParameterString(string name_);
+   		virtual ~ParameterString();
+		virtual void SetText(string newText);
+		virtual string GetText();
+
+	protected:
+        string   text;
+};
+
 /**
  Interfejs modulu. Potomkami tej klasy sa wszystkie dostepne w systemie moduly.
  Takze autorzy zewnetrznych modulow musza dostosowac sie do tego interfejsu.
@@ -40,7 +164,7 @@ class Module {
 	    static unsigned long framesPerBlock;
 	    static float	sampleRate;
 
-	    Module( string name_ );
+	    Module();
 	    virtual ~Module();
 	    int AddInput(Input& input);
 	    int AddOutput(Output& output);
@@ -93,7 +217,7 @@ class NullModuleSingleton : public Module {
 	    static NullModuleSingleton NullModule;
 
 		// prywatny konstruktor - singleton
-		NullModuleSingleton() : Module("null"), oNull("null") {
+		NullModuleSingleton() : oNull("null") {
 	        AddOutput(oNull);
 	        BlockSizeChanged();
 	    }

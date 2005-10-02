@@ -1,7 +1,7 @@
 #ifndef MYGTKSLIDER_H
 #define MYGTKSLIDER_H
 
-#include "../../modules/module_parameters.h"
+#include "../../modules/module.h"
 #include "../../debug.h"
 
 #include <gtkmm/scale.h>

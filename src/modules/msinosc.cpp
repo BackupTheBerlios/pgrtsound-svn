@@ -1,7 +1,6 @@
 #include "msinosc.h"
 
 MSinOsc::MSinOsc() :
-	Module( "Sin Oscillator" ),
     iFreq("Czêstotliwoœæ"),
 	iAmp("Amplituda"),
 	oOut( "Audio" )

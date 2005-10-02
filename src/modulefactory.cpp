@@ -19,6 +19,7 @@
 #include "modules/mwavetableosc.h"
 #include "modules/fft.h"
 #include "modules/mmodule.h"
+#include "modules/mallpassfilter.h"
 
 #include <dirent.h>
 
@@ -42,6 +43,7 @@ ModuleFactory::ModuleFactory() {
     RegisterModuleType( MVariableDelay::GetTypeStatic(), MVariableDelay::Create );
     RegisterModuleType( FFT::GetTypeStatic(), FFT::Create );
     RegisterModuleType( MModule::GetTypeStatic(), MModule::Create );
+    RegisterModuleType( MAllpassFilter::GetTypeStatic(), MAllpassFilter::Create );
     
 	if ( g_module_supported() == TRUE ) {
     	RegisterAllPlugins();
@@ -67,7 +69,7 @@ Module* ModuleFactory::CreateModule(string type) {
 		return (*funcPtr)();
 	}
 
-    throw RTSError( "ModuleFactory::CreateModule - Nie ma modulu '" + type + "'" );
+    return NULL;
 }
 
 std::vector<string>& ModuleFactory::ListModuleTypes() {

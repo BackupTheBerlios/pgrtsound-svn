@@ -1,11 +1,11 @@
 #ifndef GUIMAINWINDOW_H
 #define GUIMAINWINDOW_H
 
+#include <gtkmm/stock.h>
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/button.h>
-#include <gtkmm/stock.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/uimanager.h>
 #include <gtkmm/main.h>

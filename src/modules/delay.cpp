@@ -1,7 +1,7 @@
 #include "delay.h"
 
-Delay::Delay() : Module("New delay"),
-	iIn("inpute"), oOut("output"), pDelay("Delay")
+Delay::Delay() :
+    iIn("inpute"), oOut("output"), pDelay("Delay")
  {
     //maksymalne opó?nienie w próbkach
     maxDelay = 400000;

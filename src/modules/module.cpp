@@ -13,8 +13,7 @@ NullModuleSingleton& nullModule = NullModuleSingleton::Instance();
  Poprawne utworzenie obiektu modulu wymaga podania jego nazwy.
  @param moduleName Unikalna nazwa modulu
 */
-Module::Module( string moduleName ) {
-	name = moduleName;
+Module::Module() : name("") {
 }
 
 Module::~Module() {
@@ -165,4 +164,191 @@ void NullModuleSingleton::BlockSizeChanged() {
         *buff++ = 0.0f;
     }
 }
+
+extern NullModuleSingleton& nullModule;
+
+Input::Input(string name_) {
+	name = name_;
+	isConnected = false;
+	outputConnected =  nullModule.GetOutput(0);
+		// niepodlaczone wejscie do gloablnego zerowego modulu
+	//input.ConnectTo( nullModule.GetOutput(0) );
+}
+
+Input::~Input() {
+}
+
+void Input::SetID(int newID) {
+	id = newID;
+}
+
+int Input::GetID() const {
+	return id;
+}
+
+string Input::GetName() const {
+	return name;
+}
+
+/**
+ Laczy wejscie biezacego modulu z wyjsciem innego.
+ @param output Wskaznik do wyjscia, do ktorego podlaczone ma byc biezace wejscie.
+*/
+void Input::ConnectTo(Output* output) {
+	outputConnected = output;
+	isConnected = true;
+}
+
+void Input::Disconnect() {
+    isConnected = false;
+    outputConnected =  nullModule.GetOutput(0);
+}
+
+bool Input::IsConnected() {
+	return isConnected;
+}
+//------------------------------------------------------------------------------
+Output::Output(string name_) {
+	name = name_;
+	signal = NULL;
+
+	/* TODO (#1#): zrobic try block */
+	SetBufferSize( Module::framesPerBlock );
+}
+
+Output::~Output() {
+	delete signal;
+}
+
+void  Output::SetSignal(float* sig) {
+	signal = sig;
+}
+
+void Output::SetID(int newID) {
+	id = newID;
+}
+
+int Output::GetID() const {
+	return id;
+}
+
+string Output::GetName() const {
+	return name;
+}
+
+float* Output::GetSignal() const {
+	return signal;
+}
+
+void Output::SetBufferSize( unsigned long newBufferSize ) {
+	float* outBuff;
+
+	// kasowanie bufora poprzedniego o ile isnieje
+	if(signal != NULL) {
+		delete []signal;
+		signal = (float*)NULL;
+	}
+
+	// stworzenie bufora wyjsciowego o dlugosci newBufferSize
+	outBuff = new float[newBufferSize];
+	if(outBuff == NULL) {
+        throw RTSError("Output::SetBufferSize(): Nie mozna zaalokowac pamieci na bufor wyjsciowy");
+	}
+	else {
+		for( unsigned long i = 0; i <newBufferSize; i++ )
+			outBuff[i] = 0.0f;
+
+		signal = outBuff;
+	}
+}
+
+Parameter::Parameter(string type_, string name_) {
+	type = type_;
+	name = name_;
+	description =  "";
+	label = "";
+}
+
+Parameter::~Parameter() {
+}
+
+int Parameter::GetID() const {
+	return id;
+}
+
+string Parameter::GetName() const {
+	return name;
+}
+
+string Parameter::GetType() const {
+	return type;
+}
+string Parameter::GetLabel() const {
+	return label;
+}
+
+string Parameter::GetDescription() const {
+	return description;
+}
+
+void Parameter::SetID(int newID) {
+	id = newID;
+}
+
+void Parameter::SetLabel(string newLabel) {
+	label = newLabel;
+}
+
+void Parameter::SetDescription(string newDesc) {
+	description = newDesc;
+}
+
+//------------------------------------------------------------------------------
+ParameterFloat::ParameterFloat(string name_) :
+	Parameter("float", name_)
+{
+    value = 0;
+    bounded = false;
+}
+
+void ParameterFloat::Bound(float min, float max, float stp) {
+	minValue = min;
+	maxValue = max;
+	step = stp;
+	bounded = true;
+}
+
+float ParameterFloat::GetMin() const {
+	return minValue;
+}
+
+float ParameterFloat::GetMax() const {
+	return maxValue;
+}
+
+float ParameterFloat::GetStep() const {
+	return step;
+}
+
+//------------------------------------------------------------------------------
+ParameterString::ParameterString(string name_) :
+	Parameter("string", name_)
+{
+	description = "no description";
+	label       = "no label";
+	text        = "";
+}
+
+ParameterString::~ParameterString() {
+}
+
+string ParameterString::GetText() {
+	return text;
+}
+
+void ParameterString::SetText(string newText) {
+     text = newText;
+}
+
+
 

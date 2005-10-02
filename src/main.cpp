@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
  	try {
 		//xmlConfig.OpenFile("../../examples/ADSR test.xml");
-		xmlConfig.OpenFile("../../examples/wav.xml");
+		xmlConfig.OpenFile("../../examples/errors.xml");
 		//xmlConfig.OpenFile("../../examples/gate.xml");
 
         algo.Clear(); // test

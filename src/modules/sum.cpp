@@ -1,7 +1,7 @@
 #include "sum.h"
 
-Sum::Sum() : Module("New sumator"),
-	i1("input 1"), i2("input 2"), oSum("sum")
+Sum::Sum() :
+    i1("input 1"), i2("input 2"), oSum("sum")
 {
 	AddInput(i1);
 	AddInput(i2);

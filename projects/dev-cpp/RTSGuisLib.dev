@@ -1,7 +1,7 @@
 [Project]
 FileName=RTSGuisLib.dev
 Name=RTSGuisLib
-UnitCount=29
+UnitCount=27
 Type=2
 Ver=1
 ObjFiles=
@@ -99,16 +99,6 @@ BuildCmd=
 
 [Unit27]
 FileName=..\..\src\gui2\guis\gvariabledelay.h
-CompileCpp=1
-Folder=RTSGuisLib
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit28]
-FileName=..\..\src\gui2\guis\gfft.cpp
 CompileCpp=1
 Folder=RTSGuisLib
 Compile=1

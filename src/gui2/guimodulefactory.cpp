@@ -10,7 +10,7 @@ GuiModuleFactory::GuiModuleFactory() {
 	RegisterGui( GFilter::GetTypeStatic(), GFilter::Create );
 	RegisterGui( GGain::GetTypeStatic(), GGain::Create );
 	RegisterGui( GADSR::GetTypeStatic(), GADSR::Create );
-	RegisterGui( GFFT::GetTypeStatic(), GFFT::Create );
+	//RegisterGui( GFFT::GetTypeStatic(), GFFT::Create );
 	RegisterGui( GMonitorGraph::GetTypeStatic(), GMonitorGraph::Create );
 	RegisterGui( GDelay::GetTypeStatic(), GDelay::Create );
 	RegisterGui( GFeedbackDelay::GetTypeStatic(), GFeedbackDelay::Create );

@@ -1,7 +1,6 @@
 #include "madsrlinear.h"
 
 MADSRLinear::MADSRLinear() :
-	Module( "New ADSR" ),
 	iGateIn( "Gate input" ),
 	oEnvelope( "Envelope output" ),
 	pAttackTime( "Attack [ms]" ),

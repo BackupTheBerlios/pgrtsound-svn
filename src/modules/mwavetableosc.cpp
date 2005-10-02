@@ -1,7 +1,6 @@
 #include "mwavetableosc.h"
 
 MWavetableOsc::MWavetableOsc() :
-	Module("Nowy oscylator tablicowy"),
     iFreq("Czêstotliwoœæ"),
 	iAmp("Amplituda"),
 	oOut("Wyjœcie audio")

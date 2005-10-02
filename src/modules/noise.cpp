@@ -6,7 +6,6 @@ const float Noise::c2 = ((int)(c1 / 3)) + 1;
 const float Noise::c3 = 1.f / c1;
 
 Noise::Noise() :
-	Module("New noise generator"),
 	oOut("output")
 {
 	AddOutput(oOut);

@@ -1,0 +1,192 @@
+# Project: RTS GUI
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = objs/algorithm.o objs/audiodriver.o objs/callback.o objs/debug.o objs/modulefactory.o objs/gain.o objs/module.o objs/tinystr.o objs/tinyxml.o objs/tinyxmlerror.o objs/tinyxmlparser.o objs/audioportin.o objs/audioportout.o objs/constant.o objs/filter12db.o objs/multiplication.o objs/noise.o objs/slider.o objs/sum.o objs/textfileout.o objs/xmlconfigfile.o objs/mgate.o objs/mmonitor.o objs/madsrlinear.o objs/mmonitorgraph.o objs/delay.o objs/mvariabledelay.o objs/mwavetableosc.o objs/mfeedbackdelay.o objs/msinosc.o objs/mallpassfilter.o objs/fftw++.o objs/fft.o objs/mmodule.o objs/rtsgui2//gconstant.o objs/rtsgui2//gui.o objs/rtsgui2//mygtkslider.o objs/rtsgui2//gslider.o objs/rtsgui2//ggate.o objs/rtsgui2//gmonitor.o objs/rtsgui2//gfilter.o objs/rtsgui2//ggain.o objs/rtsgui2//gadsr.o objs/rtsgui2//gmonitorgraph.o objs/rtsgui2//gdelay.o objs/rtsgui2//gfeedbackdelay.o objs/rtsgui2//gvariabledelay.o objs/rtsgui2//guimodulefactory.o objs/rtsgui2//guimainwindow.o objs/rtsgui2//guimain.o objs/rtsgui2//audiosetupform.o objs/rtsgui2//algorithmview.o objs/rtsgui2//guiconnection.o objs/rtsgui2//algorithmview_loader.o objs/rtsgui2//moduleguiwindow.o objs/rtsgui2//guimodule.o $(RES)
+LINKOBJ  = objs/algorithm.o objs/audiodriver.o objs/callback.o objs/debug.o objs/modulefactory.o objs/gain.o objs/module.o objs/tinystr.o objs/tinyxml.o objs/tinyxmlerror.o objs/tinyxmlparser.o objs/audioportin.o objs/audioportout.o objs/constant.o objs/filter12db.o objs/multiplication.o objs/noise.o objs/slider.o objs/sum.o objs/textfileout.o objs/xmlconfigfile.o objs/mgate.o objs/mmonitor.o objs/madsrlinear.o objs/mmonitorgraph.o objs/delay.o objs/mvariabledelay.o objs/mwavetableosc.o objs/mfeedbackdelay.o objs/msinosc.o objs/mallpassfilter.o objs/fftw++.o objs/fft.o objs/mmodule.o objs/rtsgui2//gconstant.o objs/rtsgui2//gui.o objs/rtsgui2//mygtkslider.o objs/rtsgui2//gslider.o objs/rtsgui2//ggate.o objs/rtsgui2//gmonitor.o objs/rtsgui2//gfilter.o objs/rtsgui2//ggain.o objs/rtsgui2//gadsr.o objs/rtsgui2//gmonitorgraph.o objs/rtsgui2//gdelay.o objs/rtsgui2//gfeedbackdelay.o objs/rtsgui2//gvariabledelay.o objs/rtsgui2//guimodulefactory.o objs/rtsgui2//guimainwindow.o objs/rtsgui2//guimain.o objs/rtsgui2//audiosetupform.o objs/rtsgui2//algorithmview.o objs/rtsgui2//guiconnection.o objs/rtsgui2//algorithmview_loader.o objs/rtsgui2//moduleguiwindow.o objs/rtsgui2//guimodule.o $(RES)
+LIBS =  -L"C:/MinGW/lib" -L"C:/RTSound/lib/portaudio/lib" -LC:/Dev-Cpp/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv  -LC:/MinGW/lib -lgtkmm-2.4 -lgdkmm-2.4 -latkmm-1.6 -lgtk-win32-2.0 -lpangomm-1.4 -lglibmm-2.4 -lsigc-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv -lMingw32 -lportaudio -lwinmm -lole32 -lfftw3
+CXXINCS =  -I"C:/MinGW/include"  -I"C:/RTSound/lib/tinyxml"  -I"C:/RTSound/lib/portaudio/pa_common"  -I"C:/RTSound/src"  -I"C:/RTSound/lib/boost_1_32_0"  -I"C:/mingw/include/glib-2.0"  -I"C:/RTSound/src/gui2/guis" -I"C:/dev-cpp/include/fftw++" -I"C:/dev-cpp/include/fftw"
+CXXFLAGS = $(CXXINCS) -W -Wall -Wunused  -IC:/Dev-Cpp/include/gtkmm-2.4 -IC:/Dev-Cpp/lib/gtkmm-2.4/include -IC:/Dev-Cpp/include/glibmm-2.4 -IC:/Dev-Cpp/lib/glibmm-2.4/include -IC:/Dev-Cpp/include/gdkmm-2.4 -IC:/Dev-Cpp/lib/gdkmm-2.4/include -IC:/Dev-Cpp/include/pangomm-1.4 -IC:/Dev-Cpp/include/atkmm-1.6 -IC:/Dev-Cpp/include/gtk-2.0 -IC:/Dev-Cpp/include/sigc++-2.0 -IC:/Dev-Cpp/lib/sigc++-2.0/include -IC:/Dev-Cpp/include/glib-2.0 -IC:/Dev-Cpp/lib/glib-2.0/include -IC:/Dev-Cpp/lib/gtk-2.0/include -IC:/Dev-Cpp/include/pango-1.0 -IC:/Dev-Cpp/include/atk-1.0  -IC:/MinGW/include/gtkmm-2.4 -IC:/MinGW/lib/gtkmm-2.4/include -IC:/MinGW/include/glibmm-2.4 -IC:/MinGW/lib/glibmm-2.4/include -IC:/MinGW/include/gdkmm-2.4 -IC:/MinGW/lib/gdkmm-2.4/include -IC:/MinGW/include/pangomm-1.4 -IC:/MinGW/include/atkmm-1.6 -IC:/MinGW/include/gtk-2.0 -IC:/MinGW/include/sigc++-2.0 -IC:/MinGW/lib/sigc++-2.0/include -IC:/MinGW/include/glib-2.0 -IC:/MinGW/lib/glib-2.0/include -IC:/MinGW/lib/gtk-2.0/include -IC:/MinGW/include/pango-1.0 -IC:/MinGW/include/atk-1.0   
+BIN  = RTSGui.exe
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before RTSGui.exe all-after
+
+clean: clean-custom
+	${RM} $(OBJ) "bin/RTSGui.exe"
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "bin/RTSGui.exe" $(LIBS)
+	
+objs/algorithm.o: src/algorithm.cpp
+	$(CPP) -c src/algorithm.cpp -o objs/algorithm.o $(CXXFLAGS)
+
+objs/audiodriver.o: src/audiodriver.cpp
+	$(CPP) -c src/audiodriver.cpp -o objs/audiodriver.o $(CXXFLAGS)
+
+objs/callback.o: src/callback.cpp
+	$(CPP) -c src/callback.cpp -o objs/callback.o $(CXXFLAGS)
+
+objs/debug.o: src/debug.cpp
+	$(CPP) -c src/debug.cpp -o objs/debug.o $(CXXFLAGS)
+
+objs/modulefactory.o: src/modulefactory.cpp
+	$(CPP) -c src/modulefactory.cpp -o objs/modulefactory.o $(CXXFLAGS)
+
+objs/gain.o: src/modules/gain.cpp
+	$(CPP) -c src/modules/gain.cpp -o objs/gain.o $(CXXFLAGS)
+
+objs/module.o: src/modules/module.cpp
+	$(CPP) -c src/modules/module.cpp -o objs/module.o $(CXXFLAGS)
+
+objs/tinystr.o: lib/tinyxml/tinystr.cpp
+	$(CPP) -c lib/tinyxml/tinystr.cpp -o objs/tinystr.o $(CXXFLAGS)
+
+objs/tinyxml.o: lib/tinyxml/tinyxml.cpp
+	$(CPP) -c lib/tinyxml/tinyxml.cpp -o objs/tinyxml.o $(CXXFLAGS)
+
+objs/tinyxmlerror.o: lib/tinyxml/tinyxmlerror.cpp
+	$(CPP) -c lib/tinyxml/tinyxmlerror.cpp -o objs/tinyxmlerror.o $(CXXFLAGS)
+
+objs/tinyxmlparser.o: lib/tinyxml/tinyxmlparser.cpp
+	$(CPP) -c lib/tinyxml/tinyxmlparser.cpp -o objs/tinyxmlparser.o $(CXXFLAGS)
+
+objs/audioportin.o: src/modules/audioportin.cpp
+	$(CPP) -c src/modules/audioportin.cpp -o objs/audioportin.o $(CXXFLAGS)
+
+objs/audioportout.o: src/modules/audioportout.cpp
+	$(CPP) -c src/modules/audioportout.cpp -o objs/audioportout.o $(CXXFLAGS)
+
+objs/constant.o: src/modules/constant.cpp
+	$(CPP) -c src/modules/constant.cpp -o objs/constant.o $(CXXFLAGS)
+
+objs/filter12db.o: src/modules/filter12db.cpp
+	$(CPP) -c src/modules/filter12db.cpp -o objs/filter12db.o $(CXXFLAGS)
+
+objs/multiplication.o: src/modules/multiplication.cpp
+	$(CPP) -c src/modules/multiplication.cpp -o objs/multiplication.o $(CXXFLAGS)
+
+objs/noise.o: src/modules/noise.cpp
+	$(CPP) -c src/modules/noise.cpp -o objs/noise.o $(CXXFLAGS)
+
+objs/slider.o: src/modules/slider.cpp
+	$(CPP) -c src/modules/slider.cpp -o objs/slider.o $(CXXFLAGS)
+
+objs/sum.o: src/modules/sum.cpp
+	$(CPP) -c src/modules/sum.cpp -o objs/sum.o $(CXXFLAGS)
+
+objs/textfileout.o: src/modules/textfileout.cpp
+	$(CPP) -c src/modules/textfileout.cpp -o objs/textfileout.o $(CXXFLAGS)
+
+objs/xmlconfigfile.o: src/xmlconfigfile.cpp
+	$(CPP) -c src/xmlconfigfile.cpp -o objs/xmlconfigfile.o $(CXXFLAGS)
+
+objs/mgate.o: src/modules/mgate.cpp
+	$(CPP) -c src/modules/mgate.cpp -o objs/mgate.o $(CXXFLAGS)
+
+objs/mmonitor.o: src/modules/mmonitor.cpp
+	$(CPP) -c src/modules/mmonitor.cpp -o objs/mmonitor.o $(CXXFLAGS)
+
+objs/madsrlinear.o: src/modules/madsrlinear.cpp
+	$(CPP) -c src/modules/madsrlinear.cpp -o objs/madsrlinear.o $(CXXFLAGS)
+
+objs/mmonitorgraph.o: src/modules/mmonitorgraph.cpp
+	$(CPP) -c src/modules/mmonitorgraph.cpp -o objs/mmonitorgraph.o $(CXXFLAGS)
+
+objs/delay.o: src/modules/delay.cpp
+	$(CPP) -c src/modules/delay.cpp -o objs/delay.o $(CXXFLAGS)
+
+objs/mvariabledelay.o: src/modules/mvariabledelay.cpp
+	$(CPP) -c src/modules/mvariabledelay.cpp -o objs/mvariabledelay.o $(CXXFLAGS)
+
+objs/mwavetableosc.o: src/modules/mwavetableosc.cpp
+	$(CPP) -c src/modules/mwavetableosc.cpp -o objs/mwavetableosc.o $(CXXFLAGS)
+
+objs/mfeedbackdelay.o: src/modules/mfeedbackdelay.cpp
+	$(CPP) -c src/modules/mfeedbackdelay.cpp -o objs/mfeedbackdelay.o $(CXXFLAGS)
+
+objs/msinosc.o: src/modules/msinosc.cpp
+	$(CPP) -c src/modules/msinosc.cpp -o objs/msinosc.o $(CXXFLAGS)	
+	
+objs/mallpassfilter.o: src/modules/mallpassfilter.cpp
+	$(CPP) -c src/modules/mallpassfilter.cpp -o objs/mallpassfilter.o $(CXXFLAGS)	
+
+objs/fftw++.o: C:/Dev-Cpp/include/fftw++/fftw++.cc
+	$(CPP) -c C:/Dev-Cpp/include/fftw++/fftw++.cc -o objs/fftw++.o $(CXXFLAGS)
+	
+objs/fft.o: src/modules/fft.cpp
+	$(CPP) -c src/modules/fft.cpp -o objs/fft.o $(CXXFLAGS)
+	
+objs/mmodule.o: src/modules/mmodule.cpp
+	$(CPP) -c src/modules/mmodule.cpp -o objs/mmodule.o $(CXXFLAGS)	
+
+objs/rtsgui2//gconstant.o: src/gui2/guis/gconstant.cpp
+	$(CPP) -c src/gui2/guis/gconstant.cpp -o objs/rtsgui2//gconstant.o $(CXXFLAGS)
+
+objs/rtsgui2//gui.o: src/gui2/guis/gui.cpp
+	$(CPP) -c src/gui2/guis/gui.cpp -o objs/rtsgui2//gui.o $(CXXFLAGS)
+
+objs/rtsgui2//mygtkslider.o: src/gui2/guis/mygtkslider.cpp
+	$(CPP) -c src/gui2/guis/mygtkslider.cpp -o objs/rtsgui2//mygtkslider.o $(CXXFLAGS)
+
+objs/rtsgui2//gslider.o: src/gui2/guis/gslider.cpp
+	$(CPP) -c src/gui2/guis/gslider.cpp -o objs/rtsgui2//gslider.o $(CXXFLAGS)
+
+objs/rtsgui2//ggate.o: src/gui2/guis/ggate.cpp
+	$(CPP) -c src/gui2/guis/ggate.cpp -o objs/rtsgui2//ggate.o $(CXXFLAGS)
+
+objs/rtsgui2//gmonitor.o: src/gui2/guis/gmonitor.cpp
+	$(CPP) -c src/gui2/guis/gmonitor.cpp -o objs/rtsgui2//gmonitor.o $(CXXFLAGS)
+
+objs/rtsgui2//gfilter.o: src/gui2/guis/gfilter.cpp
+	$(CPP) -c src/gui2/guis/gfilter.cpp -o objs/rtsgui2//gfilter.o $(CXXFLAGS)
+
+objs/rtsgui2//ggain.o: src/gui2/guis/ggain.cpp
+	$(CPP) -c src/gui2/guis/ggain.cpp -o objs/rtsgui2//ggain.o $(CXXFLAGS)
+
+objs/rtsgui2//gadsr.o: src/gui2/guis/gadsr.cpp
+	$(CPP) -c src/gui2/guis/gadsr.cpp -o objs/rtsgui2//gadsr.o $(CXXFLAGS)
+
+objs/rtsgui2//gmonitorgraph.o: src/gui2/guis/gmonitorgraph.cpp
+	$(CPP) -c src/gui2/guis/gmonitorgraph.cpp -o objs/rtsgui2//gmonitorgraph.o $(CXXFLAGS)
+
+objs/rtsgui2//gdelay.o: src/gui2/guis/gdelay.cpp
+	$(CPP) -c src/gui2/guis/gdelay.cpp -o objs/rtsgui2//gdelay.o $(CXXFLAGS)
+
+objs/rtsgui2//gfeedbackdelay.o: src/gui2/guis/gfeedbackdelay.cpp
+	$(CPP) -c src/gui2/guis/gfeedbackdelay.cpp -o objs/rtsgui2//gfeedbackdelay.o $(CXXFLAGS)
+
+objs/rtsgui2//gvariabledelay.o: src/gui2/guis/gvariabledelay.cpp
+	$(CPP) -c src/gui2/guis/gvariabledelay.cpp -o objs/rtsgui2//gvariabledelay.o $(CXXFLAGS)
+
+objs/rtsgui2//guimodulefactory.o: src/gui2/guimodulefactory.cpp
+	$(CPP) -c src/gui2/guimodulefactory.cpp -o objs/rtsgui2//guimodulefactory.o $(CXXFLAGS)
+
+objs/rtsgui2//guimainwindow.o: src/gui2/guimainwindow.cpp
+	$(CPP) -c src/gui2/guimainwindow.cpp -o objs/rtsgui2//guimainwindow.o $(CXXFLAGS)
+
+objs/rtsgui2//guimain.o: src/gui2/guimain.cpp
+	$(CPP) -c src/gui2/guimain.cpp -o objs/rtsgui2//guimain.o $(CXXFLAGS)
+
+objs/rtsgui2//audiosetupform.o: src/gui2/audiosetupform.cpp
+	$(CPP) -c src/gui2/audiosetupform.cpp -o objs/rtsgui2//audiosetupform.o $(CXXFLAGS)
+
+objs/rtsgui2//algorithmview.o: src/gui2/algorithmview.cpp
+	$(CPP) -c src/gui2/algorithmview.cpp -o objs/rtsgui2//algorithmview.o $(CXXFLAGS)
+
+objs/rtsgui2//guiconnection.o: src/gui2/guiconnection.cpp
+	$(CPP) -c src/gui2/guiconnection.cpp -o objs/rtsgui2//guiconnection.o $(CXXFLAGS)
+
+objs/rtsgui2//algorithmview_loader.o: src/gui2/algorithmview_loader.cpp
+	$(CPP) -c src/gui2/algorithmview_loader.cpp -o objs/rtsgui2//algorithmview_loader.o $(CXXFLAGS)
+
+objs/rtsgui2//moduleguiwindow.o: src/gui2/moduleguiwindow.cpp
+	$(CPP) -c src/gui2/moduleguiwindow.cpp -o objs/rtsgui2//moduleguiwindow.o $(CXXFLAGS)
+
+objs/rtsgui2//guimodule.o: src/gui2/guimodule.cpp
+	$(CPP) -c src/gui2/guimodule.cpp -o objs/rtsgui2//guimodule.o $(CXXFLAGS)

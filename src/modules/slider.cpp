@@ -1,7 +1,7 @@
 #include "slider.h"
 
 // class constructor
-Slider::Slider() : Module("New Slider"),
+Slider::Slider() :
 	oOut("wy"), pMin("min"), pMax("max"), pValue("Wartoœæ")
 {
 	AddOutput(oOut);

@@ -1,7 +1,6 @@
 #include "Filter12dB.h"
 
 Filter12dB::Filter12dB() :
-	Module("Nowy filtr"),
 	iIn("input"),
 	oOut("output"),
 	pFreq("frequency"),

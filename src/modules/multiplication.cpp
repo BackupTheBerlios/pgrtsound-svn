@@ -1,6 +1,6 @@
 #include "multiplication.h"
 
-Multiplication::Multiplication() : Module("New multiplication"),
+Multiplication::Multiplication() : 
 	iIn1("input 1"), iIn2("input 2"), oOut("output")
 {
    	AddInput(iIn1);

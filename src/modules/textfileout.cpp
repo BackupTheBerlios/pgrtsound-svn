@@ -2,7 +2,7 @@
 
 using namespace std;
 
-TextFileOut::TextFileOut() : Module("New text file"),
+TextFileOut::TextFileOut() :
 	pFileName("filename"),
 	pFreq("Czêstotliwoœæ nagrywania"),
 	iIn("input")

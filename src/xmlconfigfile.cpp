@@ -73,7 +73,13 @@ void XMLConfigFile::LoadModules(Algorithm* algo) {
 		for( moduleXMLNode = parent; moduleXMLNode; moduleXMLNode = moduleXMLNode->NextSibling("module") ) {
 			moduleXMLElem = moduleXMLNode->ToElement();
 			moduleName = moduleXMLElem->Attribute("name");
-			moduleId = algo->AddModule( moduleXMLElem->Attribute("type"), moduleName );
+			
+			try {
+		  	   moduleId = algo->AddModule( moduleXMLElem->Attribute("type"), moduleName );
+            }
+            catch ( RTSError x ) {
+                TRACE( "%s\n", x.what() );
+            }
   		}
 	}
 

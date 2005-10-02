@@ -1,7 +1,6 @@
 #include "mfeedbackdelay.h"
 
 MFeedbackDelay::MFeedbackDelay() :
-	Module( "Feedback Delay" ),
 	iIn("input"),
 	oOut("output"),
 	pDelay( "OpóŸnienie" ),

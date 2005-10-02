@@ -1,7 +1,6 @@
 #include "constant.h"
 
 Constant::Constant() :
-	Module("New constant"),
 	oValue("wy"),
 	pValue("Wartoœæ")
 {

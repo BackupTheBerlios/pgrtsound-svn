@@ -1,6 +1,6 @@
 #include "mmodule.h"
 
-MModule::MModule() : Module("New module"),
+MModule::MModule() :
 	i1("input 1"), i2("input 2"), oModule("module")
 {
 	AddInput(i1);

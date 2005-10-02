@@ -52,18 +52,21 @@ void Algorithm::InitAudioPorts() {
  */
 ModuleId Algorithm::AddModule( string type, string name ) {
 	Module* mod = moduleFactory.CreateModule(type);
-	mod->SetName(name);
-	mod->Init();
-	ModuleId moduleId;
-	moduleId = add_vertex(graph);
-	//graph[*gm] = *(moduleFactory.CreateModule(type));
-	graph[moduleId].module = mod;
-	//put(boost::vertex_name, graph, moduleId, mod);
 
-	moduleName2IdMap.insert( make_pair(name, moduleId) );
-	TRACE( "Algorithm::AddModule - Dodano modul '%s' typu '%s'\n",
-		mod->GetName().c_str(), mod->GetType().c_str() );
-	return moduleId;
+    if( mod == NULL )
+        throw RTSError( "Algorithm::AddModulee - Nie ma modulu typu '" + type + "'" );
+	
+   	mod->SetName(name);
+   	mod->Init();
+   	ModuleId moduleId;
+   	moduleId = add_vertex(graph);
+   	graph[moduleId].module = mod;
+
+   	moduleName2IdMap.insert( make_pair(name, moduleId) );
+   	TRACE( "Algorithm::AddModule - Dodano modul '%s' typu '%s'\n",
+  		mod->GetName().c_str(), mod->GetType().c_str() );
+   		
+   	return moduleId;
 }
 
 void Algorithm::PrintInfo(void) {
